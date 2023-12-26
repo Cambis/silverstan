@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * Creates a class instance by the "singleton" design pattern.
+ * It will always return the same instance for this class,
+ * which can be used for performance reasons and as a simple
+ * way to access instance methods which don't rely on instance
+ * data (e.g. the custom SilverStripe static handling).
+ *
+ * @template T of object
+ * @param class-string<T> $className
+ * @return mixed
+ * @phpstan-return ($className is class-string<T> ? T : mixed)
+ */
+function singleton($className)
+{
+}

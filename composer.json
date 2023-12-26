@@ -8,6 +8,11 @@
             "Cambis\\Silverstan\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Cambis\\Silverstan\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Cameron Bryers"
@@ -22,7 +27,7 @@
         "silverstripe/framework": "^5.0"
     },
     "config": { 
-      "sort-packages": true,
+        "sort-packages": true,
         "allow-plugins": {
             "composer/installers": true,
             "silverstripe/vendor-plugin": true,
@@ -45,5 +50,12 @@
         "lint:fix": [
             "vendor/bin/ecs check --fix"
         ]
+    },
+    "extra": {
+        "phpstan": {
+            "includes": [
+                "extension.neon"
+            ]
+        }
     }
 }

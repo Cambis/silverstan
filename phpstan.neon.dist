@@ -1,6 +1,10 @@
 includes:
-    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - extension.neon
 parameters:
     level: 8
     paths:
         - src
+        - tests
+    excludePaths:
+        - */Fixture/*
+        - */Source/*

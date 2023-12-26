@@ -12,3 +12,4 @@ docker-compose.yml
 .vscode/
 coverage/
 public/
+.phpunit.cache/
