@@ -1,0 +1,12 @@
+/tests export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+/.github export-ignore
+/.changeset export-ignore
+/.husky export-ignore
+ecs.php export-ignore
+commmitlint.config.js export-ignore
+lint-staged.config.js export-ignore
+phpstan.neon.dist export-ignore
+phpunit.xml.dist export-ignore
+rector.php export-ignore
