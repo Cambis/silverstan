@@ -1,8 +1,8 @@
 <?php
 
-namespace Cambis\Silverstan\Tests\Rules\Properties\Fixture;
+namespace Cambis\Silverstan\Tests\Rules\ClassPropertiesNode\Fixture;
 
-final class ConfigurableClass
+final class ConfigurableClass implements \SilverStripe\Dev\TestOnly
 {
     use \SilverStripe\Core\Config\Configurable;
 

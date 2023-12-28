@@ -4,4 +4,7 @@ module.exports = {
     'php vendor/bin/ecs check --fix --ansi',
     'php vendor/bin/phpstan analyse --ansi --memory-limit=-1',
   ],
+  'composer.json': [
+    'composer normalize --ansi'
+  ],
 };

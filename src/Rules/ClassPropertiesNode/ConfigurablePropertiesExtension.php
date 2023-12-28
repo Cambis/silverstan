@@ -2,21 +2,47 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\Rules\Properties;
+namespace Cambis\Silverstan\Rules\ClassPropertiesNode;
 
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extension;
+use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 use function str_contains;
 
 /**
- * @see \Cambis\Silverstan\Tests\Rules\Properties\ConfigurablePropertiesExtensionTest
+ * @see \Cambis\Silverstan\Tests\Rules\ClassPropertiesNode\ConfigurablePropertiesExtensionTest
  */
-final class ConfigurablePropertiesExtension implements ReadWritePropertiesExtension
+final class ConfigurablePropertiesExtension implements ReadWritePropertiesExtension, DocumentedRuleInterface
 {
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition(
+            'Allows configurable read-write properties.',
+            [new CodeSample(
+                <<<'CODE_SAMPLE'
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    private array $bar = [];
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    private static array $bar = [];
+}
+CODE_SAMPLE
+            ),
+            ]
+        );
+    }
+
     public function isAlwaysRead(PropertyReflection $propertyReflection, string $propertyName): bool
     {
         return !$this->shouldSkipProperty($propertyReflection);

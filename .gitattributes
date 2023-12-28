@@ -10,3 +10,4 @@ lint-staged.config.js export-ignore
 phpstan.neon.dist export-ignore
 phpunit.xml.dist export-ignore
 rector.php export-ignore
+.nvmrc export-ignore

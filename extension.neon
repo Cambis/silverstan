@@ -18,6 +18,6 @@ parameters:
         - stubs/SilverStripe/View/ViewableData.stub
 services:
     -
-        class: Cambis\Silverstan\Rules\Properties\ConfigurablePropertiesExtension
+        class: Cambis\Silverstan\Rules\ClassPropertiesNode\ConfigurablePropertiesExtension
         tags:
             - phpstan.properties.readWriteExtension
