@@ -16,3 +16,8 @@ parameters:
         - stubs/SilverStripe/ORM/Sortable.stub
         - stubs/SilverStripe/ORM/SS_List.stub
         - stubs/SilverStripe/View/ViewableData.stub
+services:
+    -
+        class: Cambis\Silverstan\Rules\Properties\ConfigurablePropertiesExtension
+        tags:
+            - phpstan.properties.readWriteExtension
