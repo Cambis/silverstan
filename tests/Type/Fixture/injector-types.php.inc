@@ -4,6 +4,7 @@ namespace Cambis\Silverstan\Type\Tests\Fixture;
 
 use SilverStripe\Assets\File;
 use SilverStripe\Core\Injector\Injector;
+
 use function PHPStan\Testing\assertType;
 
 assertType(

@@ -2,10 +2,7 @@
 
 namespace SilverStripe\Core\Injector;
 
-use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
-
-class Injector implements ContainerInterface
+class Injector implements \Psr\Container\ContainerInterface
 {
     /**
      * Get a named managed object
@@ -18,7 +15,7 @@ class Injector implements ContainerInterface
      *
      * Failing all of that, will just return a new instance of the specified object.
      *
-     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
+     * @throws \Psr\Container\NotFoundExceptionInterface  No entry was found for **this** identifier.
      *
      * @template T of object
      * @param class-string<T>|string $name The name of the service to retrieve. If not a registered

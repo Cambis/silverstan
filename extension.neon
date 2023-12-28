@@ -1,7 +1,18 @@
 parameters:
     stubFiles:
-        - stubs/functions.stub
         - stubs/Psr/Container/ContainerExceptionInterface.php
         - stubs/Psr/Container/ContainerInterface.stub
         - stubs/Psr/Container/NotFoundExceptionInterface.php
+        - stubs/SilverStripe/functions.stub
         - stubs/SilverStripe/Core/Injector/Injector.stub
+        - stubs/SilverStripe/Core/Resettable.stub
+        - stubs/SilverStripe/i18n/i18nEntityProvider.stub
+        - stubs/SilverStripe/ORM/ArrayList.stub
+        - stubs/SilverStripe/ORM/DataList.stub
+        - stubs/SilverStripe/ORM/DataObject.stub
+        - stubs/SilverStripe/ORM/DataObjectInterface.stub
+        - stubs/SilverStripe/ORM/Filterable.stub
+        - stubs/SilverStripe/ORM/Limitable.stub
+        - stubs/SilverStripe/ORM/Sortable.stub
+        - stubs/SilverStripe/ORM/SS_List.stub
+        - stubs/SilverStripe/View/ViewableData.stub

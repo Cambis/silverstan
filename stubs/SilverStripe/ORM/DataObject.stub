@@ -1,0 +1,94 @@
+<?php
+
+namespace SilverStripe\ORM;
+
+/**
+ * A single database record & abstract class for the data-access-model.
+ *
+ * <h2>Extensions</h2>
+ *
+ * See {@link Extension} and {@link DataExtension}.
+ *
+ * <h2>Permission Control</h2>
+ *
+ * Object-level access control by {@link Permission}. Permission codes are arbitrary
+ * strings which can be selected on a group-by-group basis.
+ *
+ * <code>
+ * class Article extends DataObject implements PermissionProvider {
+ *  static $api_access = true;
+ *
+ *  function canView($member = false) {
+ *    return Permission::check('ARTICLE_VIEW');
+ *  }
+ *  function canEdit($member = false) {
+ *    return Permission::check('ARTICLE_EDIT');
+ *  }
+ *  function canDelete() {
+ *    return Permission::check('ARTICLE_DELETE');
+ *  }
+ *  function canCreate() {
+ *    return Permission::check('ARTICLE_CREATE');
+ *  }
+ *  function providePermissions() {
+ *    return array(
+ *      'ARTICLE_VIEW' => 'Read an article object',
+ *      'ARTICLE_EDIT' => 'Edit an article object',
+ *      'ARTICLE_DELETE' => 'Delete an article object',
+ *      'ARTICLE_CREATE' => 'Create an article object',
+ *    );
+ *  }
+ * }
+ * </code>
+ *
+ * Object-level access control by {@link Group} membership:
+ * <code>
+ * class Article extends DataObject {
+ *   static $api_access = true;
+ *
+ *   function canView($member = false) {
+ *     if (!$member) $member = Security::getCurrentUser();
+ *     return $member->inGroup('Subscribers');
+ *   }
+ *   function canEdit($member = false) {
+ *     if (!$member) $member = Security::getCurrentUser();
+ *     return $member->inGroup('Editors');
+ *   }
+ *
+ *   // ...
+ * }
+ * </code>
+ *
+ * If any public method on this class is prefixed with an underscore,
+ * the results are cached in memory through {@link cachedCall()}.
+ *
+ *
+ * @property int $ID ID of the DataObject, 0 if the DataObject doesn't exist in database.
+ * @property int $OldID ID of object, if deleted
+ * @property string $Title
+ * @property string $ClassName Class name of the DataObject
+ * @property string $LastEdited Date and time of DataObject's last modification.
+ * @property string $Created Date and time of DataObject creation.
+ * @property string $ObsoleteClassName If ClassName no longer exists this will be set to the legacy value
+ */
+class DataObject extends \SilverStripe\View\ViewableData implements \SilverStripe\ORM\DataObjectInterface, \SilverStripe\i18n\i18nEntityProvider, \SilverStripe\Core\Resettable
+{
+    /**
+     * Return all objects matching the filter
+     * sub-classes are automatically selected and included
+     *
+     * @param string $callerClass The class of objects to be returned
+     * @param string|array<string> $filter A filter to be inserted into the WHERE clause.
+     * Supports parameterised queries. See SQLSelect::addWhere() for syntax examples.
+     * @param string|array<string>|null $sort Passed to DataList::sort()
+     * BY clause.  If omitted, self::$default_sort will be used.
+     * @param string $join Deprecated 3.0 Join clause. Use leftJoin($table, $joinClause) instead.
+     * @param string|array<string> $limit A limit expression to be inserted into the LIMIT clause.
+     * @param string $containerClass The container class to return the results in.
+     *
+     * @return DataList<static> The objects matching the filter, in the class specified by $containerClass
+     */
+    public static function get($callerClass = null, $filter = "", $sort = "", $join = "", $limit = null, $containerClass = \SilverStripe\ORM\DataList::class)
+    {
+    }
+}

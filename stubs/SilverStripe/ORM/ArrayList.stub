@@ -1,0 +1,232 @@
+<?php
+
+namespace SilverStripe\ORM;
+
+/**
+ * A list object that wraps around an array of objects or arrays.
+ *
+ * Note that (like DataLists), the implementations of the methods from SS_Filterable, SS_Sortable and
+ * SS_Limitable return a new instance of ArrayList, rather than modifying the existing instance.
+ *
+ * For easy reference, methods that operate in this way are:
+ *
+ *   - limit
+ *   - reverse
+ *   - sort
+ *   - filter
+ *   - exclude
+ * 
+ * @template T
+ * @implements \SilverStripe\ORM\SS_List<T>
+ * @implements \SilverStripe\ORM\Filterable<T>
+ * @implements \SilverStripe\ORM\Sortable<T>
+ * @implements \SilverStripe\ORM\Limitable<T>
+ */
+class ArrayList extends \SilverStripe\View\ViewableData implements \SilverStripe\ORM\SS_List, \SilverStripe\ORM\Filterable, \SilverStripe\ORM\Sortable, \SilverStripe\ORM\Limitable
+{
+    /**
+     * Holds the items in the list
+     *
+     * @var array<T>
+     */
+    protected $items = [];
+
+    /**
+     * @param array<array-key, T> $items - an initial array to fill this object with
+     */
+    public function __construct(array $items = [])
+    {
+    }
+
+    public function count() : int
+    {
+    }
+    /**
+     * Returns an Iterator for this ArrayList.
+     * This function allows you to use ArrayList in foreach loops
+     * 
+     * @return \Traversable<array-key, T>
+     */
+    public function getIterator() : \Traversable
+    {
+    }
+    /**
+     * Return an array of the actual items that this ArrayList contains.
+     *
+     * @return array<T>
+     */
+    public function toArray()
+    {
+    }
+    /**
+     * Walks the list using the specified callback
+     *
+     * @param callable(T): void $callback
+     * @return static<T>
+     */
+    public function each($callback)
+    {
+    }
+    /**
+     * Return this list as an array and every object it as an sub array as well
+     *
+     * @return string[][]
+     */
+    public function toNestedArray()
+    {
+    }
+    /**
+     * Add this $item into this list
+     *
+     * @param T $item
+     * @return void
+     */
+    public function add($item)
+    {
+    }
+    /**
+     * Remove this item from this list
+     *
+     * @param T $item
+     * @return void
+     */
+    public function remove($item)
+    {
+    }
+    /**
+     * Replaces an item in this list with another item.
+     *
+     * @param T $item
+     * @param T $with
+     * @return void
+     */
+    public function replace($item, $with)
+    {
+    }
+    /**
+     * Merges with another array or list by pushing all the items in it onto the
+     * end of this list.
+     *
+     * @param iterable<T> $with
+     * @return void
+     */
+    public function merge($with)
+    {
+    }
+    /**
+     * Pushes an item onto the end of this list.
+     *
+     * @param T $item
+     * @return void
+     */
+    public function push($item)
+    {
+    }
+    /**
+     * Pops the last element off the end of the list and returns it.
+     *
+     * @return T|null
+     */
+    public function pop()
+    {
+    }
+    /**
+     * Add an item onto the beginning of the list.
+     *
+     * @param T $item
+     * @return void
+     */
+    public function unshift($item)
+    {
+    }
+    /**
+     * Shifts the item off the beginning of the list and returns it.
+     *
+     * @return T|null
+     */
+    public function shift()
+    {
+    }
+    /**
+     * Returns the first item in the list
+     *
+     * @return T|null
+     */
+    public function first()
+    {
+    }
+    /**
+     * Returns the last item in the list
+     *
+     * @return T|null
+     */
+    public function last()
+    {
+    }
+    /**
+     * Reverses an {@link ArrayList}
+     *
+     * @return static<T>
+     */
+    public function reverse()
+    {
+    }
+    /**
+     * Shuffle the items in this array list
+     *
+     * @return static<T>
+     */
+    public function shuffle()
+    {
+    }
+    /**
+     * Find the first item of this list where the given key = value
+     *
+     * @param string $key
+     * @param string $value
+     * @return T|null
+     */
+    public function find($key, $value)
+    {
+    }
+    /**
+     * Filter this list to only contain the given Primary IDs
+     *
+     * @param array<int> $ids Array of integers, will be automatically cast/escaped.
+     * @return static<T>
+     */
+    public function byIDs($ids)
+    {
+    }
+    /**
+     * @param int $id
+     * @return T|null
+     */
+    public function byID($id)
+    {
+    }
+    /**
+     * Returns whether an item with $key exists
+     */
+    public function offsetExists(mixed $offset) : bool
+    {
+    }
+    /**
+     * Returns item stored in list with index $key
+     */
+    public function offsetGet(mixed $offset) : mixed
+    {
+    }
+    /**
+     * Set an item with the key in $key
+     */
+    public function offsetSet(mixed $offset, mixed $value) : void
+    {
+    }
+    /**
+     * Unset an item with the key in $key
+     */
+    public function offsetUnset(mixed $offset) : void
+    {
+    }
+}
