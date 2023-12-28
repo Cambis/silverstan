@@ -28,6 +28,6 @@ final class ListTypeTest extends TypeInferenceTestCase
      */
     public static function getAdditionalConfigFiles(): array
     {
-        return [__DIR__ . '/../../phpstan.neon.dist'];
+        return [__DIR__ . '/../../extension.neon'];
     }
 }
