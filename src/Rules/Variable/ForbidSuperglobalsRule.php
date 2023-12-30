@@ -18,6 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 use function in_array;
+use function sprintf;
 
 /**
  * @implements Rule<Variable>

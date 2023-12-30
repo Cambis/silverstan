@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
+use SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff;
+use SlevomatCodingStandard\Sniffs\Namespaces\UseSpacingSniff;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
@@ -15,11 +16,17 @@ return function (ECSConfig $ecsConfig): void {
     ]);
 
     $ecsConfig->ruleWithConfiguration(
-        GlobalNamespaceImportFixer::class,
+        ReferenceUsedNamesOnlySniff::class,
         [
-            'import_classes' => true,
-            'import_constants' => true,
-            'import_functions' => true,
+            'allowFallbackGlobalFunctions' => false,
+            'allowFallbackGlobalConstants' => false,
+        ]
+    );
+
+    $ecsConfig->ruleWithConfiguration(
+        UseSpacingSniff::class,
+        [
+            'linesCountBetweenUseTypes' => 1,
         ]
     );
 

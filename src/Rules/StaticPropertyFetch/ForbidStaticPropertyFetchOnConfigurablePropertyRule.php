@@ -17,6 +17,9 @@ use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+use function sprintf;
+use function str_contains;
+
 /**
  * @implements Rule<StaticPropertyFetch>
  * @see \Cambis\Silverstan\Tests\Rules\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRuleTest
