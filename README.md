@@ -32,3 +32,7 @@ includes:
 ```
 
 </details>
+
+## Configuration 🚧
+
+Each rule can be enabled/disabled manually using the configuration options, please refer to the [rules overview](docs/rules_overview.md) for the available options.

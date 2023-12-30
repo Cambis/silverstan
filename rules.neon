@@ -2,19 +2,39 @@ parameters:
     silverstanRules:
         forbidStaticPropertyFetchOnConfigurableProperty:
             enabled: true
+        forbidSuperglobals:
+            enabled: true
+            forbiddenSuperglobals:
+                - _GET
+                - _POST
+                - _FILES
+                - _COOKIE
+                - _SESSION
+                - _REQUEST
+                - _ENV
+                - GLOBALS
 
 parametersSchema:
     silverstanRules: structure([
         forbidStaticPropertyFetchOnConfigurableProperty: structure([
             enabled: bool()
         ])
+        forbidSuperglobals: structure([
+            enabled: bool()
+            forbiddenSuperglobals: arrayOf(string())
+        ])
     ])
 
 conditionalTags:
     Cambis\Silverstan\Rules\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule:
         phpstan.rules.rule: %silverstanRules.forbidStaticPropertyFetchOnConfigurableProperty.enabled%
+    Cambis\Silverstan\Rules\Variable\ForbidSuperglobalsRule:
+        phpstan.rules.rule: %silverstanRules.forbidSuperglobals.enabled%
 
 services:
     -
         class: Cambis\Silverstan\Rules\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule
+        tags: [phpstan.rules.rule]
+    -
+        class: Cambis\Silverstan\Rules\Variable\ForbidSuperglobalsRule
         tags: [phpstan.rules.rule]
