@@ -8,5 +8,18 @@ parameters:
     excludePaths:
         - ecs.php
         - rector.php
-        - */Fixture/*
-        - */Source/*
+        - '*/Fixture/*'
+        - '*/Source/*'
+services:
+    -
+        class: Symplify\PHPStanRules\Rules\ClassNameRespectsParentSuffixRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            parentClasses:
+                - PHPStan\Rules\Rule
+    -
+        class: Symplify\PHPStanRules\Rules\SeeAnnotationToTestRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            requiredSeeTypes:
+                - PHPStan\Rules\Rule

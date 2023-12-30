@@ -32,7 +32,3 @@ includes:
 ```
 
 </details>
-
-## Configuration 🚧
-
-TODO

@@ -1,3 +1,5 @@
+includes:
+    - rules.neon
 parameters:
     stubFiles:
         - stubs/Psr/Container/ContainerExceptionInterface.php
@@ -19,5 +21,4 @@ parameters:
 services:
     -
         class: Cambis\Silverstan\Rules\ClassPropertiesNode\ConfigurablePropertiesExtension
-        tags:
-            - phpstan.properties.readWriteExtension
+        tags: [phpstan.properties.readWriteExtension]

@@ -1,0 +1,20 @@
+parameters:
+    silverstanRules:
+        forbidStaticPropertyFetchOnConfigurableProperty:
+            enabled: true
+
+parametersSchema:
+    silverstanRules: structure([
+        forbidStaticPropertyFetchOnConfigurableProperty: structure([
+            enabled: bool()
+        ])
+    ])
+
+conditionalTags:
+    Cambis\Silverstan\Rules\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule:
+        phpstan.rules.rule: %silverstanRules.forbidStaticPropertyFetchOnConfigurableProperty.enabled%
+
+services:
+    -
+        class: Cambis\Silverstan\Rules\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule
+        tags: [phpstan.rules.rule]
