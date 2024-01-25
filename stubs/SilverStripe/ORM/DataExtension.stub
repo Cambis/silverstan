@@ -1,0 +1,13 @@
+<?php
+
+namespace SilverStripe\ORM;
+
+/**
+ * An extension that adds additional functionality to a {@link DataObject}.
+ *
+ * @template T
+ * @extends \SilverStripe\Core\Extension<T>
+ */
+abstract class DataExtension extends \SilverStripe\Core\Extension
+{
+}

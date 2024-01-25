@@ -7,6 +7,8 @@ parameters:
         - stubs/Psr/Container/NotFoundExceptionInterface.php
         - stubs/SilverStripe/functions.stub
         - stubs/SilverStripe/Core/Injector/Injector.stub
+        - stubs/SilverStripe/Core/Extension.stub
+        - stubs/SilverStripe/ORM/DataExtension.stub
 services:
     -
         class: Cambis\Silverstan\Rules\ClassPropertiesNode\ConfigurablePropertiesExtension

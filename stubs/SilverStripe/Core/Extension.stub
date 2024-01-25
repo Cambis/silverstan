@@ -1,0 +1,32 @@
+<?php
+
+namespace SilverStripe\Core;
+
+/**
+ * Add extension that can be added to an object with {@link Object::add_extension()}.
+ * For {@link DataObject} extensions, use {@link DataExtension}.
+ * Each extension instance has an "owner" instance, accessible through
+ * {@link getOwner()}.
+ * Every object instance gets its own set of extension instances,
+ * meaning you can set parameters specific to the "owner instance"
+ * in new Extension instances.
+ *
+ * @template T
+ */
+abstract class Extension
+{
+    /**
+     * The object this extension is applied to.
+     *
+     * @var T|static
+     */
+    protected $owner;
+    /**
+     * Returns the owner of this extension.
+     *
+     * @return T|static
+     */
+    public function getOwner()
+    {
+    }
+}
