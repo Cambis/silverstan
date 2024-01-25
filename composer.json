@@ -12,8 +12,8 @@
         "php": "^8.1",
         "nikic/php-parser": "^4.18",
         "phpstan/phpstan": "^1.10",
-        "silverstripe/cms": "^5.0",
-        "silverstripe/framework": "^5.0",
+        "silverstripe/cms": "^5.x-dev",
+        "silverstripe/framework": "^5.x-dev",
         "symplify/rule-doc-generator-contracts": "^11.1",
         "webmozart/assert": "^1.11"
     },
@@ -58,7 +58,7 @@
         "composer-exit-on-patch-failure": true,
         "patches": {
             "symplify/rule-doc-generator": {
-                "Custom rule docs": "patches/symplify/custom-rule-docs.patch"
+                "Custom rule docs": "patches/symplify/rule-doc-generator/custom-rule-docs.patch"
             }
         },
         "phpstan": {

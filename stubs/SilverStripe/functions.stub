@@ -8,8 +8,8 @@
  * data (e.g. the custom SilverStripe static handling).
  *
  * @template T of object
- * @param class-string<T> $className
- * @return mixed
+ * @param class-string<T>|string $className
+ * @return T|mixed
  * @phpstan-return ($className is class-string<T> ? T : mixed)
  */
 function singleton($className)
