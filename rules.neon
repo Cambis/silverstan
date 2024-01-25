@@ -26,15 +26,15 @@ parametersSchema:
     ])
 
 conditionalTags:
-    Cambis\Silverstan\Rules\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule:
+    Cambis\Silverstan\Rule\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule:
         phpstan.rules.rule: %silverstanRules.forbidStaticPropertyFetchOnConfigurableProperty.enabled%
-    Cambis\Silverstan\Rules\Variable\ForbidSuperglobalsRule:
+    Cambis\Silverstan\Rule\Variable\ForbidSuperglobalsRule:
         phpstan.rules.rule: %silverstanRules.forbidSuperglobals.enabled%
 
 services:
     -
-        class: Cambis\Silverstan\Rules\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule
+        class: Cambis\Silverstan\Rule\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule
         tags: [phpstan.rules.rule]
     -
-        class: Cambis\Silverstan\Rules\Variable\ForbidSuperglobalsRule
+        class: Cambis\Silverstan\Rule\Variable\ForbidSuperglobalsRule
         tags: [phpstan.rules.rule]

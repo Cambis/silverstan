@@ -1,8 +1,8 @@
 <?php
 
-namespace Cambis\Silverstan\Tests\Rules\StaticPropertyFetch;
+namespace Cambis\Silverstan\Tests\Rule\StaticPropertyFetch;
 
-use Cambis\Silverstan\Rules\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule;
+use Cambis\Silverstan\Rule\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
@@ -20,7 +20,7 @@ final class ForbidStaticPropertyFetchOnConfigurablePropertyRuleTest extends Rule
     {
         $this->analyse([__DIR__ . '/Fixture/forbid-static-property-fetch.php.inc'], [
             [
-                'Unsafe access to configurable property Cambis\Silverstan\Tests\Rules\StaticPropertyFetch\Fixture\ForbidStaticPropertyFetch::$foo through self::.',
+                'Unsafe access to configurable property Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\Fixture\ForbidStaticPropertyFetch::$foo through self::.',
                 20,
                 'See: https://docs.silverstripe.org/en/5/developer_guides/configuration/configuration/#accessing-configuration-properties',
             ],

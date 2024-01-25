@@ -4,7 +4,7 @@
 
 Allows configurable read-write properties.
 
-- class: [`Cambis\Silverstan\Rules\ClassPropertiesNode\ConfigurablePropertiesExtension`](../src/Rules/ClassPropertiesNode/ConfigurablePropertiesExtension.php)
+- class: [`Cambis\Silverstan\Rule\ClassPropertiesNode\ConfigurablePropertiesExtension`](../src/Rules/ClassPropertiesNode/ConfigurablePropertiesExtension.php)
 
 ```php
 final class Foo extends \SilverStripe\ORM\DataObject
@@ -34,7 +34,7 @@ Forbid static property fetch on configurable properties.
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rules\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule`](../src/Rules/StaticPropertyFetch/ForbidStaticPropertyFetchOnConfigurablePropertyRule.php)
+- class: [`Cambis\Silverstan\Rule\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule`](../src/Rules/StaticPropertyFetch/ForbidStaticPropertyFetchOnConfigurablePropertyRule.php)
 
 ```yaml
 parameters:
@@ -83,7 +83,7 @@ Forbid the use of superglobals ($_GET, $_REQUEST etc.).
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rules\Variable\ForbidSuperglobalsRule`](../src/Rules/Variable/ForbidSuperglobalsRule.php)
+- class: [`Cambis\Silverstan\Rule\Variable\ForbidSuperglobalsRule`](../src/Rules/Variable/ForbidSuperglobalsRule.php)
 
 ```yaml
 parameters:

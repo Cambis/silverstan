@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\Rules\ClassPropertiesNode;
+namespace Cambis\Silverstan\Rule\ClassPropertiesNode;
 
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertyReflection;
@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function str_contains;
 
 /**
- * @see \Cambis\Silverstan\Tests\Rules\ClassPropertiesNode\ConfigurablePropertiesExtensionTest
+ * @see \Cambis\Silverstan\Tests\Rule\ClassPropertiesNode\ConfigurablePropertiesExtensionTest
  */
 final class ConfigurablePropertiesExtension implements ReadWritePropertiesExtension, DocumentedRuleInterface
 {

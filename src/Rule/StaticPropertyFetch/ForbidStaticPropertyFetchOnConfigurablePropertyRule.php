@@ -1,6 +1,6 @@
 <?php
 
-namespace Cambis\Silverstan\Rules\StaticPropertyFetch;
+namespace Cambis\Silverstan\Rule\StaticPropertyFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -22,7 +22,7 @@ use function str_contains;
 
 /**
  * @implements Rule<StaticPropertyFetch>
- * @see \Cambis\Silverstan\Tests\Rules\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRuleTest
+ * @see \Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRuleTest
  */
 final class ForbidStaticPropertyFetchOnConfigurablePropertyRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {

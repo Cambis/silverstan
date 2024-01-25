@@ -11,5 +11,5 @@ parameters:
         - stubs/SilverStripe/ORM/DataExtension.stub
 services:
     -
-        class: Cambis\Silverstan\Rules\ClassPropertiesNode\ConfigurablePropertiesExtension
+        class: Cambis\Silverstan\Rule\ClassPropertiesNode\ConfigurablePropertiesExtension
         tags: [phpstan.properties.readWriteExtension]

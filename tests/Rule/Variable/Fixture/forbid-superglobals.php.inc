@@ -1,6 +1,6 @@
 <?php 
 
-namespace Cambis\Silverstan\Tests\Rules\Variable\Fixture;
+namespace Cambis\Silverstan\Tests\Rule\Variable\Fixture;
 
 final class ForbidSuperGlobalsRule implements \SilverStripe\Dev\TestOnly
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\Rules\Variable;
+namespace Cambis\Silverstan\Rule\Variable;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
@@ -22,14 +22,14 @@ use function sprintf;
 
 /**
  * @implements Rule<Variable>
- * @see \Cambis\Silverstan\Tests\Rules\Variable\ForbidSuperglobalsRuleTest
+ * @see \Cambis\Silverstan\Tests\Rule\Variable\ForbidSuperglobalsRuleTest
  */
 final class ForbidSuperglobalsRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
     /**
      * @var string[]
      */
-    public const SUPERGLOBALS = [
+    private const SUPERGLOBALS = [
         '_GET', '_POST', '_FILES', '_COOKIE', '_SESSION', '_REQUEST', '_ENV', 'GLOBALS',
     ];
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Cambis\Silverstan\Tests\Rules\Variable;
+namespace Cambis\Silverstan\Tests\Rule\Variable;
 
-use Cambis\Silverstan\Rules\Variable\ForbidSuperglobalsRule;
+use Cambis\Silverstan\Rule\Variable\ForbidSuperglobalsRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
@@ -13,9 +13,7 @@ final class ForbidSuperglobalsRuleTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new ForbidSuperglobalsRule(
-            ForbidSuperglobalsRule::SUPERGLOBALS,
-        );
+        return new ForbidSuperglobalsRule();
     }
 
     public function testRule(): void

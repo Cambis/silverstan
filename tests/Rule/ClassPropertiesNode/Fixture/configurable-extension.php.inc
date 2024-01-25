@@ -1,11 +1,9 @@
 <?php
 
-namespace Cambis\Silverstan\Tests\Rules\ClassPropertiesNode\Fixture;
+namespace Cambis\Silverstan\Tests\Rule\ClassPropertiesNode\Fixture;
 
-final class ConfigurableClass implements \SilverStripe\Dev\TestOnly
+final class ConfigurableExtension extends \SilverStripe\Core\Extension implements \SilverStripe\Dev\TestOnly
 {
-    use \SilverStripe\Core\Config\Configurable;
-
     private static string $configurable_property = 'foo';
 
     private string $unconfigurable_property = 'bar';

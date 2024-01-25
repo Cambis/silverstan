@@ -1,6 +1,6 @@
 <?php
 
-namespace Cambis\Silverstan\Tests\Rules\StaticPropertyFetch\Fixture;
+namespace Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\Fixture;
 
 final class ForbidStaticPropertyFetch implements \SilverStripe\Dev\TestOnly
 {
