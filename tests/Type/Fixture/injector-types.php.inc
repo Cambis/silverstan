@@ -1,6 +1,6 @@
 <?php
 
-namespace Cambis\Silverstan\Type\Tests\Fixture;
+namespace Cambis\Silverstan\Tests\Type\Fixture;
 
 use SilverStripe\Assets\File;
 use SilverStripe\Core\Injector\Injector;

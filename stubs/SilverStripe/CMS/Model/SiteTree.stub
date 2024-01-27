@@ -1,0 +1,967 @@
+<?php
+
+namespace SilverStripe\CMS\Model;
+
+/**
+ * Basic data-object representing all pages within the site tree. All page types that live within the hierarchy should
+ * inherit from this. In addition, it contains a number of static methods for querying the site tree and working with
+ * draft and published states.
+ *
+ * <h2>URLs</h2>
+ * A page is identified during request handling via its "URLSegment" database column. As pages can be nested, the full
+ * path of a URL might contain multiple segments. Each segment is stored in its filtered representation (through
+ * {@link URLSegmentFilter}). The full path is constructed via {@link Link()}, {@link RelativeLink()} and
+ * {@link AbsoluteLink()}. You can allow these segments to contain multibyte characters through
+ * {@link URLSegmentFilter::$default_allow_multibyte}.
+ *
+ * @property string $URLSegment
+ * @property string $Title
+ * @property string $MenuTitle
+ * @property string $Content HTML content of the page.
+ * @property string $MetaDescription
+ * @property string $ExtraMeta
+ * @property string $ReportClass
+ * @property int $Sort Integer value denoting the sort order.
+ * @property bool $ShowInMenus
+ * @property bool $ShowInSearch
+ * @property bool $HasBrokenFile True if this page has a broken file shortcode
+ * @property bool $HasBrokenLink True if this page has a broken page shortcode
+ *
+ * @mixin Hierarchy
+ * @mixin Versioned
+ * @mixin RecursivePublishable
+ * @mixin SiteTreeLinkTracking Added via linktracking.yml to DataObject directly
+ * @mixin FileLinkTracking Added via filetracking.yml in silverstripe/assets
+ * @mixin InheritedPermissionsExtension
+ * @method HasManyList<SiteTreeLink> BackLinks()
+ * @method HasManyList<VirtualPage> VirtualPages()
+ */
+class SiteTree extends \SilverStripe\ORM\DataObject implements \SilverStripe\Security\PermissionProvider, \SilverStripe\i18n\i18nEntityProvider, \SilverStripe\ORM\CMSPreviewable, \SilverStripe\Core\Resettable, \SilverStripe\Core\Flushable, \SilverStripe\Core\Cache\MemberCacheFlusher
+{
+    /**
+     * Used as a cache for `self::allowedChildren()`
+     * Drastically reduces admin page load when there are a lot of page types
+     * @var array
+     */
+    protected static $_allowedChildren = [];
+    protected $_cache_statusFlags = null;
+    /**
+     * @var CacheInterface
+     */
+    protected $creatableChildrenCache;
+    /**
+     * Fetches the {@link SiteTree} object that maps to a link.
+     *
+     * If you have enabled {@link SiteTree::config()->nested_urls} on this site, then you can use a nested link such as
+     * "about-us/staff/", and this function will traverse down the URL chain and grab the appropriate link.
+     *
+     * Note that if no model can be found, this method will fall over to a extended alternateGetByLink method provided
+     * by a extension attached to {@link SiteTree}
+     *
+     * @param string $link  The link of the page to search for
+     * @param bool   $cache True (default) to use caching, false to force a fresh search from the database
+     * @return SiteTree|null
+     */
+    public static function get_by_link($link, $cache = true)
+    {
+    }
+    /**
+     * Return a subclass map of SiteTree that shouldn't be hidden through {@link SiteTree::$hide_pagetypes}
+     *
+     * @return array
+     */
+    public static function page_type_classes()
+    {
+    }
+    /**
+     * Replace a "[sitetree_link id=n]" shortcode with a link to the page with the corresponding ID.
+     *
+     * @param array      $arguments
+     * @param string     $content
+     * @param ShortcodeParser $parser
+     * @return string
+     */
+    public static function link_shortcode_handler($arguments, $content = null, $parser = null)
+    {
+    }
+    /**
+     * Return the link for this {@link SiteTree} object, with the {@link Director::baseURL()} included.
+     *
+     * @param string $action Optional controller action (method).
+     *                       Note: URI encoding of this parameter is applied automatically through template casting,
+     *                       don't encode the passed parameter. Please use {@link Controller::join_links()} instead to
+     *                       append GET parameters.
+     * @return string
+     */
+    public function Link($action = null)
+    {
+    }
+    /**
+     * Get the absolute URL for this page, including protocol and host.
+     *
+     * @param string $action See {@link Link()}
+     * @return string
+     */
+    public function AbsoluteLink($action = null)
+    {
+    }
+    /**
+     * Base link used for previewing. Defaults to absolute URL, in order to account for domain changes, e.g. on multi
+     * site setups. Does not contain hints about the stage, see {@link SilverStripeNavigator} for details.
+     *
+     * @param string $action See {@link Link()}
+     * @return string
+     */
+    public function PreviewLink($action = null)
+    {
+    }
+    public function getMimeType()
+    {
+    }
+    /**
+     * Return the link for this {@link SiteTree} object relative to the SilverStripe root.
+     *
+     * By default, if this page is the current home page, and there is no action specified then this will return a link
+     * to the root of the site. However, if you set the $action parameter to TRUE then the link will not be rewritten
+     * and returned in its full form.
+     *
+     * @uses RootURLController::get_homepage_link()
+     *
+     * @param string $action See {@link Link()}
+     * @return string
+     */
+    public function RelativeLink($action = null)
+    {
+    }
+    /**
+     * Get the absolute URL for this page on the Live site.
+     *
+     * @param bool $includeStageEqualsLive Whether to append the URL with ?stage=Live to force Live mode
+     * @return string
+     */
+    public function getAbsoluteLiveLink($includeStageEqualsLive = true)
+    {
+    }
+    /**
+     * Generates a link to edit this page in the CMS.
+     *
+     * Implemented here to satisfy the CMSPreviewable interface, but data is intended to be loaded via Extension
+     *
+     * @see SilverStripe\Admin\CMSEditLinkExtension
+     *
+     * @return string
+     */
+    public function CMSEditLink()
+    {
+    }
+    /**
+     * Return a CSS identifier generated from this page's link.
+     *
+     * @return string The URL segment
+     */
+    public function ElementName()
+    {
+    }
+    /**
+     * Returns true if this is the currently active page being used to handle this request.
+     *
+     * @return bool
+     */
+    public function isCurrent()
+    {
+    }
+    /**
+     * Check if this page is in the currently active section (e.g. it is either current or one of its children is
+     * currently being viewed).
+     *
+     * @return bool
+     */
+    public function isSection()
+    {
+    }
+    /**
+     * Check if the parent of this page has been removed (or made otherwise unavailable), and is still referenced by
+     * this child. Any such orphaned page may still require access via the CMS, but should not be shown as accessible
+     * to external users.
+     *
+     * @return bool
+     */
+    public function isOrphaned()
+    {
+    }
+    /**
+     * Return "link" or "current" depending on if this is the {@link SiteTree::isCurrent()} current page.
+     *
+     * @return string
+     */
+    public function LinkOrCurrent()
+    {
+    }
+    /**
+     * Return "link" or "section" depending on if this is the {@link SiteTree::isSeciton()} current section.
+     *
+     * @return string
+     */
+    public function LinkOrSection()
+    {
+    }
+    /**
+     * Return "link", "current" or "section" depending on if this page is the current page, or not on the current page
+     * but in the current section.
+     *
+     * @return string
+     */
+    public function LinkingMode()
+    {
+    }
+    /**
+     * Check if this page is in the given current section.
+     *
+     * @param string $sectionName Name of the section to check
+     * @return bool True if we are in the given section
+     */
+    public function InSection($sectionName)
+    {
+    }
+    /**
+     * Reset Sort on duped page
+     *
+     * @param SiteTree $original
+     * @param bool $doWrite
+     */
+    public function onBeforeDuplicate($original, $doWrite)
+    {
+    }
+    /**
+     * Duplicates each child of this node recursively and returns the top-level duplicate node.
+     *
+     * @return static The duplicated object
+     */
+    public function duplicateWithChildren()
+    {
+    }
+    /**
+     * Duplicate this node and its children as a child of the node with the given ID
+     *
+     * @param int $id ID of the new node's new parent
+     */
+    public function duplicateAsChild($id)
+    {
+    }
+    /**
+     * Return a breadcrumb trail to this page. Excludes "hidden" pages (with ShowInMenus=0) by default.
+     *
+     * @param int $maxDepth The maximum depth to traverse.
+     * @param boolean $unlinked Whether to link page titles.
+     * @param boolean|string $stopAtPageType ClassName of a page to stop the upwards traversal.
+     * @param boolean $showHidden Include pages marked with the attribute ShowInMenus = 0
+     * @param string $delimiter Delimiter character (raw html)
+     * @return string The breadcrumb trail.
+     */
+    public function Breadcrumbs($maxDepth = 20, $unlinked = false, $stopAtPageType = false, $showHidden = false, $delimiter = '&raquo;')
+    {
+    }
+    /**
+     * Returns a list of breadcrumbs for the current page.
+     *
+     * @param int $maxDepth The maximum depth to traverse.
+     * @param boolean|string $stopAtPageType ClassName of a page to stop the upwards traversal.
+     * @param boolean $showHidden Include pages marked with the attribute ShowInMenus = 0
+     *
+     * @return ArrayList<SiteTree>
+     */
+    public function getBreadcrumbItems($maxDepth = 20, $stopAtPageType = false, $showHidden = false)
+    {
+    }
+    /**
+     * Make this page a child of another page.
+     *
+     * If the parent page does not exist, resolve it to a valid ID before updating this page's reference.
+     *
+     * @param SiteTree|int $item Either the parent object, or the parent ID
+     */
+    public function setParent($item)
+    {
+    }
+    /**
+     * Get the parent of this page.
+     *
+     * @return SiteTree Parent of this page
+     */
+    public function getParent()
+    {
+    }
+    /**
+     * @param CacheInterface $cache
+     * @return $this
+     */
+    public function setCreatableChildrenCache(\Psr\SimpleCache\CacheInterface $cache)
+    {
+    }
+    /**
+     * @return CacheInterface $cache
+     */
+    public function getCreatableChildrenCache()
+    {
+    }
+    /**
+     * Return a string of the form "parent - page" or "grandparent - parent - page" using page titles
+     *
+     * @param int $level The maximum amount of levels to traverse.
+     * @param string $separator Seperating string
+     * @return string The resulting string
+     */
+    public function NestedTitle($level = 2, $separator = " - ")
+    {
+    }
+    /**
+     * This function should return true if the current user can execute this action. It can be overloaded to customise
+     * the security model for an application.
+     *
+     * Slightly altered from parent behaviour in {@link DataObject->can()}:
+     * - Checks for existence of a method named "can<$perm>()" on the object
+     * - Calls decorators and only returns for FALSE "vetoes"
+     * - Falls back to {@link Permission::check()}
+     * - Does NOT check for many-many relations named "Can<$perm>"
+     *
+     * @uses DataObjectDecorator->can()
+     *
+     * @param string $perm The permission to be checked, such as 'View'
+     * @param Member $member The member whose permissions need checking. Defaults to the currently logged in user.
+     * @param array $context Context argument for canCreate()
+     * @return bool True if the the member is allowed to do the given action
+     */
+    public function can($perm, $member = null, $context = [])
+    {
+    }
+    /**
+     * This function should return true if the current user can add children to this page. It can be overloaded to
+     * customise the security model for an application.
+     *
+     * Denies permission if any of the following conditions is true:
+     * - alternateCanAddChildren() on a extension returns false
+     * - canEdit() is not granted
+     * - There are no classes defined in {@link $allowed_children}
+     *
+     * @uses SiteTreeExtension->canAddChildren()
+     * @uses canEdit()
+     * @uses $allowed_children
+     *
+     * @param Member|int $member
+     * @return bool True if the current user can add children
+     */
+    public function canAddChildren($member = null)
+    {
+    }
+    /**
+     * This function should return true if the current user can view this page. It can be overloaded to customise the
+     * security model for an application.
+     *
+     * Denies permission if any of the following conditions is true:
+     * - canView() on any extension returns false
+     * - "CanViewType" directive is set to "Inherit" and any parent page return false for canView()
+     * - "CanViewType" directive is set to "LoggedInUsers" and no user is logged in
+     * - "CanViewType" directive is set to "OnlyTheseUsers" and user is not in the given groups
+     *
+     * @uses DataExtension->canView()
+     * @uses ViewerGroups()
+     *
+     * @param Member $member
+     * @return bool True if the current user can view this page
+     */
+    public function canView($member = null)
+    {
+    }
+    /**
+     * Check if this page can be published
+     *
+     * @param Member $member
+     * @return bool
+     */
+    public function canPublish($member = null)
+    {
+    }
+    /**
+     * This function should return true if the current user can delete this page. It can be overloaded to customise the
+     * security model for an application.
+     *
+     * Denies permission if any of the following conditions is true:
+     * - canDelete() returns false on any extension
+     * - canEdit() returns false
+     * - any descendant page returns false for canDelete()
+     *
+     * @uses canDelete()
+     * @uses SiteTreeExtension->canDelete()
+     * @uses canEdit()
+     *
+     * @param Member $member
+     * @return bool True if the current user can delete this page
+     */
+    public function canDelete($member = null)
+    {
+    }
+    /**
+     * This function should return true if the current user can create new pages of this class, regardless of class. It
+     * can be overloaded to customise the security model for an application.
+     *
+     * By default, permission to create at the root level is based on the SiteConfig configuration, and permission to
+     * create beneath a parent is based on the ability to edit that parent page.
+     *
+     * Use {@link canAddChildren()} to control behaviour of creating children under this page.
+     *
+     * @uses $can_create
+     * @uses DataExtension->canCreate()
+     *
+     * @param Member $member
+     * @param array $context Optional array which may contain ['Parent' => $parentObj]
+     *                       If a parent page is known, it will be checked for validity.
+     *                       If omitted, it will be assumed this is to be created as a top level page.
+     * @return bool True if the current user can create pages on this class.
+     */
+    public function canCreate($member = null, $context = [])
+    {
+    }
+    /**
+     * This function should return true if the current user can edit this page. It can be overloaded to customise the
+     * security model for an application.
+     *
+     * Denies permission if any of the following conditions is true:
+     * - canEdit() on any extension returns false
+     * - canView() return false
+     * - "CanEditType" directive is set to "Inherit" and any parent page return false for canEdit()
+     * - "CanEditType" directive is set to "LoggedInUsers" and no user is logged in or doesn't have the
+     *   CMS_Access_CMSMAIN permission code
+     * - "CanEditType" directive is set to "OnlyTheseUsers" and user is not in the given groups
+     *
+     * @uses canView()
+     * @uses EditorGroups()
+     * @uses DataExtension->canEdit()
+     *
+     * @param Member $member Set to false if you want to explicitly test permissions without a valid user (useful for
+     *                       unit tests)
+     * @return bool True if the current user can edit this page
+     */
+    public function canEdit($member = null)
+    {
+    }
+    /**
+     * Stub method to get the site config, unless the current class can provide an alternate.
+     *
+     * @return SiteConfig
+     */
+    public function getSiteConfig()
+    {
+    }
+    /**
+     * @return PermissionChecker
+     */
+    public static function getPermissionChecker()
+    {
+    }
+    /**
+     * Collate selected descendants of this page.
+     *
+     * {@link $condition} will be evaluated on each descendant, and if it is succeeds, that item will be added to the
+     * $collator array.
+     *
+     * @param string $condition The PHP condition to be evaluated. The page will be called $item
+     * @param array  $collator  An array, passed by reference, to collect all of the matching descendants.
+     * @return bool
+     */
+    public function collateDescendants($condition, &$collator)
+    {
+    }
+    /**
+     * Return attributes for various meta tags, plus a title tag, in a keyed array.
+     * Array structure corresponds to arguments for HTML::create_tag(). Example:
+     *
+     * $tags['description'] = [
+     *     // html tag type, if omitted defaults to 'meta'
+     *     'tag' => 'meta',
+     *     // attributes of html tag
+     *     'attributes' => [
+     *         'name' => 'description',
+     *         'content' => $this->customMetaDescription(),
+     *     ],
+     *     // content of html tag. (True meta tags don't contain content)
+     *     'content' => null
+     * ];
+     *
+     * @see HTML::createTag()
+     * @return array
+     */
+    public function MetaComponents()
+    {
+    }
+    /**
+     * @return VersionProvider
+     */
+    public function getVersionProvider() : \SilverStripe\Core\Manifest\VersionProvider
+    {
+    }
+    /**
+     * @param VersionProvider $versionProvider
+     */
+    public function setVersionProvider(\SilverStripe\Core\Manifest\VersionProvider $versionProvider) : void
+    {
+    }
+    /**
+     * Return the title, description, keywords and language metatags.
+     *
+     * @param bool $includeTitle Show default <title>-tag, set to false for custom templating
+     * @return string The XHTML metatags
+     */
+    public function MetaTags($includeTitle = true)
+    {
+    }
+    /**
+     * Returns the object that contains the content that a user would associate with this page.
+     *
+     * Ordinarily, this is just the page itself, but for example on RedirectorPages or VirtualPages ContentSource() will
+     * return the page that is linked to.
+     *
+     * @return $this
+     */
+    public function ContentSource()
+    {
+    }
+    /**
+     * Add default records to database.
+     *
+     * This function is called whenever the database is built, after the database tables have all been created. Overload
+     * this to add default records when the database is built, but make sure you call parent::requireDefaultRecords().
+     */
+    public function requireDefaultRecords()
+    {
+    }
+    protected function onBeforeWrite()
+    {
+    }
+    /**
+     * Trigger synchronisation of link tracking
+     *
+     * {@see SiteTreeLinkTracking::augmentSyncLinkTracking}
+     */
+    public function syncLinkTracking()
+    {
+    }
+    public function onBeforeDelete()
+    {
+    }
+    public function onAfterDelete()
+    {
+    }
+    public function flushCache($persistent = true)
+    {
+    }
+    /**
+     * Flushes the member specific cache for creatable children
+     *
+     * @param array $memberIDs
+     */
+    public function flushMemberCache($memberIDs = null)
+    {
+    }
+    public function validate()
+    {
+    }
+    /**
+     * Returns true if this object has a URLSegment value that does not conflict with any other objects. This method
+     * checks for:
+     *  - A page with the same URLSegment that has a conflict
+     *  - Conflicts with actions on the parent page
+     *  - A conflict caused by a root page having the same URLSegment as a class name
+     *
+     * @return bool
+     */
+    public function validURLSegment()
+    {
+    }
+    /**
+     * Generate a URL segment based on the title provided.
+     *
+     * If {@link Extension}s wish to alter URL segment generation, they can do so by defining
+     * updateURLSegment(&$url, $title).  $url will be passed by reference and should be modified. $title will contain
+     * the title that was originally used as the source of this generated URL. This lets extensions either start from
+     * scratch, or incrementally modify the generated URL.
+     *
+     * @param string $title Page title
+     * @return string Generated url segment
+     */
+    public function generateURLSegment($title)
+    {
+    }
+    /**
+     * Gets the URL segment for the latest draft version of this page.
+     *
+     * @return string
+     */
+    public function getStageURLSegment()
+    {
+    }
+    /**
+     * Gets the URL segment for the currently published version of this page.
+     *
+     * @return string
+     */
+    public function getLiveURLSegment()
+    {
+    }
+    /**
+     * Get the back-link tracking objects that link to this page
+     *
+     * @return ArrayList<DataObject>
+     */
+    public function BackLinkTracking()
+    {
+    }
+    /**
+     * Returns the pages that depend on this page. This includes virtual pages, pages that link to it, etc.
+     *
+     * @param bool $includeVirtuals Set to false to exlcude virtual pages.
+     * @return ArrayList<SiteTree>
+     */
+    public function DependentPages($includeVirtuals = true)
+    {
+    }
+    /**
+     * Return all virtual pages that link to this page.
+     *
+     * @return DataList<SiteTree>
+     */
+    public function VirtualPages()
+    {
+    }
+    /**
+     * Returns a FieldList with which to create the main editing form.
+     *
+     * You can override this in your child classes to add extra fields - first get the parent fields using
+     * parent::getCMSFields(), then use addFieldToTab() on the FieldList.
+     *
+     * See {@link getSettingsFields()} for a different set of fields concerned with configuration aspects on the record,
+     * e.g. access control.
+     *
+     * @return FieldList The fields to be displayed in the CMS
+     */
+    public function getCMSFields()
+    {
+    }
+    /**
+     * Returns fields related to configuration aspects on this record, e.g. access control. See {@link getCMSFields()}
+     * for content-related fields.
+     *
+     * @return FieldList
+     */
+    public function getSettingsFields()
+    {
+    }
+    /**
+     * @param bool $includerelations A boolean value to indicate if the labels returned should include relation fields
+     * @return array
+     */
+    public function fieldLabels($includerelations = true)
+    {
+    }
+    /**
+     * Get the actions available in the CMS for this page - eg Save, Publish.
+     *
+     * Frontend scripts and styles know how to handle the following FormFields:
+     * - top-level FormActions appear as standalone buttons
+     * - top-level CompositeField with FormActions within appear as grouped buttons
+     * - TabSet & Tabs appear as a drop ups
+     * - FormActions within the Tab are restyled as links
+     * - major actions can provide alternate states for richer presentation (see ssui.button widget extension)
+     *
+     * @return FieldList The available actions for this page.
+     */
+    public function getCMSActions()
+    {
+    }
+    public function onAfterPublish()
+    {
+    }
+    /**
+     * Update draft dependant pages
+     */
+    public function onAfterRevertToLive()
+    {
+    }
+    /**
+     * Determine if this page references a parent which is archived, and not available in stage
+     *
+     * @return bool True if there is an archived parent
+     */
+    protected function isParentArchived()
+    {
+    }
+    /**
+     * Restore the content in the active copy of this SiteTree page to the stage site.
+     *
+     * @return static
+     */
+    public function doRestoreToStage()
+    {
+    }
+    /**
+     * Check if this page is new - that is, if it has yet to have been written to the database.
+     *
+     * @return bool
+     */
+    public function isNew()
+    {
+    }
+    /**
+     * Get the class dropdown used in the CMS to change the class of a page. This returns the list of options in the
+     * dropdown as a Map from class name to singular name. Filters by {@link SiteTree->canCreate()}, as well as
+     * {@link SiteTree::$needs_permission}.
+     *
+     * @return array
+     */
+    protected function getClassDropdown()
+    {
+    }
+    /**
+     * Returns an array of the class names of classes that are allowed to be children of this class.
+     *
+     * @return string[]
+     */
+    public function allowedChildren()
+    {
+    }
+    /**
+     *
+     * Gets a list of the page types that can be created under this specific page, including font icons
+     *
+     * @return array
+     */
+    public function creatableChildPages()
+    {
+    }
+    /**
+     * Returns the class name of the default class for children of this page.
+     *
+     * @return string
+     */
+    public function defaultChild()
+    {
+    }
+    /**
+     * Returns the class name of the default class for the parent of this page.
+     *
+     * @return string
+     */
+    public function defaultParent()
+    {
+    }
+    /**
+     * Get the title for use in menus for this page. If the MenuTitle field is set it returns that, else it returns the
+     * Title field.
+     *
+     * @return string
+     */
+    public function getMenuTitle()
+    {
+    }
+    /**
+     * Set the menu title for this page.
+     *
+     * @param string $value
+     */
+    public function setMenuTitle($value)
+    {
+    }
+    /**
+     * A flag provides the user with additional data about the current page status, for example a "removed from draft"
+     * status. Each page can have more than one status flag. Returns a map of a unique key to a (localized) title for
+     * the flag. The unique key can be reused as a CSS class. Use the 'updateStatusFlags' extension point to customize
+     * the flags.
+     *
+     * Example (simple):
+     *   "deletedonlive" => "Deleted"
+     *
+     * Example (with optional title attribute):
+     *   "deletedonlive" => ['text' => "Deleted", 'title' => 'This page has been deleted']
+     *
+     * @param bool $cached Whether to serve the fields from cache; false regenerate them
+     * @return array
+     */
+    public function getStatusFlags($cached = true)
+    {
+    }
+    /**
+     * Returns the CSS class used for the page icon in the site tree.
+     *
+     * @return string
+     */
+    public function getIconClass()
+    {
+    }
+    /**
+     * getTreeTitle will return three <span> html DOM elements, an empty <span> with the class 'jstree-pageicon' in
+     * front, following by a <span> wrapping around its MenuTitle, then following by a <span> indicating its
+     * publication status.
+     *
+     * @return string An HTML string ready to be directly used in a template
+     */
+    public function getTreeTitle()
+    {
+    }
+    /**
+     * Returns the page in the current page stack of the given level. Level(1) will return the main menu item that
+     * we're currently inside, etc.
+     *
+     * @param int $level
+     * @return SiteTree
+     */
+    public function Level($level)
+    {
+    }
+    /**
+     * Gets the depth of this page in the sitetree, where 1 is the root level
+     *
+     * @return int
+     */
+    public function getPageLevel()
+    {
+    }
+    /**
+     * Find the controller name by our convention of {$ModelClass}Controller
+     * Can be overriden by config variable
+     *
+     * @return string
+     */
+    public function getControllerName()
+    {
+    }
+    /**
+     * Return the CSS classes to apply to this node in the CMS tree.
+     *
+     * @return string
+     */
+    public function CMSTreeClasses()
+    {
+    }
+    /**
+     * Stops extendCMSFields() being called on getCMSFields(). This is useful when you need access to fields added by
+     * subclasses of SiteTree in a extension. Call before calling parent::getCMSFields(), and reenable afterwards.
+     */
+    public static function disableCMSFieldsExtensions()
+    {
+    }
+    /**
+     * Reenables extendCMSFields() being called on getCMSFields() after it has been disabled by
+     * disableCMSFieldsExtensions().
+     */
+    public static function enableCMSFieldsExtensions()
+    {
+    }
+    public function providePermissions()
+    {
+    }
+    /**
+     * Default singular name for page / sitetree
+     *
+     * @return string
+     */
+    public function singular_name()
+    {
+    }
+    /**
+     * Default plural name for page / sitetree
+     *
+     * @return string
+     */
+    public function plural_name()
+    {
+    }
+    /**
+     * Generate link to this page's icon
+     *
+     * @return string
+     */
+    public function getPageIconURL()
+    {
+    }
+    /**
+     * Get description for this page type
+     *
+     * @return string|null
+     */
+    public function classDescription()
+    {
+    }
+    /**
+     * Get localised description for this page
+     *
+     * @return string|null
+     */
+    public function i18n_classDescription()
+    {
+    }
+    /**
+     * Overloaded to also provide entities for 'Page' class which is usually located in custom code, hence textcollector
+     * picks it up for the wrong folder.
+     *
+     * @return array
+     */
+    public function provideI18nEntities()
+    {
+    }
+    /**
+     * Returns 'root' if the current page has no parent, or 'subpage' otherwise
+     *
+     * @return string
+     */
+    public function getParentType()
+    {
+    }
+    /**
+     * Clear the permissions cache for SiteTree
+     */
+    public static function reset()
+    {
+    }
+    /**
+     * Clear the creatableChildren cache on flush
+     */
+    public static function flush()
+    {
+    }
+    /**
+     * Update dependant pages
+     */
+    protected function updateDependentPages()
+    {
+    }
+    /**
+     * Cache key for creatableChildPages() method
+     *
+     * @param int $memberID
+     * @return string
+     */
+    protected function generateChildrenCacheKey($memberID)
+    {
+    }
+    /**
+     * Get the list of excluded root URL segments
+     *
+     * @return array List of lowercase urlsegments
+     */
+    protected function getExcludedURLSegments()
+    {
+    }
+    /**
+     * @return array
+     */
+    public function getAnchorsOnPage()
+    {
+    }
+    /**
+     * Returns whether this is the home page or not
+     *
+     * @return bool
+     */
+    public function isHomePage() : bool
+    {
+    }
+}

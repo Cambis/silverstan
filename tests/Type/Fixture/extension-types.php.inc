@@ -1,8 +1,7 @@
 <?php
 
-namespace Cambis\Silverstan\Type\Tests\Fixture;
+namespace Cambis\Silverstan\Tests\Type\Fixture;
 
-use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Core\Extension;
 
@@ -25,56 +24,28 @@ class Bar extends DataObject
 }
 
 /**
- * @extends Extension<Foo>
+ * @extends Extension<Foo&static>
  */
 class ObjectExtension extends Extension
 {
     public function baz(): void
     {
         assertType(
-            Foo::class . '|static(' . self::class . ')',
+            Foo::class,
             $this->getOwner()
         );
     }
 }
 
 /**
- * @extends DataExtension<Foo>
- */
-class DataObjectExtension extends DataExtension
-{
-    public function baz(): void
-    {
-        assertType(
-            Foo::class . '|static(' . self::class . ')',
-            $this->getOwner()
-        );
-    }
-}
-
-/**
- * @extends Extension<Foo|Bar>
+ * @extends Extension<(Foo&static)|(Bar&static)>
  */
 class UnionExtension extends Extension
 {
     public function baz(): void
     {
         assertType(
-            Bar::class . '|' . Foo::class . '|static(' . self::class . ')',
-            $this->getOwner()
-        );
-    }
-}
-
-/**
- * @extends Extension<Foo&Bar>
- */
-class InstersectionExtension extends Extension
-{
-    public function baz(): void
-    {
-        assertType(
-            '(' . Bar::class . '&' . Foo::class . ')|static(' . self::class . ')',
+            Bar::class . '|' . Foo::class,
             $this->getOwner()
         );
     }

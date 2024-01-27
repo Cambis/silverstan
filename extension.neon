@@ -13,3 +13,6 @@ services:
     -
         class: Cambis\Silverstan\Rule\ClassPropertiesNode\ConfigurablePropertiesExtension
         tags: [phpstan.properties.readWriteExtension]
+    -
+        class: Cambis\Silverstan\PhpDoc\ExtensionOwnerTypeNodeResolverExtension
+        tags: [phpstan.phpDoc.typeNodeResolverExtension]

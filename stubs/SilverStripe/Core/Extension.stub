@@ -18,13 +18,13 @@ abstract class Extension
     /**
      * The object this extension is applied to.
      *
-     * @var T|static
+     * @var T
      */
     protected $owner;
     /**
      * Returns the owner of this extension.
      *
-     * @return T|static
+     * @return T
      */
     public function getOwner()
     {

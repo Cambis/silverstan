@@ -13,3 +13,5 @@ docker-compose.yml
 coverage/
 public/
 .phpunit.cache/
+src/Playground
+.idea
