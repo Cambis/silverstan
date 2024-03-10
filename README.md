@@ -7,8 +7,8 @@ See available [Silverstripe rules](docs/rules_overview.md).
 ## Prerequisites 🦺
 
 ```sh
-silverstripe/framework ^5.0
-silverstripe/cms ^5.0
+silverstripe/framework ^5.2
+silverstripe/cms ^5.2
 ```
 
 ## Installation 👷‍♀️
@@ -35,4 +35,4 @@ includes:
 
 ## Configuration 🚧
 
-Each rule can be enabled/disabled manually using the configuration options, please refer to the [rules overview](docs/rules_overview.md) for the available options.
+Each rule can be enabled/disabled individually using the configuration options, please refer to the [rules overview](docs/rules_overview.md) for the available options.

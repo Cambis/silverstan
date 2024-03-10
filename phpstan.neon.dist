@@ -1,5 +1,6 @@
 includes:
     - extension.neon
+    - phpstan-baseline.neon
 parameters:
     level: 8
     paths:
@@ -10,6 +11,7 @@ parameters:
         - rector.php
         - '*/Fixture/*'
         - '*/Source/*'
+        - src/Playground
 services:
     -
         class: Symplify\PHPStanRules\Rules\ClassNameRespectsParentSuffixRule

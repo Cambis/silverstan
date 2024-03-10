@@ -1,10 +1,23 @@
 parameters:
     silverstanRules:
-        forbidStaticPropertyFetchOnConfigurableProperty:
+        disallowNonInterfacePublicMethodsOnExtension:
             enabled: true
-        forbidSuperglobals:
+        disallowOverridingOfConfigurablePropertyType:
             enabled: true
-            forbiddenSuperglobals:
+        disallowUseOfReservedConfigurablePropertyName:
+            enabled: true
+        requireConfigurablePropertyOverride:
+            enabled: true
+            requiredProperties:
+                -
+                    class: SilverStripe\ORM\DataObject
+                    properties:
+                        - table_name
+        disallowStaticPropertyFetchOnConfigurableProperty:
+            enabled: true
+        disallowSuperglobals:
+            enabled: true
+            disallowedSuperglobals:
                 - _GET
                 - _POST
                 - _FILES
@@ -16,25 +29,61 @@ parameters:
 
 parametersSchema:
     silverstanRules: structure([
-        forbidStaticPropertyFetchOnConfigurableProperty: structure([
+        disallowNonInterfacePublicMethodsOnExtension: structure([
             enabled: bool()
         ])
-        forbidSuperglobals: structure([
+        disallowOverridingOfConfigurablePropertyType: structure([
             enabled: bool()
-            forbiddenSuperglobals: arrayOf(string())
+        ])
+        disallowUseOfReservedConfigurablePropertyName: structure([
+            enabled: bool()
+        ])
+        requireConfigurablePropertyOverride: structure([
+            enabled: bool()
+            requiredProperties: arrayOf(
+                structure([
+                    class: string(),
+                    properties: arrayOf(string())
+                ])
+            )
+        ])
+        disallowStaticPropertyFetchOnConfigurableProperty: structure([
+            enabled: bool()
+        ])
+        disallowSuperglobals: structure([
+            enabled: bool()
+            disallowedSuperglobals: arrayOf(string())
         ])
     ])
 
 conditionalTags:
-    Cambis\Silverstan\Rule\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule:
-        phpstan.rules.rule: %silverstanRules.forbidStaticPropertyFetchOnConfigurableProperty.enabled%
-    Cambis\Silverstan\Rule\Variable\ForbidSuperglobalsRule:
-        phpstan.rules.rule: %silverstanRules.forbidSuperglobals.enabled%
+    Cambis\Silverstan\Rule\ClassMethod\DisallowNonInterfacePublicMethodsOnExtensionRule:
+        phpstan.rules.rule: %silverstanRules.disallowNonInterfacePublicMethodsOnExtension.enabled%
+    Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurablePropertyTypeRule:
+        phpstan.rules.rule: %silverstanRules.disallowOverridingOfConfigurablePropertyType.enabled%
+    Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurablePropertyNameRule:
+        phpstan.rules.rule: %silverstanRules.disallowUseOfReservedConfigurablePropertyName.enabled%
+    Cambis\Silverstan\Rule\InClassNode\RequireConfigurablePropertyOverrideRule:
+        phpstan.rules.rule: %silverstanRules.requireConfigurablePropertyOverride.enabled%
+    Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurablePropertyRule:
+        phpstan.rules.rule: %silverstanRules.disallowStaticPropertyFetchOnConfigurableProperty.enabled%
+    Cambis\Silverstan\Rule\Variable\DisallowSuperglobalsRule:
+        phpstan.rules.rule: %silverstanRules.disallowSuperglobals.enabled%
 
 services:
     -
-        class: Cambis\Silverstan\Rule\StaticPropertyFetch\ForbidStaticPropertyFetchOnConfigurablePropertyRule
-        tags: [phpstan.rules.rule]
+        class: Cambis\Silverstan\Rule\ClassMethod\DisallowNonInterfacePublicMethodsOnExtensionRule
     -
-        class: Cambis\Silverstan\Rule\Variable\ForbidSuperglobalsRule
-        tags: [phpstan.rules.rule]
+        class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurablePropertyTypeRule
+    -
+        class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurablePropertyNameRule
+    -
+        class: Cambis\Silverstan\Rule\InClassNode\RequireConfigurablePropertyOverrideRule
+        arguments:
+            requiredProperties: %silverstanRules.requireConfigurablePropertyOverride.requiredProperties%
+    -
+        class: Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurablePropertyRule
+    -
+        class: Cambis\Silverstan\Rule\Variable\DisallowSuperglobalsRule
+        arguments:
+            disallowedSuperglobals: %silverstanRules.disallowSuperglobals.disallowedSuperglobals%

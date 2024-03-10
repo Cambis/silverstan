@@ -1,6 +1,6 @@
 <?php
 
-namespace Cambis\Silverstan\Tests\Type\Fixture;
+namespace Cambis\Silverstan\Tests\Extension\PhpDoc\Fixture;
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Core\Extension;
@@ -24,7 +24,7 @@ class Bar extends DataObject
 }
 
 /**
- * @extends Extension<Foo&static>
+ * @extends Extension<Foo>
  */
 class ObjectExtension extends Extension
 {
@@ -38,9 +38,37 @@ class ObjectExtension extends Extension
 }
 
 /**
- * @extends Extension<(Foo&static)|(Bar&static)>
+ * @extends Extension<Foo|Bar>
  */
 class UnionExtension extends Extension
+{
+    public function baz(): void
+    {
+        assertType(
+            Bar::class . '|' . Foo::class,
+            $this->getOwner()
+        );
+    }
+}
+
+/**
+ * @extends Extension<Foo&static>
+ */
+class IntersectionExtension extends Extension
+{
+    public function baz(): void
+    {
+        assertType(
+            Foo::class,
+            $this->getOwner()
+        );
+    }
+}
+
+/**
+ * @extends Extension<(Foo&static)|(Bar&static)>
+ */
+class DNFExtension extends Extension
 {
     public function baz(): void
     {

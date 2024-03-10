@@ -22,9 +22,9 @@ use function sprintf;
 
 /**
  * @implements Rule<Variable>
- * @see \Cambis\Silverstan\Tests\Rule\Variable\ForbidSuperglobalsRuleTest
+ * @see \Cambis\Silverstan\Tests\Rule\Variable\DisallowSuperglobalsRuleTest
  */
-final class ForbidSuperglobalsRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class DisallowSuperglobalsRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
     /**
      * @var string[]
@@ -35,17 +35,17 @@ final class ForbidSuperglobalsRule implements Rule, DocumentedRuleInterface, Con
 
     public function __construct(
         /** @var string[] */
-        private readonly array $forbiddenSuperglobals = self::SUPERGLOBALS
+        private readonly array $disallowedSuperglobals = self::SUPERGLOBALS
     ) {
-        foreach ($forbiddenSuperglobals as $forbiddenSuperglobal) {
-            Assert::inArray($forbiddenSuperglobal, self::SUPERGLOBALS);
+        foreach ($disallowedSuperglobals as $disallowedSuperglobal) {
+            Assert::inArray($disallowedSuperglobal, self::SUPERGLOBALS);
         }
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Forbid the use of superglobals ($_GET, $_REQUEST etc.).',
+            'Disallow the use of superglobals ($_GET, $_REQUEST etc.).',
             [new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class CustomMiddleware implements \SilverStripe\Control\Middleware\HTTPMiddleware
@@ -74,7 +74,7 @@ CODE_SAMPLE
                 ,
                 [
                     'enabled' => true,
-                    'forbiddenSuperglobals' => self::SUPERGLOBALS,
+                    'disallowedSuperglobals' => self::SUPERGLOBALS,
                 ]
             ),
             ]
@@ -97,7 +97,7 @@ CODE_SAMPLE
             return [];
         }
 
-        if (!in_array($node->name, $this->forbiddenSuperglobals, true)) {
+        if (!in_array($node->name, $this->disallowedSuperglobals, true)) {
             return [];
         }
 

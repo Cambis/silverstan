@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\Tests\Type;
+namespace Cambis\Silverstan\Tests\Extension\PhpDoc;
 
 use Generator;
 use PHPStan\Testing\TypeInferenceTestCase;
 
-final class ExtensionTypeTest extends TypeInferenceTestCase
+final class ExtensionOwnerTypeNodeResolverExtensionTest extends TypeInferenceTestCase
 {
     public function typeFileAsserts(): Generator
     {
@@ -27,6 +27,6 @@ final class ExtensionTypeTest extends TypeInferenceTestCase
      */
     public static function getAdditionalConfigFiles(): array
     {
-        return [__DIR__ . '/../../extension.neon'];
+        return [__DIR__ . '/../../../extension.neon'];
     }
 }

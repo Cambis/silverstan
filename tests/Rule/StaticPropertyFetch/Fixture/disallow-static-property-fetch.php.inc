@@ -2,7 +2,7 @@
 
 namespace Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\Fixture;
 
-final class ForbidStaticPropertyFetch implements \SilverStripe\Dev\TestOnly
+final class DisallowStaticPropertyFetch implements \SilverStripe\Dev\TestOnly
 {
     use \SilverStripe\Core\Config\Configurable;
 

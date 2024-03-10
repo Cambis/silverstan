@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\PhpDoc;
+namespace Cambis\Silverstan\Extension\PhpDoc;
 
 use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDoc\TypeNodeResolver;
@@ -22,6 +22,8 @@ use function count;
 
 /**
  * Allow the use of `Extensible&Extension` which would normally resolve to NEVER.
+ *
+ * @see \Cambis\Silverstan\Tests\Extension\PhpDoc\ExtensionOwnerTypeNodeResolverExtensionTest
  */
 final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverExtension
 {
@@ -39,6 +41,7 @@ final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverE
             return null;
         }
 
+        // Limit the amount of types, there should be only two
         if (count($typeNode->types) !== 2) {
             return null;
         }
@@ -69,11 +72,7 @@ final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverE
             return true;
         }
 
-        if (!$classReflection->hasTraitUse(Extensible::class)) {
-            return true;
-        }
-
-        return false;
+        return !$classReflection->hasTraitUse(Extensible::class);
     }
 
     private function shouldSkipExtensionType(Type $type): bool
@@ -88,10 +87,6 @@ final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverE
             return true;
         }
 
-        if (!$classReflection->isSubclassOf(Extension::class)) {
-            return true;
-        }
-
-        return false;
+        return !$classReflection->isSubclassOf(Extension::class);
     }
 }
