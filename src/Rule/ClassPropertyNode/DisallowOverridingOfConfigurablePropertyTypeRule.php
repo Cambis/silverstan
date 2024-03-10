@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\ClassPropertyNode;
 
+use Override;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
@@ -30,6 +31,7 @@ use function str_contains;
  */
 final class DisallowOverridingOfConfigurablePropertyTypeRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
+    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -57,6 +59,7 @@ CODE_SAMPLE
         );
     }
 
+    #[Override]
     public function getNodeType(): string
     {
         return ClassPropertyNode::class;
@@ -65,6 +68,7 @@ CODE_SAMPLE
     /**
      * @param ClassPropertyNode $node
      */
+    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$this->isConfigurableProperty($node)) {

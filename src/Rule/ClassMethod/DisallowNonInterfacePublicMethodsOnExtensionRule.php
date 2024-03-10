@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\ClassMethod;
 
+use Override;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
@@ -23,6 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DisallowNonInterfacePublicMethodsOnExtensionRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
+    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -85,6 +87,7 @@ CODE_SAMPLE
         );
     }
 
+    #[Override]
     public function getNodeType(): string
     {
         return ClassMethod::class;
@@ -93,6 +96,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
+    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         $classReflection = $scope->getClassReflection();

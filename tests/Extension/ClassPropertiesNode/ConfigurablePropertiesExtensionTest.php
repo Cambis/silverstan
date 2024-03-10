@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Extension\ClassPropertiesNode;
 
+use Override;
 use PHPStan\Rules\DeadCode\UnusedPrivatePropertyRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
@@ -13,6 +14,7 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class ConfigurablePropertiesExtensionTest extends RuleTestCase
 {
+    #[Override]
     protected function getRule(): Rule
     {
         return self::getContainer()->getByType(UnusedPrivatePropertyRule::class);
@@ -21,6 +23,7 @@ final class ConfigurablePropertiesExtensionTest extends RuleTestCase
     /**
      * @return string[]
      */
+    #[Override]
     public static function getAdditionalConfigFiles(): array
     {
         return [__DIR__ . '/../../../extension.neon'];

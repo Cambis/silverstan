@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
+use Rector\Php83\Rector\ClassConst\AddTypeToConstRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -32,5 +33,6 @@ return static function (RectorConfig $rectorConfig): void {
         '*/Fixture/*',
         '*/Source/*',
         ClosureToArrowFunctionRector::class,
+        AddTypeToConstRector::class,
     ]);
 };

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\InClassNode;
 
 use Cambis\Silverstan\ValueObject\RequiredProperties;
+use Override;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -47,6 +48,7 @@ final class RequireConfigurablePropertyOverrideRule implements Rule, DocumentedR
         }
     }
 
+    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -79,6 +81,7 @@ CODE_SAMPLE
         );
     }
 
+    #[Override]
     public function getNodeType(): string
     {
         return InClassNode::class;
@@ -87,6 +90,7 @@ CODE_SAMPLE
     /**
      * @param InClassNode $node
      */
+    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         $classReflection = $scope->getClassReflection();

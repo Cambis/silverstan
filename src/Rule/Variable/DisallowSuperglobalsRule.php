@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\Variable;
 
+use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
@@ -24,7 +25,7 @@ use function sprintf;
  * @implements Rule<Variable>
  * @see \Cambis\Silverstan\Tests\Rule\Variable\DisallowSuperglobalsRuleTest
  */
-final class DisallowSuperglobalsRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final readonly class DisallowSuperglobalsRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
     /**
      * @var string[]
@@ -35,13 +36,14 @@ final class DisallowSuperglobalsRule implements Rule, DocumentedRuleInterface, C
 
     public function __construct(
         /** @var string[] */
-        private readonly array $disallowedSuperglobals = self::SUPERGLOBALS
+        private array $disallowedSuperglobals = self::SUPERGLOBALS
     ) {
         foreach ($disallowedSuperglobals as $disallowedSuperglobal) {
             Assert::inArray($disallowedSuperglobal, self::SUPERGLOBALS);
         }
     }
 
+    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -81,6 +83,7 @@ CODE_SAMPLE
         );
     }
 
+    #[Override]
     public function getNodeType(): string
     {
         return Variable::class;
@@ -89,6 +92,7 @@ CODE_SAMPLE
     /**
      * @param Variable $node
      */
+    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         $functionReflection = $scope->getFunction();

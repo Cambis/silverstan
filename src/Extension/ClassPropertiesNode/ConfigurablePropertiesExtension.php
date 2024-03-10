@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Extension\ClassPropertiesNode;
 
+use Override;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
@@ -20,6 +21,7 @@ use function str_contains;
  */
 final class ConfigurablePropertiesExtension implements ReadWritePropertiesExtension, DocumentedRuleInterface
 {
+    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -43,16 +45,19 @@ CODE_SAMPLE
         );
     }
 
+    #[Override]
     public function isAlwaysRead(PropertyReflection $propertyReflection, string $propertyName): bool
     {
         return !$this->shouldSkipProperty($propertyReflection);
     }
 
+    #[Override]
     public function isAlwaysWritten(PropertyReflection $propertyReflection, string $propertyName): bool
     {
         return !$this->shouldSkipProperty($propertyReflection);
     }
 
+    #[Override]
     public function isInitialized(PropertyReflection $propertyReflection, string $propertyName): bool
     {
         return !$this->shouldSkipProperty($propertyReflection);

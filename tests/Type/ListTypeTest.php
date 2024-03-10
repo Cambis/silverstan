@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Tests\Type;
 
 use Generator;
+use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
 
 final class ListTypeTest extends TypeInferenceTestCase
@@ -26,6 +27,7 @@ final class ListTypeTest extends TypeInferenceTestCase
     /**
      * @return string[]
      */
+    #[Override]
     public static function getAdditionalConfigFiles(): array
     {
         return [__DIR__ . '/../../extension.neon'];

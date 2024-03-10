@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Extension\PhpDoc;
 
+use Override;
 use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDoc\TypeNodeResolverExtension;
@@ -25,16 +26,17 @@ use function count;
  *
  * @see \Cambis\Silverstan\Tests\Extension\PhpDoc\ExtensionOwnerTypeNodeResolverExtensionTest
  */
-final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverExtension
+final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverExtension
 {
     public function __construct(
-        private readonly TypeNodeResolver $typeNodeResolver
+        private TypeNodeResolver $typeNodeResolver
     ) {
     }
 
     /**
      * @throws ShouldNotHappenException
      */
+    #[Override]
     public function resolve(TypeNode $typeNode, NameScope $nameScope): ?Type
     {
         if (!$typeNode instanceof IntersectionTypeNode) {
@@ -77,7 +79,7 @@ final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverE
 
     private function shouldSkipExtensionType(Type $type): bool
     {
-        if (!($type instanceof StaticType || $type instanceof ObjectType)) {
+        if (!$type instanceof StaticType && !$type instanceof ObjectType) {
             return true;
         }
 

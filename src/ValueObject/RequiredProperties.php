@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ValueObject;
 
-final class RequiredProperties
+final readonly class RequiredProperties
 {
     public function __construct(
         /**
          * @var class-string
          */
-        private readonly string $className,
+        private string $className,
         /**
          * @var string[]
          */
-        private readonly array $properties,
+        private array $properties,
     ) {
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Tests\Rule\ClassMethod;
 
 use Cambis\Silverstan\Rule\ClassMethod\DisallowNonInterfacePublicMethodsOnExtensionRule;
+use Override;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
@@ -13,6 +14,7 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class DisallowNonInterfacePublicMethodsOnExtensionRuleTest extends RuleTestCase
 {
+    #[Override]
     protected function getRule(): Rule
     {
         return new DisallowNonInterfacePublicMethodsOnExtensionRule();

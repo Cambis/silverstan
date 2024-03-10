@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Tests\Extension\PhpDoc;
 
 use Generator;
+use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
 
 final class ExtensionOwnerTypeNodeResolverExtensionTest extends TypeInferenceTestCase
@@ -25,6 +26,7 @@ final class ExtensionOwnerTypeNodeResolverExtensionTest extends TypeInferenceTes
     /**
      * @return string[]
      */
+    #[Override]
     public static function getAdditionalConfigFiles(): array
     {
         return [__DIR__ . '/../../../extension.neon'];

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Tests\Rule\InClassNode;
 
 use Cambis\Silverstan\Rule\InClassNode\RequireConfigurablePropertyOverrideRule;
+use Override;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use SilverStripe\ORM\DataObject;
@@ -14,6 +15,7 @@ use SilverStripe\ORM\DataObject;
  */
 final class RequireConfigurablePropertyOverrideRuleTest extends RuleTestCase
 {
+    #[Override]
     protected function getRule(): Rule
     {
         return new RequireConfigurablePropertyOverrideRule([

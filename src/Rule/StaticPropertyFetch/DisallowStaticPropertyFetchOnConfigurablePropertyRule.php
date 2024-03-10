@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\StaticPropertyFetch;
 
+use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\VarLikeIdentifier;
@@ -28,6 +29,7 @@ use function str_contains;
  */
 final class DisallowStaticPropertyFetchOnConfigurablePropertyRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
+    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -65,6 +67,7 @@ CODE_SAMPLE
         );
     }
 
+    #[Override]
     public function getNodeType(): string
     {
         return StaticPropertyFetch::class;
@@ -73,6 +76,7 @@ CODE_SAMPLE
     /**
      * @param StaticPropertyFetch $node
      */
+    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$node->name instanceof VarLikeIdentifier) {
