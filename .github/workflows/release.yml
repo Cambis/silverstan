@@ -45,10 +45,12 @@ jobs:
             tests \
             ecs.php \
             phpstan.neon.dist \
+            phpstan-baseline.neon \
             rector.php \
             build \
             patches \
             package.json \
+            .nvmrc \
             CHANGELOG.md \
             CONTRIBUTING.md
 
