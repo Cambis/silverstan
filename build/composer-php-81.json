@@ -1,0 +1,29 @@
+{
+  "name": "cambis/silverstan",
+  "description": "PHPStan rules for Silverstripe.",
+  "license": "MIT",
+  "type": "phpstan-extension",
+  "authors": [
+      {
+          "name": "Cameron Bryers"
+      }
+  ],
+  "require": {
+      "php": "^8.1",
+      "nikic/php-parser": "^4.18",
+      "phpstan/phpstan": "^1.10",
+      "silverstripe/cms": "^5.2",
+      "silverstripe/framework": "^5.2",
+      "symplify/rule-doc-generator-contracts": "^11.1",
+      "webmozart/assert": "^1.11"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+      "psr-4": {
+          "Cambis\\Silverstan\\": [
+              "src/"
+          ]
+      }
+  }
+}

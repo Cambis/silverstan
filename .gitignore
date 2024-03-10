@@ -1,17 +1,28 @@
-node_modules/
-vendor/
+# OS
 .DS_Store
-composer.lock
-*.js.map
-*.css.map
-yarn-error.log
-yarn.lock
+
+# IDE
+.idea
+.vscode
+
+# Docker
 docker/
 docker-compose.yml
-.phpunit.result.cache
-.vscode/
-coverage/
+
+# Silverstripe
 public/
-.phpunit.cache/
+app/
+
+# Dependencies
+node_modules/
+vendor/
+composer.lock
+yarn-error.log
+yarn.lock
+
+# Tests
+.phpunit.cache
+coverage/
+
+# Playground
 src/Playground
-.idea

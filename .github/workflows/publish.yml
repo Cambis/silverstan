@@ -1,0 +1,38 @@
+name: Publish 🔖
+on:
+  workflow_run:
+    workflows:
+      - lint
+      - test
+    branches: 
+      - main
+    types:
+      - completed
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  publish:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - run: yarn install
+
+      - name: Create release pull request or publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          commit: ":memo: ci: update changelog"
+          title: ":memo: ci: update changelog"
+          publish: "echo 'versioned'"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
