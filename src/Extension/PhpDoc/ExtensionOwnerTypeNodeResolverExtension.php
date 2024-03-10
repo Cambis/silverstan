@@ -26,10 +26,10 @@ use function count;
  *
  * @see \Cambis\Silverstan\Tests\Extension\PhpDoc\ExtensionOwnerTypeNodeResolverExtensionTest
  */
-final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverExtension
+final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverExtension
 {
     public function __construct(
-        private TypeNodeResolver $typeNodeResolver
+        private readonly TypeNodeResolver $typeNodeResolver
     ) {
     }
 
