@@ -11,8 +11,13 @@ parameters:
         - rector.php
         - '*/Fixture/*'
         - '*/Source/*'
-        - src/Playground
 services:
+    -
+        class: Symplify\PHPStanRules\Naming\ClassToSuffixResolver
+    -
+        class: Symplify\PHPStanRules\PhpDoc\PhpDocResolver
+    -
+        class: Symplify\PHPStanRules\PhpDoc\SeePhpDocTagNodesFinder
     -
         class: Symplify\PHPStanRules\Rules\ClassNameRespectsParentSuffixRule
         tags: [phpstan.rules.rule]

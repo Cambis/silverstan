@@ -2,9 +2,27 @@ parameters:
     silverstanRules:
         disallowNonInterfacePublicMethodsOnExtension:
             enabled: true
+        requireParentCallInOverridenMethod:
+            enabled: true
+            requiredParentCalls:
+                -
+                    class: SilverStripe\ORM\DataObject
+                    method: onAfterWrite
+                -
+                    class: SilverStripe\ORM\DataObject
+                    method: onBeforeWrite
+                -
+                    class: SilverStripe\ORM\DataObject
+                    method: requireDefaultRecords
         disallowOverridingOfConfigurablePropertyType:
             enabled: true
         disallowUseOfReservedConfigurablePropertyName:
+            enabled: true
+        requireConfigurablePropertySnakeCaseName:
+            enabled: true
+        disallowUnsafeAccessOfMagicDataObject:
+            enabled: true
+        requireInterfaceForExtensibleHookMethod:
             enabled: true
         requireConfigurablePropertyOverride:
             enabled: true
@@ -13,6 +31,8 @@ parameters:
                     class: SilverStripe\ORM\DataObject
                     properties:
                         - table_name
+                        - singular_name
+                        - plural_name
         disallowStaticPropertyFetchOnConfigurableProperty:
             enabled: true
         disallowSuperglobals:
@@ -32,10 +52,29 @@ parametersSchema:
         disallowNonInterfacePublicMethodsOnExtension: structure([
             enabled: bool()
         ])
+        requireParentCallInOverridenMethod: structure([
+            enabled: bool()
+            requiredParentCalls: arrayOf(
+                structure([
+                    class: string(),
+                    method: string(),
+                    ?isFirst: bool()
+                ])
+            )
+        ])
         disallowOverridingOfConfigurablePropertyType: structure([
             enabled: bool()
         ])
         disallowUseOfReservedConfigurablePropertyName: structure([
+            enabled: bool()
+        ])
+        requireConfigurablePropertySnakeCaseName: structure([
+            enabled: bool()
+        ])
+        disallowUnsafeAccessOfMagicDataObject: structure([
+            enabled: bool()
+        ])
+        requireInterfaceForExtensibleHookMethod: structure([
             enabled: bool()
         ])
         requireConfigurablePropertyOverride: structure([
@@ -57,12 +96,22 @@ parametersSchema:
     ])
 
 conditionalTags:
+    Cambis\Silverstan\Extension\MethodCall\MagicDataObjectMethodReturnTypeExtension:
+        phpstan.broker.dynamicMethodReturnTypeExtension: %silverstanRules.disallowUnsafeAccessOfMagicDataObject.enabled%
     Cambis\Silverstan\Rule\ClassMethod\DisallowNonInterfacePublicMethodsOnExtensionRule:
         phpstan.rules.rule: %silverstanRules.disallowNonInterfacePublicMethodsOnExtension.enabled%
+    Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule:
+        phpstan.rules.rule: %silverstanRules.requireParentCallInOverridenMethod.enabled%
     Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurablePropertyTypeRule:
         phpstan.rules.rule: %silverstanRules.disallowOverridingOfConfigurablePropertyType.enabled%
     Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurablePropertyNameRule:
         phpstan.rules.rule: %silverstanRules.disallowUseOfReservedConfigurablePropertyName.enabled%
+    Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurablePropertySnakeCaseNameRule:
+        phpstan.rules.rule: %silverstanRules.requireConfigurablePropertySnakeCaseName.enabled%
+    Cambis\Silverstan\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRule:
+        phpstan.rules.rule: %silverstanRules.disallowUnsafeAccessOfMagicDataObject.enabled%
+    Cambis\Silverstan\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRule:
+        phpstan.rules.rule: %silverstanRules.requireInterfaceForExtensibleHookMethod.enabled%
     Cambis\Silverstan\Rule\InClassNode\RequireConfigurablePropertyOverrideRule:
         phpstan.rules.rule: %silverstanRules.requireConfigurablePropertyOverride.enabled%
     Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurablePropertyRule:
@@ -72,11 +121,23 @@ conditionalTags:
 
 services:
     -
+        class: Cambis\Silverstan\Extension\MethodCall\MagicDataObjectMethodReturnTypeExtension
+    -
         class: Cambis\Silverstan\Rule\ClassMethod\DisallowNonInterfacePublicMethodsOnExtensionRule
+    -
+        class: Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule
+        arguments:
+            requiredParentCalls: %silverstanRules.requireParentCallInOverridenMethod.requiredParentCalls%
+    -
+        class: Cambis\Silverstan\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRule
     -
         class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurablePropertyTypeRule
     -
         class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurablePropertyNameRule
+    -
+        class: Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurablePropertySnakeCaseNameRule
+    -
+        class: Cambis\Silverstan\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRule
     -
         class: Cambis\Silverstan\Rule\InClassNode\RequireConfigurablePropertyOverrideRule
         arguments:

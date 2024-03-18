@@ -9,10 +9,21 @@ parameters:
         - stubs/SilverStripe/Core/Injector/Injector.stub
         - stubs/SilverStripe/Core/Extension.stub
         - stubs/SilverStripe/ORM/DataExtension.stub
+    ignoreErrors:
+        -
+            messages:
+                - '#Unknown PHPDoc tag: @phpstan-silverstripe-extend#'
+                - '#Unknown PHPDoc tag: @psalm-silverstripe-extend#'
+            reportUnmatched: false
 services:
+    -
+        class: Cambis\Silverstan\Collector\Expr\MagicDataObjectCallCollector
+        tags: [phpstan.collector]
     -
         class: Cambis\Silverstan\Extension\ClassPropertiesNode\ConfigurablePropertiesExtension
         tags: [phpstan.properties.readWriteExtension]
     -
         class: Cambis\Silverstan\Extension\PhpDoc\ExtensionOwnerTypeNodeResolverExtension
         tags: [phpstan.phpDoc.typeNodeResolverExtension]
+    -   
+        class: PhpParser\NodeFinder

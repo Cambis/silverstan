@@ -2,7 +2,7 @@
 
 This project contains [PHPStan rules](hhttps://github.com/phpstan/phpstan) for [Silverstripe CMS](https://github.com/silverstripe).
 
-See available [Silverstripe rules](docs/rules_overview.md).
+See the available [Silverstripe rules](docs/rules_overview.md).
 
 ## Prerequisites 🦺
 
@@ -10,6 +10,12 @@ See available [Silverstripe rules](docs/rules_overview.md).
 silverstripe/framework ^5.2
 silverstripe/cms ^5.2
 ```
+
+### Why Silverstripe 5.2?
+
+Silverstripe 5.2 introduces [generic typehints](https://docs.silverstripe.org/en/5/changelogs/beta/5.2.0-beta1/#generics). These changes allow the module to infer the types of objects without relying on an extension.
+
+To make the best use of this module, make sure that your classes are correctly annotated using a combination of generics, and property/method annotations.
 
 ## Installation 👷‍♀️
 

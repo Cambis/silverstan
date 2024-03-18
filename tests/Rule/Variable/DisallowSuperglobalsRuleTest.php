@@ -20,10 +20,10 @@ final class DisallowSuperglobalsRuleTest extends RuleTestCase
 
     public function testRule(): void
     {
-        $this->analyse([__DIR__ . '/Fixture/disallow-superglobals.php.inc'], [
+        $this->analyse([__DIR__ . '/Fixture/DisallowSuperglobals.php'], [
             [
                 'You should not directly access the $_GET superglobal. Consider using an alternative.',
-                9,
+                13,
             ],
         ]);
     }

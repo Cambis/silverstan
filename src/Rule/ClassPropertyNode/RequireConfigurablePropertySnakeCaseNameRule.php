@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\ClassPropertyNode;
 
+use Jawira\CaseConverter\Convert;
 use Override;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use SilverStripe\Core\Config\Configurable;
@@ -24,28 +24,28 @@ use function str_contains;
 
 /**
  * @implements Rule<ClassPropertyNode>
- * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurablePropertyNameRuleTest
+ * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\RequireConfigurablePropertySnakeCaseNameRuleTest
  */
-final class DisallowUseOfReservedConfigurablePropertyNameRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class RequireConfigurablePropertySnakeCaseNameRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
     #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Disallow declaring a non configurable property that shares the same name with an existing configurable property.',
+            'Configurable properties must be in snake_case.',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
-final class Foo extends \SilverStripe\ORM\DataObject
+class Foo extends \SilverStripe\ORM\DataObject
 {
-    public static string $table_name = 'Foo';
+    private static string $fooBar = 'foo bar';
 }
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-final class Foo extends \SilverStripe\ORM\DataObject
+class Foo extends \SilverStripe\ORM\DataObject
 {
-    private static string $table_name = 'Foo';
+    private static string $foo_bar = 'foo bar';
 }
 CODE_SAMPLE
                     ,
@@ -68,7 +68,7 @@ CODE_SAMPLE
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        if ($this->isConfigurableProperty($node)) {
+        if (!$this->isConfigurableProperty($node)) {
             return [];
         }
 
@@ -82,31 +82,24 @@ CODE_SAMPLE
             return [];
         }
 
-        $prototype = $this->findPrototype($classReflection, $node->getName());
-
-        if (!$prototype instanceof PhpPropertyReflection) {
+        if ((new Convert($node->getName()))->toSnake() === $node->getName()) {
             return [];
         }
 
         return [
             RuleErrorBuilder::message(
                 sprintf(
-                    'The name of non configurable property %s::$%s is already used by the configurable property %s::$%s.',
+                    'Configurable property %s::$%s must be in snake_case format.',
                     $classReflection->getDisplayName(),
                     $node->getName(),
-                    $prototype->getDeclaringClass()->getDisplayName(),
-                    $node->getName()
                 )
-            )
-            ->tip(
-                'Did you mean to declare the property as `private static` instead?'
             )
             ->identifier('silverstan.configurableProperty')
             ->build(),
         ];
     }
 
-    private function isConfigurableProperty(ClassPropertyNode|PhpPropertyReflection $property): bool
+    private function isConfigurableProperty(ClassPropertyNode $property): bool
     {
         if (!$property->isPrivate()) {
             return false;
@@ -116,13 +109,8 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($property instanceof ClassPropertyNode) {
-            !str_contains((string) $property->getPhpDoc(), '@internal');
-        }
-
-        return !str_contains((string) $property->getDocComment(), '@internal');
+        return !str_contains((string) $property->getPhpDoc(), '@internal');
     }
-
 
     private function shouldSkipClass(ClassReflection $classReflection): bool
     {
@@ -131,24 +119,5 @@ CODE_SAMPLE
         }
 
         return !$classReflection->hasTraitUse(Configurable::class);
-    }
-
-    private function findPrototype(ClassReflection $classReflection, string $propertyName): ?PhpPropertyReflection
-    {
-        foreach ($classReflection->getParents() as $parent) {
-            if (!$parent->hasNativeProperty($propertyName)) {
-                continue;
-            }
-
-            $property = $parent->getNativeProperty($propertyName);
-
-            if (!$this->isConfigurableProperty($property)) {
-                continue;
-            }
-
-            return $property;
-        }
-
-        return null;
     }
 }

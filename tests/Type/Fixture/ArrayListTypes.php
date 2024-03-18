@@ -7,7 +7,10 @@ use SilverStripe\ORM\ArrayList;
 
 use function PHPStan\Testing\assertType;
 
-$list = new ArrayList([File::create(['Name' => 'Foo'])]);
+$list = new ArrayList([
+    File::create([
+        'Name' => 'Foo',
+    ])]);
 
 assertType(
     ArrayList::class . '<' . File::class . '>',

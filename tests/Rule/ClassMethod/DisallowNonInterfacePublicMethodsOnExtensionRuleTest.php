@@ -22,10 +22,10 @@ final class DisallowNonInterfacePublicMethodsOnExtensionRuleTest extends RuleTes
 
     public function testRule(): void
     {
-        $this->analyse([__DIR__ . '/Fixture/disallowed-extension.php.inc'], [
+        $this->analyse([__DIR__ . '/Fixture/DisallowedExtension.php'], [
             [
                 'Use explicit interface contract or a service to define public facing extension methods.',
-                12,
+                13,
             ],
         ]);
     }

@@ -149,12 +149,14 @@ CODE_SAMPLE
             }
         }
 
-        $parentClass = $classReflection->getParentClass();
+        $parents = $classReflection->getParents();
 
-        if (!$parentClass instanceof ClassReflection) {
-            return false;
+        foreach ($parents as $parent) {
+            if ($parent->hasNativeMethod($methodName)) {
+                return true;
+            }
         }
 
-        return $parentClass->hasNativeMethod($methodName);
+        return false;
     }
 }

@@ -23,10 +23,10 @@ final class DisallowUseOfReservedConfigurablePropertyNameRuleTest extends RuleTe
 
     public function testRule(): void
     {
-        $this->analyse([__DIR__ . '/Fixture/disallow-reserved-name.php.inc'], [
+        $this->analyse([__DIR__ . '/Fixture/DisallowReservedName.php'], [
             [
                 'The name of non configurable property Cambis\Silverstan\Tests\Rule\ClassPropertyNode\Fixture\DisallowReservedName::$db is already used by the configurable property ' . DataObject::class . '::$db.',
-                07,
+                10,
                 'Did you mean to declare the property as `private static` instead?',
             ],
         ]);

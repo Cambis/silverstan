@@ -28,10 +28,10 @@ final class RequireConfigurablePropertyOverrideRuleTest extends RuleTestCase
 
     public function testRule(): void
     {
-        $this->analyse([__DIR__ . '/Fixture/require-table-name.php.inc'], [
+        $this->analyse([__DIR__ . '/Fixture/RequireTableName.php'], [
             [
                 'Class Cambis\Silverstan\Tests\Rule\InClassNode\Fixture\RequireTableName is missing configurable property $table_name',
-                5,
+                8,
             ],
         ]);
     }

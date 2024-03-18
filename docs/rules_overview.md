@@ -1,4 +1,4 @@
-# 6 Rules Overview
+# 10 Rules Overview
 
 ## DisallowNonInterfacePublicMethodsOnExtensionRule
 
@@ -222,6 +222,61 @@ final class CustomMiddleware implements \SilverStripe\Control\Middleware\HTTPMid
 
 <br>
 
+## DisallowUnsafeAccessOfMagicDataObjectRule
+
+Use `instanceof` and `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` methods or properties as the object may not be present in the database.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRule`](../src/Rule/CollectedDataNode/DisallowUnsafeAccessOfMagicDataObjectRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        disallowUnsafeAccessOfMagicDataObject:
+            enabled: true
+```
+
+↓
+
+```php
+/**
+ * @method \SilverStripe\ORM\DataObject Bar()
+ */
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    public function doSomething(): string
+    {
+        return $this->Bar()->Title;
+    }
+}
+```
+
+:x:
+
+<br>
+
+```php
+/**
+ * @method \SilverStripe\ORM\DataObject Bar()
+ */
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    public function doSomething(): string
+    {
+        if ($this->Bar() instanceof \SilverStripe\ORM\DataObject && $this->Bar()->exists()) {
+            return $this->Bar()->Title;
+        }
+
+        return '';
+    }
+}
+```
+
+:+1:
+
+<br>
+
 ## DisallowUseOfReservedConfigurablePropertyNameRule
 
 Disallow declaring a non configurable property that shares the same name with an existing configurable property.
@@ -297,6 +352,155 @@ final class Foo extends \SilverStripe\ORM\DataObject
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $table_name = 'Foo';
+}
+```
+
+:+1:
+
+<br>
+
+## RequireConfigurablePropertySnakeCaseNameRule
+
+Configurable properties must be in snake_case.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurablePropertySnakeCaseNameRule`](../src/Rule/ClassPropertyNode/RequireConfigurablePropertySnakeCaseNameRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        requireConfigurablePropertySnakeCaseName:
+            enabled: true
+```
+
+↓
+
+```php
+class Foo extends \SilverStripe\ORM\DataObject
+{
+    private static string $fooBar = 'foo bar';
+}
+```
+
+:x:
+
+<br>
+
+```php
+class Foo extends \SilverStripe\ORM\DataObject
+{
+    private static string $foo_bar = 'foo bar';
+}
+```
+
+:+1:
+
+<br>
+
+## RequireInterfaceForExtensibleHookMethodRule
+
+Require extensible hook methods to be defined via an interface. Use the `@phpstan-silverstripe-extend` annotation resolve the interface location.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRule`](../src/Rule/MethodCall/RequireInterfaceForExtensibleHookMethodRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        requireInterfaceForExtensibleHookMethod:
+            enabled: true
+```
+
+↓
+
+```php
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    public function bar(): string
+    {
+        $bar = 'bar';
+
+        $this->extend('updateBar', $bar);
+
+        return $bar;
+    }
+}
+```
+
+:x:
+
+<br>
+
+```php
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    /**
+     * @phpstan-silverstripe-extend UpdateBar
+     */
+    public function bar(): string
+    {
+        $bar = 'bar';
+
+        $this->extend('updateBar', $bar);
+
+        return $bar;
+    }
+}
+
+interface UpdateBar
+{
+    public function updateBar(string &$bar): void;
+}
+```
+
+:+1:
+
+<br>
+
+## RequireParentCallInOverridenMethodRule
+
+Require parent call in an overriden method.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule`](../src/Rule/ClassMethod/RequireParentCallInOverridenMethodRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        requireParentCallInOverridenMethod:
+            enabled: true
+            requiredParentCalls:
+                -
+                    class: SilverStripe\ORM\DataObject
+                    method: onBeforeWrite
+                    isFirst: false
+```
+
+↓
+
+```php
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    protected function onBeforeWrite(): void
+    {
+    }
+}
+```
+
+:x:
+
+<br>
+
+```php
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    protected function onBeforeWrite(): void
+    {
+        parent::onBeforeWrite();
+    }
 }
 ```
 

@@ -6,6 +6,7 @@ use SilverStripe\Assets\File;
 use SilverStripe\Core\Injector\Injector;
 
 use function PHPStan\Testing\assertType;
+use function singleton;
 
 assertType(
     File::class,
@@ -24,5 +25,7 @@ assertType(
 
 assertType(
     File::class,
-    Injector::inst()->createWithArgs(File::class, ['Name' => 'Foo'])
+    Injector::inst()->createWithArgs(File::class, [
+        'Name' => 'Foo',
+    ])
 );

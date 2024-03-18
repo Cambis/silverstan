@@ -2,9 +2,12 @@
 
 namespace Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\Fixture;
 
-final class DisallowStaticPropertyFetch implements \SilverStripe\Dev\TestOnly
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Dev\TestOnly;
+
+final class DisallowStaticPropertyFetch implements TestOnly
 {
-    use \SilverStripe\Core\Config\Configurable;
+    use Configurable;
 
     private static string $foo = 'foo';
 

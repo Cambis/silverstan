@@ -23,10 +23,10 @@ final class DisallowOverridingOfConfigurablePropertyTypeRuleTest extends RuleTes
 
     public function testRule(): void
     {
-        $this->analyse([__DIR__ . '/Fixture/disallow-overriding-type.php.inc'], [
+        $this->analyse([__DIR__ . '/Fixture/DisallowOverridingName.php'], [
             [
                 'Type string|null of configurable property Cambis\Silverstan\Tests\Rule\ClassPropertyNode\Fixture\DisallowOverridingName::$table_name is not the same as type string of overridden configurable property ' . DataObject::class . '::$table_name.',
-                9,
+                12,
             ],
         ]);
     }

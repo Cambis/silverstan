@@ -35,9 +35,4 @@ return function (ECSConfig $ecsConfig): void {
         SetList::CLEAN_CODE,
         SetList::PSR_12,
     ]);
-
-    $ecsConfig->skip([
-        '*/Fixture/*',
-        '*/Source/*',
-    ]);
 };

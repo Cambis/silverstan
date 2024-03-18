@@ -2,7 +2,10 @@
 
 namespace Cambis\Silverstan\Tests\Rule\ClassPropertyNode\Fixture;
 
-final class DisallowReservedName extends \SilverStripe\ORM\DataObject implements \SilverStripe\Dev\TestOnly
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\ORM\DataObject;
+
+final class DisallowReservedName extends DataObject implements TestOnly
 {
     public static array $db = [];
 

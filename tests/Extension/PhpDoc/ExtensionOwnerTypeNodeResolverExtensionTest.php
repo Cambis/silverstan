@@ -12,7 +12,7 @@ final class ExtensionOwnerTypeNodeResolverExtensionTest extends TypeInferenceTes
 {
     public function typeFileAsserts(): Generator
     {
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/extension-types.php.inc');
+        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/ExtensionTypes.php');
     }
 
     /**

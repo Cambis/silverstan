@@ -2,12 +2,13 @@
 
 namespace Cambis\Silverstan\Tests\Extension\PhpDoc\Fixture;
 
-use SilverStripe\ORM\DataObject;
 use SilverStripe\Core\Extension;
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\ORM\DataObject;
 
 use function PHPStan\Testing\assertType;
 
-class Foo extends DataObject
+class Foo extends DataObject implements TestOnly
 {
     public function foo(): string
     {
@@ -15,7 +16,7 @@ class Foo extends DataObject
     }
 }
 
-class Bar extends DataObject
+class Bar extends DataObject implements TestOnly
 {
     public function bar(): bool
     {
@@ -26,7 +27,7 @@ class Bar extends DataObject
 /**
  * @extends Extension<Foo>
  */
-class ObjectExtension extends Extension
+class ObjectExtension extends Extension implements TestOnly
 {
     public function baz(): void
     {
@@ -40,7 +41,7 @@ class ObjectExtension extends Extension
 /**
  * @extends Extension<Foo|Bar>
  */
-class UnionExtension extends Extension
+class UnionExtension extends Extension implements TestOnly
 {
     public function baz(): void
     {
@@ -54,7 +55,7 @@ class UnionExtension extends Extension
 /**
  * @extends Extension<Foo&static>
  */
-class IntersectionExtension extends Extension
+class IntersectionExtension extends Extension implements TestOnly
 {
     public function baz(): void
     {
@@ -68,7 +69,7 @@ class IntersectionExtension extends Extension
 /**
  * @extends Extension<(Foo&static)|(Bar&static)>
  */
-class DNFExtension extends Extension
+class DNFExtension extends Extension implements TestOnly
 {
     public function baz(): void
     {

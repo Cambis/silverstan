@@ -2,10 +2,11 @@
 
 namespace Cambis\Silverstan\Tests\Extension\ClassPropertiesNode\Fixture;
 
-final class ConfigurableClass implements \SilverStripe\Dev\TestOnly
-{
-    use \SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extension;
+use SilverStripe\Dev\TestOnly;
 
+final class ConfigurableExtension extends Extension implements TestOnly
+{
     private static string $configurable_property = 'foo';
 
     private string $unconfigurable_property = 'bar';

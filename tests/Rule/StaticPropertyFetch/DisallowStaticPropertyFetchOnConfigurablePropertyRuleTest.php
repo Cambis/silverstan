@@ -22,10 +22,10 @@ final class DisallowStaticPropertyFetchOnConfigurablePropertyRuleTest extends Ru
 
     public function testRule(): void
     {
-        $this->analyse([__DIR__ . '/Fixture/disallow-static-property-fetch.php.inc'], [
+        $this->analyse([__DIR__ . '/Fixture/DisallowStaticPropertyFetch.php'], [
             [
                 'Unsafe access to configurable property Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\Fixture\DisallowStaticPropertyFetch::$foo through self::.',
-                20,
+                23,
                 'See: https://docs.silverstripe.org/en/5/developer_guides/configuration/configuration/#accessing-configuration-properties',
             ],
         ]);

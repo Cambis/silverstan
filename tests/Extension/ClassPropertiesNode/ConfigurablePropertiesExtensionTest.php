@@ -31,15 +31,15 @@ final class ConfigurablePropertiesExtensionTest extends RuleTestCase
 
     public function testRuleConfigurableClass(): void
     {
-        $this->analyse([__DIR__ . '/Fixture/configurable-class.php.inc'], [
+        $this->analyse([__DIR__ . '/Fixture/ConfigurableClass.php'], [
             [
                 'Property Cambis\Silverstan\Tests\Extension\ClassPropertiesNode\Fixture\ConfigurableClass::$unconfigurable_property is never read, only written.',
-                11,
+                14,
                 'See: https://phpstan.org/developing-extensions/always-read-written-properties',
             ],
             [
                 'Static property Cambis\Silverstan\Tests\Extension\ClassPropertiesNode\Fixture\ConfigurableClass::$blocklisted_property is never read, only written.',
-                16,
+                19,
                 'See: https://phpstan.org/developing-extensions/always-read-written-properties',
             ],
         ]);
@@ -47,15 +47,15 @@ final class ConfigurablePropertiesExtensionTest extends RuleTestCase
 
     public function testRuleConfigurableExtension(): void
     {
-        $this->analyse([__DIR__ . '/Fixture/configurable-extension.php.inc'], [
+        $this->analyse([__DIR__ . '/Fixture/ConfigurableExtension.php'], [
             [
                 'Property Cambis\Silverstan\Tests\Extension\ClassPropertiesNode\Fixture\ConfigurableExtension::$unconfigurable_property is never read, only written.',
-                9,
+                12,
                 'See: https://phpstan.org/developing-extensions/always-read-written-properties',
             ],
             [
                 'Static property Cambis\Silverstan\Tests\Extension\ClassPropertiesNode\Fixture\ConfigurableExtension::$blocklisted_property is never read, only written.',
-                14,
+                17,
                 'See: https://phpstan.org/developing-extensions/always-read-written-properties',
             ],
         ]);

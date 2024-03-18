@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\Tests\Type;
+namespace Cambis\Silverstan\Tests\Extension\MethodCall;
 
 use Generator;
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
 
-final class InjectorTypeTest extends TypeInferenceTestCase
+final class MagicDataObjectMethodReturnTypeExtensionTest extends TypeInferenceTestCase
 {
     public function typeFileAsserts(): Generator
     {
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/InjectorTypes.php');
+        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/DataObjectTypes.php');
     }
 
     /**
@@ -29,6 +29,6 @@ final class InjectorTypeTest extends TypeInferenceTestCase
     #[Override]
     public static function getAdditionalConfigFiles(): array
     {
-        return [__DIR__ . '/../../extension.neon'];
+        return [__DIR__ . '/config/config.neon'];
     }
 }

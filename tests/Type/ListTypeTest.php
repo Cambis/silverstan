@@ -12,8 +12,8 @@ final class ListTypeTest extends TypeInferenceTestCase
 {
     public function typeFileAsserts(): Generator
     {
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/array-list-types.php.inc');
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/data-list-types.php.inc');
+        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/ArrayListTypes.php');
+        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/DataListTypes.php');
     }
 
     /**
