@@ -137,7 +137,7 @@ CODE_SAMPLE
         }
 
         if ($property instanceof ClassPropertyNode) {
-            !str_contains((string) $property->getPhpDoc(), '@internal');
+            return !str_contains((string) $property->getPhpDoc(), '@internal');
         }
 
         return !str_contains((string) $property->getDocComment(), '@internal');
