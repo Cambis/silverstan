@@ -224,7 +224,7 @@ final class CustomMiddleware implements \SilverStripe\Control\Middleware\HTTPMid
 
 ## DisallowUnsafeAccessOfMagicDataObjectRule
 
-Use `instanceof` and `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` methods or properties as the object may not be present in the database.
+Use `instanceof` and `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` methods or properties as the object may not be present in the database. Enabling this rule will change the return type of `$has_one` and `$belongs_to` relationships from `\SilverStripe\ORM\DataObject` to `\SilverStripe\ORM\DataObject|null` in order to encourage the use of the `instanceof` check.
 
 :wrench: **configure it!**
 

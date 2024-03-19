@@ -7,7 +7,6 @@ namespace Cambis\Silverstan\Extension\MethodCall;
 use Override;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
@@ -42,12 +41,6 @@ final class MagicDataObjectMethodReturnTypeExtension implements DynamicMethodRet
     #[Override]
     public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): ?Type
     {
-        $classReflection = $scope->getClassReflection();
-
-        if (!$classReflection instanceof ClassReflection) {
-            return null;
-        }
-
         $type = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 
         if ((new ObjectType(DataObject::class))->isSuperTypeOf($type)->no()) {

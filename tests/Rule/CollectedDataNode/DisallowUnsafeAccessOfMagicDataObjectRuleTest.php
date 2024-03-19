@@ -35,6 +35,7 @@ final class DisallowUnsafeAccessOfMagicDataObjectRuleTest extends RuleTestCase
             [
                 'Call exists() first before accessing any \SilverStripe\ORM\DataObject methods or properties.',
                 15,
+                'See https://api.silverstripe.org/5/SilverStripe/ORM/DataObject.html#method_exists',
             ],
         ]);
     }
@@ -45,6 +46,7 @@ final class DisallowUnsafeAccessOfMagicDataObjectRuleTest extends RuleTestCase
             [
                 'Call exists() first before accessing any \SilverStripe\ORM\DataObject methods or properties.',
                 17,
+                'See https://api.silverstripe.org/5/SilverStripe/ORM/DataObject.html#method_exists',
             ],
         ]);
     }

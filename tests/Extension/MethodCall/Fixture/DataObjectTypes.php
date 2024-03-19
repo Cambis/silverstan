@@ -13,11 +13,16 @@ use function PHPStan\Testing\assertType;
  */
 final class DataObjectTypes extends DataObject implements TestOnly
 {
+    public function doSomething(): void
+    {
+        assertType(
+            File::class . '|null',
+            $this->File()
+        );
+    }
 }
 
-$file = DataObjectTypes::create()->File();
-
 assertType(
-    'mixed',
-    $file
+    File::class . '|null',
+    DataObjectTypes::create()->File()
 );

@@ -16,8 +16,6 @@ use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-use function reset;
-
 /**
  * @implements Rule<CollectedDataNode>
  * @see \Cambis\Silverstan\Tests\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRuleTest
@@ -28,7 +26,8 @@ final class DisallowUnsafeAccessOfMagicDataObjectRule implements Rule, Documente
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Use `instanceof` and `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` methods or properties as the object may not be present in the database.',
+            'Use `instanceof` and `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` methods or properties as the object may not be present in the database. ' .
+            'Enabling this rule will change the return type of `$has_one` and `$belongs_to` relationships from `\SilverStripe\ORM\DataObject` to `\SilverStripe\ORM\DataObject|null` in order to encourage the use of the `instanceof` check.',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
@@ -87,7 +86,7 @@ CODE_SAMPLE
             $calls = $this->gatherCalls($data);
 
             foreach ($calls as $call) {
-                $firstCall = reset($call);
+                $firstCall = $call[0];
 
                 if ($firstCall[0] === 'exists') {
                     continue;
