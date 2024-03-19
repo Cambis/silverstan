@@ -96,6 +96,11 @@ class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $foo = 'foo';
 }
+
+final class Bar extends Foo
+{
+    private static string|bool $foo = false;
+}
 ```
 
 :x:
@@ -103,9 +108,14 @@ class Foo extends \SilverStripe\ORM\DataObject
 <br>
 
 ```php
+class Foo extends \SilverStripe\ORM\DataObject
+{
+    private static string $foo = 'foo';
+}
+
 final class Bar extends Foo
 {
-    private static string|bool $foo = false;
+    private static string $foo = 'bar';
 }
 ```
 

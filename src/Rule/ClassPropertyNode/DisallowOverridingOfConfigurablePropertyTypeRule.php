@@ -43,12 +43,22 @@ class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $foo = 'foo';
 }
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+
 final class Bar extends Foo
 {
     private static string|bool $foo = false;
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+class Foo extends \SilverStripe\ORM\DataObject
+{
+    private static string $foo = 'foo';
+}
+
+final class Bar extends Foo
+{
+    private static string $foo = 'bar';
 }
 CODE_SAMPLE
                     ,
