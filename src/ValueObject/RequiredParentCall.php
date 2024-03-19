@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ValueObject;
 
-final readonly class RequiredParentCall
+final class RequiredParentCall
 {
     public function __construct(
         /**
          * @var class-string
          */
-        private string $className,
-        private string $methodName,
-        private bool $isFirstCall = false
+        private readonly string $className,
+        private readonly string $methodName,
+        private readonly bool $isFirstCall = false
     ) {
     }
 

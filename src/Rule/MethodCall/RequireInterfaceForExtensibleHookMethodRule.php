@@ -32,11 +32,11 @@ use function sprintf;
  * @implements Rule<MethodCall>
  * @see \Cambis\Silverstan\Tests\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRuleTest
  */
-final readonly class RequireInterfaceForExtensibleHookMethodRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class RequireInterfaceForExtensibleHookMethodRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
     public function __construct(
-        private FileTypeMapper $fileTypeMapper,
-        private ReflectionProvider $reflectionProvider
+        private readonly FileTypeMapper $fileTypeMapper,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

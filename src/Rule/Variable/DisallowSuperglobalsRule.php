@@ -25,7 +25,7 @@ use function sprintf;
  * @implements Rule<Variable>
  * @see \Cambis\Silverstan\Tests\Rule\Variable\DisallowSuperglobalsRuleTest
  */
-final readonly class DisallowSuperglobalsRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class DisallowSuperglobalsRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
     /**
      * @var string[]
@@ -36,7 +36,7 @@ final readonly class DisallowSuperglobalsRule implements Rule, DocumentedRuleInt
 
     public function __construct(
         /** @var string[] */
-        private array $disallowedSuperglobals = self::SUPERGLOBALS
+        private readonly array $disallowedSuperglobals = self::SUPERGLOBALS
     ) {
         foreach ($disallowedSuperglobals as $disallowedSuperglobal) {
             Assert::inArray($disallowedSuperglobal, self::SUPERGLOBALS);
