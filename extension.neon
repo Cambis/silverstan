@@ -2,9 +2,9 @@ includes:
     - rules.neon
 parameters:
     stubFiles:
-        - stubs/Psr/Container/ContainerExceptionInterface.php
+        - stubs/Psr/Container/ContainerExceptionInterface.stub
         - stubs/Psr/Container/ContainerInterface.stub
-        - stubs/Psr/Container/NotFoundExceptionInterface.php
+        - stubs/Psr/Container/NotFoundExceptionInterface.stub
         - stubs/SilverStripe/functions.stub
         - stubs/SilverStripe/Core/Injector/Injector.stub
         - stubs/SilverStripe/Core/Extension.stub
