@@ -7,30 +7,27 @@ use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php83\Rector\ClassConst\AddTypeToConstRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Set\ValueObject\LevelSetList;
-use Rector\Set\ValueObject\SetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->importNames();
-
-    $rectorConfig->paths([
+return RectorConfig::configure()
+    ->withImportNames(removeUnusedImports: true)
+    ->withPaths([
         __DIR__ . '/src',
         __DIR__ . '/tests',
-    ]);
-
-    $rectorConfig->removeUnusedImports();
-
-    $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_83,
-        SetList::CODE_QUALITY,
-        SetList::CODING_STYLE,
-        SetList::DEAD_CODE,
-        SetList::EARLY_RETURN,
-        SetList::PRIVATIZATION,
+    ])
+    ->withPhpSets(
+        php83: true
+    )
+    ->withPreparedSets(
+        codeQuality: true,
+        codingStyle: true,
+        deadCode: true,
+        earlyReturn: true,
+        privatization: true
+    )
+    ->withSets([
         PHPUnitSetList::PHPUNIT_90,
-    ]);
-
-    $rectorConfig->skip([
+    ])
+    ->withSkip([
         '*/Fixture/*',
         '*/Source/*',
         AddTypeToConstRector::class,
@@ -39,4 +36,3 @@ return static function (RectorConfig $rectorConfig): void {
             __DIR__ . '/tests',
         ]
     ]);
-};
