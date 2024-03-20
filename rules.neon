@@ -24,6 +24,8 @@ parameters:
             enabled: true
         requireInterfaceForExtensibleHookMethod:
             enabled: true
+        disallowNewInstanceOnInjectable:
+            enabled: true
         requireConfigurablePropertyOverride:
             enabled: true
             requiredProperties:
@@ -77,6 +79,9 @@ parametersSchema:
         requireInterfaceForExtensibleHookMethod: structure([
             enabled: bool()
         ])
+        disallowNewInstanceOnInjectable: structure([
+            enabled: bool()
+        ])
         requireConfigurablePropertyOverride: structure([
             enabled: bool()
             requiredProperties: arrayOf(
@@ -112,6 +117,8 @@ conditionalTags:
         phpstan.rules.rule: %silverstanRules.disallowUnsafeAccessOfMagicDataObject.enabled%
     Cambis\Silverstan\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRule:
         phpstan.rules.rule: %silverstanRules.requireInterfaceForExtensibleHookMethod.enabled%
+    Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule:
+        phpstan.rules.rule: %silverstanRules.disallowNewInstanceOnInjectable.enabled%
     Cambis\Silverstan\Rule\InClassNode\RequireConfigurablePropertyOverrideRule:
         phpstan.rules.rule: %silverstanRules.requireConfigurablePropertyOverride.enabled%
     Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurablePropertyRule:
@@ -138,6 +145,8 @@ services:
         class: Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurablePropertySnakeCaseNameRule
     -
         class: Cambis\Silverstan\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRule
+    -
+        class: Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule
     -
         class: Cambis\Silverstan\Rule\InClassNode\RequireConfigurablePropertyOverrideRule
         arguments:
