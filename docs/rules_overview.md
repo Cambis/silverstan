@@ -1,4 +1,47 @@
-# 10 Rules Overview
+# 11 Rules Overview
+
+## DisallowNewInstanceOnInjectableRule
+
+Disallow instantiating a `\SilverStripe\Core\Injectable` class using `new`. Use `create()` instead.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule`](../src/Rule/New_/DisallowNewInstanceOnInjectableRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        disallowNewInstanceOnInjectable:
+            enabled: true
+```
+
+↓
+
+```php
+final class Foo
+{
+    use \SilverStripe\Core\Injectable;
+}
+
+$foo = new Foo();
+```
+
+:x:
+
+<br>
+
+```php
+final class Foo
+{
+    use \SilverStripe\Core\Injectable;
+}
+
+$foo = Foo::create();
+```
+
+:+1:
+
+<br>
 
 ## DisallowNonInterfacePublicMethodsOnExtensionRule
 
