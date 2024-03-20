@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;
 use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php83\Rector\ClassConst\AddTypeToConstRector;
@@ -32,7 +33,10 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->skip([
         '*/Fixture/*',
         '*/Source/*',
-        ClosureToArrowFunctionRector::class,
         AddTypeToConstRector::class,
+        ClosureToArrowFunctionRector::class,
+        UseClassKeywordForClassNameResolutionRector::class => [
+            __DIR__ . '/tests',
+        ]
     ]);
 };

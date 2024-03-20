@@ -24,10 +24,10 @@ use function sprintf;
  * @implements Rule<New_>
  * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowOverridingOfConfigurablePropertyTypeRuleTest
  */
-final class DisallowNewInstanceOnInjectableRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final readonly class DisallowNewInstanceOnInjectableRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
     public function __construct(
-        private readonly ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider
     ) {
     }
 

@@ -34,7 +34,7 @@ final class MagicDataObjectCallCollector implements Collector
     #[Override]
     public function processNode(Node $node, Scope $scope): ?array
     {
-        if (!($node instanceof MethodCall || $node instanceof PropertyFetch)) {
+        if (!$node instanceof MethodCall && !$node instanceof PropertyFetch) {
             return null;
         }
 

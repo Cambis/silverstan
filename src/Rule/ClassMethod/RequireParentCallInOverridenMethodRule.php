@@ -125,11 +125,7 @@ CODE_SAMPLE
 
         // Get all nodes that aren't an expression
         $nodes = $this->nodeFinder->find((array) $node->stmts, static function (Node $node): bool {
-            if ($node instanceof Expression) {
-                return false;
-            }
-
-            return true;
+            return !$node instanceof Expression;
         });
 
         // If there are no calls, return an error
