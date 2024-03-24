@@ -25,9 +25,9 @@ use function str_contains;
 
 /**
  * @implements Rule<StaticPropertyFetch>
- * @see \Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurablePropertyRuleTest
+ * @see \Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRuleTest
  */
-final class DisallowStaticPropertyFetchOnConfigurablePropertyRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
     #[Override]
     public function getRuleDefinition(): RuleDefinition
@@ -102,12 +102,12 @@ CODE_SAMPLE
         return [
             RuleErrorBuilder::message(
                 sprintf(
-                    'Unsafe access to configurable property %s::$%s through self::.',
+                    'Unsafe access to configuration property %s::$%s through self::.',
                     $classReflection->getName(),
                     $node->name->name,
                 )
             )
-            ->identifier('silverstan.configurableProperty')
+            ->identifier('silverstan.configurationProperty')
             ->tip('See: https://docs.silverstripe.org/en/5/developer_guides/configuration/configuration/#accessing-configuration-properties')
             ->build(),
         ];

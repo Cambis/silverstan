@@ -24,9 +24,9 @@ use function str_contains;
 
 /**
  * @implements Rule<InClassNode>
- * @see \Cambis\Silverstan\Tests\Rule\InClassNode\RequireConfigurablePropertyOverrideRuleTest
+ * @see \Cambis\Silverstan\Tests\Rule\InClassNode\RequireConfigurationPropertyOverrideRuleTest
  */
-final class RequireConfigurablePropertyOverrideRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class RequireConfigurationPropertyOverrideRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
     /**
      * @var RequiredProperties[]
@@ -107,18 +107,18 @@ CODE_SAMPLE
             }
 
             foreach ($requiredProperty->getProperties() as $property) {
-                if ($this->hasConfigurableProperty($classReflection, $property)) {
+                if ($this->hasConfigurationProperty($classReflection, $property)) {
                     continue;
                 }
         
                 $errors[] = RuleErrorBuilder::message(
                     sprintf(
-                        'Class %s is missing configurable property $%s',
+                        'Class %s is missing configuration property $%s',
                         $classReflection->getDisplayName(),
                         $property
                     )
                 )
-                    ->identifier('silverstan.configurableProperty')
+                    ->identifier('silverstan.configurationProperty')
                     ->build();
             }
         }
@@ -126,7 +126,7 @@ CODE_SAMPLE
         return $errors;
     }
 
-    private function hasConfigurableProperty(ClassReflection $classReflection, string $propertyName): bool
+    private function hasConfigurationProperty(ClassReflection $classReflection, string $propertyName): bool
     {
         if (!$classReflection->hasNativeProperty($propertyName)) {
             return false;

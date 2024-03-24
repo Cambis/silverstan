@@ -17,9 +17,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function str_contains;
 
 /**
- * @see \Cambis\Silverstan\Tests\Extension\ClassPropertiesNode\ConfigurablePropertiesExtensionTest
+ * @see \Cambis\Silverstan\Tests\Extension\ClassPropertiesNode\ConfigurationPropertiesExtensionTest
  */
-final class ConfigurablePropertiesExtension implements ReadWritePropertiesExtension, DocumentedRuleInterface
+final class ConfigurationPropertiesExtension implements ReadWritePropertiesExtension, DocumentedRuleInterface
 {
     #[Override]
     public function getRuleDefinition(): RuleDefinition

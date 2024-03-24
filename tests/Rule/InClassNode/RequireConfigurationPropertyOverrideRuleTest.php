@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Rule\InClassNode;
 
-use Cambis\Silverstan\Rule\InClassNode\RequireConfigurablePropertyOverrideRule;
+use Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule;
 use Override;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use SilverStripe\ORM\DataObject;
 
 /**
- * @extends RuleTestCase<RequireConfigurablePropertyOverrideRule>
+ * @extends RuleTestCase<RequireConfigurationPropertyOverrideRule>
  */
-final class RequireConfigurablePropertyOverrideRuleTest extends RuleTestCase
+final class RequireConfigurationPropertyOverrideRuleTest extends RuleTestCase
 {
     #[Override]
     protected function getRule(): Rule
     {
-        return new RequireConfigurablePropertyOverrideRule([
+        return new RequireConfigurationPropertyOverrideRule([
             [
                 'class' => DataObject::class,
                 'properties' => ['table_name'],
@@ -30,7 +30,7 @@ final class RequireConfigurablePropertyOverrideRuleTest extends RuleTestCase
     {
         $this->analyse([__DIR__ . '/Fixture/RequireTableName.php'], [
             [
-                'Class Cambis\Silverstan\Tests\Rule\InClassNode\Fixture\RequireTableName is missing configurable property $table_name',
+                'Class Cambis\Silverstan\Tests\Rule\InClassNode\Fixture\RequireTableName is missing configuration property $table_name',
                 8,
             ],
         ]);

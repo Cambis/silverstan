@@ -14,11 +14,11 @@ parameters:
                 -
                     class: SilverStripe\ORM\DataObject
                     method: requireDefaultRecords
-        disallowOverridingOfConfigurablePropertyType:
+        disallowOverridingOfConfigurationPropertyType:
             enabled: true
-        disallowUseOfReservedConfigurablePropertyName:
+        disallowUseOfReservedConfigurationPropertyName:
             enabled: true
-        requireConfigurablePropertySnakeCaseName:
+        requireConfigurationPropertySnakeCaseName:
             enabled: true
         disallowUnsafeAccessOfMagicDataObject:
             enabled: true
@@ -26,7 +26,7 @@ parameters:
             enabled: true
         disallowNewInstanceOnInjectable:
             enabled: true
-        requireConfigurablePropertyOverride:
+        requireConfigurationPropertyOverride:
             enabled: true
             requiredProperties:
                 -
@@ -35,7 +35,7 @@ parameters:
                         - table_name
                         - singular_name
                         - plural_name
-        disallowStaticPropertyFetchOnConfigurableProperty:
+        disallowStaticPropertyFetchOnConfigurationProperty:
             enabled: true
         disallowSuperglobals:
             enabled: true
@@ -64,13 +64,13 @@ parametersSchema:
                 ])
             )
         ])
-        disallowOverridingOfConfigurablePropertyType: structure([
+        disallowOverridingOfConfigurationPropertyType: structure([
             enabled: bool()
         ])
-        disallowUseOfReservedConfigurablePropertyName: structure([
+        disallowUseOfReservedConfigurationPropertyName: structure([
             enabled: bool()
         ])
-        requireConfigurablePropertySnakeCaseName: structure([
+        requireConfigurationPropertySnakeCaseName: structure([
             enabled: bool()
         ])
         disallowUnsafeAccessOfMagicDataObject: structure([
@@ -82,7 +82,7 @@ parametersSchema:
         disallowNewInstanceOnInjectable: structure([
             enabled: bool()
         ])
-        requireConfigurablePropertyOverride: structure([
+        requireConfigurationPropertyOverride: structure([
             enabled: bool()
             requiredProperties: arrayOf(
                 structure([
@@ -91,7 +91,7 @@ parametersSchema:
                 ])
             )
         ])
-        disallowStaticPropertyFetchOnConfigurableProperty: structure([
+        disallowStaticPropertyFetchOnConfigurationProperty: structure([
             enabled: bool()
         ])
         disallowSuperglobals: structure([
@@ -107,22 +107,22 @@ conditionalTags:
         phpstan.rules.rule: %silverstanRules.disallowNonInterfacePublicMethodsOnExtension.enabled%
     Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule:
         phpstan.rules.rule: %silverstanRules.requireParentCallInOverridenMethod.enabled%
-    Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurablePropertyTypeRule:
-        phpstan.rules.rule: %silverstanRules.disallowOverridingOfConfigurablePropertyType.enabled%
-    Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurablePropertyNameRule:
-        phpstan.rules.rule: %silverstanRules.disallowUseOfReservedConfigurablePropertyName.enabled%
-    Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurablePropertySnakeCaseNameRule:
-        phpstan.rules.rule: %silverstanRules.requireConfigurablePropertySnakeCaseName.enabled%
+    Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule:
+        phpstan.rules.rule: %silverstanRules.disallowOverridingOfConfigurationPropertyType.enabled%
+    Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurationPropertyNameRule:
+        phpstan.rules.rule: %silverstanRules.disallowUseOfReservedConfigurationPropertyName.enabled%
+    Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurationPropertySnakeCaseNameRule:
+        phpstan.rules.rule: %silverstanRules.requireConfigurationPropertySnakeCaseName.enabled%
     Cambis\Silverstan\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRule:
         phpstan.rules.rule: %silverstanRules.disallowUnsafeAccessOfMagicDataObject.enabled%
     Cambis\Silverstan\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRule:
         phpstan.rules.rule: %silverstanRules.requireInterfaceForExtensibleHookMethod.enabled%
     Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule:
         phpstan.rules.rule: %silverstanRules.disallowNewInstanceOnInjectable.enabled%
-    Cambis\Silverstan\Rule\InClassNode\RequireConfigurablePropertyOverrideRule:
-        phpstan.rules.rule: %silverstanRules.requireConfigurablePropertyOverride.enabled%
-    Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurablePropertyRule:
-        phpstan.rules.rule: %silverstanRules.disallowStaticPropertyFetchOnConfigurableProperty.enabled%
+    Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule:
+        phpstan.rules.rule: %silverstanRules.requireConfigurationPropertyOverride.enabled%
+    Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule:
+        phpstan.rules.rule: %silverstanRules.disallowStaticPropertyFetchOnConfigurationProperty.enabled%
     Cambis\Silverstan\Rule\Variable\DisallowSuperglobalsRule:
         phpstan.rules.rule: %silverstanRules.disallowSuperglobals.enabled%
 
@@ -138,21 +138,21 @@ services:
     -
         class: Cambis\Silverstan\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRule
     -
-        class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurablePropertyTypeRule
+        class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule
     -
-        class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurablePropertyNameRule
+        class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurationPropertyNameRule
     -
-        class: Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurablePropertySnakeCaseNameRule
+        class: Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurationPropertySnakeCaseNameRule
     -
         class: Cambis\Silverstan\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRule
     -
         class: Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule
     -
-        class: Cambis\Silverstan\Rule\InClassNode\RequireConfigurablePropertyOverrideRule
+        class: Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule
         arguments:
-            requiredProperties: %silverstanRules.requireConfigurablePropertyOverride.requiredProperties%
+            requiredProperties: %silverstanRules.requireConfigurationPropertyOverride.requiredProperties%
     -
-        class: Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurablePropertyRule
+        class: Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule
     -
         class: Cambis\Silverstan\Rule\Variable\DisallowSuperglobalsRule
         arguments:

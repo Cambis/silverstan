@@ -12,7 +12,7 @@ use PHPStan\Testing\RuleTestCase;
 /**
  * @extends RuleTestCase<UnusedPrivatePropertyRule>
  */
-final class ConfigurablePropertiesExtensionTest extends RuleTestCase
+final class ConfigurationPropertiesExtensionTest extends RuleTestCase
 {
     #[Override]
     protected function getRule(): Rule

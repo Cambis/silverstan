@@ -20,7 +20,7 @@ services:
         class: Cambis\Silverstan\Collector\Expr\MagicDataObjectCallCollector
         tags: [phpstan.collector]
     -
-        class: Cambis\Silverstan\Extension\ClassPropertiesNode\ConfigurablePropertiesExtension
+        class: Cambis\Silverstan\Extension\ClassPropertiesNode\ConfigurationPropertiesExtension
         tags: [phpstan.properties.readWriteExtension]
     -
         class: Cambis\Silverstan\Extension\PhpDoc\ExtensionOwnerTypeNodeResolverExtension

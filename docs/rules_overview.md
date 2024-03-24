@@ -117,18 +117,18 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 <br>
 
-## DisallowOverridingOfConfigurablePropertyTypeRule
+## DisallowOverridingOfConfigurationPropertyTypeRule
 
 Disallow overriding types of configurable properties.
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurablePropertyTypeRule`](../src/Rule/ClassPropertyNode/DisallowOverridingOfConfigurablePropertyTypeRule.php)
+- class: [`Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule`](../src/Rule/ClassPropertyNode/DisallowOverridingOfConfigurationPropertyTypeRule.php)
 
 ```yaml
 parameters:
     silverstanRules:
-        disallowOverridingOfConfigurablePropertyType:
+        disallowOverridingOfConfigurationPropertyType:
             enabled: true
 ```
 
@@ -166,18 +166,18 @@ final class Bar extends Foo
 
 <br>
 
-## DisallowStaticPropertyFetchOnConfigurablePropertyRule
+## DisallowStaticPropertyFetchOnConfigurationPropertyRule
 
 Disallow static property fetch on configurable properties.
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurablePropertyRule`](../src/Rule/StaticPropertyFetch/DisallowStaticPropertyFetchOnConfigurablePropertyRule.php)
+- class: [`Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule`](../src/Rule/StaticPropertyFetch/DisallowStaticPropertyFetchOnConfigurationPropertyRule.php)
 
 ```yaml
 parameters:
     silverstanRules:
-        disallowStaticPropertyFetchOnConfigurableProperty:
+        disallowStaticPropertyFetchOnConfigurationProperty:
             enabled: true
 ```
 
@@ -330,18 +330,18 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 <br>
 
-## DisallowUseOfReservedConfigurablePropertyNameRule
+## DisallowUseOfReservedConfigurationPropertyNameRule
 
-Disallow declaring a non configurable property that shares the same name with an existing configurable property.
+Disallow declaring a non configuration property that shares the same name with an existing configuration property.
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurablePropertyNameRule`](../src/Rule/ClassPropertyNode/DisallowUseOfReservedConfigurablePropertyNameRule.php)
+- class: [`Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurationPropertyNameRule`](../src/Rule/ClassPropertyNode/DisallowUseOfReservedConfigurationPropertyNameRule.php)
 
 ```yaml
 parameters:
     silverstanRules:
-        disallowUseOfReservedConfigurablePropertyName:
+        disallowUseOfReservedConfigurationPropertyName:
             enabled: true
 ```
 
@@ -369,18 +369,18 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 <br>
 
-## RequireConfigurablePropertyOverrideRule
+## RequireConfigurationPropertyOverrideRule
 
 Require a class to override a set of configurable properties.
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\InClassNode\RequireConfigurablePropertyOverrideRule`](../src/Rule/InClassNode/RequireConfigurablePropertyOverrideRule.php)
+- class: [`Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule`](../src/Rule/InClassNode/RequireConfigurationPropertyOverrideRule.php)
 
 ```yaml
 parameters:
     silverstanRules:
-        requireConfigurablePropertyOverride:
+        requireConfigurationPropertyOverride:
             enabled: true
             requiredProperties:
                 -
@@ -412,18 +412,18 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 <br>
 
-## RequireConfigurablePropertySnakeCaseNameRule
+## RequireConfigurationPropertySnakeCaseNameRule
 
 Configurable properties must be in snake_case.
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurablePropertySnakeCaseNameRule`](../src/Rule/ClassPropertyNode/RequireConfigurablePropertySnakeCaseNameRule.php)
+- class: [`Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurationPropertySnakeCaseNameRule`](../src/Rule/ClassPropertyNode/RequireConfigurationPropertySnakeCaseNameRule.php)
 
 ```yaml
 parameters:
     silverstanRules:
-        requireConfigurablePropertySnakeCaseName:
+        requireConfigurationPropertySnakeCaseName:
             enabled: true
 ```
 

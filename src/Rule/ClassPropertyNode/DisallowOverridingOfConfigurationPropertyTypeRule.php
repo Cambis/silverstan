@@ -27,9 +27,9 @@ use function str_contains;
 
 /**
  * @implements Rule<ClassPropertyNode>
- * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowOverridingOfConfigurablePropertyTypeRuleTest
+ * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRuleTest
  */
-final class DisallowOverridingOfConfigurablePropertyTypeRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class DisallowOverridingOfConfigurationPropertyTypeRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
     #[Override]
     public function getRuleDefinition(): RuleDefinition
@@ -81,7 +81,7 @@ CODE_SAMPLE
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$this->isConfigurableProperty($node)) {
+        if (!$this->isConfigurationProperty($node)) {
             return [];
         }
 
@@ -112,7 +112,7 @@ CODE_SAMPLE
         return [
             RuleErrorBuilder::message(
                 sprintf(
-                    'Type %s of configurable property %s::$%s is not the same as type %s of overridden configurable property %s::$%s.',
+                    'Type %s of configuration property %s::$%s is not the same as type %s of overridden configuration property %s::$%s.',
                     $type->describe(VerbosityLevel::typeOnly()),
                     $classReflection->getDisplayName(),
                     $node->getName(),
@@ -121,12 +121,12 @@ CODE_SAMPLE
                     $node->getName()
                 )
             )
-            ->identifier('silverstan.configurableProperty')
+            ->identifier('silverstan.configurationProperty')
             ->build(),
         ];
     }
 
-    private function isConfigurableProperty(ClassPropertyNode|PhpPropertyReflection $property): bool
+    private function isConfigurationProperty(ClassPropertyNode|PhpPropertyReflection $property): bool
     {
         if (!$property->isPrivate()) {
             return false;
@@ -161,7 +161,7 @@ CODE_SAMPLE
 
             $property = $parent->getNativeProperty($propertyName);
 
-            if (!$this->isConfigurableProperty($property)) {
+            if (!$this->isConfigurationProperty($property)) {
                 continue;
             }
 
