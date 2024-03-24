@@ -430,7 +430,7 @@ parameters:
 ↓
 
 ```php
-class Foo extends \SilverStripe\ORM\DataObject
+final class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $fooBar = 'foo bar';
 }
@@ -441,7 +441,7 @@ class Foo extends \SilverStripe\ORM\DataObject
 <br>
 
 ```php
-class Foo extends \SilverStripe\ORM\DataObject
+final class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $foo_bar = 'foo bar';
 }
