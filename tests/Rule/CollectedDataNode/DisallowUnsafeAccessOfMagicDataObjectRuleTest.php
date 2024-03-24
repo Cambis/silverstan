@@ -33,7 +33,7 @@ final class DisallowUnsafeAccessOfMagicDataObjectRuleTest extends RuleTestCase
     {
         $this->analyse([__DIR__ . '/Fixture/UnsafeMethodAccess.php'], [
             [
-                'Call exists() first before accessing any \SilverStripe\ORM\DataObject methods or properties.',
+                'Call exists() first before accessing any magic \SilverStripe\ORM\DataObject methods or properties.',
                 15,
                 'See https://api.silverstripe.org/5/SilverStripe/ORM/DataObject.html#method_exists',
             ],
@@ -44,7 +44,7 @@ final class DisallowUnsafeAccessOfMagicDataObjectRuleTest extends RuleTestCase
     {
         $this->analyse([__DIR__ . '/Fixture/UnsafePropertyAccess.php'], [
             [
-                'Call exists() first before accessing any \SilverStripe\ORM\DataObject methods or properties.',
+                'Call exists() first before accessing any magic \SilverStripe\ORM\DataObject methods or properties.',
                 17,
                 'See https://api.silverstripe.org/5/SilverStripe/ORM/DataObject.html#method_exists',
             ],

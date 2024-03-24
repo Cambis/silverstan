@@ -93,7 +93,7 @@ CODE_SAMPLE
                 }
 
                 $errors[] = RuleErrorBuilder::message(
-                    'Call exists() first before accessing any \SilverStripe\ORM\DataObject methods or properties.'
+                    'Call exists() first before accessing any magic \SilverStripe\ORM\DataObject methods or properties.'
                 )
                     ->file($file)
                     ->line($firstCall[1])

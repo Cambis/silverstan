@@ -22,7 +22,7 @@ use function sprintf;
 
 /**
  * @implements Rule<New_>
- * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowOverridingOfConfigurablePropertyTypeRuleTest
+ * @see \Cambis\Silverstan\Tests\Rule\New_\DisallowNewInstanceOnInjectableRuleTest
  */
 final readonly class DisallowNewInstanceOnInjectableRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
 {
