@@ -35,7 +35,7 @@ final class DisallowOverridingOfConfigurationPropertyTypeRule implements Rule, D
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Disallow overriding types of configurable properties.',
+            'Disallow overriding types of configuration properties.',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'

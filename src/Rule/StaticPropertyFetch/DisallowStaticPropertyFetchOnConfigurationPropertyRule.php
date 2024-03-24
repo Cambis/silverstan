@@ -33,7 +33,7 @@ final class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements Ru
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Disallow static property fetch on configurable properties.',
+            'Disallow static property fetch on configuration properties.',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'

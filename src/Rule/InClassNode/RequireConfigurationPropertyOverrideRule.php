@@ -52,7 +52,7 @@ final class RequireConfigurationPropertyOverrideRule implements Rule, Documented
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Require a class to override a set of configurable properties.',
+            'Require a class to override a set of configuration properties.',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'

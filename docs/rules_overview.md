@@ -119,7 +119,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 ## DisallowOverridingOfConfigurationPropertyTypeRule
 
-Disallow overriding types of configurable properties.
+Disallow overriding types of configuration properties.
 
 :wrench: **configure it!**
 
@@ -168,7 +168,7 @@ final class Bar extends Foo
 
 ## DisallowStaticPropertyFetchOnConfigurationPropertyRule
 
-Disallow static property fetch on configurable properties.
+Disallow static property fetch on configuration properties.
 
 :wrench: **configure it!**
 
@@ -371,7 +371,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 ## RequireConfigurationPropertyOverrideRule
 
-Require a class to override a set of configurable properties.
+Require a class to override a set of configuration properties.
 
 :wrench: **configure it!**
 
@@ -414,7 +414,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 ## RequireConfigurationPropertySnakeCaseNameRule
 
-Configurable properties must be in snake_case.
+Configuration properties must be in snake_case.
 
 :wrench: **configure it!**
 

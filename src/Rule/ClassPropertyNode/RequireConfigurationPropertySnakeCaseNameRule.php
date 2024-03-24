@@ -32,7 +32,7 @@ final class RequireConfigurationPropertySnakeCaseNameRule implements Rule, Docum
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Configurable properties must be in snake_case.',
+            'Configuration properties must be in snake_case.',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
