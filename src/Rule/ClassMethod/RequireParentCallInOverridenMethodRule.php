@@ -37,13 +37,13 @@ final class RequireParentCallInOverridenMethodRule implements SilverstanRuleInte
     private array $classParentMethodCalls;
 
     /**
-     * @param array<array{class: class-string, method: string, isFirst?: bool}> $classParentMethodCalls
+     * @param array<array{class: class-string, method: string, isFirst?: bool}> $classes
      */
     public function __construct(
         private readonly NodeFinder $nodeFinder,
-        array $classParentMethodCalls = []
+        array $classes
     ) {
-        foreach ($classParentMethodCalls as $classParentCall) {
+        foreach ($classes as $classParentCall) {
             $this->classParentMethodCalls[] = new ClassParentMethodCall(
                 $classParentCall['class'],
                 $classParentCall['method'],
