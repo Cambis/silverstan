@@ -10,17 +10,20 @@ use function sprintf;
 
 final readonly class ClassAllowedNamespace
 {
+    /**
+     * @var string
+     */
     private const ALLOWED_NAMESPACE_REGEX = '#\b%s\b#';
 
     public function __construct(
         /**
          * @var class-string
          */
-        private string $className,
+        public string $className,
         /**
          * @var string[]
          */
-        private array $allowedNamespaces
+        public array $allowedNamespaces
     ) {
     }
 
@@ -33,21 +36,5 @@ final readonly class ClassAllowedNamespace
         }
 
         return false;
-    }
-
-    /**
-     * @return class-string
-     */
-    public function getClassName(): string
-    {
-        return $this->className;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getAllowedNamespaces(): array
-    {
-        return $this->allowedNamespaces;
     }
 }

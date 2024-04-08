@@ -10,27 +10,11 @@ final readonly class ClassRequiredProperty
         /**
          * @var class-string
          */
-        private string $className,
+        public string $className,
         /**
          * @var string[]
          */
-        private array $properties,
+        public array $properties
     ) {
-    }
-
-    /**
-     * @return class-string
-     */
-    public function getClassName(): string
-    {
-        return $this->className;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getProperties(): array
-    {
-        return $this->properties;
     }
 }

@@ -190,7 +190,7 @@ CODE_SAMPLE
                 sprintf(
                     'Class %s must be located in one of [%s] namespace.',
                     $classReflection->getDisplayName(),
-                    implode(', ', $classAllowedNamespace->getAllowedNamespaces())
+                    implode(', ', $classAllowedNamespace->allowedNamespaces)
                 )
             )->build(),
         ];
@@ -199,7 +199,7 @@ CODE_SAMPLE
     private function getClassAllowedNamespace(ClassReflection $classReflection): ?ClassAllowedNamespace
     {
         foreach ($this->classAllowedNamespaces as $classAllowedNamespace) {
-            if (!$classReflection->isSubclassOf($classAllowedNamespace->getClassName())) {
+            if (!$classReflection->isSubclassOf($classAllowedNamespace->className)) {
                 continue;
             }
 

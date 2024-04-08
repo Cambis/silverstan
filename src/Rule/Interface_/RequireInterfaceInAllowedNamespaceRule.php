@@ -21,8 +21,14 @@ use function sprintf;
  */
 final readonly class RequireInterfaceInAllowedNamespaceRule implements SilverstanRuleInterface
 {
+    /**
+     * @var string
+     */
     private const ALLOWED_NAMESPACE_REGEX = '#\b%s\b#';
 
+    /**
+     * @var string[]
+     */
     private const DEFAULT_ALLOWED_NAMESPACES = ['Contract'];
 
     /**

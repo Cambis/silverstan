@@ -10,27 +10,9 @@ final readonly class ClassParentMethodCall
         /**
          * @var class-string
          */
-        private string $className,
-        private string $methodName,
-        private bool $isFirstCall = false
+        public string $className,
+        public string $methodName,
+        public bool $isFirstCall = false
     ) {
-    }
-
-    /**
-     * @return class-string
-     */
-    public function getClassName(): string
-    {
-        return $this->className;
-    }
-
-    public function getMethodName(): string
-    {
-        return $this->methodName;
-    }
-
-    public function getIsFirstCall(): bool
-    {
-        return $this->isFirstCall;
     }
 }

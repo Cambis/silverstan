@@ -242,8 +242,8 @@ CODE_SAMPLE
                     sprintf(
                         'Class method %s::%s() is missing required call to parent::%s().',
                         $classReflection->getDisplayName(),
-                        $classParentMethodCall->getMethodName(),
-                        $classParentMethodCall->getMethodName()
+                        $classParentMethodCall->methodName,
+                        $classParentMethodCall->methodName
                     )
                 )
                 ->build(),
@@ -257,8 +257,8 @@ CODE_SAMPLE
                     sprintf(
                         'Class method %s::%s() is missing required call to parent::%s().',
                         $classReflection->getDisplayName(),
-                        $classParentMethodCall->getMethodName(),
-                        $classParentMethodCall->getMethodName()
+                        $classParentMethodCall->methodName,
+                        $classParentMethodCall->methodName
                     )
                 )
                 ->build(),
@@ -266,7 +266,7 @@ CODE_SAMPLE
         }
        
         // Extra condition if the parent call should come first
-        if (!$classParentMethodCall->getIsFirstCall()) {
+        if (!$classParentMethodCall->isFirstCall) {
             return [];
         }
 
@@ -274,15 +274,15 @@ CODE_SAMPLE
 
         if (
             !$firstCall instanceof StaticCall ||
-            ($firstCall->name instanceof Identifier && $firstCall->name->toString() !== $classParentMethodCall->getMethodName())
+            ($firstCall->name instanceof Identifier && $firstCall->name->toString() !== $classParentMethodCall->methodName)
         ) {
             return [
                 RuleErrorBuilder::message(
                     sprintf(
                         'Class method %s::%s() should call parent::%s() first.',
                         $classReflection->getDisplayName(),
-                        $classParentMethodCall->getMethodName(),
-                        $classParentMethodCall->getMethodName()
+                        $classParentMethodCall->methodName,
+                        $classParentMethodCall->methodName
                     )
                 )
                 ->build(),
@@ -295,11 +295,11 @@ CODE_SAMPLE
     private function getClassParentMethodCall(ClassMethod $classMethod, ClassReflection $classReflection): ?ClassParentMethodCall
     {
         foreach ($this->classParentMethodCalls as $requiredParentCall) {
-            if (!$classReflection->isSubclassOf($requiredParentCall->getClassName())) {
+            if (!$classReflection->isSubclassOf($requiredParentCall->className)) {
                 continue;
             }
 
-            if ($requiredParentCall->getMethodName() !== $classMethod->name->toString()) {
+            if ($requiredParentCall->methodName !== $classMethod->name->toString()) {
                 continue;
             }
 
@@ -331,7 +331,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($node->name->toString() !== $requiredParentCall->getMethodName()) {
+            if ($node->name->toString() !== $requiredParentCall->methodName) {
                 continue;
             }
 

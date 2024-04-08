@@ -110,7 +110,7 @@ CODE_SAMPLE
 
         $errors = [];
 
-        foreach ($classRequiredProperty->getProperties() as $property) {
+        foreach ($classRequiredProperty->properties as $property) {
             if ($this->hasConfigurationProperty($classReflection, $property)) {
                 continue;
             }
@@ -132,7 +132,7 @@ CODE_SAMPLE
     private function getClassRequiredProperty(ClassReflection $classReflection): ?ClassRequiredProperty
     {
         foreach ($this->classRequiredProperties as $requiredProperty) {
-            if (!$classReflection->isSubclassOf($requiredProperty->getClassName())) {
+            if (!$classReflection->isSubclassOf($requiredProperty->className)) {
                 continue;
             }
 
