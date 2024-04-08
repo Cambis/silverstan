@@ -30,6 +30,11 @@ final class DisallowNonInterfacePublicMethodsOnExtensionRule implements Silverst
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
+namespace App\Extension;
+
+/**
+ * @extends \SilverStripe\Core\Extension<\App\Model\Foo & static>
+ */
 final class FooExtension extends \SilverStripe\Core\Extension
 {
     public function foo(): string
@@ -37,6 +42,8 @@ final class FooExtension extends \SilverStripe\Core\Extension
         return 'foo';
     }
 }
+
+namespace App\Model;
 
 /**
  * @mixin FooExtension
@@ -52,11 +59,18 @@ final class Foo extends \SilverStripe\ORM\DataObject
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+namespace App\Contract;
+
 interface FooExtensionInterface
 {
     public function foo(): string;
 }
 
+namespace App\Extension;
+
+/**
+ * @extends \SilverStripe\Core\Extension<\App\Model\Foo & static>
+ */
 final class FooExtension extends \SilverStripe\Core\Extension implements FooExtensionInterface
 {
     public function foo(): string
@@ -64,6 +78,8 @@ final class FooExtension extends \SilverStripe\Core\Extension implements FooExte
         return 'foo';
     }
 }
+
+namespace App\Model;
 
 /**
  * @mixin FooExtensionInterface

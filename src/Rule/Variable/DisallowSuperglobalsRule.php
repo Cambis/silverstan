@@ -50,10 +50,7 @@ final readonly class DisallowSuperglobalsRule implements SilverstanRuleInterface
                 <<<'CODE_SAMPLE'
 final class CustomMiddleware implements \SilverStripe\Control\Middleware\HTTPMiddleware
 {
-    /**
-     * @return void
-     */
-    public function process(\SilverStripe\Control\HTTPRequest $request, callable $delegate)
+    public function process(\SilverStripe\Control\HTTPRequest $request, callable $delegate): void
     {
         $foo =  $_GET['foo'];
     }
@@ -62,10 +59,7 @@ CODE_SAMPLE,
                 <<<'CODE_SAMPLE'
 final class CustomMiddleware implements \SilverStripe\Control\Middleware\HTTPMiddleware
 {
-    /**
-     * @return void
-     */
-    public function process(\SilverStripe\Control\HTTPRequest $request, callable $delegate)
+    public function process(\SilverStripe\Control\HTTPRequest $request, callable $delegate): void
     {
         $foo =  $request->getVar('foo');
     }

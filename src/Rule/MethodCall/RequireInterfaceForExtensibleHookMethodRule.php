@@ -46,6 +46,8 @@ final readonly class RequireInterfaceForExtensibleHookMethodRule implements Silv
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
+namespace App\Model;
+
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     public function bar(): string
@@ -60,6 +62,8 @@ final class Foo extends \SilverStripe\ORM\DataObject
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+namespace App\Model;
+
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     /**
@@ -74,6 +78,8 @@ final class Foo extends \SilverStripe\ORM\DataObject
         return $bar;
     }
 }
+
+namespace App\Contract;
 
 interface UpdateBar
 {

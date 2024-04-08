@@ -37,6 +37,8 @@ final class DisallowOverridingOfConfigurationPropertyTypeRule implements Silvers
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
+namespace App\Model;
+
 class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $foo = 'foo';
@@ -49,6 +51,8 @@ final class Bar extends Foo
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+namespace App\Model;
+
 class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $foo = 'foo';

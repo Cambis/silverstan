@@ -61,6 +61,11 @@ parameters:
 ↓
 
 ```php
+namespace App\Extension;
+
+/**
+ * @extends \SilverStripe\Core\Extension<\App\Model\Foo & static>
+ */
 final class FooExtension extends \SilverStripe\Core\Extension
 {
     public function foo(): string
@@ -68,6 +73,8 @@ final class FooExtension extends \SilverStripe\Core\Extension
         return 'foo';
     }
 }
+
+namespace App\Model;
 
 /**
  * @mixin FooExtension
@@ -87,11 +94,18 @@ final class Foo extends \SilverStripe\ORM\DataObject
 <br>
 
 ```php
+namespace App\Contract;
+
 interface FooExtensionInterface
 {
     public function foo(): string;
 }
 
+namespace App\Extension;
+
+/**
+ * @extends \SilverStripe\Core\Extension<\App\Model\Foo & static>
+ */
 final class FooExtension extends \SilverStripe\Core\Extension implements FooExtensionInterface
 {
     public function foo(): string
@@ -99,6 +113,8 @@ final class FooExtension extends \SilverStripe\Core\Extension implements FooExte
         return 'foo';
     }
 }
+
+namespace App\Model;
 
 /**
  * @mixin FooExtensionInterface
@@ -135,6 +151,8 @@ parameters:
 ↓
 
 ```php
+namespace App\Model;
+
 class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $foo = 'foo';
@@ -151,6 +169,8 @@ final class Bar extends Foo
 <br>
 
 ```php
+namespace App\Model;
+
 class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $foo = 'foo';
@@ -244,10 +264,7 @@ parameters:
 ```php
 final class CustomMiddleware implements \SilverStripe\Control\Middleware\HTTPMiddleware
 {
-    /**
-     * @return void
-     */
-    public function process(\SilverStripe\Control\HTTPRequest $request, callable $delegate)
+    public function process(\SilverStripe\Control\HTTPRequest $request, callable $delegate): void
     {
         $foo =  $_GET['foo'];
     }
@@ -261,10 +278,7 @@ final class CustomMiddleware implements \SilverStripe\Control\Middleware\HTTPMid
 ```php
 final class CustomMiddleware implements \SilverStripe\Control\Middleware\HTTPMiddleware
 {
-    /**
-     * @return void
-     */
-    public function process(\SilverStripe\Control\HTTPRequest $request, callable $delegate)
+    public function process(\SilverStripe\Control\HTTPRequest $request, callable $delegate): void
     {
         $foo =  $request->getVar('foo');
     }
@@ -585,6 +599,8 @@ parameters:
 ↓
 
 ```php
+namespace App\Model;
+
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     public function bar(): string
@@ -603,6 +619,8 @@ final class Foo extends \SilverStripe\ORM\DataObject
 <br>
 
 ```php
+namespace App\Model;
+
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     /**
@@ -617,6 +635,8 @@ final class Foo extends \SilverStripe\ORM\DataObject
         return $bar;
     }
 }
+
+namespace App\Contract;
 
 interface UpdateBar
 {
