@@ -492,11 +492,13 @@ parameters:
     silverstanRules:
         requireConfigurationPropertyOverride:
             enabled: true
-            requiredProperties:
+            classes:
                 -
                     class: SilverStripe\ORM\DataObject
                     properties:
                         - table_name
+                        - singular_name
+                        - plural_name
 ```
 
 ↓
@@ -515,6 +517,10 @@ final class Foo extends \SilverStripe\ORM\DataObject
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $table_name = 'Foo';
+
+    private static string $singlular_name = 'Foo';
+
+    private static string $plural_name = 'Foos';
 }
 ```
 
@@ -678,20 +684,77 @@ parameters:
     silverstanRules:
         requireParentCallInOverridenMethod:
             enabled: true
-            requiredParentCalls:
+            classes:
                 -
                     class: SilverStripe\ORM\DataObject
                     method: onBeforeWrite
-                    isFirst: false
+                -
+                    class: SilverStripe\ORM\DataObject
+                    method: onAfterWrite
+                -
+                    class: SilverStripe\ORM\DataObject
+                    method: requireDefaultRecords
+                -
+                    class: SilverStripe\Dev\SapphireTest
+                    method: setUp
+                    isFirst: true
+                -
+                    class: SilverStripe\Dev\SapphireTest
+                    method: setUpBeforeClass
+                    isFirst: true
+                -
+                    class: SilverStripe\Dev\SapphireTest
+                    method: tearDown
+                -
+                    class: SilverStripe\Dev\SapphireTest
+                    method: tearDownAfterClass
 ```
 
 ↓
 
 ```php
+namespace App\Model;
+
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     protected function onBeforeWrite(): void
     {
+        // Custom code...
+    }
+
+    protected function onAfterWrite(): void
+    {
+        // Custom code...
+    }
+
+    public function requireDefaultRecords(): void
+    {
+        // Custom code...
+    }
+}
+
+namespace App\Tests\Model;
+
+final class FooTest extends \SilverStripe\Dev\SapphireTest
+{
+    protected function setUp(): void
+    {
+        // Custom code...
+    }
+
+    protected function setUpBeforeClass(): void
+    {
+        // Custom code...
+    }
+
+    protected function tearDown(): void
+    {
+        // Custom code...
+    }
+
+    protected function tearDownAfterClass(): void
+    {
+        // Custom code...
     }
 }
 ```
@@ -701,11 +764,62 @@ final class Foo extends \SilverStripe\ORM\DataObject
 <br>
 
 ```php
+namespace App\Model;
+
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     protected function onBeforeWrite(): void
     {
+        // Custom code...
+
         parent::onBeforeWrite();
+    }
+
+    protected function onAfterWrite(): void
+    {
+        // Custom code...
+
+        parent::onAfterWrite();
+    }
+
+    public function requireDefaultRecords(): void
+    {
+        // Custom code...
+
+        parent::requireDefaultRecords();
+    }
+}
+
+namespace App\Tests\Model;
+
+final class FooTest extends \SilverStripe\Dev\SapphireTest
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Custom code...
+    }
+
+    protected function setUpBeforeClass(): void
+    {
+        parent::setupBeforeClass();
+
+        // Custom code...
+    }
+
+    protected function tearDown(): void
+    {
+        // Custom code...
+
+        parent::tearDown();
+    }
+
+    protected function tearDownAfterClass(): void
+    {
+        // Custom code...
+
+        parent::tearDownAfterClass();
     }
 }
 ```

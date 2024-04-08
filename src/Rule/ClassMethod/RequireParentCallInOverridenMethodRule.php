@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\ClassMethod;
 
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
-use Cambis\Silverstan\ValueObject\RequiredParentCall;
+use Cambis\Silverstan\ValueObject\ClassParentMethodCall;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
@@ -17,10 +17,10 @@ use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\RuleErrorBuilder;
+use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\DataObject;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Webmozart\Assert\Assert;
 
 use function sprintf;
 
@@ -32,27 +32,22 @@ use function sprintf;
 final class RequireParentCallInOverridenMethodRule implements SilverstanRuleInterface
 {
     /**
-     * @var RequiredParentCall[]
+     * @var ClassParentMethodCall[]
      */
-    private array $requiredParentCalls;
+    private array $classParentMethodCalls;
 
     /**
-     * @param array<array{class: class-string, method: string, isFirst?: bool}> $requiredParentCalls
+     * @param array<array{class: class-string, method: string, isFirst?: bool}> $classParentMethodCalls
      */
     public function __construct(
         private readonly NodeFinder $nodeFinder,
-        array $requiredParentCalls = []
+        array $classParentMethodCalls = []
     ) {
-        foreach ($requiredParentCalls as $requiredParentCall) {
-            Assert::keyExists($requiredParentCall, 'class');
-            Assert::keyExists($requiredParentCall, 'method');
-            Assert::string($requiredParentCall['class']);
-            Assert::string($requiredParentCall['method']);
-
-            $this->requiredParentCalls[] = new RequiredParentCall(
-                $requiredParentCall['class'],
-                $requiredParentCall['method'],
-                $requiredParentCall['isFirst'] ?? false
+        foreach ($classParentMethodCalls as $classParentCall) {
+            $this->classParentMethodCalls[] = new ClassParentMethodCall(
+                $classParentCall['class'],
+                $classParentCall['method'],
+                $classParentCall['isFirst'] ?? false
             );
         }
     }
@@ -65,31 +60,145 @@ final class RequireParentCallInOverridenMethodRule implements SilverstanRuleInte
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
+namespace App\Model;
+
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     protected function onBeforeWrite(): void
     {
+        // Custom code...
+    }
+
+    protected function onAfterWrite(): void
+    {
+        // Custom code...
+    }
+
+    public function requireDefaultRecords(): void
+    {
+        // Custom code...
+    }
+}
+
+namespace App\Tests\Model;
+
+final class FooTest extends \SilverStripe\Dev\SapphireTest
+{
+    protected function setUp(): void
+    {
+        // Custom code...
+    }
+
+    protected function setUpBeforeClass(): void
+    {
+        // Custom code...
+    }
+
+    protected function tearDown(): void
+    {
+        // Custom code...
+    }
+
+    protected function tearDownAfterClass(): void
+    {
+        // Custom code...
     }
 }
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+namespace App\Model;
+
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     protected function onBeforeWrite(): void
     {
+        // Custom code...
+
         parent::onBeforeWrite();
+    }
+
+    protected function onAfterWrite(): void
+    {
+        // Custom code...
+
+        parent::onAfterWrite();
+    }
+
+    public function requireDefaultRecords(): void
+    {
+        // Custom code...
+
+        parent::requireDefaultRecords();
+    }
+}
+
+namespace App\Tests\Model;
+
+final class FooTest extends \SilverStripe\Dev\SapphireTest
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Custom code...
+    }
+
+    protected function setUpBeforeClass(): void
+    {
+        parent::setupBeforeClass();
+
+        // Custom code...
+    }
+
+    protected function tearDown(): void
+    {
+        // Custom code...
+
+        parent::tearDown();
+    }
+
+    protected function tearDownAfterClass(): void
+    {
+        // Custom code...
+
+        parent::tearDownAfterClass();
     }
 }
 CODE_SAMPLE
                     ,
                     [
                         'enabled' => true,
-                        'requiredParentCalls' => [
+                        'classes' => [
                             [
                                 'class' => DataObject::class,
                                 'method' => 'onBeforeWrite',
-                                'isFirst' => false,
+                            ],
+                            [
+                                'class' => DataObject::class,
+                                'method' => 'onAfterWrite',
+                            ],
+                            [
+                                'class' => DataObject::class,
+                                'method' => 'requireDefaultRecords',
+                            ],
+                            [
+                                'class' => SapphireTest::class,
+                                'method' => 'setUp',
+                                'isFirst' => true,
+                            ],
+                            [
+                                'class' => SapphireTest::class,
+                                'method' => 'setUpBeforeClass',
+                                'isFirst' => true,
+                            ],
+                            [
+                                'class' => SapphireTest::class,
+                                'method' => 'tearDown',
+                            ],
+                            [
+                                'class' => SapphireTest::class,
+                                'method' => 'tearDownAfterClass',
                             ],
                         ],
                     ]
@@ -115,9 +224,9 @@ CODE_SAMPLE
             return [];
         }
 
-        $requiredParentCall = $this->getRequiredParentCall($node, $classReflection);
+        $classParentMethodCall = $this->getClassParentMethodCall($node, $classReflection);
 
-        if (!$requiredParentCall instanceof RequiredParentCall) {
+        if (!$classParentMethodCall instanceof ClassParentMethodCall) {
             return [];
         }
 
@@ -133,8 +242,8 @@ CODE_SAMPLE
                     sprintf(
                         'Class method %s::%s() is missing required call to parent::%s().',
                         $classReflection->getDisplayName(),
-                        $requiredParentCall->getMethodName(),
-                        $requiredParentCall->getMethodName()
+                        $classParentMethodCall->getMethodName(),
+                        $classParentMethodCall->getMethodName()
                     )
                 )
                 ->build(),
@@ -142,14 +251,14 @@ CODE_SAMPLE
         }
 
         // Check if we have the required call
-        if (!$this->hasRequiredParentCall($nodes, $requiredParentCall)) {
+        if (!$this->hasClassParentMethodCall($nodes, $classParentMethodCall)) {
             return [
                 RuleErrorBuilder::message(
                     sprintf(
                         'Class method %s::%s() is missing required call to parent::%s().',
                         $classReflection->getDisplayName(),
-                        $requiredParentCall->getMethodName(),
-                        $requiredParentCall->getMethodName()
+                        $classParentMethodCall->getMethodName(),
+                        $classParentMethodCall->getMethodName()
                     )
                 )
                 ->build(),
@@ -157,7 +266,7 @@ CODE_SAMPLE
         }
        
         // Extra condition if the parent call should come first
-        if (!$requiredParentCall->getIsFirstCall()) {
+        if (!$classParentMethodCall->getIsFirstCall()) {
             return [];
         }
 
@@ -165,15 +274,15 @@ CODE_SAMPLE
 
         if (
             !$firstCall instanceof StaticCall ||
-            ($firstCall->name instanceof Identifier && $firstCall->name->toString() !== $requiredParentCall->getMethodName())
+            ($firstCall->name instanceof Identifier && $firstCall->name->toString() !== $classParentMethodCall->getMethodName())
         ) {
             return [
                 RuleErrorBuilder::message(
                     sprintf(
                         'Class method %s::%s() should call parent::%s() first.',
                         $classReflection->getDisplayName(),
-                        $requiredParentCall->getMethodName(),
-                        $requiredParentCall->getMethodName()
+                        $classParentMethodCall->getMethodName(),
+                        $classParentMethodCall->getMethodName()
                     )
                 )
                 ->build(),
@@ -183,9 +292,9 @@ CODE_SAMPLE
         return [];
     }
 
-    private function getRequiredParentCall(ClassMethod $classMethod, ClassReflection $classReflection): ?RequiredParentCall
+    private function getClassParentMethodCall(ClassMethod $classMethod, ClassReflection $classReflection): ?ClassParentMethodCall
     {
-        foreach ($this->requiredParentCalls as $requiredParentCall) {
+        foreach ($this->classParentMethodCalls as $requiredParentCall) {
             if (!$classReflection->isSubclassOf($requiredParentCall->getClassName())) {
                 continue;
             }
@@ -203,7 +312,7 @@ CODE_SAMPLE
     /**
      * @param Node[] $nodes
      */
-    private function hasRequiredParentCall(array $nodes, RequiredParentCall $requiredParentCall): bool
+    private function hasClassParentMethodCall(array $nodes, ClassParentMethodCall $requiredParentCall): bool
     {
         foreach ($nodes as $node) {
             if (!$node instanceof StaticCall) {

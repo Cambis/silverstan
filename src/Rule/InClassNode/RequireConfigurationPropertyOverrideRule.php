@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\InClassNode;
 
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
-use Cambis\Silverstan\ValueObject\RequiredProperties;
+use Cambis\Silverstan\ValueObject\ClassRequiredProperty;
 use Override;
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Reflection\ClassReflection;
@@ -15,8 +16,8 @@ use PHPStan\Rules\RuleErrorBuilder;
 use SilverStripe\ORM\DataObject;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Webmozart\Assert\Assert;
 
+use function array_reverse;
 use function sprintf;
 use function str_contains;
 
@@ -27,22 +28,18 @@ use function str_contains;
 final class RequireConfigurationPropertyOverrideRule implements SilverstanRuleInterface
 {
     /**
-     * @var RequiredProperties[]
+     * @var ClassRequiredProperty[]
      */
-    private array $requiredProperties;
+    private array $classRequiredProperties;
 
     /**
-     * @param array<array{class: class-string, properties: array<string>}> $requiredProperties
+     * @param array<array{class: class-string, properties: string[]}> $classes
      */
-    public function __construct(array $requiredProperties = [])
+    public function __construct(array $classes = [])
     {
-        foreach ($requiredProperties as $property) {
-            Assert::keyExists($property, 'class');
-            Assert::keyExists($property, 'properties');
-            Assert::string($property['class']);
-            Assert::allString($property['properties']);
-
-            $this->requiredProperties[] = new RequiredProperties($property['class'], $property['properties']);
+        // Reverse so custom configuration takes precedence over default configuration
+        foreach (array_reverse($classes) as $klass) {
+            $this->classRequiredProperties[] = new ClassRequiredProperty($klass['class'], $klass['properties']);
         }
     }
 
@@ -63,15 +60,19 @@ CODE_SAMPLE
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $table_name = 'Foo';
+
+    private static string $singlular_name = 'Foo';
+
+    private static string $plural_name = 'Foos';
 }
 CODE_SAMPLE
                     ,
                     [
                         'enabled' => true,
-                        'requiredProperties' => [
+                        'classes' => [
                             [
                                 'class' => DataObject::class,
-                                'properties' => ['table_name'],
+                                'properties' => ['table_name', 'singular_name', 'plural_name'],
                             ],
                         ],
                     ]
@@ -91,37 +92,54 @@ CODE_SAMPLE
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        $classReflection = $scope->getClassReflection();
+        if (!$node->getOriginalNode() instanceof Class_) {
+            return [];
+        }
 
-        if (!$classReflection instanceof ClassReflection) {
+        $classReflection = $node->getClassReflection();
+
+        if ($classReflection->isAnonymous()) {
+            return [];
+        }
+
+        $classRequiredProperty = $this->getClassRequiredProperty($classReflection);
+
+        if (!$classRequiredProperty instanceof ClassRequiredProperty) {
             return [];
         }
 
         $errors = [];
 
-        foreach ($this->requiredProperties as $requiredProperty) {
+        foreach ($classRequiredProperty->getProperties() as $property) {
+            if ($this->hasConfigurationProperty($classReflection, $property)) {
+                continue;
+            }
+    
+            $errors[] = RuleErrorBuilder::message(
+                sprintf(
+                    'Class %s is missing configuration property $%s',
+                    $classReflection->getDisplayName(),
+                    $property
+                )
+            )
+                ->identifier('silverstan.configurationProperty')
+                ->build();
+        }
+
+        return $errors;
+    }
+
+    private function getClassRequiredProperty(ClassReflection $classReflection): ?ClassRequiredProperty
+    {
+        foreach ($this->classRequiredProperties as $requiredProperty) {
             if (!$classReflection->isSubclassOf($requiredProperty->getClassName())) {
                 continue;
             }
 
-            foreach ($requiredProperty->getProperties() as $property) {
-                if ($this->hasConfigurationProperty($classReflection, $property)) {
-                    continue;
-                }
-        
-                $errors[] = RuleErrorBuilder::message(
-                    sprintf(
-                        'Class %s is missing configuration property $%s',
-                        $classReflection->getDisplayName(),
-                        $property
-                    )
-                )
-                    ->identifier('silverstan.configurationProperty')
-                    ->build();
-            }
+            return $requiredProperty;
         }
 
-        return $errors;
+        return null;
     }
 
     private function hasConfigurationProperty(ClassReflection $classReflection, string $propertyName): bool

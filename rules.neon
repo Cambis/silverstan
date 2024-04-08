@@ -4,7 +4,7 @@ parameters:
             enabled: true
         requireParentCallInOverridenMethod:
             enabled: true
-            requiredParentCalls:
+            classes:
                 -
                     class: SilverStripe\ORM\DataObject
                     method: onAfterWrite
@@ -51,7 +51,7 @@ parameters:
                         - Job
         requireConfigurationPropertyOverride:
             enabled: true
-            requiredProperties:
+            classes:
                 -
                     class: SilverStripe\ORM\DataObject
                     properties:
@@ -82,7 +82,7 @@ parametersSchema:
         ])
         requireParentCallInOverridenMethod: structure([
             enabled: bool()
-            requiredParentCalls: arrayOf(
+            classes: arrayOf(
                 structure([
                     class: string(),
                     method: string(),
@@ -110,7 +110,7 @@ parametersSchema:
         ])
         requireConfigurationPropertyOverride: structure([
             enabled: bool()
-            requiredProperties: arrayOf(
+            classes: arrayOf(
                 structure([
                     class: string(),
                     properties: arrayOf(string())
@@ -177,7 +177,7 @@ services:
     -
         class: Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule
         arguments:
-            requiredParentCalls: %silverstanRules.requireParentCallInOverridenMethod.requiredParentCalls%
+            classes: %silverstanRules.requireParentCallInOverridenMethod.classes%
     -
         class: Cambis\Silverstan\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRule
     -
@@ -193,7 +193,7 @@ services:
     -
         class: Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule
         arguments:
-            requiredProperties: %silverstanRules.requireConfigurationPropertyOverride.requiredProperties%
+            classes: %silverstanRules.requireConfigurationPropertyOverride.classes%
     -
         class: Cambis\Silverstan\Rule\Interface_\RequireInterfaceInAllowedNamespaceRule
         arguments:

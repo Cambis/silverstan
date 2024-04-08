@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ValueObject;
 
-final readonly class RequiredProperties
+final readonly class ClassParentMethodCall
 {
     public function __construct(
         /**
          * @var class-string
          */
         private string $className,
-        /**
-         * @var string[]
-         */
-        private array $properties,
+        private string $methodName,
+        private bool $isFirstCall = false
     ) {
     }
 
@@ -26,11 +24,13 @@ final readonly class RequiredProperties
         return $this->className;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getProperties(): array
+    public function getMethodName(): string
     {
-        return $this->properties;
+        return $this->methodName;
+    }
+
+    public function getIsFirstCall(): bool
+    {
+        return $this->isFirstCall;
     }
 }
