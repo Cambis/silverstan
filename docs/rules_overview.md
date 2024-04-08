@@ -1,4 +1,4 @@
-# 11 Rules Overview
+# 13 Rules Overview
 
 ## DisallowNewInstanceOnInjectableRule
 
@@ -369,6 +369,116 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 <br>
 
+## RequireClassInAllowedNamespaceRule
+
+Require a class to be in an allowed namespace.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\InClassNode\RequireClassInAllowedNamespaceRule`](../src/Rule/InClassNode/RequireClassInAllowedNamespaceRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        requireClassInAllowedNamespace:
+            enabled: true
+            classes:
+                -
+                    class: SilverStripe\ORM\DataObject
+                    allowedNamespaces:
+                        - Model
+                -
+                    class: SilverStripe\Control\Controller
+                    allowedNamespaces:
+                        - Controller
+                -
+                    class: SilverStripe\Core\Extension
+                    allowedNamespaces:
+                        - Extension
+                -
+                    class: SilverStripe\Dev\BuildTask
+                    allowedNamespaces:
+                        - Task
+                -
+                    class: Symbiote\QueuedJobs\Services\AbstractQueuedJob
+                    allowedNamespaces:
+                        - Job
+```
+
+↓
+
+```php
+namespace App;
+
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+}
+
+namespace App;
+
+final class FooController extends \SilverStripe\Control\Controller
+{
+}
+
+namespace App;
+
+final class FooExtension extends \SilverStripe\Core\Extension
+{
+}
+
+namespace App;
+
+final class FooTask extends \SilverStripe\Dev\BuildTask
+{
+}
+
+namespace App;
+
+final class FooJob extends \Symbiote\QueuedJobs\Services\AbstractQueuedJob
+{
+}
+```
+
+:x:
+
+<br>
+
+```php
+namespace App\Model;
+
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+}
+
+namespace App\Controller;
+
+final class FooController extends \SilverStripe\Control\Controller
+{
+}
+
+namespace App\Extension;
+
+final class FooExtension extends \SilverStripe\Core\Extension
+{
+}
+
+namespace App\Task;
+
+final class FooTask extends \SilverStripe\Dev\BuildTask
+{
+}
+
+namespace App\Job;
+
+final class FooJob extends \Symbiote\QueuedJobs\Services\AbstractQueuedJob
+{
+}
+```
+
+:+1:
+
+<br>
+
 ## RequireConfigurationPropertyOverrideRule
 
 Require a class to override a set of configuration properties.
@@ -505,6 +615,49 @@ final class Foo extends \SilverStripe\ORM\DataObject
 interface UpdateBar
 {
     public function updateBar(string &$bar): void;
+}
+```
+
+:+1:
+
+<br>
+
+## RequireInterfaceInAllowedNamespaceRule
+
+Require an interface to be in an allowed namespace.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\Interface_\RequireInterfaceInAllowedNamespaceRule`](../src/Rule/Interface_/RequireInterfaceInAllowedNamespaceRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        requireInterfaceInAllowedNamespace:
+            enabled: true
+            allowedNamespaces:
+                - Contract
+```
+
+↓
+
+```php
+namespace App;
+
+interface FooInterface
+{
+}
+```
+
+:x:
+
+<br>
+
+```php
+namespace App\Contract;
+
+interface FooInterface
+{
 }
 ```
 

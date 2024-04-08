@@ -29,7 +29,7 @@
         "rector/rector": "^1.0",
         "slevomat/coding-standard": "^8.14",
         "symplify/easy-coding-standard": "^12.0",
-        "symplify/phpstan-rules": "*",
+        "symplify/phpstan-rules": "^12.4",
         "symplify/rule-doc-generator": "^11.0"
     },
     "minimum-stability": "dev",
