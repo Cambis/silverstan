@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\ClassMethod;
 
+use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use SilverStripe\Core\Extension;
-use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
-use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @implements Rule<ClassMethod>
+ * @implements SilverstanRuleInterface<ClassMethod>
  *
  * @see \Cambis\Silverstan\Tests\Rule\ClassMethod\DisallowNonInterfacePublicMethodsOnExtensionRuleTest
  */
-final class DisallowNonInterfacePublicMethodsOnExtensionRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class DisallowNonInterfacePublicMethodsOnExtensionRule implements SilverstanRuleInterface
 {
     #[Override]
     public function getRuleDefinition(): RuleDefinition

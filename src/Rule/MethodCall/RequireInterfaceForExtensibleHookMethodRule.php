@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\MethodCall;
 
+use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -16,12 +17,9 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\FileTypeMapper;
 use SilverStripe\Core\Extensible;
-use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
-use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -29,10 +27,10 @@ use function count;
 use function sprintf;
 
 /**
- * @implements Rule<MethodCall>
+ * @implements SilverstanRuleInterface<MethodCall>
  * @see \Cambis\Silverstan\Tests\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRuleTest
  */
-final readonly class RequireInterfaceForExtensibleHookMethodRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final readonly class RequireInterfaceForExtensibleHookMethodRule implements SilverstanRuleInterface
 {
     public function __construct(
         private FileTypeMapper $fileTypeMapper,

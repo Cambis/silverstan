@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\StaticPropertyFetch;
 
+use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -11,12 +12,9 @@ use PhpParser\Node\VarLikeIdentifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertyReflection;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extension;
-use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
-use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -24,10 +22,10 @@ use function sprintf;
 use function str_contains;
 
 /**
- * @implements Rule<StaticPropertyFetch>
+ * @implements SilverstanRuleInterface<StaticPropertyFetch>
  * @see \Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRuleTest
  */
-final class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements SilverstanRuleInterface
 {
     #[Override]
     public function getRuleDefinition(): RuleDefinition

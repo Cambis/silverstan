@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\New_;
 
+use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use SilverStripe\Core\Injector\Injectable;
-use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
-use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 use function sprintf;
 
 /**
- * @implements Rule<New_>
+ * @implements SilverstanRuleInterface<New_>
  * @see \Cambis\Silverstan\Tests\Rule\New_\DisallowNewInstanceOnInjectableRuleTest
  */
-final readonly class DisallowNewInstanceOnInjectableRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final readonly class DisallowNewInstanceOnInjectableRule implements SilverstanRuleInterface
 {
     public function __construct(
         private ReflectionProvider $reflectionProvider

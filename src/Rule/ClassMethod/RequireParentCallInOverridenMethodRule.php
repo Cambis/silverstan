@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\ClassMethod;
 
+use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\ValueObject\RequiredParentCall;
 use Override;
 use PhpParser\Node;
@@ -15,11 +16,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use SilverStripe\ORM\DataObject;
-use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
-use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -27,11 +25,11 @@ use Webmozart\Assert\Assert;
 use function sprintf;
 
 /**
- * @implements Rule<ClassMethod>
+ * @implements SilverstanRuleInterface<ClassMethod>
  *
  * @see \Cambis\Silverstan\Tests\Rule\ClassMethod\RequireParentCallInOverridenMethodRuleTest
  */
-final class RequireParentCallInOverridenMethodRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class RequireParentCallInOverridenMethodRule implements SilverstanRuleInterface
 {
     /**
      * @var RequiredParentCall[]

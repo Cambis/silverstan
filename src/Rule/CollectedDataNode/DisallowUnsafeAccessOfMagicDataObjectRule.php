@@ -5,22 +5,20 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\CollectedDataNode;
 
 use Cambis\Silverstan\Collector\Expr\MagicDataObjectCallCollector;
+use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Override;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
-use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @implements Rule<CollectedDataNode>
+ * @implements SilverstanRuleInterface<CollectedDataNode>
  * @see \Cambis\Silverstan\Tests\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRuleTest
  */
-final class DisallowUnsafeAccessOfMagicDataObjectRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class DisallowUnsafeAccessOfMagicDataObjectRule implements SilverstanRuleInterface
 {
     #[Override]
     public function getRuleDefinition(): RuleDefinition

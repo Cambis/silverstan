@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\ClassPropertyNode;
 
+use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Override;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ParserNodeTypeToPHPStanType;
 use PHPStan\Type\TypehintHelper;
 use PHPStan\Type\VerbosityLevel;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extension;
-use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
-use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,10 +24,10 @@ use function sprintf;
 use function str_contains;
 
 /**
- * @implements Rule<ClassPropertyNode>
+ * @implements SilverstanRuleInterface<ClassPropertyNode>
  * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRuleTest
  */
-final class DisallowOverridingOfConfigurationPropertyTypeRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class DisallowOverridingOfConfigurationPropertyTypeRule implements SilverstanRuleInterface
 {
     #[Override]
     public function getRuleDefinition(): RuleDefinition

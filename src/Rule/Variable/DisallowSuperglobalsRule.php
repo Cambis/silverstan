@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\Variable;
 
+use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
-use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -22,10 +20,10 @@ use function in_array;
 use function sprintf;
 
 /**
- * @implements Rule<Variable>
+ * @implements SilverstanRuleInterface<Variable>
  * @see \Cambis\Silverstan\Tests\Rule\Variable\DisallowSuperglobalsRuleTest
  */
-final readonly class DisallowSuperglobalsRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final readonly class DisallowSuperglobalsRule implements SilverstanRuleInterface
 {
     /**
      * @var string[]

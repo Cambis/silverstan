@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\InClassNode;
 
+use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\ValueObject\RequiredProperties;
 use Override;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use SilverStripe\ORM\DataObject;
-use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
-use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -23,10 +21,10 @@ use function sprintf;
 use function str_contains;
 
 /**
- * @implements Rule<InClassNode>
+ * @implements SilverstanRuleInterface<InClassNode>
  * @see \Cambis\Silverstan\Tests\Rule\InClassNode\RequireConfigurationPropertyOverrideRuleTest
  */
-final class RequireConfigurationPropertyOverrideRule implements Rule, DocumentedRuleInterface, ConfigurableRuleInterface
+final class RequireConfigurationPropertyOverrideRule implements SilverstanRuleInterface
 {
     /**
      * @var RequiredProperties[]
