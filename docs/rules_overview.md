@@ -1,4 +1,4 @@
-# 13 Rules Overview
+# 14 Rules Overview
 
 ## DisallowNewInstanceOnInjectableRule
 
@@ -841,6 +841,49 @@ final class FooTest extends \SilverStripe\Dev\SapphireTest
 
         parent::tearDownAfterClass();
     }
+}
+```
+
+:+1:
+
+<br>
+
+## RequireTraitInAllowedNamespaceRule
+
+Require a trait to be in an allowed namespace.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\Trait_\RequireTraitInAllowedNamespaceRule`](../src/Rule/Trait_/RequireTraitInAllowedNamespaceRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        requireTraitInAllowedNamespace:
+            enabled: true
+            allowedNamespaces:
+                - Concern
+```
+
+↓
+
+```php
+namespace App;
+
+trait FooTrait
+{
+}
+```
+
+:x:
+
+<br>
+
+```php
+namespace App\Concern;
+
+trait FooTrait
+{
 }
 ```
 
