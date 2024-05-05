@@ -18,6 +18,9 @@
     "symplify/rule-doc-generator-contracts": "^11.1",
     "webmozart/assert": "^1.11"
   },
+  "suggest": {
+    "silverstripe/standards": "Verifies annotations inside of Silverstripe classes."
+  },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "autoload": {

@@ -32,6 +32,9 @@
         "symplify/phpstan-rules": "^12.4",
         "symplify/rule-doc-generator": "^11.0"
     },
+    "suggest": {
+        "silverstripe/standards": "Verifies annotations inside of Silverstripe classes."
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
@@ -69,7 +72,7 @@
         },
         "phpstan/extension-installer": {
             "ignore": [
-              "symplify/phpstan-rules"
+                "symplify/phpstan-rules"
             ]
         }
     },
