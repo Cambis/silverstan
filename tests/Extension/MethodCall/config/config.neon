@@ -1,4 +1,0 @@
-services:
-    -
-        class: Cambis\Silverstan\Extension\MethodCall\MagicDataObjectMethodReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]

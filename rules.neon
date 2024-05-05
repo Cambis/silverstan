@@ -140,8 +140,6 @@ parametersSchema:
     ])
 
 conditionalTags:
-    Cambis\Silverstan\Extension\MethodCall\MagicDataObjectMethodReturnTypeExtension:
-        phpstan.broker.dynamicMethodReturnTypeExtension: %silverstanRules.disallowUnsafeAccessOfMagicDataObject.enabled%
     Cambis\Silverstan\Rule\ClassMethod\DisallowNonInterfacePublicMethodsOnExtensionRule:
         phpstan.rules.rule: %silverstanRules.disallowNonInterfacePublicMethodsOnExtension.enabled%
     Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule:
@@ -170,8 +168,6 @@ conditionalTags:
         phpstan.rules.rule: %silverstanRules.disallowSuperglobals.enabled%
 
 services:
-    -
-        class: Cambis\Silverstan\Extension\MethodCall\MagicDataObjectMethodReturnTypeExtension
     -
         class: Cambis\Silverstan\Rule\ClassMethod\DisallowNonInterfacePublicMethodsOnExtensionRule
     -

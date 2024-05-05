@@ -24,8 +24,7 @@ final class DisallowUnsafeAccessOfMagicDataObjectRule implements SilverstanRuleI
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Use `instanceof` and `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` methods or properties as the object may not be present in the database. ' .
-            'Enabling this rule will change the return type of `$has_one` and `$belongs_to` relationships from `\SilverStripe\ORM\DataObject` to `\SilverStripe\ORM\DataObject|null` in order to encourage the use of the `instanceof` check.',
+            'Call `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` methods or properties as the object may not be present in the database.',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
@@ -49,11 +48,11 @@ final class Foo extends \SilverStripe\ORM\DataObject
 {
     public function doSomething(): string
     {
-        if ($this->Bar() instanceof \SilverStripe\ORM\DataObject && $this->Bar()->exists()) {
-            return $this->Bar()->Title;
+        if (!$this->Bar()->exists()) {
+            return '';
         }
 
-        return '';
+        return $this->Bar()->Title;
     }
 }
 CODE_SAMPLE

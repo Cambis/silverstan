@@ -17,10 +17,10 @@ final class UnsafeMethodAccess extends DataObject implements TestOnly
 
     public function doSomethingSafe(): string
     {
-        if ($this->Relation() instanceof DataObject && $this->Relation()->exists()) {
-            return $this->Relation()->getTitle();
+        if (!$this->Relation()->exists()) {
+            return '';
         }
 
-        return '';
+        return $this->Relation()->getTitle();
     }
 }

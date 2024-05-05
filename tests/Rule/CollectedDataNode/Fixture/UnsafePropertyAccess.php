@@ -19,10 +19,10 @@ final class UnsafePropertyAccess extends Extension implements TestOnly
 
     public function doSomethingSafe(): string
     {
-        if ($this->Relation() instanceof DataObject && $this->Relation()->exists()) {
-            return $this->Relation()->Title;
+        if (!$this->Relation()->exists()) {
+            return '';
         }
 
-        return '';
+        return $this->Relation()->Title;
     }
 }
