@@ -8,6 +8,7 @@
 # Docker
 docker/
 docker-compose.yml
+compose.yml
 
 # Silverstripe
 public/
@@ -19,6 +20,7 @@ vendor/
 composer.lock
 yarn-error.log
 yarn.lock
+phpstan.phar
 
 # Tests
 .phpunit.cache

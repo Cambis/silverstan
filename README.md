@@ -1,6 +1,6 @@
 # Silverstan | Kaitiaki Ponga
 
-This project contains [PHPStan rules](hhttps://github.com/phpstan/phpstan) for [Silverstripe CMS](https://github.com/silverstripe).
+This project contains extra strict and opinionated [PHPStan rules](https://github.com/phpstan/phpstan) for [Silverstripe CMS](https://github.com/silverstripe).
 
 See the available [Silverstripe rules](docs/rules_overview.md).
 

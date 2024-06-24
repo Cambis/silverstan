@@ -612,6 +612,19 @@ final class Foo extends \SilverStripe\ORM\DataObject
         return $bar;
     }
 }
+
+namespace App\Extension;
+
+/**
+ * @extends \SilverStripe\Core\Extension<Foo & static>
+ */
+final class FooExtension extends \SilverStripe\Core\Extension
+{
+    public function updateBar(string &$bar): void
+    {
+        $bar = 'foobar';
+    }
+}
 ```
 
 :x:
@@ -624,7 +637,7 @@ namespace App\Model;
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     /**
-     * @phpstan-silverstripe-extend UpdateBar
+     * @phpstan-silverstripe-extend \App\Contract\UpdateBar
      */
     public function bar(): string
     {
@@ -641,6 +654,19 @@ namespace App\Contract;
 interface UpdateBar
 {
     public function updateBar(string &$bar): void;
+}
+
+namespace App\Extension;
+
+/**
+ * @extends \SilverStripe\Core\Extension<Foo & static>
+ */
+final class FooExtension extends \SilverStripe\Core\Extension implements \App\Contract\UpdateBar
+{
+    public function updateBar(string &$bar): void
+    {
+        $bar = 'foobar';
+    }
 }
 ```
 

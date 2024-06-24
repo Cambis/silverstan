@@ -27,3 +27,9 @@ services:
         tags: [phpstan.phpDoc.typeNodeResolverExtension]
     -   
         class: PhpParser\NodeFinder
+    -
+        class: Cambis\Silverstan\NodeAnalyser\CallLikeAnalyser
+    -
+        class: Cambis\Silverstan\TypeComparator\CallLikeTypeComparator
+    -
+        class: Cambis\Silverstan\TypeResolver\CallLikeTypeResolver

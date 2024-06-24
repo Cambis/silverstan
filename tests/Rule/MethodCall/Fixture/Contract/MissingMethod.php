@@ -2,7 +2,6 @@
 
 namespace Cambis\Silverstan\Tests\Rule\MethodCall\Fixture\Contract;
 
-interface UpdateTitle
+interface MissingMethod
 {
-    public function updateHook(string &$title): void;
 }
