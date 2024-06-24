@@ -50,7 +50,7 @@ jobs:
             build \
             patches \
             package.json \
-            .nvmrc \
+            .node-version \
             CHANGELOG.md \
             CONTRIBUTING.md
 
