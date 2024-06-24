@@ -4,7 +4,7 @@ Kia ora! Would you like to contribute? That's awesome, thank you so much for you
 
 Before you go committing your amazing contribution please read the following guidelines.
 
-## Getting started 👶
+## Getting started 🐤
 
 Here are some things to know before you start coding.
 
@@ -12,7 +12,7 @@ We use the following dependencies for development:
 
 - php 8.3
 - composer
-- node >=18
+- node 22
 
 We use a number of quality of life tools to streamline development, install them via the command line.
 
