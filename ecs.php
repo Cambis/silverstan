@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff;
-use SlevomatCodingStandard\Sniffs\Namespaces\UseSpacingSniff;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 return ECSConfig::configure()
@@ -17,14 +17,11 @@ return ECSConfig::configure()
             'allowFallbackGlobalFunctions' => false,
             'allowFallbackGlobalConstants' => false,
         ]
-    )->withConfiguredRule(
-        UseSpacingSniff::class,
-        [
-            'linesCountBetweenUseTypes' => 1,
-        ]
     )
     ->withPreparedSets(
-        arrays: true,
-        cleanCode: true,
+        common: true,
         psr12: true,
-    );
+    )
+    ->withSkip([
+        NotOperatorWithSuccessorSpaceFixer::class
+    ]);

@@ -7,6 +7,14 @@ use SilverStripe\ORM\DataObject;
 
 final class DataObjectWrite extends DataObject implements TestOnly
 {
+    public function requireDefaultRecords(): void
+    {
+        if (true) {
+        }
+
+        parent::requireDefaultRecords();
+    }
+
     protected function onAfterWrite(): void
     {
         parent::onAfterWrite();
@@ -14,13 +22,5 @@ final class DataObjectWrite extends DataObject implements TestOnly
 
     protected function onBeforeWrite(): void
     {
-    }
-
-    public function requireDefaultRecords(): void
-    {
-        if (true) {
-        }
-
-        parent::requireDefaultRecords();
     }
 }

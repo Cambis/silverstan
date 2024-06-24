@@ -13,21 +13,21 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class DisallowNewInstanceOnInjectableRuleTest extends RuleTestCase
 {
+    public function testRule(): void
+    {
+        $this->analyse([__DIR__ . '/Fixture/DisallowNewInstance.php'], [
+            [
+                'Use Cambis\Silverstan\Tests\Rule\New_\Source\InjectableClass::create() instead of new Cambis\Silverstan\Tests\Rule\New_\Source\InjectableClass().',
+                13,
+            ],
+        ]);
+    }
+
     #[Override]
     protected function getRule(): Rule
     {
         return new DisallowNewInstanceOnInjectableRule(
             self::getContainer()->getByType(ReflectionProvider::class),
         );
-    }
-
-    public function testRule(): void
-    {
-        $this->analyse([__DIR__ . '/Fixture/DisallowNewInstance.php'], [
-            [
-                'Use Cambis\Silverstan\Tests\Rule\New_\Source\InjectableClass::create() instead of new Cambis\Silverstan\Tests\Rule\New_\Source\InjectableClass().',
-                14,
-            ],
-        ]);
     }
 }

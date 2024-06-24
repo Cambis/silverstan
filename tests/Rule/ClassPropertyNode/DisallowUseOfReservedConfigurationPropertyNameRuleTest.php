@@ -15,12 +15,6 @@ use SilverStripe\ORM\DataObject;
  */
 final class DisallowUseOfReservedConfigurationPropertyNameRuleTest extends RuleTestCase
 {
-    #[Override]
-    protected function getRule(): Rule
-    {
-        return new DisallowUseOfReservedConfigurationPropertyNameRule();
-    }
-
     public function testRule(): void
     {
         $this->analyse([__DIR__ . '/Fixture/DisallowReservedName.php'], [
@@ -30,5 +24,11 @@ final class DisallowUseOfReservedConfigurationPropertyNameRuleTest extends RuleT
                 'Did you mean to declare the property as `private static` instead?',
             ],
         ]);
+    }
+
+    #[Override]
+    protected function getRule(): Rule
+    {
+        return new DisallowUseOfReservedConfigurationPropertyNameRule();
     }
 }

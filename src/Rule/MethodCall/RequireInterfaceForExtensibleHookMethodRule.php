@@ -26,7 +26,6 @@ use PHPStan\Type\FileTypeMapper;
 use SilverStripe\Core\Extensible;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 use function array_shift;
 use function count;
 use function sprintf;
@@ -200,8 +199,8 @@ CODE_SAMPLE
                         $hookMethodName,
                     )
                 )
-                ->tip('Use the @phpstan-silverstripe-extend annotation to point an interface where the hook method is defined.')
-                ->build(),
+                    ->tip('Use the @phpstan-silverstripe-extend annotation to point an interface where the hook method is defined.')
+                    ->build(),
             ];
         }
 
@@ -211,7 +210,7 @@ CODE_SAMPLE
 
         // Grab the parameter types, these will be used later
         $methodParametersTypes = $this->callLikeTypeResolver->resolveTypesFromArgs($node->getArgs(), $scope);
-        
+
         // Remove the first parameter type as this is the method name
         array_shift($methodParametersTypes);
 
@@ -221,7 +220,7 @@ CODE_SAMPLE
             if (!$value instanceof GenericTagValueNode) {
                 continue;
             }
-    
+
             $name = $value->value;
 
             // Check that a class was specified
@@ -230,7 +229,7 @@ CODE_SAMPLE
                     RuleErrorBuilder::message(
                         sprintf('%s annotation does not specify anything.', $annotationTagNode->name)
                     )
-                    ->build(),
+                        ->build(),
                 ];
             }
 
@@ -289,13 +288,13 @@ CODE_SAMPLE
 
             // Check that the method signatures match
             $hookParametersTypes = $this->callLikeTypeResolver->resolveTypesFromParameters($hookParameters);
-            
+
             if (!$this->callLikeTypeComparator->doSignaturesMatch($methodParametersTypes, $hookParametersTypes)) {
                 return [
                     RuleErrorBuilder::message(sprintf('Specified class method %s::%s() signature does not match.', $resolvedName, $hookMethodName))->build(),
                 ];
             }
-            
+
             return [];
         }
 
@@ -306,8 +305,8 @@ CODE_SAMPLE
                     $hookMethodName,
                 )
             )
-            ->tip('Use the @phpstan-silverstripe-extend annotation to point an interface where the hook method is defined.')
-            ->build(),
+                ->tip('Use the @phpstan-silverstripe-extend annotation to point an interface where the hook method is defined.')
+                ->build(),
         ];
     }
 

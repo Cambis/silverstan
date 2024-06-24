@@ -15,6 +15,16 @@ use SilverStripe\ORM\DataObject;
  */
 final class RequireClassInAllowedNamespaceRuleTest extends RuleTestCase
 {
+    public function testRule(): void
+    {
+        $this->analyse([__DIR__ . '/Fixture/NotInAllowedNamespace.php', __DIR__ . '/Fixture/Model/InAllowedNamespace.php'], [
+            [
+                'Class Cambis\Silverstan\Tests\Rule\InClassNode\Fixture\NotInAllowedNamespace must be located in one of [Model] namespace.',
+                8,
+            ],
+        ]);
+    }
+
     #[Override]
     protected function getRule(): Rule
     {
@@ -22,16 +32,6 @@ final class RequireClassInAllowedNamespaceRuleTest extends RuleTestCase
             [
                 'class' => DataObject::class,
                 'allowedNamespaces' => ['Model'],
-            ],
-        ]);
-    }
-
-    public function testRule(): void
-    {
-        $this->analyse([__DIR__ . '/Fixture/NotInAllowedNamespace.php', __DIR__ . '/Fixture/Model/InAllowedNamespace.php'], [
-            [
-                'Class Cambis\Silverstan\Tests\Rule\InClassNode\Fixture\NotInAllowedNamespace must be located in one of [Model] namespace.',
-                8,
             ],
         ]);
     }

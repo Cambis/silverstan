@@ -14,14 +14,6 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class RequireTraitInAllowedNamespaceRuleTest extends RuleTestCase
 {
-    #[Override]
-    protected function getRule(): Rule
-    {
-        return new RequireTraitInAllowedNamespaceRule(
-            ['Concern']
-        );
-    }
-
     public function testRule(): void
     {
         $this->analyse(
@@ -36,6 +28,14 @@ final class RequireTraitInAllowedNamespaceRuleTest extends RuleTestCase
                     null,
                 ],
             ]
+        );
+    }
+
+    #[Override]
+    protected function getRule(): Rule
+    {
+        return new RequireTraitInAllowedNamespaceRule(
+            ['Concern']
         );
     }
 }

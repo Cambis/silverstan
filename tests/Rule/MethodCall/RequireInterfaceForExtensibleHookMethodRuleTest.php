@@ -19,18 +19,6 @@ use PHPStan\Type\FileTypeMapper;
  */
 final class RequireInterfaceForExtensibleHookMethodRuleTest extends RuleTestCase
 {
-    #[Override]
-    protected function getRule(): Rule
-    {
-        return new RequireInterfaceForExtensibleHookMethodRule(
-            self::getContainer()->getByType(CallLikeAnalyser::class),
-            self::getContainer()->getByType(CallLikeTypeComparator::class),
-            self::getContainer()->getByType(CallLikeTypeResolver::class),
-            self::getContainer()->getByType(FileTypeMapper::class),
-            self::getContainer()->getByType(ReflectionProvider::class),
-        );
-    }
-
     public function testRule(): void
     {
         $this->analyse([__DIR__ . '/Fixture/ExtensibleComplete.php'], []);
@@ -91,5 +79,17 @@ final class RequireInterfaceForExtensibleHookMethodRuleTest extends RuleTestCase
         return [
             __DIR__ . '/../../../extension.neon',
         ];
+    }
+
+    #[Override]
+    protected function getRule(): Rule
+    {
+        return new RequireInterfaceForExtensibleHookMethodRule(
+            self::getContainer()->getByType(CallLikeAnalyser::class),
+            self::getContainer()->getByType(CallLikeTypeComparator::class),
+            self::getContainer()->getByType(CallLikeTypeResolver::class),
+            self::getContainer()->getByType(FileTypeMapper::class),
+            self::getContainer()->getByType(ReflectionProvider::class),
+        );
     }
 }

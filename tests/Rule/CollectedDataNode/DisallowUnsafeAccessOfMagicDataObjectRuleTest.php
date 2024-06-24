@@ -15,20 +15,6 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class DisallowUnsafeAccessOfMagicDataObjectRuleTest extends RuleTestCase
 {
-    #[Override]
-    protected function getRule(): Rule
-    {
-        return new DisallowUnsafeAccessOfMagicDataObjectRule();
-    }
-
-    #[Override]
-    protected function getCollectors(): array
-    {
-        return [
-            new MagicDataObjectCallCollector(),
-        ];
-    }
-
     public function testRuleMethods(): void
     {
         $this->analyse([__DIR__ . '/Fixture/UnsafeMethodAccess.php'], [
@@ -49,5 +35,19 @@ final class DisallowUnsafeAccessOfMagicDataObjectRuleTest extends RuleTestCase
                 'See https://api.silverstripe.org/5/SilverStripe/ORM/DataObject.html#method_exists',
             ],
         ]);
+    }
+
+    #[Override]
+    protected function getRule(): Rule
+    {
+        return new DisallowUnsafeAccessOfMagicDataObjectRule();
+    }
+
+    #[Override]
+    protected function getCollectors(): array
+    {
+        return [
+            new MagicDataObjectCallCollector(),
+        ];
     }
 }

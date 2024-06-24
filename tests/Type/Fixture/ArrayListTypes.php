@@ -4,7 +4,6 @@ namespace Cambis\Silverstan\Tests\Type\Fixture;
 
 use SilverStripe\Assets\File;
 use SilverStripe\ORM\ArrayList;
-
 use function PHPStan\Testing\assertType;
 
 $list = new ArrayList([

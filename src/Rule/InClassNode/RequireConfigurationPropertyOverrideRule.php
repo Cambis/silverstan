@@ -16,7 +16,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use SilverStripe\ORM\DataObject;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 use function array_reverse;
 use function sprintf;
 use function str_contains;
@@ -114,7 +113,7 @@ CODE_SAMPLE
             if ($this->hasConfigurationProperty($classReflection, $property)) {
                 continue;
             }
-    
+
             $errors[] = RuleErrorBuilder::message(
                 sprintf(
                     'Class %s is missing configuration property $%s',

@@ -14,12 +14,6 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class ConfigurationPropertiesExtensionTest extends RuleTestCase
 {
-    #[Override]
-    protected function getRule(): Rule
-    {
-        return self::getContainer()->getByType(UnusedPrivatePropertyRule::class);
-    }
-
     /**
      * @return string[]
      */
@@ -59,5 +53,11 @@ final class ConfigurationPropertiesExtensionTest extends RuleTestCase
                 'See: https://phpstan.org/developing-extensions/always-read-written-properties',
             ],
         ]);
+    }
+
+    #[Override]
+    protected function getRule(): Rule
+    {
+        return self::getContainer()->getByType(UnusedPrivatePropertyRule::class);
     }
 }

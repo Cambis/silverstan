@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\ValueObject;
 
 use Nette\Utils\Strings;
-
 use function sprintf;
 
 final readonly class ClassAllowedNamespace

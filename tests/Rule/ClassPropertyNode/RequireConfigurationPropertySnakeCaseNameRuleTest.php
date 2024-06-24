@@ -14,12 +14,6 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class RequireConfigurationPropertySnakeCaseNameRuleTest extends RuleTestCase
 {
-    #[Override]
-    protected function getRule(): Rule
-    {
-        return new RequireConfigurationPropertySnakeCaseNameRule();
-    }
-
     public function testRule(): void
     {
         $this->analyse([__DIR__ . '/Fixture/RequireSnakeCase.php'], [
@@ -28,5 +22,11 @@ final class RequireConfigurationPropertySnakeCaseNameRuleTest extends RuleTestCa
                 10,
             ],
         ]);
+    }
+
+    #[Override]
+    protected function getRule(): Rule
+    {
+        return new RequireConfigurationPropertySnakeCaseNameRule();
     }
 }

@@ -15,6 +15,16 @@ use SilverStripe\ORM\DataObject;
  */
 final class RequireConfigurationPropertyOverrideRuleTest extends RuleTestCase
 {
+    public function testRule(): void
+    {
+        $this->analyse([__DIR__ . '/Fixture/RequireTableName.php'], [
+            [
+                'Class Cambis\Silverstan\Tests\Rule\InClassNode\Fixture\RequireTableName is missing configuration property $table_name',
+                8,
+            ],
+        ]);
+    }
+
     #[Override]
     protected function getRule(): Rule
     {
@@ -22,16 +32,6 @@ final class RequireConfigurationPropertyOverrideRuleTest extends RuleTestCase
             [
                 'class' => DataObject::class,
                 'properties' => ['table_name'],
-            ],
-        ]);
-    }
-
-    public function testRule(): void
-    {
-        $this->analyse([__DIR__ . '/Fixture/RequireTableName.php'], [
-            [
-                'Class Cambis\Silverstan\Tests\Rule\InClassNode\Fixture\RequireTableName is missing configuration property $table_name',
-                8,
             ],
         ]);
     }

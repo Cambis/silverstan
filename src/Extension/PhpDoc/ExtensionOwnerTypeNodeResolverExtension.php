@@ -18,7 +18,6 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Extension;
-
 use function count;
 
 /**

@@ -12,19 +12,19 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class DisallowSuperglobalsRuleTest extends RuleTestCase
 {
-    #[Override]
-    protected function getRule(): Rule
-    {
-        return new DisallowSuperglobalsRule();
-    }
-
     public function testRule(): void
     {
         $this->analyse([__DIR__ . '/Fixture/DisallowSuperglobals.php'], [
             [
                 'You should not directly access the $_GET superglobal. Consider using an alternative.',
-                13,
+                12,
             ],
         ]);
+    }
+
+    #[Override]
+    protected function getRule(): Rule
+    {
+        return new DisallowSuperglobalsRule();
     }
 }

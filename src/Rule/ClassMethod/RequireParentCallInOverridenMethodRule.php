@@ -21,7 +21,6 @@ use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\DataObject;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 use function sprintf;
 
 /**
@@ -246,7 +245,7 @@ CODE_SAMPLE
                         $classParentMethodCall->methodName
                     )
                 )
-                ->build(),
+                    ->build(),
             ];
         }
 
@@ -261,10 +260,10 @@ CODE_SAMPLE
                         $classParentMethodCall->methodName
                     )
                 )
-                ->build(),
+                    ->build(),
             ];
         }
-       
+
         // Extra condition if the parent call should come first
         if (!$classParentMethodCall->isFirstCall) {
             return [];
@@ -285,7 +284,7 @@ CODE_SAMPLE
                         $classParentMethodCall->methodName
                     )
                 )
-                ->build(),
+                    ->build(),
             ];
         }
 

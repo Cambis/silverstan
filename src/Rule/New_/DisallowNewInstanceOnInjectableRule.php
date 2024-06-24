@@ -15,7 +15,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use SilverStripe\Core\Injector\Injectable;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 use function sprintf;
 
 /**
@@ -95,7 +94,7 @@ CODE_SAMPLE
                     $node->class->toString(),
                 )
             )
-            ->build(),
+                ->build(),
         ];
     }
 }

@@ -15,12 +15,6 @@ use SilverStripe\ORM\DataObject;
  */
 final class DisallowOverridingOfConfigurationPropertyTypeRuleTest extends RuleTestCase
 {
-    #[Override]
-    protected function getRule(): Rule
-    {
-        return new DisallowOverridingOfConfigurationPropertyTypeRule();
-    }
-
     public function testRule(): void
     {
         $this->analyse([__DIR__ . '/Fixture/DisallowOverridingName.php'], [
@@ -29,5 +23,11 @@ final class DisallowOverridingOfConfigurationPropertyTypeRuleTest extends RuleTe
                 12,
             ],
         ]);
+    }
+
+    #[Override]
+    protected function getRule(): Rule
+    {
+        return new DisallowOverridingOfConfigurationPropertyTypeRule();
     }
 }

@@ -14,12 +14,6 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class DisallowStaticPropertyFetchOnConfigurationPropertyRuleTest extends RuleTestCase
 {
-    #[Override]
-    protected function getRule(): Rule
-    {
-        return new DisallowStaticPropertyFetchOnConfigurationPropertyRule();
-    }
-
     public function testRule(): void
     {
         $this->analyse([__DIR__ . '/Fixture/DisallowStaticPropertyFetch.php'], [
@@ -29,5 +23,11 @@ final class DisallowStaticPropertyFetchOnConfigurationPropertyRuleTest extends R
                 'See: https://docs.silverstripe.org/en/5/developer_guides/configuration/configuration/#accessing-configuration-properties',
             ],
         ]);
+    }
+
+    #[Override]
+    protected function getRule(): Rule
+    {
+        return new DisallowStaticPropertyFetchOnConfigurationPropertyRule();
     }
 }

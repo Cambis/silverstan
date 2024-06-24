@@ -19,7 +19,6 @@ use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extension;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 use function sprintf;
 use function str_contains;
 
@@ -123,8 +122,8 @@ CODE_SAMPLE
                     $node->getName()
                 )
             )
-            ->identifier('silverstan.configurationProperty')
-            ->build(),
+                ->identifier('silverstan.configurationProperty')
+                ->build(),
         ];
     }
 

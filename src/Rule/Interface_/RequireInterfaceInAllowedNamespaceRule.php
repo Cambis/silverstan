@@ -11,7 +11,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 use function implode;
 use function sprintf;
 
@@ -81,7 +80,7 @@ CODE_SAMPLE
     {
         return Interface_::class;
     }
-    
+
     /**
      * @param Interface_ $node
      */

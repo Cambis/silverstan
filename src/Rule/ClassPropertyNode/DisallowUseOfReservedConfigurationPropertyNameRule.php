@@ -16,7 +16,6 @@ use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extension;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 use function sprintf;
 use function str_contains;
 
@@ -96,11 +95,11 @@ CODE_SAMPLE
                     $node->getName()
                 )
             )
-            ->tip(
-                'Did you mean to declare the property as `private static` instead?'
-            )
-            ->identifier('silverstan.configurationProperty')
-            ->build(),
+                ->tip(
+                    'Did you mean to declare the property as `private static` instead?'
+                )
+                ->identifier('silverstan.configurationProperty')
+                ->build(),
         ];
     }
 
@@ -120,7 +119,6 @@ CODE_SAMPLE
 
         return !str_contains((string) $property->getDocComment(), '@internal');
     }
-
 
     private function shouldSkipClass(ClassReflection $classReflection): bool
     {

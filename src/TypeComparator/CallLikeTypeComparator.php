@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\TypeComparator;
 
 use PHPStan\Type\Type;
-
 use function count;
 
 final class CallLikeTypeComparator

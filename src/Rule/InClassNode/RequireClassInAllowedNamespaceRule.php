@@ -19,7 +19,6 @@ use SilverStripe\Dev\BuildTask;
 use SilverStripe\ORM\DataObject;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 use function array_reverse;
 use function implode;
 use function sprintf;

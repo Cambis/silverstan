@@ -14,14 +14,6 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class RequireInterfaceInAllowedNamespaceRuleTest extends RuleTestCase
 {
-    #[Override]
-    protected function getRule(): Rule
-    {
-        return new RequireInterfaceInAllowedNamespaceRule(
-            ['Contract']
-        );
-    }
-
     public function testRule(): void
     {
         $this->analyse(
@@ -36,6 +28,14 @@ final class RequireInterfaceInAllowedNamespaceRuleTest extends RuleTestCase
                     null,
                 ],
             ]
+        );
+    }
+
+    #[Override]
+    protected function getRule(): Rule
+    {
+        return new RequireInterfaceInAllowedNamespaceRule(
+            ['Contract']
         );
     }
 }

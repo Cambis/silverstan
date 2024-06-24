@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Cambis\Silverstan\Tests\Rule\Variable\Fixture;
 
 use SilverStripe\Control\HTTPRequest;

@@ -14,12 +14,6 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class DisallowNonInterfacePublicMethodsOnExtensionRuleTest extends RuleTestCase
 {
-    #[Override]
-    protected function getRule(): Rule
-    {
-        return new DisallowNonInterfacePublicMethodsOnExtensionRule();
-    }
-
     public function testRule(): void
     {
         $this->analyse([__DIR__ . '/Fixture/DisallowedExtension.php'], [
@@ -28,5 +22,11 @@ final class DisallowNonInterfacePublicMethodsOnExtensionRuleTest extends RuleTes
                 13,
             ],
         ]);
+    }
+
+    #[Override]
+    protected function getRule(): Rule
+    {
+        return new DisallowNonInterfacePublicMethodsOnExtensionRule();
     }
 }

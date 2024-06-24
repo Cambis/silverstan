@@ -131,7 +131,7 @@ CODE_SAMPLE
             RuleErrorBuilder::message(
                 'Use explicit interface contract or a service to define public facing extension methods.'
             )
-            ->build(),
+                ->build(),
         ];
     }
 
