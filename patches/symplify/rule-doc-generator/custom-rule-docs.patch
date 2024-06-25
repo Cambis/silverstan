@@ -1,7 +1,7 @@
-diff --git src/RuleCodeSamplePrinter/PHPStanRuleCodeSamplePrinter.php src/RuleCodeSamplePrinter/PHPStanRuleCodeSamplePrinter.php
-index 7b825cd..3e74e90 100644
---- src/RuleCodeSamplePrinter/PHPStanRuleCodeSamplePrinter.php
-+++ src/RuleCodeSamplePrinter/PHPStanRuleCodeSamplePrinter.php
+diff --git a/src/RuleCodeSamplePrinter/PHPStanRuleCodeSamplePrinter.php b/src/RuleCodeSamplePrinter/PHPStanRuleCodeSamplePrinter.php
+index 7b825cd..b14c5b2 100644
+--- a/src/RuleCodeSamplePrinter/PHPStanRuleCodeSamplePrinter.php
++++ b/src/RuleCodeSamplePrinter/PHPStanRuleCodeSamplePrinter.php
 @@ -4,6 +4,8 @@ declare(strict_types=1);
  
  namespace Symplify\RuleDocGenerator\RuleCodeSamplePrinter;
@@ -11,21 +11,12 @@ index 7b825cd..3e74e90 100644
  use Symplify\RuleDocGenerator\Contract\CodeSampleInterface;
  use Symplify\RuleDocGenerator\Contract\RuleCodeSamplePrinterInterface;
  use Symplify\RuleDocGenerator\Printer\CodeSamplePrinter\BadGoodCodeSamplePrinter;
-@@ -23,7 +25,7 @@ final class PHPStanRuleCodeSamplePrinter implements RuleCodeSamplePrinterInterfa
- 
-     public function isMatch(string $class): bool
-     {
--        return is_a($class, 'PHPStan\Rules\Rule', true);
-+        return is_a($class, 'PHPStan\Rules\Rule', true) || is_a($class, 'PHPStan\Rules\Properties\ReadWritePropertiesExtension', true);
-     }
- 
-     /**
-@@ -47,22 +49,21 @@ final class PHPStanRuleCodeSamplePrinter implements RuleCodeSamplePrinterInterfa
+@@ -46,15 +48,14 @@ final class PHPStanRuleCodeSamplePrinter implements RuleCodeSamplePrinterInterfa
+         RuleDefinition $ruleDefinition
      ): array {
          $lines = [];
- 
-+        // Override output format
 +        $ruleName = Strings::firstLower((new ReflectionClass($ruleDefinition->getRuleClass()))->getShortName());
+ 
          $phpStanNeon = [
 -            'services' => [
 -                [
@@ -33,20 +24,12 @@ index 7b825cd..3e74e90 100644
 -                    'tags' => ['phpstan.rules.rule'],
 -                    'arguments' => $configuredCodeSample->getConfiguration(),
 -                ],
+-            ],
 +            'parameters' => [
-+                'silverstanRules' => [
++               'silverstanRules' => [
 +                    explode('Rule', $ruleName)[0] => $configuredCodeSample->getConfiguration(),
 +                ]
-             ],
++             ],
          ];
  
          $printedNeon = $this->neonPrinter->printNeon($phpStanNeon);
-         $lines[] = $this->markdownCodeWrapper->printYamlCode($printedNeon);
--
-         $lines[] = '↓';
--
-         $newLines = $this->badGoodCodeSamplePrinter->print($configuredCodeSample);
-+
-         return array_merge($lines, $newLines);
-     }
- }
