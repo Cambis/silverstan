@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\ClassPropertyNode;
 
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
+use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
 use Override;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -12,19 +14,22 @@ use PHPStan\Node\ClassPropertyNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Rules\RuleErrorBuilder;
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Extension;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function sprintf;
-use function str_contains;
 
 /**
  * @implements SilverstanRuleInterface<ClassPropertyNode>
  * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurationPropertyNameRuleTest
  */
-final class DisallowUseOfReservedConfigurationPropertyNameRule implements SilverstanRuleInterface
+final readonly class DisallowUseOfReservedConfigurationPropertyNameRule implements SilverstanRuleInterface
 {
+    public function __construct(
+        private ClassAnalyser $classAnalyser,
+        private PropertyAnalyser $propertyAnalyser
+    ) {
+    }
+
     #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
@@ -65,7 +70,7 @@ CODE_SAMPLE
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        if ($this->isConfigurationProperty($node)) {
+        if ($this->propertyAnalyser->isConfigurationProperty($node)) {
             return [];
         }
 
@@ -75,7 +80,7 @@ CODE_SAMPLE
             return [];
         }
 
-        if ($this->shouldSkipClass($classReflection)) {
+        if (!$this->classAnalyser->isConfigurable($classReflection)) {
             return [];
         }
 
@@ -103,32 +108,6 @@ CODE_SAMPLE
         ];
     }
 
-    private function isConfigurationProperty(ClassPropertyNode|PhpPropertyReflection $property): bool
-    {
-        if (!$property->isPrivate()) {
-            return false;
-        }
-
-        if (!$property->isStatic()) {
-            return false;
-        }
-
-        if ($property instanceof ClassPropertyNode) {
-            return !str_contains((string) $property->getPhpDoc(), '@internal');
-        }
-
-        return !str_contains((string) $property->getDocComment(), '@internal');
-    }
-
-    private function shouldSkipClass(ClassReflection $classReflection): bool
-    {
-        if ($classReflection->isSubclassOf(Extension::class)) {
-            return false;
-        }
-
-        return !$classReflection->hasTraitUse(Configurable::class);
-    }
-
     private function findPrototype(ClassReflection $classReflection, string $propertyName): ?PhpPropertyReflection
     {
         foreach ($classReflection->getParents() as $parent) {
@@ -138,7 +117,7 @@ CODE_SAMPLE
 
             $property = $parent->getNativeProperty($propertyName);
 
-            if (!$this->isConfigurationProperty($property)) {
+            if (!$this->propertyAnalyser->isConfigurationProperty($property)) {
                 continue;
             }
 

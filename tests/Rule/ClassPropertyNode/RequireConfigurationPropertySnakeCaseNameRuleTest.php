@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Rule\ClassPropertyNode;
 
+use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
 use Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurationPropertySnakeCaseNameRule;
 use Override;
 use PHPStan\Rules\Rule;
@@ -25,8 +27,19 @@ final class RequireConfigurationPropertySnakeCaseNameRuleTest extends RuleTestCa
     }
 
     #[Override]
+    public static function getAdditionalConfigFiles(): array
+    {
+        return [
+            __DIR__ . '/../../../extension.neon',
+        ];
+    }
+
+    #[Override]
     protected function getRule(): Rule
     {
-        return new RequireConfigurationPropertySnakeCaseNameRule();
+        return new RequireConfigurationPropertySnakeCaseNameRule(
+            self::getContainer()->getByType(ClassAnalyser::class),
+            self::getContainer()->getByType(PropertyAnalyser::class)
+        );
     }
 }

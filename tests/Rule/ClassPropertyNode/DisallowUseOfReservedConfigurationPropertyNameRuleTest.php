@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Rule\ClassPropertyNode;
 
+use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
 use Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurationPropertyNameRule;
 use Override;
 use PHPStan\Rules\Rule;
@@ -27,8 +29,19 @@ final class DisallowUseOfReservedConfigurationPropertyNameRuleTest extends RuleT
     }
 
     #[Override]
+    public static function getAdditionalConfigFiles(): array
+    {
+        return [
+            __DIR__ . '/../../../extension.neon',
+        ];
+    }
+
+    #[Override]
     protected function getRule(): Rule
     {
-        return new DisallowUseOfReservedConfigurationPropertyNameRule();
+        return new DisallowUseOfReservedConfigurationPropertyNameRule(
+            self::getContainer()->getByType(ClassAnalyser::class),
+            self::getContainer()->getByType(PropertyAnalyser::class)
+        );
     }
 }

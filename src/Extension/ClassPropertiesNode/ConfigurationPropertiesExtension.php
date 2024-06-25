@@ -4,62 +4,41 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Extension\ClassPropertiesNode;
 
+use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
 use Override;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Extension;
-use function str_contains;
 
 /**
  * @see \Cambis\Silverstan\Tests\Extension\ClassPropertiesNode\ConfigurationPropertiesExtensionTest
  */
-final class ConfigurationPropertiesExtension implements ReadWritePropertiesExtension
+final readonly class ConfigurationPropertiesExtension implements ReadWritePropertiesExtension
 {
+    public function __construct(
+        private ClassAnalyser $classAnalyser,
+        private PropertyAnalyser $propertyAnalyser
+    ) {
+    }
+
     #[Override]
     public function isAlwaysRead(PropertyReflection $propertyReflection, string $propertyName): bool
     {
-        return $this->isConfigurationProperty($propertyReflection);
+        return $this->classAnalyser->isConfigurable($propertyReflection->getDeclaringClass()) &&
+            $this->propertyAnalyser->isConfigurationProperty($propertyReflection);
     }
 
     #[Override]
     public function isAlwaysWritten(PropertyReflection $propertyReflection, string $propertyName): bool
     {
-        return $this->isConfigurationProperty($propertyReflection);
+        return $this->classAnalyser->isConfigurable($propertyReflection->getDeclaringClass()) &&
+            $this->propertyAnalyser->isConfigurationProperty($propertyReflection);
     }
 
     #[Override]
     public function isInitialized(PropertyReflection $propertyReflection, string $propertyName): bool
     {
-        return $this->isConfigurationProperty($propertyReflection);
-    }
-
-    private function shouldSkipClass(ClassReflection $classReflection): bool
-    {
-        if ($classReflection->isSubclassOf(Extension::class)) {
-            return false;
-        }
-
-        return !$classReflection->hasTraitUse(Configurable::class);
-    }
-
-    private function isConfigurationProperty(PropertyReflection $propertyReflection): bool
-    {
-        $classReflection = $propertyReflection->getDeclaringClass();
-
-        if ($this->shouldSkipClass($classReflection)) {
-            return false;
-        }
-
-        if (!$propertyReflection->isPrivate()) {
-            return false;
-        }
-
-        if (!$propertyReflection->isStatic()) {
-            return false;
-        }
-
-        return !str_contains((string) $propertyReflection->getDocComment(), '@internal');
+        return $this->classAnalyser->isConfigurable($propertyReflection->getDeclaringClass()) &&
+            $this->propertyAnalyser->isConfigurationProperty($propertyReflection);
     }
 }

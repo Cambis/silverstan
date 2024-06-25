@@ -30,6 +30,10 @@ services:
     -
         class: Cambis\Silverstan\NodeAnalyser\CallLikeAnalyser
     -
+        class: Cambis\Silverstan\NodeAnalyser\ClassAnalyser
+    -
+        class: Cambis\Silverstan\NodeAnalyser\PropertyAnalyser
+    -
         class: Cambis\Silverstan\TypeComparator\CallLikeTypeComparator
     -
         class: Cambis\Silverstan\TypeResolver\CallLikeTypeResolver

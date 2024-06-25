@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Rule\StaticPropertyFetch;
 
+use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
 use Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule;
 use Override;
 use PHPStan\Rules\Rule;
@@ -26,8 +28,19 @@ final class DisallowStaticPropertyFetchOnConfigurationPropertyRuleTest extends R
     }
 
     #[Override]
+    public static function getAdditionalConfigFiles(): array
+    {
+        return [
+            __DIR__ . '/../../../extension.neon',
+        ];
+    }
+
+    #[Override]
     protected function getRule(): Rule
     {
-        return new DisallowStaticPropertyFetchOnConfigurationPropertyRule();
+        return new DisallowStaticPropertyFetchOnConfigurationPropertyRule(
+            self::getContainer()->getByType(ClassAnalyser::class),
+            self::getContainer()->getByType(PropertyAnalyser::class)
+        );
     }
 }

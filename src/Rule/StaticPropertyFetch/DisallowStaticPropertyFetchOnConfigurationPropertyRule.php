@@ -5,27 +5,31 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\StaticPropertyFetch;
 
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
+use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\VarLikeIdentifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\RuleErrorBuilder;
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Extension;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function sprintf;
-use function str_contains;
 
 /**
  * @implements SilverstanRuleInterface<StaticPropertyFetch>
  * @see \Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRuleTest
  */
-final class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements SilverstanRuleInterface
+final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements SilverstanRuleInterface
 {
+    public function __construct(
+        private ClassAnalyser $classAnalyser,
+        private PropertyAnalyser $propertyAnalyser,
+    ) {
+    }
+
     #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
@@ -86,13 +90,13 @@ CODE_SAMPLE
             return [];
         }
 
-        if ($this->shouldSkipClass($classReflection)) {
+        if (!$this->classAnalyser->isConfigurable($classReflection)) {
             return [];
         }
 
         $propertyReflection = $classReflection->getProperty($node->name->name, $scope);
 
-        if ($this->shouldSkipProperty($propertyReflection)) {
+        if (!$this->propertyAnalyser->isConfigurationProperty($propertyReflection)) {
             return [];
         }
 
@@ -108,27 +112,5 @@ CODE_SAMPLE
                 ->tip('See: https://docs.silverstripe.org/en/5/developer_guides/configuration/configuration/#accessing-configuration-properties')
                 ->build(),
         ];
-    }
-
-    private function shouldSkipClass(ClassReflection $classReflection): bool
-    {
-        if ($classReflection->isSubclassOf(Extension::class)) {
-            return false;
-        }
-
-        return !$classReflection->hasTraitUse(Configurable::class);
-    }
-
-    private function shouldSkipProperty(PropertyReflection $propertyReflection): bool
-    {
-        if (!$propertyReflection->isPrivate()) {
-            return true;
-        }
-
-        if (!$propertyReflection->isStatic()) {
-            return true;
-        }
-
-        return str_contains((string) $propertyReflection->getDocComment(), '@internal');
     }
 }

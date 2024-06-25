@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Rule\ClassPropertyNode;
 
+use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
 use Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule;
 use Override;
 use PHPStan\Rules\Rule;
@@ -26,8 +28,19 @@ final class DisallowOverridingOfConfigurationPropertyTypeRuleTest extends RuleTe
     }
 
     #[Override]
+    public static function getAdditionalConfigFiles(): array
+    {
+        return [
+            __DIR__ . '/../../../extension.neon',
+        ];
+    }
+
+    #[Override]
     protected function getRule(): Rule
     {
-        return new DisallowOverridingOfConfigurationPropertyTypeRule();
+        return new DisallowOverridingOfConfigurationPropertyTypeRule(
+            self::getContainer()->getByType(ClassAnalyser::class),
+            self::getContainer()->getByType(PropertyAnalyser::class)
+        );
     }
 }
