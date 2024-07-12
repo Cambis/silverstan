@@ -2,7 +2,7 @@
 
 namespace Cambis\Silverstan\Tests\Rule\MethodCall\Fixture;
 
-use Cambis\Silverstan\Tests\Rule\MethodCall\Fixture\Contract\MethodSignatureDoesNotMatchType;
+use Cambis\Silverstan\Tests\Rule\MethodCall\Fixture\Concern\MethodSignatureDoesNotMatchType;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Dev\TestOnly;
 

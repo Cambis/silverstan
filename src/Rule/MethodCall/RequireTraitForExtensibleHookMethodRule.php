@@ -6,6 +6,7 @@ namespace Cambis\Silverstan\Rule\MethodCall;
 
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\NodeAnalyser\CallLikeAnalyser;
+use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
 use Cambis\Silverstan\TypeComparator\CallLikeTypeComparator;
 use Cambis\Silverstan\TypeResolver\CallLikeTypeResolver;
 use Override;
@@ -23,7 +24,6 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\FileTypeMapper;
-use SilverStripe\Core\Extensible;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function array_shift;
@@ -32,14 +32,15 @@ use function sprintf;
 
 /**
  * @implements SilverstanRuleInterface<MethodCall>
- * @see \Cambis\Silverstan\Tests\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRuleTest
+ * @see \Cambis\Silverstan\Tests\Rule\MethodCall\RequireTraitForExtensibleHookMethodRuleTest
  */
-final readonly class RequireInterfaceForExtensibleHookMethodRule implements SilverstanRuleInterface
+final readonly class RequireTraitForExtensibleHookMethodRule implements SilverstanRuleInterface
 {
     public function __construct(
         private CallLikeAnalyser $callLikeAnalyser,
         private CallLikeTypeComparator $callLikeTypeComparator,
         private CallLikeTypeResolver $callLikeTypeResolver,
+        private ClassAnalyser $classAnalyser,
         private FileTypeMapper $fileTypeMapper,
         private ReflectionProvider $reflectionProvider
     ) {
@@ -49,7 +50,10 @@ final readonly class RequireInterfaceForExtensibleHookMethodRule implements Silv
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Require extensible hook methods to be defined via an interface. Use the `@phpstan-silverstripe-extend` annotation resolve the interface location.',
+            'Require extensible hook methods to be defined via a trait. ' .
+            'This provides an easy way for developers to call these extension points. ' .
+            'Trait methods must be `abstract protected`, return `void`, and having matching signatures. ' .
+            'Use the `@phpstan-silverstripe-extend` annotation resolve the trait location.',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
@@ -74,7 +78,7 @@ namespace App\Extension;
  */
 final class FooExtension extends \SilverStripe\Core\Extension
 {
-    public function updateBar(string &$bar): void
+    protected function updateBar(string &$bar): void
     {
         $bar = 'foobar';
     }
@@ -87,7 +91,7 @@ namespace App\Model;
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     /**
-     * @phpstan-silverstripe-extend \App\Contract\UpdateBar
+     * @phpstan-silverstripe-extend \App\Concern\UpdateBar
      */
     public function bar(): string
     {
@@ -99,11 +103,11 @@ final class Foo extends \SilverStripe\ORM\DataObject
     }
 }
 
-namespace App\Contract;
+namespace App\Concern;
 
-interface UpdateBar
+trait UpdateBar
 {
-    public function updateBar(string &$bar): void;
+    abstract protected function updateBar(string &$bar): void;
 }
 
 namespace App\Extension;
@@ -111,9 +115,11 @@ namespace App\Extension;
 /**
  * @extends \SilverStripe\Core\Extension<Foo & static>
  */
-final class FooExtension extends \SilverStripe\Core\Extension implements \App\Contract\UpdateBar
+final class FooExtension extends \SilverStripe\Core\Extension
 {
-    public function updateBar(string &$bar): void
+    use \App\Concern\UpdateBar;
+
+    protected function updateBar(string &$bar): void
     {
         $bar = 'foobar';
     }
@@ -145,7 +151,7 @@ CODE_SAMPLE
             return [];
         }
 
-        if (!$classReflection->hasTraitUse(Extensible::class)) {
+        if (!$this->classAnalyser->isExtensible($classReflection)) {
             return [];
         }
 
@@ -153,7 +159,7 @@ CODE_SAMPLE
             return [];
         }
 
-        if ($node->name->toString() !== 'extend') {
+        if ($node->name->toString() !== 'extend' && $node->name->toString() !== 'invokeWithExtensions') {
             return [];
         }
 
@@ -195,11 +201,11 @@ CODE_SAMPLE
             return [
                 RuleErrorBuilder::message(
                     sprintf(
-                        'Cannot find interface definition for extensible hook %s().',
+                        'Cannot find trait definition for extensible hook %s().',
                         $hookMethodName,
                     )
                 )
-                    ->tip('Use the @phpstan-silverstripe-extend annotation to point an interface where the hook method is defined.')
+                    ->tip('Use the @phpstan-silverstripe-extend annotation to point an trait where the hook method is defined.')
                     ->build(),
             ];
         }
@@ -244,10 +250,10 @@ CODE_SAMPLE
 
             $extendReflection = $this->reflectionProvider->getClass($resolvedName);
 
-            // Check if class in an interface
-            if (!$extendReflection->isInterface()) {
+            // Check if class in a trait
+            if (!$extendReflection->isTrait()) {
                 return [
-                    RuleErrorBuilder::message(sprintf('Specified class %s must be an interface.', $resolvedName))->build(),
+                    RuleErrorBuilder::message(sprintf('Specified class %s must be a trait.', $resolvedName))->build(),
                 ];
             }
 
@@ -263,8 +269,23 @@ CODE_SAMPLE
                 ];
             }
 
-            $hookMethod = $extendReflection->getNativeMethod($hookMethodName);
-            $hookMethodVariant = ParametersAcceptorSelector::selectSingle($hookMethod->getVariants());
+            $hookMethodReflection = $extendReflection->getNativeReflection()->getMethod($hookMethodName);
+            $hookMethodExtendedReflection = $extendReflection->getNativeMethod($hookMethodName);
+            $hookMethodVariant = ParametersAcceptorSelector::selectSingle($hookMethodExtendedReflection->getVariants());
+
+            // Check that the method is abstract
+            if (!$hookMethodReflection->isAbstract()) {
+                return [
+                    RuleErrorBuilder::message(sprintf('Specified class method %s::%s() must be abstract.', $resolvedName, $hookMethodName))->build(),
+                ];
+            }
+
+            // Check the the method is protected
+            if (!$hookMethodReflection->isProtected()) {
+                return [
+                    RuleErrorBuilder::message(sprintf('Specified class method %s::%s() must be protected.', $resolvedName, $hookMethodName))->build(),
+                ];
+            }
 
             // Check that the method returns void
             if ($hookMethodVariant->getReturnType()->isVoid()->no()) {
@@ -301,11 +322,11 @@ CODE_SAMPLE
         return [
             RuleErrorBuilder::message(
                 sprintf(
-                    'Cannot find interface definition for extensible hook %s.',
+                    'Cannot find trait definition for extensible hook %s.',
                     $hookMethodName,
                 )
             )
-                ->tip('Use the @phpstan-silverstripe-extend annotation to point an interface where the hook method is defined.')
+                ->tip('Use the @phpstan-silverstripe-extend annotation to point an trait where the hook method is defined.')
                 ->build(),
         ];
     }

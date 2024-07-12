@@ -6,6 +6,7 @@ namespace Cambis\Silverstan\NodeAnalyser;
 
 use PHPStan\Reflection\ClassReflection;
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Extension;
 
 final class ClassAnalyser
@@ -17,5 +18,10 @@ final class ClassAnalyser
         }
 
         return $classReflection->hasTraitUse(Configurable::class);
+    }
+
+    public function isExtensible(ClassReflection $classReflection): bool
+    {
+        return $classReflection->hasTraitUse(Extensible::class);
     }
 }

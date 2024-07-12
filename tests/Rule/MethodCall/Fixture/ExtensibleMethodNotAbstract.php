@@ -2,16 +2,16 @@
 
 namespace Cambis\Silverstan\Tests\Rule\MethodCall\Fixture;
 
-use Cambis\Silverstan\Tests\Rule\MethodCall\Fixture\Concern\MultipleMethods;
+use Cambis\Silverstan\Tests\Rule\MethodCall\Fixture\Concern\MethodNotAbstract;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Dev\TestOnly;
 
-final class ExtensibleMultipleMethods implements TestOnly
+final class ExtensibleMethodNotAbstract implements TestOnly
 {
     use Extensible;
 
     /**
-     * @phpstan-silverstripe-extend MultipleMethods
+     * @phpstan-silverstripe-extend MethodNotAbstract
      */
     public function getFoo(): string
     {

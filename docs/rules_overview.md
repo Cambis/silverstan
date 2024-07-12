@@ -581,99 +581,6 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 <br>
 
-## RequireInterfaceForExtensibleHookMethodRule
-
-Require extensible hook methods to be defined via an interface. Use the `@phpstan-silverstripe-extend` annotation resolve the interface location.
-
-:wrench: **configure it!**
-
-- class: [`Cambis\Silverstan\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRule`](../src/Rule/MethodCall/RequireInterfaceForExtensibleHookMethodRule.php)
-
-```yaml
-parameters:
-    silverstanRules:
-        requireInterfaceForExtensibleHookMethod:
-            enabled: true
-```
-
-↓
-
-```php
-namespace App\Model;
-
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    public function bar(): string
-    {
-        $bar = 'bar';
-
-        $this->extend('updateBar', $bar);
-
-        return $bar;
-    }
-}
-
-namespace App\Extension;
-
-/**
- * @extends \SilverStripe\Core\Extension<Foo & static>
- */
-final class FooExtension extends \SilverStripe\Core\Extension
-{
-    public function updateBar(string &$bar): void
-    {
-        $bar = 'foobar';
-    }
-}
-```
-
-:x:
-
-<br>
-
-```php
-namespace App\Model;
-
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    /**
-     * @phpstan-silverstripe-extend \App\Contract\UpdateBar
-     */
-    public function bar(): string
-    {
-        $bar = 'bar';
-
-        $this->extend('updateBar', $bar);
-
-        return $bar;
-    }
-}
-
-namespace App\Contract;
-
-interface UpdateBar
-{
-    public function updateBar(string &$bar): void;
-}
-
-namespace App\Extension;
-
-/**
- * @extends \SilverStripe\Core\Extension<Foo & static>
- */
-final class FooExtension extends \SilverStripe\Core\Extension implements \App\Contract\UpdateBar
-{
-    public function updateBar(string &$bar): void
-    {
-        $bar = 'foobar';
-    }
-}
-```
-
-:+1:
-
-<br>
-
 ## RequireInterfaceInAllowedNamespaceRule
 
 Require an interface to be in an allowed namespace.
@@ -866,6 +773,101 @@ final class FooTest extends \SilverStripe\Dev\SapphireTest
         // Custom code...
 
         parent::tearDownAfterClass();
+    }
+}
+```
+
+:+1:
+
+<br>
+
+## RequireTraitForExtensibleHookMethodRule
+
+Require extensible hook methods to be defined via a trait. This provides an easy way for developers to call these extension points. Trait methods must be `abstract protected`, return `void`, and having matching signatures. Use the `@phpstan-silverstripe-extend` annotation resolve the trait location.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\MethodCall\RequireTraitForExtensibleHookMethodRule`](../src/Rule/MethodCall/RequireTraitForExtensibleHookMethodRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        requireTraitForExtensibleHookMethod:
+            enabled: true
+```
+
+↓
+
+```php
+namespace App\Model;
+
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    public function bar(): string
+    {
+        $bar = 'bar';
+
+        $this->extend('updateBar', $bar);
+
+        return $bar;
+    }
+}
+
+namespace App\Extension;
+
+/**
+ * @extends \SilverStripe\Core\Extension<Foo & static>
+ */
+final class FooExtension extends \SilverStripe\Core\Extension
+{
+    protected function updateBar(string &$bar): void
+    {
+        $bar = 'foobar';
+    }
+}
+```
+
+:x:
+
+<br>
+
+```php
+namespace App\Model;
+
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    /**
+     * @phpstan-silverstripe-extend \App\Concern\UpdateBar
+     */
+    public function bar(): string
+    {
+        $bar = 'bar';
+
+        $this->extend('updateBar', $bar);
+
+        return $bar;
+    }
+}
+
+namespace App\Concern;
+
+trait UpdateBar
+{
+    abstract protected function updateBar(string &$bar): void;
+}
+
+namespace App\Extension;
+
+/**
+ * @extends \SilverStripe\Core\Extension<Foo & static>
+ */
+final class FooExtension extends \SilverStripe\Core\Extension
+{
+    use \App\Concern\UpdateBar;
+
+    protected function updateBar(string &$bar): void
+    {
+        $bar = 'foobar';
     }
 }
 ```

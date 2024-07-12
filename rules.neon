@@ -22,7 +22,7 @@ parameters:
             enabled: true
         disallowUnsafeAccessOfMagicDataObject:
             enabled: true
-        requireInterfaceForExtensibleHookMethod:
+        requireTraitForExtensibleHookMethod:
             enabled: true
         disallowNewInstanceOnInjectable:
             enabled: true
@@ -124,7 +124,7 @@ parametersSchema:
         disallowUnsafeAccessOfMagicDataObject: structure([
             enabled: bool()
         ])
-        requireInterfaceForExtensibleHookMethod: structure([
+        requireTraitForExtensibleHookMethod: structure([
             enabled: bool()
         ])
         disallowNewInstanceOnInjectable: structure([
@@ -158,8 +158,8 @@ conditionalTags:
         phpstan.rules.rule: %silverstanRules.requireConfigurationPropertyOverride.enabled%
     Cambis\Silverstan\Rule\Interface_\RequireInterfaceInAllowedNamespaceRule:
         phpstan.rules.rule: %silverstanRules.requireInterfaceInAllowedNamespace.enabled%
-    Cambis\Silverstan\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRule:
-        phpstan.rules.rule: %silverstanRules.requireInterfaceForExtensibleHookMethod.enabled%
+    Cambis\Silverstan\Rule\MethodCall\RequireTraitForExtensibleHookMethodRule:
+        phpstan.rules.rule: %silverstanRules.requireTraitForExtensibleHookMethod.enabled%
     Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule:
         phpstan.rules.rule: %silverstanRules.disallowNewInstanceOnInjectable.enabled%
     Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule:
@@ -195,7 +195,7 @@ services:
         arguments:
             allowedNamespaces: %silverstanRules.requireInterfaceInAllowedNamespace.allowedNamespaces%
     -
-        class: Cambis\Silverstan\Rule\MethodCall\RequireInterfaceForExtensibleHookMethodRule
+        class: Cambis\Silverstan\Rule\MethodCall\RequireTraitForExtensibleHookMethodRule
     -
         class: Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule
     -
