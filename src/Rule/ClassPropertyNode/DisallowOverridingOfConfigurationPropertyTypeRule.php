@@ -7,6 +7,7 @@ namespace Cambis\Silverstan\Rule\ClassPropertyNode;
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
 use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
+use Cambis\Silverstan\Reflection\ReflectionResolver;
 use Override;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -29,7 +30,8 @@ final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implement
 {
     public function __construct(
         private ClassAnalyser $classAnalyser,
-        private PropertyAnalyser $propertyAnalyser
+        private PropertyAnalyser $propertyAnalyser,
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -101,7 +103,7 @@ CODE_SAMPLE
             return [];
         }
 
-        $prototype = $this->findPrototype($classReflection, $node->getName());
+        $prototype = $this->reflectionResolver->resolveConfigurationProperty($classReflection->getParentClass(), $node->getName());
 
         if (!$prototype instanceof PhpPropertyReflection) {
             return [];
@@ -130,24 +132,5 @@ CODE_SAMPLE
                 ->identifier('silverstan.configurationProperty')
                 ->build(),
         ];
-    }
-
-    private function findPrototype(ClassReflection $classReflection, string $propertyName): ?PhpPropertyReflection
-    {
-        foreach ($classReflection->getParents() as $parent) {
-            if (!$parent->hasNativeProperty($propertyName)) {
-                continue;
-            }
-
-            $property = $parent->getNativeProperty($propertyName);
-
-            if (!$this->propertyAnalyser->isConfigurationProperty($property)) {
-                continue;
-            }
-
-            return $property;
-        }
-
-        return null;
     }
 }

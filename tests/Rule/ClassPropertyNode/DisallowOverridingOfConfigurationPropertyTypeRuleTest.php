@@ -6,6 +6,7 @@ namespace Cambis\Silverstan\Tests\Rule\ClassPropertyNode;
 
 use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
 use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
+use Cambis\Silverstan\Reflection\ReflectionResolver;
 use Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule;
 use Override;
 use PHPStan\Rules\Rule;
@@ -40,7 +41,8 @@ final class DisallowOverridingOfConfigurationPropertyTypeRuleTest extends RuleTe
     {
         return new DisallowOverridingOfConfigurationPropertyTypeRule(
             self::getContainer()->getByType(ClassAnalyser::class),
-            self::getContainer()->getByType(PropertyAnalyser::class)
+            self::getContainer()->getByType(PropertyAnalyser::class),
+            self::getContainer()->getByType(ReflectionResolver::class)
         );
     }
 }

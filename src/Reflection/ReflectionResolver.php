@@ -8,10 +8,10 @@ use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 
-final class ReflectionResolver
+final readonly class ReflectionResolver
 {
     public function __construct(
-        private readonly PropertyAnalyser $propertyAnalyser,
+        private PropertyAnalyser $propertyAnalyser,
     ) {
     }
 
