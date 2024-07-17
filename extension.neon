@@ -25,6 +25,12 @@ services:
     -
         class: Cambis\Silverstan\Extension\PhpDoc\ExtensionOwnerTypeNodeResolverExtension
         tags: [phpstan.phpDoc.typeNodeResolverExtension]
+    -
+        class: Cambis\Silverstan\Extension\Type\ConfigCollectionInterfaceGetReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Cambis\Silverstan\Extension\Type\ConfigForClassGetReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
     -   
         class: PhpParser\NodeFinder
     -
@@ -34,6 +40,10 @@ services:
     -
         class: Cambis\Silverstan\NodeAnalyser\PropertyAnalyser
     -
+        class: Cambis\Silverstan\Reflection\ReflectionResolver
+    -
         class: Cambis\Silverstan\TypeComparator\CallLikeTypeComparator
     -
         class: Cambis\Silverstan\TypeResolver\CallLikeTypeResolver
+    -
+        class: Cambis\Silverstan\TypeResolver\ConfigurationPropertyTypeResolver
