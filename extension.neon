@@ -9,6 +9,13 @@ parameters:
         - stubs/SilverStripe/Core/Injector/Injector.stub
         - stubs/SilverStripe/Core/Extension.stub
         - stubs/SilverStripe/ORM/DataExtension.stub
+    universalObjectCratesClasses:
+        - SilverStripe\Core\Config\Config_ForClass
+        - SilverStripe\Forms\GridField\GridState_Data
+        - SilverStripe\ORM\DataObjectInterface
+        - SilverStripe\View\ArrayData
+        - SilverStripe\View\ViewableData
+        - Symbiote\QueuedJobs\Services\AbstractQueuedJob
     ignoreErrors:
         -
             messages:
