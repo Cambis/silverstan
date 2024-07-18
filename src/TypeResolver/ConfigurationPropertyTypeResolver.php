@@ -17,11 +17,6 @@ final readonly class ConfigurationPropertyTypeResolver
     ) {
     }
 
-    /**
-     * Resolve the `\PHPStan\Type\Type` of a configuration property.
-     *
-     * If the property does not exist on the current class, loop over its parents until the property is found, otherwise return null.
-     */
     public function resolveConfigurationPropertyType(?ClassReflection $classReflection, string $propertyName): ?Type
     {
         $property = $this->reflectionResolver->resolveConfigurationProperty($classReflection, $propertyName);
