@@ -8,7 +8,6 @@ See the available [Silverstripe rules](docs/rules_overview.md).
 
 ```sh
 silverstripe/framework ^5.2
-silverstripe/cms ^5.2
 ```
 
 ### Why Silverstripe 5.2?
