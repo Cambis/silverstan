@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Extension\PhpDoc;
 
+use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
 use Override;
 use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDoc\TypeNodeResolver;
@@ -13,12 +14,9 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\IntersectionType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
-use SilverStripe\Core\Extensible;
+use PHPStan\Type\TypeWithClassName;
 use SilverStripe\Core\Extension;
-use function count;
 
 /**
  * Allow the use of `Extensible&Extension` which would normally resolve to NEVER.
@@ -28,6 +26,7 @@ use function count;
 final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverExtension
 {
     public function __construct(
+        private ClassAnalyser $classAnalyser,
         private TypeNodeResolver $typeNodeResolver
     ) {
     }
@@ -42,52 +41,37 @@ final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNode
             return null;
         }
 
-        // Limit the amount of types, there should be only two
-        if (count($typeNode->types) !== 2) {
-            return null;
+        $types = [];
+
+        foreach ($typeNode->types as $node) {
+            $type = $this->typeNodeResolver->resolve($node, $nameScope);
+
+            if (!$this->isAcceptedType($type)) {
+                return null;
+            }
+
+            $types[] = $type;
         }
 
-        $extensibleType = $this->typeNodeResolver->resolve($typeNode->types[0], $nameScope);
-        $extensionType = $this->typeNodeResolver->resolve($typeNode->types[1], $nameScope);
-
-        if ($this->shouldSkipExtensibleType($extensibleType)) {
-            return null;
-        }
-
-        if ($this->shouldSkipExtensionType($extensionType)) {
-            return null;
-        }
-
-        return new IntersectionType([$extensibleType, $extensionType]);
+        return new IntersectionType($types);
     }
 
-    private function shouldSkipExtensibleType(Type $type): bool
+    private function isAcceptedType(Type $type): bool
     {
-        if (!$type instanceof ObjectType) {
-            return true;
+        if (!$type instanceof TypeWithClassName) {
+            return false;
         }
 
         $classReflection = $type->getClassReflection();
 
         if (!$classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        if ($classReflection->isSubclassOf(Extension::class)) {
             return true;
         }
 
-        return !$classReflection->hasTraitUse(Extensible::class);
-    }
-
-    private function shouldSkipExtensionType(Type $type): bool
-    {
-        if (!$type instanceof StaticType && !$type instanceof ObjectType) {
-            return true;
-        }
-
-        $classReflection = $type->getClassReflection();
-
-        if (!$classReflection instanceof ClassReflection) {
-            return true;
-        }
-
-        return !$classReflection->isSubclassOf(Extension::class);
+        return $this->classAnalyser->isExtensible($classReflection);
     }
 }

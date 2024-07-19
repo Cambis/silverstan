@@ -2,79 +2,45 @@
 
 namespace Cambis\Silverstan\Tests\Extension\PhpDoc\Fixture;
 
-use SilverStripe\Core\Extension;
-use SilverStripe\Dev\TestOnly;
-use SilverStripe\ORM\DataObject;
+use Cambis\Silverstan\Tests\Extension\PhpDoc\Source\Extension\ComplexIntersectionExtension;
+use Cambis\Silverstan\Tests\Extension\PhpDoc\Source\Extension\DNFExtension;
+use Cambis\Silverstan\Tests\Extension\PhpDoc\Source\Extension\SimpleExtension;
+use Cambis\Silverstan\Tests\Extension\PhpDoc\Source\Extension\SimpleIntersectionExtension;
+use Cambis\Silverstan\Tests\Extension\PhpDoc\Source\Extension\UnionExtension;
+use Cambis\Silverstan\Tests\Extension\PhpDoc\Source\Model\Bar;
+use Cambis\Silverstan\Tests\Extension\PhpDoc\Source\Model\Foo;
 use function PHPStan\Testing\assertType;
+use function sprintf;
 
-class Foo extends DataObject implements TestOnly
-{
-    public function foo(): string
-    {
-        return 'foo';
-    }
-}
+assertType(Foo::class, (new SimpleExtension())->getOwner());
 
-class Bar extends DataObject implements TestOnly
-{
-    public function bar(): bool
-    {
-        return true;
-    }
-}
+assertType(
+    Bar::class . '|' . Foo::class,
+    (new UnionExtension())->getOwner()
+);
 
-/**
- * @extends Extension<Foo>
- */
-class ObjectExtension extends Extension implements TestOnly
-{
-    public function baz(): void
-    {
-        assertType(
-            Foo::class,
-            $this->getOwner()
-        );
-    }
-}
+assertType(
+    sprintf('%s&static(%s)', Foo::class, SimpleIntersectionExtension::class),
+    (new SimpleIntersectionExtension())->getOwner()
+);
 
-/**
- * @extends Extension<Foo|Bar>
- */
-class UnionExtension extends Extension implements TestOnly
-{
-    public function baz(): void
-    {
-        assertType(
-            Bar::class . '|' . Foo::class,
-            $this->getOwner()
-        );
-    }
-}
+assertType(
+    sprintf(
+        '%s&%s&static(%s)',
+        Bar::class,
+        Foo::class,
+        ComplexIntersectionExtension::class
+    ),
+    (new ComplexIntersectionExtension())->getOwner()
+);
 
-/**
- * @extends Extension<Foo&static>
- */
-class IntersectionExtension extends Extension implements TestOnly
-{
-    public function baz(): void
-    {
-        assertType(
-            Foo::class,
-            $this->getOwner()
-        );
-    }
-}
-
-/**
- * @extends Extension<(Foo&static)|(Bar&static)>
- */
-class DNFExtension extends Extension implements TestOnly
-{
-    public function baz(): void
-    {
-        assertType(
-            Bar::class . '|' . Foo::class,
-            $this->getOwner()
-        );
-    }
-}
+assertType(
+    sprintf(
+        '(%s&static(%s))|(%s&static(%s))',
+        Bar::class,
+        DNFExtension::class,
+        Foo::class,
+        DNFExtension::class
+    ),
+    (new DNFExtension())->getOwner()
+);
