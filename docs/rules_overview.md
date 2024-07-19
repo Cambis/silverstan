@@ -275,7 +275,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
     public function getType(): string
     {
-        return $this->config()->get('singular_name');
+        return self::config()->get('singular_name');
     }
 }
 ```

@@ -56,7 +56,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
     public function getType(): string
     {
-        return $this->config()->get('singular_name');
+        return self::config()->get('singular_name');
     }
 }
 CODE_SAMPLE
@@ -103,9 +103,10 @@ CODE_SAMPLE
         return [
             RuleErrorBuilder::message(
                 sprintf(
-                    'Unsafe access to configuration property %s::$%s through self::.',
+                    "Unsafe access to configuration property %s::$%s through self::. Use self::config->get('%s') instead.",
                     $classReflection->getName(),
                     $node->name->name,
+                    $node->name->name
                 )
             )
                 ->identifier('silverstan.configurationProperty')
