@@ -1,0 +1,5 @@
+---
+"silverstan": minor
+---
+
+Add DisallowPropertyFetchOnConfigForClassRule

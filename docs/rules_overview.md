@@ -1,4 +1,4 @@
-# 14 Rules Overview
+# 15 Rules Overview
 
 ## DisallowNewInstanceOnInjectableRule
 
@@ -179,6 +179,55 @@ class Foo extends \SilverStripe\ORM\DataObject
 final class Bar extends Foo
 {
     private static string $foo = 'bar';
+}
+```
+
+:+1:
+
+<br>
+
+## DisallowPropertyFetchOnConfigForClassRule
+
+Disallow property fetch on `\SilverStripe\Core\Config\Config_ForClass`. PHPStan cannot resolve the type of the property, use `self::config()->get('property_name')` instead.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRule`](../src/Rule/PropertyFetch/DisallowPropertyFetchOnConfigForClassRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        disallowPropertyFetchOnConfigForClass:
+            enabled: true
+```
+
+↓
+
+```php
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    private static string $singular_name = 'Foo';
+
+    public function getType(): string
+    {
+        return self::config()->singular_name;
+    }
+}
+```
+
+:x:
+
+<br>
+
+```php
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    private static string $singular_name = 'Foo';
+
+    public function getType(): string
+    {
+        return self::config()->get('singular_name');
+    }
 }
 ```
 

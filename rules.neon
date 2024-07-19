@@ -61,6 +61,8 @@ parameters:
         requireInterfaceInAllowedNamespace:
             enabled: true
             allowedNamespaces: []
+        disallowPropertyFetchOnConfigForClass:
+            enabled: true
         disallowStaticPropertyFetchOnConfigurationProperty:
             enabled: true
         disallowSuperglobals:
@@ -130,6 +132,9 @@ parametersSchema:
         disallowNewInstanceOnInjectable: structure([
             enabled: bool()
         ])
+        disallowPropertyFetchOnConfigForClass: structure([
+            enabled: bool()
+        ])
         disallowStaticPropertyFetchOnConfigurationProperty: structure([
             enabled: bool()
         ])
@@ -162,6 +167,8 @@ conditionalTags:
         phpstan.rules.rule: %silverstanRules.requireTraitForExtensibleHookMethod.enabled%
     Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule:
         phpstan.rules.rule: %silverstanRules.disallowNewInstanceOnInjectable.enabled%
+    Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRule:
+        phpstan.rules.rule: %silverstanRules.disallowPropertyFetchOnConfigForClass.enabled%
     Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule:
         phpstan.rules.rule: %silverstanRules.disallowStaticPropertyFetchOnConfigurationProperty.enabled%
     Cambis\Silverstan\Rule\Variable\DisallowSuperglobalsRule:
@@ -198,6 +205,8 @@ services:
         class: Cambis\Silverstan\Rule\MethodCall\RequireTraitForExtensibleHookMethodRule
     -
         class: Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule
+    -
+        class: Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRule
     -
         class: Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule
     -
