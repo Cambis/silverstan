@@ -6,7 +6,7 @@ use Cambis\Silverstan\Tests\Rule\MethodCall\Fixture\Concern\NotATrait;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Dev\TestOnly;
 
-final class ExtensibleIncompleteAnnotation implements TestOnly
+final class ExtensibleNotATrait implements TestOnly
 {
     use Extensible;
 

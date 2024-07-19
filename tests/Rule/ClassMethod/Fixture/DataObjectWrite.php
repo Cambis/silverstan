@@ -1,6 +1,6 @@
 <?php
 
-namespace Cambis\Silverstan\Rule\ClassMethod\Fixture;
+namespace Cambis\Silverstan\Tests\Rule\ClassMethod\Fixture;
 
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\DataObject;

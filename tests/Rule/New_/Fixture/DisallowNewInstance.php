@@ -1,6 +1,6 @@
 <?php
 
-namespace Cambis\Silverstan\Tests\Rule\Variable\Fixture;
+namespace Cambis\Silverstan\Tests\Rule\New_\Fixture;
 
 use Cambis\Silverstan\Tests\Rule\New_\Source\InjectableClass;
 use Cambis\Silverstan\Tests\Rule\New_\Source\NonInjectableClass;

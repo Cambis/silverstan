@@ -20,11 +20,11 @@ final class RequireParentCallInOverridenMethodRuleTest extends RuleTestCase
     {
         $this->analyse([__DIR__ . '/Fixture/DataObjectWrite.php'], [
             [
-                'Class method Cambis\Silverstan\Rule\ClassMethod\Fixture\DataObjectWrite::requireDefaultRecords() should call parent::requireDefaultRecords() first.',
+                'Class method Cambis\Silverstan\Tests\Rule\ClassMethod\Fixture\DataObjectWrite::requireDefaultRecords() should call parent::requireDefaultRecords() first.',
                 10,
             ],
             [
-                'Class method Cambis\Silverstan\Rule\ClassMethod\Fixture\DataObjectWrite::onBeforeWrite() is missing required call to parent::onBeforeWrite().',
+                'Class method Cambis\Silverstan\Tests\Rule\ClassMethod\Fixture\DataObjectWrite::onBeforeWrite() is missing required call to parent::onBeforeWrite().',
                 23,
             ],
         ]);
