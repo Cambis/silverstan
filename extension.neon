@@ -38,7 +38,17 @@ services:
     -
         class: Cambis\Silverstan\Extension\Type\ConfigForClassGetReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-    -   
+    -
+        factory: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'SilverStripe\View\ViewableData'
+    -
+        factory: Cambis\Silverstan\Extension\Type\ExtensibleHasMethodTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'SilverStripe\View\ViewableData'
+    - 
         class: PhpParser\NodeFinder
     -
         class: Cambis\Silverstan\NodeAnalyser\CallLikeAnalyser
