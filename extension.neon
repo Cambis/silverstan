@@ -12,8 +12,6 @@ parameters:
     universalObjectCratesClasses:
         - SilverStripe\Core\Config\Config_ForClass
         - SilverStripe\Forms\GridField\GridState_Data
-        - SilverStripe\ORM\DataObjectInterface
-        - SilverStripe\View\ArrayData
         - SilverStripe\View\ViewableData
         - Symbiote\QueuedJobs\Services\AbstractQueuedJob
     ignoreErrors:
@@ -58,6 +56,8 @@ services:
         class: Cambis\Silverstan\NodeAnalyser\PropertyAnalyser
     -
         class: Cambis\Silverstan\Reflection\ReflectionResolver
+    -
+        class: Cambis\Silverstan\TypeFactory\TypeFactory
     -
         class: Cambis\Silverstan\TypeComparator\CallLikeTypeComparator
     -

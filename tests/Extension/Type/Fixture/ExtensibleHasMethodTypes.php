@@ -14,5 +14,5 @@ if ($foo->hasMethod('doSomething')) {
         $foo
     );
 
-    $foo->doSomething();
+    assertType('mixed', $foo->doSomething());
 }

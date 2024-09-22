@@ -14,4 +14,6 @@ if ($foo->hasExtension(FooExtension::class)) {
         sprintf('%s&%s', FooExtension::class, Foo::class),
         $foo
     );
+
+    assertType('bool', $foo->doSomething());
 }

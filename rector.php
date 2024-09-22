@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;
 use Rector\Config\RectorConfig;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php83\Rector\ClassConst\AddTypeToConstRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
@@ -32,7 +33,8 @@ return RectorConfig::configure()
         '*/Source/*',
         AddTypeToConstRector::class,
         ClosureToArrowFunctionRector::class,
+        StringClassNameToClassConstantRector::class,
         UseClassKeywordForClassNameResolutionRector::class => [
             __DIR__ . '/tests',
-        ]
+        ],
     ]);

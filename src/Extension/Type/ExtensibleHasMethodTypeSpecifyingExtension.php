@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Extension\Type;
 
 use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\TypeFactory\TypeFactory;
 use Override;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
@@ -14,8 +15,8 @@ use PHPStan\Analyser\TypeSpecifierAwareExtension;
 use PHPStan\Analyser\TypeSpecifierContext;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Accessory\HasMethodType;
-use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MethodTypeSpecifyingExtension;
+use PHPStan\Type\TypeCombinator;
 use function in_array;
 
 /**
@@ -36,6 +37,7 @@ final class ExtensibleHasMethodTypeSpecifyingExtension implements MethodTypeSpec
         /** @var class-string */
         private readonly string $className,
         private readonly ClassAnalyser $classAnalyser,
+        private readonly TypeFactory $typeFactory,
     ) {
     }
 
@@ -68,18 +70,18 @@ final class ExtensibleHasMethodTypeSpecifyingExtension implements MethodTypeSpec
             return new SpecifiedTypes();
         }
 
-        $objectType = $scope->getType($node->var);
+        $extensibleType = $scope->getType($node->var);
 
-        if ($objectType->isObject()->no()) {
+        if ($extensibleType->isObject()->no()) {
             return new SpecifiedTypes();
         }
 
         return $this->typeSpecifier->create(
             $node->var,
-            new IntersectionType([
-                $objectType,
+            TypeCombinator::intersect(
+                $this->typeFactory->createExtensibleTypeFromType($extensibleType),
                 new HasMethodType($methodNameType->getConstantStrings()[0]->getValue()),
-            ]),
+            ),
             TypeSpecifierContext::createTruthy(),
             true,
             $scope
