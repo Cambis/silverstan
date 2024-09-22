@@ -11,12 +11,9 @@ use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDoc\TypeNodeResolverExtension;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
-use SilverStripe\Core\Extension;
 
 /**
  * Allow the use of `Extensible&Extension` which would normally resolve to NEVER.
@@ -46,7 +43,7 @@ final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNode
         foreach ($typeNode->types as $node) {
             $type = $this->typeNodeResolver->resolve($node, $nameScope);
 
-            if (!$this->isAcceptedType($type)) {
+            if (!$this->isInternalTypeAcceptable($type)) {
                 return null;
             }
 
@@ -56,22 +53,18 @@ final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNode
         return new IntersectionType($types);
     }
 
-    private function isAcceptedType(Type $type): bool
+    private function isInternalTypeAcceptable(Type $type): bool
     {
-        if (!$type instanceof TypeWithClassName) {
-            return false;
+        foreach ($type->getObjectClassReflections() as $classReflection) {
+            if ($this->classAnalyser->isExtensible($classReflection)) {
+                return true;
+            }
+
+            if ($classReflection->isSubclassOf('SilverStripe\Core\Extension')) {
+                return true;
+            }
         }
 
-        $classReflection = $type->getClassReflection();
-
-        if (!$classReflection instanceof ClassReflection) {
-            return false;
-        }
-
-        if ($classReflection->isSubclassOf(Extension::class)) {
-            return true;
-        }
-
-        return $this->classAnalyser->isExtensible($classReflection);
+        return false;
     }
 }
