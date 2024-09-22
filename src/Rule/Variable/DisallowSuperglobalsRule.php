@@ -44,7 +44,7 @@ final readonly class DisallowSuperglobalsRule implements SilverstanRuleInterface
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Disallow the use of superglobals ($_GET, $_REQUEST etc.).',
+            'Disallow the use of superglobals ($_GET, $_REQUEST etc.). [STRICT]',
             [new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class CustomMiddleware implements \SilverStripe\Control\Middleware\HTTPMiddleware

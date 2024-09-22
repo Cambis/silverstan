@@ -34,7 +34,7 @@ final readonly class RequireConfigurationPropertySnakeCaseNameRule implements Si
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Configuration properties must be in snake_case.',
+            'Configuration properties must be in snake_case. [STRICT]',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'

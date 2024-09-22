@@ -53,7 +53,7 @@ final readonly class RequireTraitForExtensibleHookMethodRule implements Silverst
             'Require extensible hook methods to be defined via a trait. ' .
             'This provides an easy way for developers to call these extension points. ' .
             'Trait methods must be `abstract protected`, return `void`, and having matching signatures. ' .
-            'Use the `@phpstan-silverstripe-extend` annotation resolve the trait location.',
+            'Use the `@phpstan-silverstripe-extend` annotation resolve the trait location. [STRICT]',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'

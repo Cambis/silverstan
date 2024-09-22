@@ -26,7 +26,7 @@ final class DisallowNonInterfacePublicMethodsOnExtensionRule implements Silverst
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Disallow non interface public methods on `\SilverStripe\Core\Extension`, an interface should be used to define public methods added to an owner class.',
+            'Disallow non interface public methods on `\SilverStripe\Core\Extension`, an interface should be used to define public methods added to an owner class. [STRICT]',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'

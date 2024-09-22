@@ -50,7 +50,7 @@ final class RequireClassInAllowedNamespaceRule implements SilverstanRuleInterfac
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Require a class to be in an allowed namespace.',
+            'Require a class to be in an allowed namespace. [STRICT]',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'

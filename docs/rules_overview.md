@@ -45,7 +45,7 @@ $foo = Foo::create();
 
 ## DisallowNonInterfacePublicMethodsOnExtensionRule
 
-Disallow non interface public methods on `\SilverStripe\Core\Extension`, an interface should be used to define public methods added to an owner class.
+Disallow non interface public methods on `\SilverStripe\Core\Extension`, an interface should be used to define public methods added to an owner class. [STRICT]
 
 :wrench: **configure it!**
 
@@ -286,7 +286,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 ## DisallowSuperglobalsRule
 
-Disallow the use of superglobals ($_GET, $_REQUEST etc.).
+Disallow the use of superglobals ($_GET, $_REQUEST etc.). [STRICT]
 
 :wrench: **configure it!**
 
@@ -434,7 +434,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 ## RequireClassInAllowedNamespaceRule
 
-Require a class to be in an allowed namespace.
+Require a class to be in an allowed namespace. [STRICT]
 
 :wrench: **configure it!**
 
@@ -593,7 +593,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 ## RequireConfigurationPropertySnakeCaseNameRule
 
-Configuration properties must be in snake_case.
+Configuration properties must be in snake_case. [STRICT]
 
 :wrench: **configure it!**
 
@@ -632,7 +632,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 ## RequireInterfaceInAllowedNamespaceRule
 
-Require an interface to be in an allowed namespace.
+Require an interface to be in an allowed namespace. [STRICT]
 
 :wrench: **configure it!**
 
@@ -832,7 +832,7 @@ final class FooTest extends \SilverStripe\Dev\SapphireTest
 
 ## RequireTraitForExtensibleHookMethodRule
 
-Require extensible hook methods to be defined via a trait. This provides an easy way for developers to call these extension points. Trait methods must be `abstract protected`, return `void`, and having matching signatures. Use the `@phpstan-silverstripe-extend` annotation resolve the trait location.
+Require extensible hook methods to be defined via a trait. This provides an easy way for developers to call these extension points. Trait methods must be `abstract protected`, return `void`, and having matching signatures. Use the `@phpstan-silverstripe-extend` annotation resolve the trait location. [STRICT]
 
 :wrench: **configure it!**
 
@@ -927,7 +927,7 @@ final class FooExtension extends \SilverStripe\Core\Extension
 
 ## RequireTraitInAllowedNamespaceRule
 
-Require a trait to be in an allowed namespace.
+Require a trait to be in an allowed namespace. [STRICT]
 
 :wrench: **configure it!**
 

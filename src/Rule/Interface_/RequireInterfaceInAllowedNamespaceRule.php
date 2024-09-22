@@ -48,7 +48,7 @@ final readonly class RequireInterfaceInAllowedNamespaceRule implements Silversta
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Require an interface to be in an allowed namespace.',
+            'Require an interface to be in an allowed namespace. [STRICT]',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
