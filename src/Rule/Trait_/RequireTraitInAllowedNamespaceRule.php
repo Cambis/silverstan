@@ -104,7 +104,7 @@ CODE_SAMPLE
                     (string) $node->namespacedName,
                     implode(', ', $this->allowedNamespaces)
                 )
-            )->build(),
+            )->identifier('silverstan.allowedNamespace')->build(),
         ];
     }
 

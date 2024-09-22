@@ -58,6 +58,7 @@ final class ConfigurationPropertiesExtensionTest extends RuleTestCase
     #[Override]
     protected function getRule(): Rule
     {
+        /** @phpstan-ignore-next-line phpstanApi.classConstant */
         return self::getContainer()->getByType(UnusedPrivatePropertyRule::class);
     }
 }

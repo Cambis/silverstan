@@ -95,6 +95,7 @@ CODE_SAMPLE
                     ->file($file)
                     ->line($firstCall[1])
                     ->tip('See https://api.silverstripe.org/5/SilverStripe/ORM/DataObject.html#method_exists')
+                    ->identifier('silverstan.dataObjectMagicAccess')
                     ->build();
             }
         }

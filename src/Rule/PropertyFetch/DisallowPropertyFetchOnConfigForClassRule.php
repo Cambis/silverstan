@@ -12,10 +12,8 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\Type\TypeWithClassName;
-use SilverStripe\Core\Config\Config_ForClass;
+use PHPStan\Type\ObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function sprintf;
@@ -91,17 +89,11 @@ CODE_SAMPLE
 
         $type = $scope->getType($node->var);
 
-        if (!$type instanceof TypeWithClassName) {
+        if ($type->isObject()->no()) {
             return [];
         }
 
-        $classReflection = $type->getClassReflection();
-
-        if (!$classReflection instanceof ClassReflection) {
-            return [];
-        }
-
-        if (!$classReflection->is(Config_ForClass::class)) {
+        if ($type->isSuperTypeOf(new ObjectType('SilverStripe\Core\Config_ForClass'))->no()) {
             return [];
         }
 

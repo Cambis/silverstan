@@ -245,6 +245,7 @@ CODE_SAMPLE
                         $classParentMethodCall->methodName
                     )
                 )
+                    ->identifier('silverstan.requiredParentCall')
                     ->build(),
             ];
         }
@@ -260,6 +261,7 @@ CODE_SAMPLE
                         $classParentMethodCall->methodName
                     )
                 )
+                    ->identifier('silverstan.requiredParentCall')
                     ->build(),
             ];
         }
@@ -284,6 +286,7 @@ CODE_SAMPLE
                         $classParentMethodCall->methodName
                     )
                 )
+                    ->identifier('silverstan.requiredParentCall')
                     ->build(),
             ];
         }

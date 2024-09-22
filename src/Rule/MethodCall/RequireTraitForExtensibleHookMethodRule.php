@@ -206,6 +206,7 @@ CODE_SAMPLE
                     )
                 )
                     ->tip('Use the @phpstan-silverstripe-extend annotation to point an trait where the hook method is defined.')
+                    ->identifier('silverstan.extensibleTraitMethod')
                     ->build(),
             ];
         }
@@ -235,6 +236,7 @@ CODE_SAMPLE
                     RuleErrorBuilder::message(
                         sprintf('%s annotation does not specify anything.', $annotationTagNode->name)
                     )
+                        ->identifier('silverstan.extensibleTraitMethod')
                         ->build(),
                 ];
             }
@@ -244,7 +246,9 @@ CODE_SAMPLE
 
             if (!$this->reflectionProvider->hasClass($resolvedName)) {
                 return [
-                    RuleErrorBuilder::message(sprintf('Could not resolve specified class %s.', $resolvedName))->build(),
+                    RuleErrorBuilder::message(sprintf('Could not resolve specified class %s.', $resolvedName))
+                        ->identifier('silverstan.extensibleTraitMethod')
+                        ->build(),
                 ];
             }
 
@@ -253,7 +257,9 @@ CODE_SAMPLE
             // Check if class in a trait
             if (!$extendReflection->isTrait()) {
                 return [
-                    RuleErrorBuilder::message(sprintf('Specified class %s must be a trait.', $resolvedName))->build(),
+                    RuleErrorBuilder::message(sprintf('Specified class %s must be a trait.', $resolvedName))
+                        ->identifier('silverstan.extensibleTraitMethod')
+                        ->build(),
                 ];
             }
 
@@ -265,7 +271,9 @@ CODE_SAMPLE
             // Check that the class only has a single method definition
             if (count($extendReflection->getNativeReflection()->getMethods()) !== 1) {
                 return [
-                    RuleErrorBuilder::message(sprintf('Specified class %s can only contain a single method definition.', $resolvedName))->build(),
+                    RuleErrorBuilder::message(sprintf('Specified class %s can only contain a single method definition.', $resolvedName))
+                        ->identifier('silverstan.extensibleTraitMethod')
+                        ->build(),
                 ];
             }
 
@@ -276,21 +284,27 @@ CODE_SAMPLE
             // Check that the method is abstract
             if (!$hookMethodReflection->isAbstract()) {
                 return [
-                    RuleErrorBuilder::message(sprintf('Specified class method %s::%s() must be abstract.', $resolvedName, $hookMethodName))->build(),
+                    RuleErrorBuilder::message(sprintf('Specified class method %s::%s() must be abstract.', $resolvedName, $hookMethodName))
+                        ->identifier('silverstan.extensibleTraitMethod')
+                        ->build(),
                 ];
             }
 
             // Check the the method is protected
             if (!$hookMethodReflection->isProtected()) {
                 return [
-                    RuleErrorBuilder::message(sprintf('Specified class method %s::%s() must be protected.', $resolvedName, $hookMethodName))->build(),
+                    RuleErrorBuilder::message(sprintf('Specified class method %s::%s() must be protected.', $resolvedName, $hookMethodName))
+                        ->identifier('silverstan.extensibleTraitMethod')
+                        ->build(),
                 ];
             }
 
             // Check that the method returns void
             if ($hookMethodVariant->getReturnType()->isVoid()->no()) {
                 return [
-                    RuleErrorBuilder::message(sprintf('Specified class method %s::%s() must return void.', $resolvedName, $hookMethodName))->build(),
+                    RuleErrorBuilder::message(sprintf('Specified class method %s::%s() must return void.', $resolvedName, $hookMethodName))
+                        ->identifier('silverstan.extensibleTraitMethod')
+                        ->build(),
                 ];
             }
 
@@ -303,6 +317,7 @@ CODE_SAMPLE
                         sprintf('Specified class method %s::%s() literal parameters must be passed by reference.', $resolvedName, $hookMethodName)
                     )
                         ->tip('See: https://docs.silverstripe.org/en/5/developer_guides/extending/extensions/#modifying-existing-methods')
+                        ->identifier('silverstan.extensibleTraitMethod')
                         ->build(),
                 ];
             }
@@ -312,7 +327,9 @@ CODE_SAMPLE
 
             if (!$this->callLikeTypeComparator->doSignaturesMatch($methodParametersTypes, $hookParametersTypes)) {
                 return [
-                    RuleErrorBuilder::message(sprintf('Specified class method %s::%s() signature does not match.', $resolvedName, $hookMethodName))->build(),
+                    RuleErrorBuilder::message(
+                        sprintf('Specified class method %s::%s() signature does not match.', $resolvedName, $hookMethodName)
+                    )->identifier('silverstan.extensibleTraitMethod')->build(),
                 ];
             }
 
@@ -327,6 +344,7 @@ CODE_SAMPLE
                 )
             )
                 ->tip('Use the @phpstan-silverstripe-extend annotation to point an trait where the hook method is defined.')
+                ->identifier('silverstan.extensibleTraitMethod')
                 ->build(),
         ];
     }

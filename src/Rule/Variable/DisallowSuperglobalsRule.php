@@ -103,6 +103,7 @@ CODE_SAMPLE
                     $node->name,
                 )
             )
+                ->identifier('silverstan.disallowedSuperglobals')
                 ->build(),
         ];
     }

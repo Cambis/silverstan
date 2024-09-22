@@ -8,7 +8,6 @@ use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
 use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 
 final readonly class ReflectionResolver
@@ -64,12 +63,16 @@ final readonly class ReflectionResolver
     private function resolveConfigurationPropertyFromMixins(array $mixinTypes, string $propertyName): ?PhpPropertyReflection
     {
         foreach ($mixinTypes as $type) {
-            if (!$type instanceof ObjectType) {
+            if ($type->isObject()->no()) {
+                continue;
+            }
+
+            if ($type->getObjectClassReflections() === []) {
                 continue;
             }
 
             $property = $this->resolveConfigurationProperty(
-                $type->getClassReflection(),
+                $type->getObjectClassReflections()[0],
                 $propertyName
             );
 

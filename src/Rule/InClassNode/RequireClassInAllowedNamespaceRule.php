@@ -191,7 +191,7 @@ CODE_SAMPLE
                     $classReflection->getDisplayName(),
                     implode(', ', $classAllowedNamespace->allowedNamespaces)
                 )
-            )->build(),
+            )->identifier('silverstan.allowedNamespace')->build(),
         ];
     }
 

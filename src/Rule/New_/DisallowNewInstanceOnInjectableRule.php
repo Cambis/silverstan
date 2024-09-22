@@ -94,6 +94,7 @@ CODE_SAMPLE
                     $node->class->toString(),
                 )
             )
+                ->identifier('silverstan.newInjectable')
                 ->build(),
         ];
     }
