@@ -71,7 +71,7 @@ CODE_SAMPLE
                         'classes' => [
                             [
                                 'class' => DataObject::class,
-                                'properties' => ['table_name', 'singular_name', 'plural_name'],
+                                'properties' => ['table_name'],
                             ],
                         ],
                     ]

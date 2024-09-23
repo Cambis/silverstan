@@ -14,12 +14,6 @@ parameters:
         - SilverStripe\Forms\GridField\GridState_Data
         - SilverStripe\View\ViewableData
         - Symbiote\QueuedJobs\Services\AbstractQueuedJob
-    ignoreErrors:
-        -
-            messages:
-                - '#Unknown PHPDoc tag: @phpstan-silverstripe-extend#'
-                - '#Unknown PHPDoc tag: @psalm-silverstripe-extend#'
-            reportUnmatched: false
 services:
     -
         class: Cambis\Silverstan\Collector\Expr\MagicDataObjectCallCollector
@@ -49,8 +43,6 @@ services:
     - 
         class: PhpParser\NodeFinder
     -
-        class: Cambis\Silverstan\NodeAnalyser\CallLikeAnalyser
-    -
         class: Cambis\Silverstan\NodeAnalyser\ClassAnalyser
     -
         class: Cambis\Silverstan\NodeAnalyser\PropertyAnalyser
@@ -58,9 +50,5 @@ services:
         class: Cambis\Silverstan\Reflection\ReflectionResolver
     -
         class: Cambis\Silverstan\TypeFactory\TypeFactory
-    -
-        class: Cambis\Silverstan\TypeComparator\CallLikeTypeComparator
-    -
-        class: Cambis\Silverstan\TypeResolver\CallLikeTypeResolver
     -
         class: Cambis\Silverstan\TypeResolver\ConfigurationPropertyTypeResolver

@@ -1,7 +1,5 @@
 parameters:
     silverstanRules:
-        disallowNonInterfacePublicMethodsOnExtension:
-            enabled: true
         requireParentCallInOverridenMethod:
             enabled: true
             classes:
@@ -16,39 +14,10 @@ parameters:
                     method: requireDefaultRecords
         disallowOverridingOfConfigurationPropertyType:
             enabled: true
-        disallowUseOfReservedConfigurationPropertyName:
-            enabled: true
-        requireConfigurationPropertySnakeCaseName:
-            enabled: true
         disallowUnsafeAccessOfMagicDataObject:
-            enabled: true
-        requireTraitForExtensibleHookMethod:
             enabled: true
         disallowNewInstanceOnInjectable:
             enabled: true
-        requireClassInAllowedNamespace:
-            enabled: true
-            classes:
-                -
-                    class: SilverStripe\ORM\DataObject
-                    allowedNamespaces:
-                        - Model
-                -
-                    class: SilverStripe\Control\Controller
-                    allowedNamespaces:
-                        - Controller
-                -
-                    class: SilverStripe\Core\Extension
-                    allowedNamespaces:
-                        - Extension
-                -
-                    class: SilverStripe\Dev\BuildTask
-                    allowedNamespaces:
-                        - Task
-                -
-                    class: Symbiote\QueuedJobs\Services\QueuedJob
-                    allowedNamespaces:
-                        - Job
         requireConfigurationPropertyOverride:
             enabled: true
             classes:
@@ -56,32 +25,13 @@ parameters:
                     class: SilverStripe\ORM\DataObject
                     properties:
                         - table_name
-                        - singular_name
-                        - plural_name
-        requireInterfaceInAllowedNamespace:
-            enabled: true
-            allowedNamespaces: []
         disallowPropertyFetchOnConfigForClass:
             enabled: true
         disallowStaticPropertyFetchOnConfigurationProperty:
             enabled: true
-        disallowSuperglobals:
-            enabled: true
-            disallowedSuperglobals:
-                - _GET
-                - _POST
-                - _FILES
-                - _COOKIE
-                - _SESSION
-                - _REQUEST
-                - _ENV
-                - GLOBALS
 
 parametersSchema:
     silverstanRules: structure([
-        disallowNonInterfacePublicMethodsOnExtension: structure([
-            enabled: bool()
-        ])
         requireParentCallInOverridenMethod: structure([
             enabled: bool()
             classes: arrayOf(
@@ -95,21 +45,6 @@ parametersSchema:
         disallowOverridingOfConfigurationPropertyType: structure([
             enabled: bool()
         ])
-        disallowUseOfReservedConfigurationPropertyName: structure([
-            enabled: bool()
-        ])
-        requireConfigurationPropertySnakeCaseName: structure([
-            enabled: bool()
-        ])
-        requireClassInAllowedNamespace: structure([
-            enabled: bool()
-            classes: arrayOf(
-                structure([
-                    class: string(),
-                    allowedNamespaces: arrayOf(string())
-                ])
-            )
-        ])
         requireConfigurationPropertyOverride: structure([
             enabled: bool()
             classes: arrayOf(
@@ -119,14 +54,7 @@ parametersSchema:
                 ])
             )
         ])
-        requireInterfaceInAllowedNamespace: structure([
-            enabled: bool()
-            allowedNamespaces: arrayOf(string())
-        ])
         disallowUnsafeAccessOfMagicDataObject: structure([
-            enabled: bool()
-        ])
-        requireTraitForExtensibleHookMethod: structure([
             enabled: bool()
         ])
         disallowNewInstanceOnInjectable: structure([
@@ -138,45 +66,25 @@ parametersSchema:
         disallowStaticPropertyFetchOnConfigurationProperty: structure([
             enabled: bool()
         ])
-        disallowSuperglobals: structure([
-            enabled: bool()
-            disallowedSuperglobals: arrayOf(string())
-        ])
     ])
 
 conditionalTags:
-    Cambis\Silverstan\Rule\ClassMethod\DisallowNonInterfacePublicMethodsOnExtensionRule:
-        phpstan.rules.rule: %silverstanRules.disallowNonInterfacePublicMethodsOnExtension.enabled%
     Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule:
         phpstan.rules.rule: %silverstanRules.requireParentCallInOverridenMethod.enabled%
     Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule:
         phpstan.rules.rule: %silverstanRules.disallowOverridingOfConfigurationPropertyType.enabled%
-    Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurationPropertyNameRule:
-        phpstan.rules.rule: %silverstanRules.disallowUseOfReservedConfigurationPropertyName.enabled%
-    Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurationPropertySnakeCaseNameRule:
-        phpstan.rules.rule: %silverstanRules.requireConfigurationPropertySnakeCaseName.enabled%
     Cambis\Silverstan\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRule:
         phpstan.rules.rule: %silverstanRules.disallowUnsafeAccessOfMagicDataObject.enabled%
-    Cambis\Silverstan\Rule\InClassNode\RequireClassInAllowedNamespaceRule:
-        phpstan.rules.rule: %silverstanRules.requireClassInAllowedNamespace.enabled%
     Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule:
         phpstan.rules.rule: %silverstanRules.requireConfigurationPropertyOverride.enabled%
-    Cambis\Silverstan\Rule\Interface_\RequireInterfaceInAllowedNamespaceRule:
-        phpstan.rules.rule: %silverstanRules.requireInterfaceInAllowedNamespace.enabled%
-    Cambis\Silverstan\Rule\MethodCall\RequireTraitForExtensibleHookMethodRule:
-        phpstan.rules.rule: %silverstanRules.requireTraitForExtensibleHookMethod.enabled%
     Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule:
         phpstan.rules.rule: %silverstanRules.disallowNewInstanceOnInjectable.enabled%
     Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRule:
         phpstan.rules.rule: %silverstanRules.disallowPropertyFetchOnConfigForClass.enabled%
     Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule:
         phpstan.rules.rule: %silverstanRules.disallowStaticPropertyFetchOnConfigurationProperty.enabled%
-    Cambis\Silverstan\Rule\Variable\DisallowSuperglobalsRule:
-        phpstan.rules.rule: %silverstanRules.disallowSuperglobals.enabled%
 
 services:
-    -
-        class: Cambis\Silverstan\Rule\ClassMethod\DisallowNonInterfacePublicMethodsOnExtensionRule
     -
         class: Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule
         arguments:
@@ -186,30 +94,12 @@ services:
     -
         class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule
     -
-        class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUseOfReservedConfigurationPropertyNameRule
-    -
-        class: Cambis\Silverstan\Rule\ClassPropertyNode\RequireConfigurationPropertySnakeCaseNameRule
-    -
-        class: Cambis\Silverstan\Rule\InClassNode\RequireClassInAllowedNamespaceRule
-        arguments:
-            classes: %silverstanRules.requireClassInAllowedNamespace.classes%
-    -
         class: Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule
         arguments:
             classes: %silverstanRules.requireConfigurationPropertyOverride.classes%
-    -
-        class: Cambis\Silverstan\Rule\Interface_\RequireInterfaceInAllowedNamespaceRule
-        arguments:
-            allowedNamespaces: %silverstanRules.requireInterfaceInAllowedNamespace.allowedNamespaces%
-    -
-        class: Cambis\Silverstan\Rule\MethodCall\RequireTraitForExtensibleHookMethodRule
     -
         class: Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule
     -
         class: Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRule
     -
         class: Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule
-    -
-        class: Cambis\Silverstan\Rule\Variable\DisallowSuperglobalsRule
-        arguments:
-            disallowedSuperglobals: %silverstanRules.disallowSuperglobals.disallowedSuperglobals%
