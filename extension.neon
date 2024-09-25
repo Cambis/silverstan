@@ -1,6 +1,8 @@
 includes:
     - rules.neon
 parameters:
+    bootstrapFiles:
+        - bootstrap.php
     stubFiles:
         - stubs/Psr/Container/ContainerExceptionInterface.stub
         - stubs/Psr/Container/ContainerInterface.stub
