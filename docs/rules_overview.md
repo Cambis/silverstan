@@ -1,4 +1,4 @@
-# 9 Rules Overview
+# 8 Rules Overview
 
 ## DisallowMethodCallOnUnsafeDataObjectRule
 
@@ -298,61 +298,6 @@ final class Foo extends \SilverStripe\ORM\DataObject
     public function getType(): string
     {
         return self::config()->get('singular_name');
-    }
-}
-```
-
-:+1:
-
-<br>
-
-## DisallowUnsafeAccessOfMagicDataObjectRule
-
-Call `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` methods or properties as the object may not be present in the database.
-
-:wrench: **configure it!**
-
-- class: [`Cambis\Silverstan\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRule`](../src/Rule/CollectedDataNode/DisallowUnsafeAccessOfMagicDataObjectRule.php)
-
-```yaml
-parameters:
-    silverstanRules:
-        disallowUnsafeAccessOfMagicDataObject:
-            enabled: true
-```
-
-↓
-
-```php
-/**
- * @method \SilverStripe\ORM\DataObject Bar()
- */
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    public function doSomething(): string
-    {
-        return $this->Bar()->Title;
-    }
-}
-```
-
-:x:
-
-<br>
-
-```php
-/**
- * @method \SilverStripe\ORM\DataObject Bar()
- */
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    public function doSomething(): string
-    {
-        if (!$this->Bar()->exists()) {
-            return '';
-        }
-
-        return $this->Bar()->Title;
     }
 }
 ```

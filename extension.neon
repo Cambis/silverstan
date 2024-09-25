@@ -16,9 +16,6 @@ parameters:
         - Symbiote\QueuedJobs\Services\AbstractQueuedJob
 services:
     -
-        class: Cambis\Silverstan\Collector\Expr\MagicDataObjectCallCollector
-        tags: [phpstan.collector]
-    -
         class: Cambis\Silverstan\Extension\ClassPropertiesNode\ConfigurationPropertiesExtension
         tags: [phpstan.properties.readWriteExtension]
     -

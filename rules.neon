@@ -14,8 +14,6 @@ parameters:
                     method: requireDefaultRecords
         disallowOverridingOfConfigurationPropertyType:
             enabled: true
-        disallowUnsafeAccessOfMagicDataObject:
-            enabled: true
         requireConfigurationPropertyOverride:
             enabled: true
             classes:
@@ -48,9 +46,6 @@ parametersSchema:
             )
         ])
         disallowOverridingOfConfigurationPropertyType: structure([
-            enabled: bool()
-        ])
-        disallowUnsafeAccessOfMagicDataObject: structure([
             enabled: bool()
         ])
         requireConfigurationPropertyOverride: structure([
@@ -103,8 +98,6 @@ services:
         class: Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule
         arguments:
             classes: %silverstanRules.requireParentCallInOverridenMethod.classes%
-    -
-        class: Cambis\Silverstan\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRule
     -
         class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule
     -
