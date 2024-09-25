@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Extension\PhpDoc;
 
 use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\TypeFactory\TypeFactory;
 use Override;
 use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDoc\TypeNodeResolver;
@@ -12,8 +13,8 @@ use PHPStan\PhpDoc\TypeNodeResolverExtension;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\ShouldNotHappenException;
-use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 
 /**
  * Allow the use of `Extensible&Extension` which would normally resolve to NEVER.
@@ -24,6 +25,7 @@ final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNode
 {
     public function __construct(
         private ClassAnalyser $classAnalyser,
+        private TypeFactory $typeFactory,
         private TypeNodeResolver $typeNodeResolver
     ) {
     }
@@ -47,10 +49,10 @@ final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNode
                 return null;
             }
 
-            $types[] = $type;
+            $types[] = $this->typeFactory->createExtensibleTypeFromType($type);
         }
 
-        return new IntersectionType($types);
+        return TypeCombinator::intersect(...$types);
     }
 
     private function isInternalTypeAcceptable(Type $type): bool
