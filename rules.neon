@@ -16,8 +16,6 @@ parameters:
             enabled: true
         disallowUnsafeAccessOfMagicDataObject:
             enabled: true
-        disallowNewInstanceOnInjectable:
-            enabled: true
         requireConfigurationPropertyOverride:
             enabled: true
             classes:
@@ -25,7 +23,14 @@ parameters:
                     class: SilverStripe\ORM\DataObject
                     properties:
                         - table_name
+        disallowMethodCallOnUnsafeDataObject:
+            enabled: true
+            allowedMethodCalls: []
+        disallowNewInstanceOnInjectable:
+            enabled: true
         disallowPropertyFetchOnConfigForClass:
+            enabled: true
+        disallowPropertyFetchOnUnsafeDataObject:
             enabled: true
         disallowStaticPropertyFetchOnConfigurationProperty:
             enabled: true
@@ -45,6 +50,9 @@ parametersSchema:
         disallowOverridingOfConfigurationPropertyType: structure([
             enabled: bool()
         ])
+        disallowUnsafeAccessOfMagicDataObject: structure([
+            enabled: bool()
+        ])
         requireConfigurationPropertyOverride: structure([
             enabled: bool()
             classes: arrayOf(
@@ -54,13 +62,17 @@ parametersSchema:
                 ])
             )
         ])
-        disallowUnsafeAccessOfMagicDataObject: structure([
+        disallowMethodCallOnUnsafeDataObject: structure([
             enabled: bool()
+            allowedMethodCalls: arrayOf(string())
         ])
         disallowNewInstanceOnInjectable: structure([
             enabled: bool()
         ])
         disallowPropertyFetchOnConfigForClass: structure([
+            enabled: bool()
+        ])
+        disallowPropertyFetchOnUnsafeDataObject: structure([
             enabled: bool()
         ])
         disallowStaticPropertyFetchOnConfigurationProperty: structure([
@@ -73,14 +85,16 @@ conditionalTags:
         phpstan.rules.rule: %silverstanRules.requireParentCallInOverridenMethod.enabled%
     Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule:
         phpstan.rules.rule: %silverstanRules.disallowOverridingOfConfigurationPropertyType.enabled%
-    Cambis\Silverstan\Rule\CollectedDataNode\DisallowUnsafeAccessOfMagicDataObjectRule:
-        phpstan.rules.rule: %silverstanRules.disallowUnsafeAccessOfMagicDataObject.enabled%
     Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule:
         phpstan.rules.rule: %silverstanRules.requireConfigurationPropertyOverride.enabled%
+    Cambis\Silverstan\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRule:
+        phpstan.rules.rule: %silverstanRules.disallowMethodCallOnUnsafeDataObject.enabled%
     Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule:
         phpstan.rules.rule: %silverstanRules.disallowNewInstanceOnInjectable.enabled%
     Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRule:
         phpstan.rules.rule: %silverstanRules.disallowPropertyFetchOnConfigForClass.enabled%
+    Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRule:
+        phpstan.rules.rule: %silverstanRules.disallowPropertyFetchOnUnsafeDataObject.enabled%
     Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule:
         phpstan.rules.rule: %silverstanRules.disallowStaticPropertyFetchOnConfigurationProperty.enabled%
 
@@ -98,8 +112,14 @@ services:
         arguments:
             classes: %silverstanRules.requireConfigurationPropertyOverride.classes%
     -
+        class: Cambis\Silverstan\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRule
+        arguments:
+            allowedMethodCalls: %silverstanRules.disallowMethodCallOnUnsafeDataObject.allowedMethodCalls%
+    -
         class: Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule
     -
         class: Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRule
+    -
+        class: Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRule
     -
         class: Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule

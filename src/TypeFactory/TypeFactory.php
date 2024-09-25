@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\TypeFactory;
 
 use Cambis\Silverstan\Type\Concern\ExtensibleTypeTrait;
+use Cambis\Silverstan\Type\UnsafeObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
@@ -34,5 +35,15 @@ final class TypeFactory
         }
 
         return $type;
+    }
+
+    public function createUnsafeObjectTypeFromObjectType(ObjectType $type): UnsafeObjectType
+    {
+        return new UnsafeObjectType($type->getClassName(), $type->getSubtractedType(), $type->getClassReflection());
+    }
+
+    public function createObjectTypeFromUnsafeObjectType(UnsafeObjectType $type): ObjectType
+    {
+        return new ObjectType($type->getClassName(), $type->getSubtractedType(), $type->getClassReflection());
     }
 }

@@ -22,6 +22,9 @@ services:
         class: Cambis\Silverstan\Extension\ClassPropertiesNode\ConfigurationPropertiesExtension
         tags: [phpstan.properties.readWriteExtension]
     -
+        class: Cambis\Silverstan\Extension\PhpDoc\DataObjectTypeNodeResolverExtension
+        tags: [phpstan.phpDoc.typeNodeResolverExtension]
+    -
         class: Cambis\Silverstan\Extension\PhpDoc\ExtensionOwnerTypeNodeResolverExtension
         tags: [phpstan.phpDoc.typeNodeResolverExtension]
     -
@@ -30,6 +33,15 @@ services:
     -
         class: Cambis\Silverstan\Extension\Type\ConfigForClassGetReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Cambis\Silverstan\Extension\Type\DataObjectDeleteTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+    -
+        class: Cambis\Silverstan\Extension\Type\DataObjectExistsTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+    -
+        class: Cambis\Silverstan\Extension\Type\DataObjectWriteTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
     -
         factory: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
@@ -46,6 +58,9 @@ services:
         class: Cambis\Silverstan\NodeAnalyser\ClassAnalyser
     -
         class: Cambis\Silverstan\NodeAnalyser\PropertyAnalyser
+    -
+        class: Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor
+        tags: [phpstan.parser.richParserNodeVisitor]
     -
         class: Cambis\Silverstan\Reflection\ReflectionResolver
     -

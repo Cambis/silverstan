@@ -1,4 +1,61 @@
-# 7 Rules Overview
+# 9 Rules Overview
+
+## DisallowMethodCallOnUnsafeDataObjectRule
+
+Call `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` methods as the object may not be present in the database. Database manipulation methods such as `write()` and `delete()` are allowed by default. If you think a method is safe to call by default add it to the `allowedMethodCalls` configuration.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRule`](../src/Rule/MethodCall/DisallowMethodCallOnUnsafeDataObjectRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        disallowMethodCallOnUnsafeDataObject:
+            enabled: true
+            allowedMethodCalls:
+                - mySafeMethod
+```
+
+↓
+
+```php
+/**
+ * @method \SilverStripe\ORM\DataObject Bar()
+ */
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    public function doSomething(): string
+    {
+        return $this->Bar()->doSomething();
+    }
+}
+```
+
+:x:
+
+<br>
+
+```php
+/**
+ * @method \SilverStripe\ORM\DataObject Bar()
+ */
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    public function doSomething(): string
+    {
+        if (!$this->Bar()->exists()) {
+            return '';
+        }
+
+        return $this->Bar()->doSomething();
+    }
+}
+```
+
+:+1:
+
+<br>
 
 ## DisallowNewInstanceOnInjectableRule
 
@@ -137,6 +194,61 @@ final class Foo extends \SilverStripe\ORM\DataObject
     public function getType(): string
     {
         return self::config()->get('singular_name');
+    }
+}
+```
+
+:+1:
+
+<br>
+
+## DisallowPropertyFetchOnUnsafeDataObjectRule
+
+Call `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` properties as the object may not be present in the database. Property assignment is allowed.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRule`](../src/Rule/PropertyFetch/DisallowPropertyFetchOnUnsafeDataObjectRule.php)
+
+```yaml
+parameters:
+    silverstanRules:
+        disallowPropertyFetchOnUnsafeDataObject:
+            enabled: true
+```
+
+↓
+
+```php
+/**
+ * @method \SilverStripe\ORM\DataObject Bar()
+ */
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    public function doSomething(): string
+    {
+        return $this->Bar()->Title;
+    }
+}
+```
+
+:x:
+
+<br>
+
+```php
+/**
+ * @method \SilverStripe\ORM\DataObject Bar()
+ */
+final class Foo extends \SilverStripe\ORM\DataObject
+{
+    public function doSomething(): string
+    {
+        if (!$this->Bar()->exists()) {
+            return '';
+        }
+
+        return $this->Bar()->Title;
     }
 }
 ```
