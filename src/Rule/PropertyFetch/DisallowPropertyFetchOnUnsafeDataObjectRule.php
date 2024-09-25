@@ -12,7 +12,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -140,20 +139,16 @@ CODE_SAMPLE
 
     private function resolveExprName(Expr $expr): string
     {
-        if ($expr instanceof Variable && !$expr->name instanceof Expr) {
-            return '$' . $expr->name;
-        }
-
-        if ($expr instanceof MethodCall && !$expr->name instanceof Expr) {
-            return sprintf('%s->%s()', $this->resolveExprName($expr->var), $expr->name->toString());
-        }
-
         if (!property_exists($expr, 'name')) {
             return '';
         }
 
         if ($expr->name instanceof Expr) {
             return '';
+        }
+
+        if ($expr instanceof MethodCall) {
+            return sprintf('%s->%s()', $this->resolveExprName($expr->var), $expr->name->toString());
         }
 
         return '$' . $expr->name;

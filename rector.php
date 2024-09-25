@@ -8,6 +8,7 @@ use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php83\Rector\ClassConst\AddTypeToConstRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 
 return RectorConfig::configure()
     ->withImportNames(removeUnusedImports: true)
@@ -25,6 +26,9 @@ return RectorConfig::configure()
         earlyReturn: true,
         privatization: true
     )
+    ->withRules([
+        DeclareStrictTypesRector::class,
+    ])
     ->withSets([
         PHPUnitSetList::PHPUNIT_90,
     ])
@@ -32,6 +36,9 @@ return RectorConfig::configure()
         '*/Fixture/*',
         '*/Source/*',
         AddTypeToConstRector::class,
+        DeclareStrictTypesRector::class => [
+            __DIR__ . '/src/Playground',
+        ],
         ClosureToArrowFunctionRector::class,
         StringClassNameToClassConstantRector::class,
         UseClassKeywordForClassNameResolutionRector::class => [

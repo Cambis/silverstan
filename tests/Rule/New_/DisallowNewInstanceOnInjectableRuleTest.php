@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cambis\Silverstan\Tests\Rule\New_;
 
 use Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule;
