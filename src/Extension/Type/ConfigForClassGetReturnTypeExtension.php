@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Extension\Type;
 
 use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
-use Cambis\Silverstan\TypeResolver\ConfigurationPropertyTypeResolver;
+use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -36,7 +36,7 @@ final readonly class ConfigForClassGetReturnTypeExtension implements DynamicMeth
 
     public function __construct(
         private ClassAnalyser $classAnalyser,
-        private ConfigurationPropertyTypeResolver $configurationPropertyTypeResolver,
+        private TypeResolver $configurationPropertyTypeResolver,
         private ReflectionProvider $reflectionProvider
     ) {
     }

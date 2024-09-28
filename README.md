@@ -41,3 +41,15 @@ includes:
 ## Configuration 🚧
 
 Each rule can be enabled/disabled individually using the configuration options, please refer to the [rules overview](docs/rules_overview.md) for the available options.
+
+`MethodReflectionResolver`
+
+`PropertyReflectionResolver`
+
+`resolveExtraMethodReflections(string $className, $string $propertyName): array;`
+
+`resolveExtraPropertyReflections(string $className, $string $propertyName): array;`
+
+`getConfigurationPropertyName(): string;`
+
+`resolve(string $className): array;`

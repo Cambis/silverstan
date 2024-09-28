@@ -7,13 +7,13 @@ namespace Cambis\Silverstan\Rule\ClassPropertyNode;
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
 use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
-use Cambis\Silverstan\Reflection\ReflectionResolver;
+use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 use Override;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\Php\PhpPropertyReflection;
+use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ParserNodeTypeToPHPStanType;
 use PHPStan\Type\TypehintHelper;
@@ -103,15 +103,15 @@ CODE_SAMPLE
             return [];
         }
 
-        $prototype = $this->reflectionResolver->resolveConfigurationProperty($classReflection->getParentClass(), $node->getName());
+        $prototype = $this->reflectionResolver->resolveConfigurationPropertyReflection($classReflection->getParentClass(), $node->getName());
 
-        if (!$prototype instanceof PhpPropertyReflection) {
+        if (!$prototype instanceof PropertyReflection) {
             return [];
         }
 
         $nativeType = ParserNodeTypeToPHPStanType::resolve($node->getNativeType(), $classReflection);
         $type = TypehintHelper::decideType($nativeType, $node->getPhpDocType());
-        $prototypeType = TypehintHelper::decideType($prototype->getNativeType(), $prototype->getPhpDocType());
+        $prototypeType = $prototype->getReadableType();
 
         if ($prototypeType->accepts($type, true)->yes()) {
             return [];

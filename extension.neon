@@ -14,9 +14,11 @@ parameters:
     universalObjectCratesClasses:
         - SilverStripe\Core\Config\Config_ForClass
         - SilverStripe\Forms\GridField\GridState_Data
-        - SilverStripe\View\ViewableData
+        # - SilverStripe\View\ViewableData
         - Symbiote\QueuedJobs\Services\AbstractQueuedJob
 services:
+    -
+        class: Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver
     -
         class: Cambis\Silverstan\Extension\ClassPropertiesNode\ConfigurationPropertiesExtension
         tags: [phpstan.properties.readWriteExtension]
@@ -26,6 +28,12 @@ services:
     -
         class: Cambis\Silverstan\Extension\PhpDoc\ExtensionOwnerTypeNodeResolverExtension
         tags: [phpstan.phpDoc.typeNodeResolverExtension]
+    -
+        class: Cambis\Silverstan\Extension\Reflection\ExtensibleClassReflectionExtension
+        tags: [phpstan.broker.propertiesClassReflectionExtension]
+    -
+        class: Cambis\Silverstan\Extension\Reflection\ViewableDataClassReflectionExtension
+        tags: [phpstan.broker.propertiesClassReflectionExtension]
     -
         class: Cambis\Silverstan\Extension\Type\ConfigCollectionInterfaceGetReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
@@ -42,17 +50,17 @@ services:
         class: Cambis\Silverstan\Extension\Type\DataObjectWriteTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
     -
-        factory: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
+        class: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
         arguments:
             className: 'SilverStripe\View\ViewableData'
     -
-        factory: Cambis\Silverstan\Extension\Type\ExtensibleHasMethodTypeSpecifyingExtension
+        class: Cambis\Silverstan\Extension\Type\ExtensibleHasMethodTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
         arguments:
             className: 'SilverStripe\View\ViewableData'
-    - 
-        class: PhpParser\NodeFinder
+    -
+        class: Cambis\Silverstan\InjectionResolver\InjectionResolver
     -
         class: Cambis\Silverstan\NodeAnalyser\ClassAnalyser
     -
@@ -61,8 +69,32 @@ services:
         class: Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor
         tags: [phpstan.parser.richParserNodeVisitor]
     -
-        class: Cambis\Silverstan\Reflection\ReflectionResolver
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver
+    -
+        class: Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProviderInterface
+        factory: Cambis\Silverstan\ReflectionResolver\LazyReflectionResolverRegistryProvider
+    -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\DBPropertyReflectionResolver
+        tags: [silverstan.reflectionResolver.propertyReflectionResolver]
     -
         class: Cambis\Silverstan\TypeFactory\TypeFactory
     -
-        class: Cambis\Silverstan\TypeResolver\ConfigurationPropertyTypeResolver
+        class: Cambis\Silverstan\TypeResolver\TypeResolver
+    -
+        class: Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryProviderInterface
+        factory: Cambis\Silverstan\TypeResolver\LazyTypeResolverRegistryProvider
+    -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\DBPropertyTypeResolver
+        tags: [silverstan.typeResolver.propertyTypeResolver]
+    -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\SingleRelationPropertyTypeResolver
+        tags: [silverstan.typeResolver.propertyTypeResolver]
+        arguments:
+            configurationPropertyName: 'belongs_to'
+    -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\SingleRelationPropertyTypeResolver
+        tags: [silverstan.typeResolver.propertyTypeResolver]
+        arguments:
+            configurationPropertyName: 'has_one'
+    - 
+        class: PhpParser\NodeFinder

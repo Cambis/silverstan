@@ -6,7 +6,7 @@ namespace Cambis\Silverstan\Tests\Rule\ClassPropertyNode;
 
 use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
 use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
-use Cambis\Silverstan\Reflection\ReflectionResolver;
+use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 use Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule;
 use Override;
 use PHPStan\Rules\Rule;
