@@ -77,6 +77,9 @@ services:
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\DBPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
     -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\ExtensionPropertyReflectionResolver
+        tags: [silverstan.reflectionResolver.propertyReflectionResolver]
+    -
         class: Cambis\Silverstan\TypeFactory\TypeFactory
     -
         class: Cambis\Silverstan\TypeResolver\TypeResolver
@@ -87,14 +90,9 @@ services:
         class: Cambis\Silverstan\TypeResolver\TypeResolver\DBPropertyTypeResolver
         tags: [silverstan.typeResolver.propertyTypeResolver]
     -
-        class: Cambis\Silverstan\TypeResolver\TypeResolver\SingleRelationPropertyTypeResolver
-        tags: [silverstan.typeResolver.propertyTypeResolver]
-        arguments:
-            configurationPropertyName: 'belongs_to'
-    -
-        class: Cambis\Silverstan\TypeResolver\TypeResolver\SingleRelationPropertyTypeResolver
-        tags: [silverstan.typeResolver.propertyTypeResolver]
-        arguments:
-            configurationPropertyName: 'has_one'
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\ExtensionTypeResolver
+        tags:
+            - silverstan.typeResolver.methodTypeResolver
+            - silverstan.typeResolver.propertyTypeResolver
     - 
         class: PhpParser\NodeFinder

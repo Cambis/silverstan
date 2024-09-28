@@ -20,8 +20,6 @@ use PHPStan\Type\Type;
  */
 interface MethodTypeResolverInterface
 {
-    final public const SERVICE_TAG = 'silverstan.typeResolver.methodTypeResolver';
-
     public function getConfigurationPropertyName(): string;
 
     /**

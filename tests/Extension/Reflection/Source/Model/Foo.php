@@ -2,6 +2,7 @@
 
 namespace Cambis\Silverstan\Tests\Extension\Reflection\Source\Model;
 
+use Cambis\Silverstan\Tests\Extension\Reflection\Source\Extension\FooExtension;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\Forms\CompositeValidator;
 use SilverStripe\Forms\RequiredFields;
@@ -24,6 +25,10 @@ final class Foo extends DataObject implements TestOnly
         'Time' => 'Time',
         'Varchar' => 'Varchar(255)',
         'RequiredField' => 'Varchar(255)',
+    ];
+
+    private static array $extensions = [
+        FooExtension::class,
     ];
 
     public function getCMSCompositeValidator(): CompositeValidator

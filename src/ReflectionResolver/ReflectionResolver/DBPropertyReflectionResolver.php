@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 
+use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
 use Cambis\Silverstan\Reflection\ExtensiblePropertyReflection;
 use Cambis\Silverstan\ReflectionResolver\Contract\PropertyReflectionResolverInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
@@ -13,6 +14,7 @@ use PHPStan\Reflection\ClassReflection;
 final readonly class DBPropertyReflectionResolver implements PropertyReflectionResolverInterface
 {
     public function __construct(
+        private ClassAnalyser $classAnalyser,
         private TypeResolver $typeResolver
     ) {
     }
@@ -26,7 +28,7 @@ final readonly class DBPropertyReflectionResolver implements PropertyReflectionR
     #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
-        if (!$classReflection->isSubclassOf('SilverStripe\ORM\DataObject')) {
+        if (!$this->classAnalyser->isDataObject($classReflection)) {
             return [];
         }
 

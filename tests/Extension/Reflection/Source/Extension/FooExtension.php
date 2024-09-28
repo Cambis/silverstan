@@ -11,4 +11,7 @@ use SilverStripe\Dev\TestOnly;
  */
 final class FooExtension extends Extension implements TestOnly
 {
+    private static array $db = [
+        'ExtensionField' => 'Varchar(255)',
+    ];
 }

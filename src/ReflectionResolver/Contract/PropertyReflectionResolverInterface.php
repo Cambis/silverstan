@@ -20,8 +20,6 @@ use PHPStan\Reflection\PropertyReflection;
  */
 interface PropertyReflectionResolverInterface
 {
-    final public const SERVICE_TAG = 'silverstan.reflectionResolver.propertyReflectionResolver';
-
     public function getConfigurationPropertyName(): string;
 
     /**
