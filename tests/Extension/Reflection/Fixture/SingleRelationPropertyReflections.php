@@ -24,3 +24,9 @@ assertType('string', $foo->RequiredField);
 
 // From extension
 assertType('string|null', $foo->ExtensionField);
+
+// belongs_to
+assertType('int', $foo->ParentID);
+
+// has_one
+assertType('int', $foo->ChildID);

@@ -11,9 +11,10 @@ use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
 
-final readonly class DBPropertyReflectionResolver implements PropertyReflectionResolverInterface
+final readonly class SingleRelationPropertyReflectionResolver implements PropertyReflectionResolverInterface
 {
     public function __construct(
+        private string $configurationPropertyName,
         private ClassAnalyser $classAnalyser,
         private TypeResolver $typeResolver
     ) {
@@ -22,7 +23,7 @@ final readonly class DBPropertyReflectionResolver implements PropertyReflectionR
     #[Override]
     public function getConfigurationPropertyName(): string
     {
-        return 'db';
+        return $this->configurationPropertyName;
     }
 
     #[Override]

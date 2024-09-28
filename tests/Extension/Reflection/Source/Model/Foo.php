@@ -27,6 +27,14 @@ final class Foo extends DataObject implements TestOnly
         'RequiredField' => 'Varchar(255)',
     ];
 
+    private static array $belongs_to = [
+        'Parent' => self::class . '.Parent',
+    ];
+
+    private static array $has_one = [
+        'Child' => self::class . '.Child',
+    ];
+
     private static array $extensions = [
         FooExtension::class,
     ];
