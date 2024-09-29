@@ -12,7 +12,7 @@ use PHPStan\Type\IntegerType;
 use function array_keys;
 use function is_array;
 
-final readonly class SingleRelationPropertyTypeResolver implements PropertyTypeResolverInterface
+final readonly class SimpleRelationPropertyTypeResolver implements PropertyTypeResolverInterface
 {
     public function __construct(
         private string $configurationPropertyName,

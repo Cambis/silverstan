@@ -12,7 +12,12 @@ final class ExtensibleClassReflectionExtensionTest extends TypeInferenceTestCase
 {
     public function typeFileAsserts(): Generator
     {
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/SingleRelationPropertyReflections.php');
+        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/DBPropertyReflections.php');
+        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/ExtensionMethodReflections.php');
+        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/ExtensionPropertyReflections.php');
+        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/SimpleRelationMethodReflections.php');
+        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/SimpleRelationPropertyReflections.php');
+        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/ManyRelationMethodReflections.php');
     }
 
     /**

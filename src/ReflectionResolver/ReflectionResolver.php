@@ -11,10 +11,8 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Type\Type;
+use ReflectionProperty;
 
-/**
- * @api
- */
 final readonly class ReflectionResolver
 {
     public function __construct(
@@ -25,13 +23,16 @@ final readonly class ReflectionResolver
     }
 
     /**
+     * Resolve all injected property reflections using the registered resolvers.
+     *
+     * @see \Cambis\Silverstan\ReflectionResolver\Contract\PropertyReflectionResolverInterface
      * @return PropertyReflection[]
      */
     public function resolveInjectedPropertyReflections(ClassReflection $classReflection): array
     {
         $propertyReflections = [];
 
-        foreach ($classReflection->getNativeReflection()->getProperties() as $reflectionProperty) {
+        foreach ($classReflection->getNativeReflection()->getProperties(ReflectionProperty::IS_PRIVATE) as $reflectionProperty) {
             $property = $this->resolveConfigurationPropertyReflection($classReflection, $reflectionProperty->getName());
 
             if (!$property instanceof PropertyReflection) {
@@ -45,6 +46,9 @@ final readonly class ReflectionResolver
     }
 
     /**
+     * Resolve injected property reflections from a configuration property using the registered resolvers.
+     *
+     * @see \Cambis\Silverstan\ReflectionResolver\Contract\PropertyReflectionResolverInterface
      * @return PropertyReflection[]
      */
     public function resolveInjectedPropertyReflectionsFromConfigurationProperty(ClassReflection $classReflection, string $propertyName): array
@@ -61,6 +65,32 @@ final readonly class ReflectionResolver
     }
 
     /**
+     * Resolve all injected method reflections using the registered resolvers.
+     *
+     * @see \Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterface
+     * @return MethodReflection[]
+     */
+    public function resolveInjectedMethodReflections(ClassReflection $classReflection): array
+    {
+        $methodReflections = [];
+
+        foreach ($classReflection->getNativeReflection()->getProperties(ReflectionProperty::IS_PRIVATE) as $reflectionProperty) {
+            $property = $this->resolveConfigurationPropertyReflection($classReflection, $reflectionProperty->getName());
+
+            if (!$property instanceof PropertyReflection) {
+                continue;
+            }
+
+            $methodReflections = [...$methodReflections, ...$this->resolveInjectedMethodReflectionsFromConfigurationProperty($classReflection, $reflectionProperty->getName())];
+        }
+
+        return $methodReflections;
+    }
+
+    /**
+     * Resolve injected method reflections from a configuration property using the registered resolvers.
+     *
+     * @see \Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterface
      * @return MethodReflection[]
      */
     public function resolveInjectedMethodReflectionsFromConfigurationProperty(ClassReflection $classReflection, string $propertyName): array

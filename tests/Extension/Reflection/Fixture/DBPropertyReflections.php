@@ -21,12 +21,4 @@ assertType('string|null', $foo->Text);
 assertType('string|null', $foo->Time);
 assertType('string|null', $foo->Varchar);
 assertType('string', $foo->RequiredField);
-
-// From extension
-assertType('string|null', $foo->ExtensionField);
-
-// belongs_to
-assertType('int', $foo->ParentID);
-
-// has_one
-assertType('int', $foo->ChildID);
+assertType('string', $foo->TypehintedField);

@@ -8,6 +8,10 @@ use SilverStripe\Forms\CompositeValidator;
 use SilverStripe\Forms\RequiredFields;
 use SilverStripe\ORM\DataObject;
 
+/**
+ * @property string $TypehintedField
+ */
+
 final class Foo extends DataObject implements TestOnly
 {
     private static array $db = [
@@ -25,6 +29,11 @@ final class Foo extends DataObject implements TestOnly
         'Time' => 'Time',
         'Varchar' => 'Varchar(255)',
         'RequiredField' => 'Varchar(255)',
+        'TypehintedField' => 'Varchar(255)',
+    ];
+
+    private static array $belongs_many_many = [
+        'Ancestors' => self::class,
     ];
 
     private static array $belongs_to = [
@@ -33,6 +42,19 @@ final class Foo extends DataObject implements TestOnly
 
     private static array $has_one = [
         'Child' => self::class . '.Child',
+    ];
+
+    private static array $has_many = [
+        'Siblings' => self::class,
+    ];
+
+    private static array $many_many = [
+        'Family' => self::class,
+        'ExtendedFamily' => [
+            'through' => self::class,
+            'from' => 'Me',
+            'to' => 'You',
+        ],
     ];
 
     private static array $extensions = [

@@ -14,4 +14,19 @@ final class FooExtension extends Extension implements TestOnly
     private static array $db = [
         'ExtensionField' => 'Varchar(255)',
     ];
+
+    public function publicMethod(): bool
+    {
+        return true;
+    }
+
+    protected function protectedMethod(): bool
+    {
+        return true;
+    }
+
+    private function privateMethod(): bool
+    {
+        return true;
+    }
 }

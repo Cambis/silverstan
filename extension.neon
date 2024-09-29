@@ -30,7 +30,9 @@ services:
         tags: [phpstan.phpDoc.typeNodeResolverExtension]
     -
         class: Cambis\Silverstan\Extension\Reflection\ExtensibleClassReflectionExtension
-        tags: [phpstan.broker.propertiesClassReflectionExtension]
+        tags: 
+            - phpstan.broker.methodsClassReflectionExtension
+            - phpstan.broker.propertiesClassReflectionExtension
     -
         class: Cambis\Silverstan\Extension\Reflection\ViewableDataClassReflectionExtension
         tags: [phpstan.broker.propertiesClassReflectionExtension]
@@ -74,20 +76,48 @@ services:
         class: Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProviderInterface
         factory: Cambis\Silverstan\ReflectionResolver\LazyReflectionResolverRegistryProvider
     -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\ExtensionMethodReflectionResolver
+        tags: [silverstan.reflectionResolver.methodReflectionResolver]
+    -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\ExtensionPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
     -
-        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SingleRelationPropertyReflectionResolver
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationMethodReflectionResolver
+        tags: [silverstan.reflectionResolver.methodReflectionResolver]
+        arguments:
+            configurationPropertyName: 'belongs_many_many'
+    -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationMethodReflectionResolver
+        tags: [silverstan.reflectionResolver.methodReflectionResolver]
+        arguments:
+            configurationPropertyName: 'belongs_to'
+    -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationMethodReflectionResolver
+        tags: [silverstan.reflectionResolver.methodReflectionResolver]
+        arguments:
+            configurationPropertyName: 'has_one'
+    -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationMethodReflectionResolver
+        tags: [silverstan.reflectionResolver.methodReflectionResolver]
+        arguments:
+            configurationPropertyName: 'has_many'
+    -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationMethodReflectionResolver
+        tags: [silverstan.reflectionResolver.methodReflectionResolver]
+        arguments:
+            configurationPropertyName: 'many_many'
+    -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
         arguments:
             configurationPropertyName: 'db'
     -
-        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SingleRelationPropertyReflectionResolver
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
         arguments:
             configurationPropertyName: 'belongs_to'
     -
-        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SingleRelationPropertyReflectionResolver
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
         arguments:
             configurationPropertyName: 'has_one'
@@ -107,12 +137,40 @@ services:
             - silverstan.typeResolver.methodTypeResolver
             - silverstan.typeResolver.propertyTypeResolver
     -
-        class: Cambis\Silverstan\TypeResolver\TypeResolver\SingleRelationPropertyTypeResolver
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\ManyRelationMethodTypeResolver
+        tags: [silverstan.typeResolver.methodTypeResolver]
+        arguments:
+            configurationPropertyName: 'belongs_many_many'
+            listName: 'SilverStripe\ORM\ManyManyList'
+    -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\ManyRelationMethodTypeResolver
+        tags: [silverstan.typeResolver.methodTypeResolver]
+        arguments:
+            configurationPropertyName: 'has_many'
+            listName: 'SilverStripe\ORM\HasManyList'
+    -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\ManyRelationMethodTypeResolver
+        tags: [silverstan.typeResolver.methodTypeResolver]
+        arguments:
+            configurationPropertyName: 'many_many'
+            listName: 'SilverStripe\ORM\ManyManyList'
+    -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\SimpleRelationMethodTypeResolver
+        tags: [silverstan.typeResolver.methodTypeResolver]
+        arguments:
+            configurationPropertyName: 'belongs_to'
+    -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\SimpleRelationMethodTypeResolver
+        tags: [silverstan.typeResolver.methodTypeResolver]
+        arguments:
+            configurationPropertyName: 'has_one'
+    -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\SimpleRelationPropertyTypeResolver
         tags: [silverstan.typeResolver.propertyTypeResolver]
         arguments:
             configurationPropertyName: 'belongs_to'
     -
-        class: Cambis\Silverstan\TypeResolver\TypeResolver\SingleRelationPropertyTypeResolver
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\SimpleRelationPropertyTypeResolver
         tags: [silverstan.typeResolver.propertyTypeResolver]
         arguments:
             configurationPropertyName: 'has_one'

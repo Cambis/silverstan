@@ -11,7 +11,7 @@ use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
 
-final readonly class SingleRelationPropertyReflectionResolver implements PropertyReflectionResolverInterface
+final readonly class SimpleRelationPropertyReflectionResolver implements PropertyReflectionResolverInterface
 {
     public function __construct(
         private string $configurationPropertyName,
@@ -33,7 +33,7 @@ final readonly class SingleRelationPropertyReflectionResolver implements Propert
             return [];
         }
 
-        $types = $this->typeResolver->resolveInjectedPropertyTypesFromConfigurationProperty($classReflection, $this->getConfigurationPropertyName());
+        $types = $this->typeResolver->resolveInjectedPropertyTypesFromConfigurationProperty($classReflection, $this->configurationPropertyName);
 
         $propertyReflections = [];
 
