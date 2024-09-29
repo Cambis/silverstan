@@ -19,7 +19,7 @@ final class RequireConfigurationPropertyOverrideRuleTest extends RuleTestCase
     {
         $this->analyse([__DIR__ . '/Fixture/RequireTableName.php'], [
             [
-                'Class Cambis\Silverstan\Tests\Rule\InClassNode\Fixture\RequireTableName is missing configuration property $table_name',
+                'Class Cambis\Silverstan\Tests\Rule\InClassNode\Fixture\RequireTableName is missing required configuration property $table_name',
                 8,
             ],
         ]);

@@ -16,7 +16,9 @@ use PHPStan\Rules\RuleErrorBuilder;
 use SilverStripe\ORM\DataObject;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use function array_key_exists;
 use function array_reverse;
+use function in_array;
 use function sprintf;
 use function str_contains;
 
@@ -26,6 +28,14 @@ use function str_contains;
  */
 final class RequireConfigurationPropertyOverrideRule implements SilverstanRuleInterface
 {
+    /**
+     * @var string[][]
+     */
+    private const PROPERTY_ALLOWLIST = [
+        'Page' => ['table_name'],
+        'SilverStripe\CMS\Model\SiteTree' => ['table_name'],
+    ];
+
     /**
      * @var ClassRequiredProperty[]
      */
@@ -110,13 +120,20 @@ CODE_SAMPLE
         $errors = [];
 
         foreach ($classRequiredProperty->properties as $property) {
+            if (
+                array_key_exists($classReflection->getName(), self::PROPERTY_ALLOWLIST) &&
+                in_array($property, self::PROPERTY_ALLOWLIST[$classReflection->getName()], true)
+            ) {
+                continue;
+            }
+
             if ($this->hasConfigurationProperty($classReflection, $property)) {
                 continue;
             }
 
             $errors[] = RuleErrorBuilder::message(
                 sprintf(
-                    'Class %s is missing configuration property $%s',
+                    'Class %s is missing required configuration property $%s',
                     $classReflection->getDisplayName(),
                     $property
                 )
