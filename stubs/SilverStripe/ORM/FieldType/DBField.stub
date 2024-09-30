@@ -1,0 +1,29 @@
+<?php
+
+namespace SilverStripe\ORM\FieldType;
+
+use SilverStripe\ORM\FieldType\DBIndexable;
+use SilverStripe\View\ViewableData;
+
+abstract class DBField extends ViewableData implements DBIndexable
+{
+    /**
+     * Create a DBField object that's not bound to any particular field.
+     *
+     * Useful for accessing the classes behaviour for other parts of your code.
+     *
+     * @template T
+     * @param string $spec Class specification to construct. May include both service name and additional
+     * @phpstan-param class-string<T>|string $spec Class specification to construct. May include both service name and additional
+     * constructor arguments in the same format as DataObject.db config.
+     * @param mixed $value value of field
+     * @param string $name Name of field
+     * @param mixed $args Additional arguments to pass to constructor if not using args in service $spec
+     * Note: Will raise a warning if using both
+     * @return static
+     * @phpstan-return ($spec is class-string<T> ? T : static)
+     */
+    public static function create_field($spec, $value, $name = null, ...$args)
+    {
+    }
+}

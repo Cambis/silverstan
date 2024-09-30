@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Extension\Type;
 
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -35,7 +35,7 @@ final readonly class ConfigCollectionInterfaceGetReturnTypeExtension implements 
     ];
 
     public function __construct(
-        private ClassAnalyser $classAnalyser,
+        private ClassReflectionAnalyser $classReflectionAnalyser,
         private TypeResolver $configurationPropertyTypeResolver,
         private ReflectionProvider $reflectionProvider
     ) {
@@ -82,7 +82,7 @@ final readonly class ConfigCollectionInterfaceGetReturnTypeExtension implements 
 
         $classReflection = $this->reflectionProvider->getClass($className);
 
-        if (!$this->classAnalyser->isConfigurable($classReflection)) {
+        if (!$this->classReflectionAnalyser->isConfigurable($classReflection)) {
             return null;
         }
 

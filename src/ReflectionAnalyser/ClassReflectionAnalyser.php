@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\NodeAnalyser;
+namespace Cambis\Silverstan\ReflectionAnalyser;
 
 use PHPStan\Reflection\ClassReflection;
 
-final class ClassAnalyser
+final class ClassReflectionAnalyser
 {
     public function isConfigurable(ClassReflection $classReflection): bool
     {

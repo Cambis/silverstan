@@ -6,7 +6,7 @@ namespace Cambis\Silverstan\TypeResolver\TypeResolver;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\InjectionResolver\InjectionResolver;
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\TypeFactory\TypeFactory;
 use Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface;
@@ -27,7 +27,7 @@ final readonly class ExtensionTypeResolver implements MethodTypeResolverInterfac
     private const EXTENSION_CLASSNAME_REGEX = '/^([^(]*)/';
 
     public function __construct(
-        private ClassAnalyser $classAnalyser,
+        private ClassReflectionAnalyser $classReflectionAnalyser,
         private ConfigurationResolver $configurationResolver,
         private InjectionResolver $injectionResolver,
         private ReflectionProvider $reflectionProvider,
@@ -44,7 +44,7 @@ final readonly class ExtensionTypeResolver implements MethodTypeResolverInterfac
     #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
-        if (!$this->classAnalyser->isExtensible($classReflection)) {
+        if (!$this->classReflectionAnalyser->isExtensible($classReflection)) {
             return [];
         }
 

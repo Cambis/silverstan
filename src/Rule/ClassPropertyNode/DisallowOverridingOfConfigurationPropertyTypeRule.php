@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\ClassPropertyNode;
 
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
-use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 use Override;
 use PhpParser\Node;
@@ -29,8 +29,8 @@ use function sprintf;
 final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implements SilverstanRuleInterface
 {
     public function __construct(
-        private ClassAnalyser $classAnalyser,
-        private PropertyAnalyser $propertyAnalyser,
+        private ClassReflectionAnalyser $classReflectionAnalyser,
+        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
         private ReflectionResolver $reflectionResolver
     ) {
     }
@@ -89,7 +89,7 @@ CODE_SAMPLE
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$this->propertyAnalyser->isConfigurationProperty($node)) {
+        if (!$this->propertyReflectionAnalyser->isConfigurationProperty($node)) {
             return [];
         }
 
@@ -99,7 +99,7 @@ CODE_SAMPLE
             return [];
         }
 
-        if (!$this->classAnalyser->isConfigurable($classReflection)) {
+        if (!$this->classReflectionAnalyser->isConfigurable($classReflection)) {
             return [];
         }
 

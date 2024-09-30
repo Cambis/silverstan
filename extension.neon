@@ -3,18 +3,9 @@ includes:
 parameters:
     bootstrapFiles:
         - bootstrap.php
-    stubFiles:
-        - stubs/Psr/Container/ContainerExceptionInterface.stub
-        - stubs/Psr/Container/ContainerInterface.stub
-        - stubs/Psr/Container/NotFoundExceptionInterface.stub
-        - stubs/SilverStripe/functions.stub
-        - stubs/SilverStripe/Core/Injector/Injector.stub
-        - stubs/SilverStripe/Core/Extension.stub
-        - stubs/SilverStripe/ORM/DataExtension.stub
     universalObjectCratesClasses:
         - SilverStripe\Core\Config\Config_ForClass
         - SilverStripe\Forms\GridField\GridState_Data
-        # - SilverStripe\View\ViewableData
         - Symbiote\QueuedJobs\Services\AbstractQueuedJob
 services:
     -
@@ -28,6 +19,9 @@ services:
     -
         class: Cambis\Silverstan\Extension\PhpDoc\ExtensionOwnerTypeNodeResolverExtension
         tags: [phpstan.phpDoc.typeNodeResolverExtension]
+    -
+        class: Cambis\Silverstan\Extension\PhpDoc\SilverstripeStubFilesExtension
+        tags: [phpstan.stubFilesExtension]
     -
         class: Cambis\Silverstan\Extension\Reflection\ExtensibleClassReflectionExtension
         tags: 
@@ -64,12 +58,12 @@ services:
     -
         class: Cambis\Silverstan\InjectionResolver\InjectionResolver
     -
-        class: Cambis\Silverstan\NodeAnalyser\ClassAnalyser
-    -
-        class: Cambis\Silverstan\NodeAnalyser\PropertyAnalyser
-    -
         class: Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor
         tags: [phpstan.parser.richParserNodeVisitor]
+    -
+        class: Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser
+    -
+        class: Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser
     -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver
     -

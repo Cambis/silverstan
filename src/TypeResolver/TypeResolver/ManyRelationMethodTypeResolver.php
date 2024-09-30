@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\TypeResolver\TypeResolver;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\TypeFactory\TypeFactory;
 use Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
@@ -20,7 +20,7 @@ final readonly class ManyRelationMethodTypeResolver implements MethodTypeResolve
     public function __construct(
         private string $configurationPropertyName,
         private string $listName,
-        private ClassAnalyser $classAnalyser,
+        private ClassReflectionAnalyser $classReflectionAnalyser,
         private ConfigurationResolver $configurationResolver,
         private TypeFactory $typeFactory,
         private TypeResolver $typeResolver,
@@ -36,7 +36,7 @@ final readonly class ManyRelationMethodTypeResolver implements MethodTypeResolve
     #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
-        if (!$this->classAnalyser->isDataObject($classReflection)) {
+        if (!$this->classReflectionAnalyser->isDataObject($classReflection)) {
             return [];
         }
 

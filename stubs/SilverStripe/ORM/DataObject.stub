@@ -1,0 +1,18 @@
+<?php
+
+namespace SilverStripe\ORM;
+
+use SilverStripe\Core\Resettable;
+use SilverStripe\i18n\i18nEntityProvider;
+use SilverStripe\View\ViewableData;
+
+class DataObject extends ViewableData implements DataObjectInterface, i18nEntityProvider, Resettable
+{
+    /**
+     * @param string $fieldName Name of the field
+     * @return ?\SilverStripe\ORM\FieldType\DBField The field as a DBField object
+     */
+    public function dbObject($fieldName)
+    {
+    }
+}

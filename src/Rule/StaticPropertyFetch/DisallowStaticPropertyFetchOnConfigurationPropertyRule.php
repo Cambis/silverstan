@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\StaticPropertyFetch;
 
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
-use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -25,8 +25,8 @@ use function sprintf;
 final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements SilverstanRuleInterface
 {
     public function __construct(
-        private ClassAnalyser $classAnalyser,
-        private PropertyAnalyser $propertyAnalyser,
+        private ClassReflectionAnalyser $classReflectionAnalyser,
+        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
     ) {
     }
 
@@ -90,13 +90,13 @@ CODE_SAMPLE
             return [];
         }
 
-        if (!$this->classAnalyser->isConfigurable($classReflection)) {
+        if (!$this->classReflectionAnalyser->isConfigurable($classReflection)) {
             return [];
         }
 
         $propertyReflection = $classReflection->getProperty($node->name->name, $scope);
 
-        if (!$this->propertyAnalyser->isConfigurationProperty($propertyReflection)) {
+        if (!$this->propertyReflectionAnalyser->isConfigurationProperty($propertyReflection)) {
             return [];
         }
 

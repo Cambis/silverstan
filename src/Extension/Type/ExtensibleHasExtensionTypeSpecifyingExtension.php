@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Extension\Type;
 
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\TypeFactory\TypeFactory;
 use Override;
 use PhpParser\Node\Expr\MethodCall;
@@ -35,7 +35,7 @@ final class ExtensibleHasExtensionTypeSpecifyingExtension implements MethodTypeS
     public function __construct(
         /** @var class-string */
         private readonly string $className,
-        private readonly ClassAnalyser $classAnalyser,
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
         private readonly TypeFactory $typeFactory,
     ) {
     }
@@ -49,7 +49,7 @@ final class ExtensibleHasExtensionTypeSpecifyingExtension implements MethodTypeS
     #[Override]
     public function isMethodSupported(MethodReflection $methodReflection, MethodCall $node, TypeSpecifierContext $context): bool
     {
-        if (!$this->classAnalyser->isExtensible($methodReflection->getDeclaringClass())) {
+        if (!$this->classReflectionAnalyser->isExtensible($methodReflection->getDeclaringClass())) {
             return false;
         }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Extension\PhpDoc;
 
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\TypeFactory\TypeFactory;
 use Override;
 use PHPStan\Analyser\NameScope;
@@ -24,7 +24,7 @@ use PHPStan\Type\TypeCombinator;
 final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverExtension
 {
     public function __construct(
-        private ClassAnalyser $classAnalyser,
+        private ClassReflectionAnalyser $classReflectionAnalyser,
         private TypeFactory $typeFactory,
         private TypeNodeResolver $typeNodeResolver
     ) {
@@ -58,7 +58,7 @@ final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNode
     private function isInternalTypeAcceptable(Type $type): bool
     {
         foreach ($type->getObjectClassReflections() as $classReflection) {
-            if ($this->classAnalyser->isExtensible($classReflection)) {
+            if ($this->classReflectionAnalyser->isExtensible($classReflection)) {
                 return true;
             }
 

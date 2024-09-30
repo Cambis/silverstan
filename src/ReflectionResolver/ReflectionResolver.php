@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ReflectionResolver;
 
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
-use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProviderInterface;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -16,8 +16,8 @@ use ReflectionProperty;
 final readonly class ReflectionResolver
 {
     public function __construct(
-        private ClassAnalyser $classAnalyser,
-        private PropertyAnalyser $propertyAnalyser,
+        private ClassReflectionAnalyser $classReflectionAnalyser,
+        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
         private ReflectionResolverRegistryProviderInterface $reflectionResolverRegistryProvider
     ) {
     }
@@ -119,7 +119,7 @@ final readonly class ReflectionResolver
         }
 
         // Safety check, only configurable classes can have configuration properties
-        if (!$this->classAnalyser->isConfigurable($classReflection)) {
+        if (!$this->classReflectionAnalyser->isConfigurable($classReflection)) {
             return null;
         }
 
@@ -137,7 +137,7 @@ final readonly class ReflectionResolver
         }
 
         // Fail, property is not a configuration property. Check the parent class next.
-        if (!$this->propertyAnalyser->isConfigurationProperty($property)) {
+        if (!$this->propertyReflectionAnalyser->isConfigurationProperty($property)) {
             return $this->resolveConfigurationPropertyReflection($classReflection->getParentClass(), $propertyName);
         }
 

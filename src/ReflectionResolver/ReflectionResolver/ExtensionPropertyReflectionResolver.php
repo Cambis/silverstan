@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\Contract\PropertyReflectionResolverInterface;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
@@ -14,7 +14,7 @@ use PHPStan\Reflection\ClassReflection;
 final readonly class ExtensionPropertyReflectionResolver implements PropertyReflectionResolverInterface
 {
     public function __construct(
-        private ClassAnalyser $classAnalyser,
+        private ClassReflectionAnalyser $classReflectionAnalyser,
         private ReflectionResolver $reflectionResolver,
         private TypeResolver $typeResolver
     ) {
@@ -29,7 +29,7 @@ final readonly class ExtensionPropertyReflectionResolver implements PropertyRefl
     #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
-        if (!$this->classAnalyser->isExtensible($classReflection)) {
+        if (!$this->classReflectionAnalyser->isExtensible($classReflection)) {
             return [];
         }
 

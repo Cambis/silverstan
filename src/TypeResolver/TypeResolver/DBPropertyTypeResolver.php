@@ -6,7 +6,7 @@ namespace Cambis\Silverstan\TypeResolver\TypeResolver;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\InjectionResolver\InjectionResolver;
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface;
 use Override;
 use PHPStan\Reflection\ClassReflection;
@@ -36,7 +36,7 @@ final readonly class DBPropertyTypeResolver implements PropertyTypeResolverInter
     ];
 
     public function __construct(
-        private ClassAnalyser $classAnalyser,
+        private ClassReflectionAnalyser $classReflectionAnalyser,
         private ConfigurationResolver $configurationResolver,
         private InjectionResolver $injectionResolver,
         private ReflectionProvider $reflectionProvider
@@ -52,7 +52,7 @@ final readonly class DBPropertyTypeResolver implements PropertyTypeResolverInter
     #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
-        if (!$this->classAnalyser->isDataObject($classReflection)) {
+        if (!$this->classReflectionAnalyser->isDataObject($classReflection)) {
             return [];
         }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Extension\Reflection;
 
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
@@ -31,7 +31,7 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
     private array $methodReflections = [];
 
     public function __construct(
-        private readonly ClassAnalyser $classAnalyser,
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
         private readonly ReflectionResolver $reflectionResolver,
     ) {
     }
@@ -40,7 +40,7 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
     public function hasMethod(ClassReflection $classReflection, string $methodName): bool
     {
         // Skip non-extensible classes
-        if (!$this->classAnalyser->isExtensible($classReflection)) {
+        if (!$this->classReflectionAnalyser->isExtensible($classReflection)) {
             return false;
         }
 
@@ -65,7 +65,7 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
     public function hasProperty(ClassReflection $classReflection, string $propertyName): bool
     {
         // Skip non-extensible classes
-        if (!$this->classAnalyser->isExtensible($classReflection)) {
+        if (!$this->classReflectionAnalyser->isExtensible($classReflection)) {
             return false;
         }
 

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\NodeAnalyser;
+namespace Cambis\Silverstan\ReflectionAnalyser;
 
 use PHPStan\Node\ClassPropertyNode;
 use PHPStan\Reflection\PropertyReflection;
 use function str_contains;
 
-final class PropertyAnalyser
+final class PropertyReflectionAnalyser
 {
     public function isConfigurationProperty(ClassPropertyNode|PropertyReflection $property): bool
     {

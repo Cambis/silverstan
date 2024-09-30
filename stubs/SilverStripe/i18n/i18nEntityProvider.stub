@@ -1,0 +1,7 @@
+<?php
+
+namespace SilverStripe\i18n;
+
+interface i18nEntityProvider
+{
+}

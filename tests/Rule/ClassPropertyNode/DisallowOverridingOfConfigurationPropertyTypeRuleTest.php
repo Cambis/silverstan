@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Rule\ClassPropertyNode;
 
-use Cambis\Silverstan\NodeAnalyser\ClassAnalyser;
-use Cambis\Silverstan\NodeAnalyser\PropertyAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
+use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 use Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule;
 use Override;
@@ -40,8 +40,8 @@ final class DisallowOverridingOfConfigurationPropertyTypeRuleTest extends RuleTe
     protected function getRule(): Rule
     {
         return new DisallowOverridingOfConfigurationPropertyTypeRule(
-            self::getContainer()->getByType(ClassAnalyser::class),
-            self::getContainer()->getByType(PropertyAnalyser::class),
+            self::getContainer()->getByType(ClassReflectionAnalyser::class),
+            self::getContainer()->getByType(PropertyReflectionAnalyser::class),
             self::getContainer()->getByType(ReflectionResolver::class)
         );
     }
