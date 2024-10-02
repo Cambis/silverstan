@@ -2,7 +2,7 @@
 
 namespace SilverStripe\Core\Injector;
 
-class Injector implements \Psr\Container\ContainerInterface
+class Injector
 {
     /**
      * Get a named managed object

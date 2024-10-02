@@ -1,0 +1,16 @@
+<?php
+
+namespace SilverStripe\Dev;
+
+abstract class SapphireTest
+{
+    /**
+     * @var string|string[]
+     */
+    protected static $fixture_file = null;
+
+    /**
+     * @var array<class-string<\SilverStripe\ORM\DataObject>>
+     */
+    protected static $extra_dataobjects = [];
+}

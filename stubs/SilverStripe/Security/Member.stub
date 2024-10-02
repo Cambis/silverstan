@@ -1,0 +1,9 @@
+<?php
+
+namespace SilverStripe\Security;
+
+use SilverStripe\ORM\DataObject;
+
+class Member extends DataObject
+{
+}

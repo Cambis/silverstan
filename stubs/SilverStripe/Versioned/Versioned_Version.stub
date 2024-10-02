@@ -1,0 +1,24 @@
+<?php
+
+namespace SilverStripe\Versioned;
+
+class Versioned_Version
+{
+    /**
+     * Author of this DataObject
+     *
+     * @return \SilverStripe\Security\Member|null
+     */
+    public function Author()
+    {
+    }
+
+    /**
+     * Member object of the person who last published this record
+     *
+     * @return \SilverStripe\Security\Member|null
+     */
+    public function Publisher()
+    {
+    }
+}

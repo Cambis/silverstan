@@ -5,7 +5,7 @@ namespace SilverStripe\ORM\FieldType;
 use SilverStripe\ORM\FieldType\DBIndexable;
 use SilverStripe\View\ViewableData;
 
-abstract class DBField extends ViewableData implements DBIndexable
+abstract class DBField
 {
     /**
      * Create a DBField object that's not bound to any particular field.
