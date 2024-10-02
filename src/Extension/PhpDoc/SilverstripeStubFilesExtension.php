@@ -40,6 +40,10 @@ final class SilverstripeStubFilesExtension implements StubFilesExtension
             $stubDirs[] = __DIR__ . '/../../../stubs/SilverStripe/Versioned';
         }
 
+        if ($this->isInstalledVersion('silverstripe/versioned-admin', 2)) {
+            $stubDirs[] = __DIR__ . '/../../../stubs/SilverStripe/VersionedAdmin';
+        }
+
         $stubFiles = Finder::create()->files()->name('*.stub')->in($stubDirs);
 
         foreach ($stubFiles as $stubFile) {

@@ -1,0 +1,11 @@
+<?php
+
+namespace SilverStripe\VersionedAdmin\Interfaces;
+
+interface ArchiveViewProvider
+{
+    /**
+     * @return class-string<\SilverStripe\ORM\DataObject>
+     */
+    public function getArchiveFieldClass();
+}
