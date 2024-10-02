@@ -9,6 +9,7 @@ use Cambis\Silverstan\TypeFactory\TypeFactory;
 use Override;
 use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDoc\TypeNodeResolver;
+use PHPStan\PhpDoc\TypeNodeResolverAwareExtension;
 use PHPStan\PhpDoc\TypeNodeResolverExtension;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -21,12 +22,13 @@ use PHPStan\Type\TypeCombinator;
  *
  * @see \Cambis\Silverstan\Tests\Extension\PhpDoc\ExtensionOwnerTypeNodeResolverExtensionTest
  */
-final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverExtension
+final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverExtension, TypeNodeResolverAwareExtension
 {
+    private TypeNodeResolver $typeNodeResolver;
+
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private TypeFactory $typeFactory,
-        private TypeNodeResolver $typeNodeResolver
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly TypeFactory $typeFactory,
     ) {
     }
 
@@ -53,6 +55,12 @@ final readonly class ExtensionOwnerTypeNodeResolverExtension implements TypeNode
         }
 
         return TypeCombinator::intersect(...$types);
+    }
+
+    #[Override]
+    public function setTypeNodeResolver(TypeNodeResolver $typeNodeResolver): void
+    {
+        $this->typeNodeResolver = $typeNodeResolver;
     }
 
     private function isInternalTypeAcceptable(Type $type): bool

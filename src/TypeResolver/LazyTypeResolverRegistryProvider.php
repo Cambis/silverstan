@@ -24,6 +24,7 @@ final class LazyTypeResolverRegistryProvider implements TypeResolverRegistryProv
     {
         if (!$this->registry instanceof TypeResolverRegistryInterface) {
             $this->registry = new TypeResolverRegistry(
+                $this->container->getByType(TypeResolver::class),
                 /** @phpstan-ignore-next-line argument.type */
                 array_reverse($this->container->getServicesByTag('silverstan.typeResolver.propertyTypeResolver')),
                 /** @phpstan-ignore-next-line argument.type */

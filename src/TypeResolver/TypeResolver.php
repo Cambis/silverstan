@@ -12,15 +12,34 @@ use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryProviderInterfac
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
+use SilverStripe\Core\Extension;
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\FieldType\DBField;
 use function array_key_exists;
 use function is_array;
 use function is_string;
 
 final readonly class TypeResolver
 {
+    /**
+     * @var array<class-string<DBField>, class-string<Type>>
+     */
+    private const DBFIELD_TO_TYPE_MAPPING = [
+        'SilverStripe\ORM\FieldType\DBBoolean' => BooleanType::class,
+        'SilverStripe\ORM\FieldType\DBDecimal' => FloatType::class,
+        'SilverStripe\ORM\FieldType\DBFloat' => FloatType::class,
+        'SilverStripe\ORM\FieldType\DBInt' => IntegerType::class,
+    ];
+
     public function __construct(
         private ConfigurationResolver $configurationResolver,
         private InjectionResolver $injectionResolver,
@@ -78,6 +97,51 @@ final readonly class TypeResolver
         }
 
         return $property->getReadableType();
+    }
+
+    /**
+     * @param class-string $className
+     * @param class-string<DBField> $fieldType
+     */
+    public function resolveDBFieldType(string $className, string $fieldName, string $fieldType): Type
+    {
+        /** @var DBField $field */
+        $field = $this->injectionResolver->create($fieldType, 'Temp');
+        $classReflection = $this->reflectionProvider->getClass($field::class);
+
+        foreach (self::DBFIELD_TO_TYPE_MAPPING as $dbClass => $type) {
+            if (!$this->reflectionProvider->hasClass($dbClass)) {
+                continue;
+            }
+
+            if (!$classReflection->is($dbClass)) {
+                continue;
+            }
+
+            return new $type();
+        }
+
+        // Instantiate the object so we can check for required fields
+        $object = $this->injectionResolver->create($className);
+
+        // Fallback case
+        if (!$object instanceof DataObject && !$object instanceof Extension) {
+            return new StringType();
+        }
+
+        // If the object is an extension, create a mock DataObject and add the extension to it
+        if ($object instanceof Extension) {
+            $object = new class extends DataObject implements TestOnly {};
+            $object::add_extension($className);
+        }
+
+        // Check if the field is required
+        if ($object->getCMSCompositeValidator()->fieldIsRequired($fieldName)) {
+            return new StringType();
+        }
+
+        // This is not required and therefore is nullable
+        return TypeCombinator::addNull(new StringType());
     }
 
     /**

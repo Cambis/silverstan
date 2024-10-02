@@ -7,18 +7,20 @@ namespace Cambis\Silverstan\TypeResolver\TypeResolver;
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface;
+use Cambis\Silverstan\TypeResolver\Contract\TypeResolverAwareInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
 use function is_array;
 
-final readonly class SimpleRelationMethodTypeResolver implements MethodTypeResolverInterface
+final class SimpleRelationMethodTypeResolver implements MethodTypeResolverInterface, TypeResolverAwareInterface
 {
+    private TypeResolver $typeResolver;
+
     public function __construct(
-        private string $configurationPropertyName,
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private ConfigurationResolver $configurationResolver,
-        private TypeResolver $typeResolver,
+        private readonly string $configurationPropertyName,
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly ConfigurationResolver $configurationResolver
     ) {
     }
 
@@ -48,5 +50,13 @@ final readonly class SimpleRelationMethodTypeResolver implements MethodTypeResol
         }
 
         return $properties;
+    }
+
+    #[Override]
+    public function setTypeResolver(TypeResolver $typeResolver): static
+    {
+        $this->typeResolver = $typeResolver;
+
+        return $this;
     }
 }
