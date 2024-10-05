@@ -15,7 +15,9 @@ use SilverStripe\Config\Transformer\YamlTransformer;
 use Symfony\Component\Finder\Finder;
 use function array_key_exists;
 use function class_exists;
+use function defined;
 use function explode;
+use function extension_loaded;
 use function getenv;
 use function is_array;
 use function preg_match;
@@ -133,7 +135,7 @@ final class ConfigurationResolver
                 return getenv($var) !== false;
             })
             ->addRule('constantdefined', function (string $const): bool {
-                return $this->reflectionProvider->hasClass($const);
+                return defined($const);
             })
             ->addRule('moduleexists', static function (string $module): bool {
                 if (!class_exists(InstalledVersions::class)) {
@@ -144,6 +146,12 @@ final class ConfigurationResolver
             })
             ->addRule('environment', static function (string $environment): bool {
                 return true;
+            })
+            ->addRule('envorconstant', static function (string $var): bool {
+                return getenv($var) !== false || defined($var);
+            })
+            ->addRule('extensionloaded', static function (string $extension) {
+                return extension_loaded($extension);
             })
             ->transform($this->getConfigCollection());
     }
