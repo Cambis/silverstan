@@ -11,7 +11,6 @@ use Cambis\Silverstan\TypeResolver\Contract\TypeResolverAwareInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
-use SilverStripe\ORM\FieldType\DBField;
 
 final class FixedFieldsPropertyTypeResolver implements PropertyTypeResolverInterface, TypeResolverAwareInterface
 {
@@ -45,7 +44,7 @@ final class FixedFieldsPropertyTypeResolver implements PropertyTypeResolverInter
 
         $types = [];
 
-        /** @var class-string<DBField>[] $fixedFields */
+        /** @var class-string[] $fixedFields */
         foreach ($fixedFields as $fieldName => $fieldType) {
             $types[$fieldName] = $this->typeResolver->resolveDBFieldType('SilverStripe\ORM\DataObject', $fieldName, $fieldType);
         }

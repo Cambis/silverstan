@@ -11,7 +11,7 @@
     "require": {
         "php": "^8.3",
         "phpstan/phpstan": "^1.12",
-        "silverstripe/framework": "^5.2",
+        "silverstripe/config": "^2.0",
         "symplify/rule-doc-generator-contracts": "^11.1"
     },
     "require-dev": {
@@ -24,6 +24,7 @@
         "phpunit/phpunit": "^9.6",
         "rector/rector": "^1.2",
         "shipmonk/composer-dependency-analyser": "^1.7",
+        "silverstripe/framework": "^5.2",
         "silverstripe/versioned": "^2.2",
         "silverstripe/versioned-admin": "^2.2",
         "slevomat/coding-standard": "^8.14",

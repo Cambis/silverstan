@@ -34,4 +34,9 @@ final class ClassReflectionAnalyser
     {
         return $classReflection->hasTraitUse('SilverStripe\Core\Extensible');
     }
+
+    public function isInjectable(ClassReflection $classReflection): bool
+    {
+        return $classReflection->hasTraitUse('SilverStripe\Core\Injector\Injectable');
+    }
 }

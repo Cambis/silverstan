@@ -13,7 +13,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\RuleErrorBuilder;
-use SilverStripe\ORM\DataObject;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function array_key_exists;
@@ -80,7 +79,7 @@ CODE_SAMPLE
                         'enabled' => true,
                         'classes' => [
                             [
-                                'class' => DataObject::class,
+                                'class' => 'SilverStripe\ORM\DataObject',
                                 'properties' => ['table_name'],
                             ],
                         ],

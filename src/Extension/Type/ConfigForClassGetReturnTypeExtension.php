@@ -16,7 +16,6 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
-use SilverStripe\Core\Config\Config_ForClass;
 use function in_array;
 
 /**
@@ -44,7 +43,7 @@ final readonly class ConfigForClassGetReturnTypeExtension implements DynamicMeth
     #[Override]
     public function getClass(): string
     {
-        return Config_ForClass::class;
+        return 'SilverStripe\Core\Config\Config_ForClass';
     }
 
     #[Override]

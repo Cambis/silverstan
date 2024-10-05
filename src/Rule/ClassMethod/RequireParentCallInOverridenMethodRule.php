@@ -17,8 +17,6 @@ use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\RuleErrorBuilder;
-use SilverStripe\Dev\SapphireTest;
-use SilverStripe\ORM\DataObject;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function sprintf;
@@ -170,33 +168,33 @@ CODE_SAMPLE
                         'enabled' => true,
                         'classes' => [
                             [
-                                'class' => DataObject::class,
+                                'class' => 'SilverStripe\ORM\DataObject',
                                 'method' => 'onBeforeWrite',
                             ],
                             [
-                                'class' => DataObject::class,
+                                'class' => 'SilverStripe\ORM\DataObject',
                                 'method' => 'onAfterWrite',
                             ],
                             [
-                                'class' => DataObject::class,
+                                'class' => 'SilverStripe\ORM\DataObject',
                                 'method' => 'requireDefaultRecords',
                             ],
                             [
-                                'class' => SapphireTest::class,
+                                'class' => 'SilverStripe\Dev\SapphireTest',
                                 'method' => 'setUp',
                                 'isFirst' => true,
                             ],
                             [
-                                'class' => SapphireTest::class,
+                                'class' => 'SilverStripe\Dev\SapphireTest',
                                 'method' => 'setUpBeforeClass',
                                 'isFirst' => true,
                             ],
                             [
-                                'class' => SapphireTest::class,
+                                'class' => 'SilverStripe\Dev\SapphireTest',
                                 'method' => 'tearDown',
                             ],
                             [
-                                'class' => SapphireTest::class,
+                                'class' => 'SilverStripe\Dev\SapphireTest',
                                 'method' => 'tearDownAfterClass',
                             ],
                         ],

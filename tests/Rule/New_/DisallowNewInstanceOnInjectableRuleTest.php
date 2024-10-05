@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Rule\New_;
 
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule;
 use Override;
 use PHPStan\Reflection\ReflectionProvider;
@@ -26,10 +27,19 @@ final class DisallowNewInstanceOnInjectableRuleTest extends RuleTestCase
     }
 
     #[Override]
+    public static function getAdditionalConfigFiles(): array
+    {
+        return [
+            __DIR__ . '/../../../extension.neon',
+        ];
+    }
+
+    #[Override]
     protected function getRule(): Rule
     {
         return new DisallowNewInstanceOnInjectableRule(
-            self::getContainer()->getByType(ReflectionProvider::class),
+            self::getContainer()->getByType(ClassReflectionAnalyser::class),
+            self::getContainer()->getByType(ReflectionProvider::class)
         );
     }
 }

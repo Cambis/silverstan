@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\TypeResolver;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
-use Cambis\Silverstan\InjectionResolver\InjectionResolver;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 use Cambis\Silverstan\TypeFactory\TypeFactory;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryProviderInterface;
@@ -21,7 +20,6 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use ReflectionProperty;
-use SilverStripe\ORM\FieldType\DBField;
 use function array_key_exists;
 use function is_array;
 use function is_string;
@@ -30,7 +28,7 @@ use function strtok;
 final readonly class TypeResolver
 {
     /**
-     * @var array<class-string<DBField>, class-string<Type>>
+     * @var array<class-string, class-string>
      */
     private const DBFIELD_TO_TYPE_MAPPING = [
         'SilverStripe\ORM\FieldType\DBBoolean' => BooleanType::class,
@@ -41,7 +39,6 @@ final readonly class TypeResolver
 
     public function __construct(
         private ConfigurationResolver $configurationResolver,
-        private InjectionResolver $injectionResolver,
         private ReflectionProvider $reflectionProvider,
         private ReflectionResolver $reflectionResolver,
         private TypeFactory $typeFactory,
@@ -160,7 +157,7 @@ final readonly class TypeResolver
 
     /**
      * @param class-string $className
-     * @param class-string<DBField> $fieldType
+     * @param class-string $fieldType
      */
     public function resolveDBFieldType(string $className, string $fieldName, string $fieldType): Type
     {
@@ -222,7 +219,7 @@ final readonly class TypeResolver
         }
 
         if ($this->reflectionProvider->hasClass($className)) {
-            $className = $this->injectionResolver->resolveInjectedClassName($className);
+            $className = $this->configurationResolver->resolveClassName($className);
         }
 
         return $this->typeFactory->createExtensibleTypeFromType(new ObjectType($className));

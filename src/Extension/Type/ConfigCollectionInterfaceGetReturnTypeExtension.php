@@ -16,7 +16,6 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
-use SilverStripe\Config\Collections\ConfigCollectionInterface;
 use function count;
 use function in_array;
 
@@ -44,7 +43,7 @@ final readonly class ConfigCollectionInterfaceGetReturnTypeExtension implements 
     #[Override]
     public function getClass(): string
     {
-        return ConfigCollectionInterface::class;
+        return 'SilverStripe\Config\Collections\ConfigCollectionInterface';
     }
 
     #[Override]

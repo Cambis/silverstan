@@ -33,7 +33,6 @@ assertType('string|null', $foo->Datetime);
 assertType('string|null', $foo->Text);
 assertType('string|null', $foo->Time);
 assertType('string|null', $foo->Varchar);
-assertType('string', $foo->RequiredField);
 assertType('string', $foo->TypehintedField);
 
 // Inherited fields
@@ -50,5 +49,4 @@ assertType('string|null', $bar->Datetime);
 assertType('string|null', $bar->Text);
 assertType('string|null', $bar->Time);
 assertType('string|null', $bar->Varchar);
-assertType('string', $bar->RequiredField);
 assertType('string', $bar->TypehintedField);

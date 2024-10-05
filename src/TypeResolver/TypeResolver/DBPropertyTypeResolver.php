@@ -12,7 +12,6 @@ use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
-use SilverStripe\ORM\FieldType\DBField;
 use function is_array;
 
 final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, TypeResolverAwareInterface
@@ -65,7 +64,7 @@ final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, Typ
             return $properties;
         }
 
-        /** @var class-string<DBField>[] $db */
+        /** @var class-string[] $db */
         foreach ($db as $fieldName => $fieldType) {
             $properties[$fieldName] = $this->typeResolver->resolveDBFieldType($classReflection->getName(), $fieldName, $fieldType);
         }

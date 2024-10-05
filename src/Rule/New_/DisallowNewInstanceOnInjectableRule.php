@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\New_;
 
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
+use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
@@ -12,7 +13,6 @@ use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
-use SilverStripe\Core\Injector\Injectable;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function sprintf;
@@ -24,6 +24,7 @@ use function sprintf;
 final readonly class DisallowNewInstanceOnInjectableRule implements SilverstanRuleInterface
 {
     public function __construct(
+        private ClassReflectionAnalyser $classReflectionAnalyser,
         private ReflectionProvider $reflectionProvider
     ) {
     }
@@ -82,7 +83,7 @@ CODE_SAMPLE
 
         $classReflection = $this->reflectionProvider->getClass($node->class->toString());
 
-        if (!$classReflection->hasTraitUse(Injectable::class)) {
+        if (!$this->classReflectionAnalyser->isInjectable($classReflection)) {
             return [];
         }
 

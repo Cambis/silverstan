@@ -4,8 +4,6 @@ namespace Cambis\Silverstan\Tests\Extension\Reflection\Source\Model;
 
 use Cambis\Silverstan\Tests\Extension\Reflection\Source\Extension\FooExtension;
 use SilverStripe\Dev\TestOnly;
-use SilverStripe\Forms\CompositeValidator;
-use SilverStripe\Forms\RequiredFields;
 use SilverStripe\ORM\DataObject;
 
 /**
@@ -60,10 +58,4 @@ class Foo extends DataObject implements TestOnly
     private static array $extensions = [
         FooExtension::class,
     ];
-
-    public function getCMSCompositeValidator(): CompositeValidator
-    {
-        return parent::getCMSCompositeValidator()
-            ->addValidator(RequiredFields::create(['RequiredField']));
-    }
 }
