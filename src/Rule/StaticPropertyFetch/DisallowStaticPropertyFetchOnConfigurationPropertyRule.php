@@ -9,10 +9,11 @@ use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
 use Override;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Name;
 use PhpParser\Node\VarLikeIdentifier;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\RuleErrorBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -84,13 +85,27 @@ CODE_SAMPLE
             return [];
         }
 
-        $classReflection = $scope->getClassReflection();
+        $type = null;
 
-        if (!$classReflection instanceof ClassReflection) {
+        if ($node->class instanceof Expr) {
+            $type = $scope->getType($node->class);
+        }
+
+        if ($node->class instanceof Name) {
+            $type = $scope->resolveTypeByName($node->class);
+        }
+
+        if ($type->getObjectClassReflections() === []) {
             return [];
         }
 
+        $classReflection = $type->getObjectClassReflections()[0];
+
         if (!$this->classReflectionAnalyser->isConfigurable($classReflection)) {
+            return [];
+        }
+
+        if ($type->hasProperty($node->name->name)->no()) {
             return [];
         }
 
@@ -100,12 +115,16 @@ CODE_SAMPLE
             return [];
         }
 
+        $varName = $node->class instanceof Name ? $node->class->toString() : $classReflection->getName();
+
         return [
             RuleErrorBuilder::message(
                 sprintf(
-                    "Unsafe access to configuration property %s::$%s through self::. Use self::config->get('%s') instead.",
+                    "Unsafe access to configuration property %s::$%s through %s::. Use %s::config->get('%s') instead.",
                     $classReflection->getName(),
                     $node->name->name,
+                    $varName,
+                    $varName,
                     $node->name->name
                 )
             )
