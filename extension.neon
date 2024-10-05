@@ -1,6 +1,8 @@
 includes:
     - rules.neon
 parameters:
+    bootstrapFiles:
+        - bootstrap.php
     universalObjectCratesClasses:
         - SilverStripe\Core\Config\Config_ForClass
         - SilverStripe\Forms\GridField\GridState_Data
