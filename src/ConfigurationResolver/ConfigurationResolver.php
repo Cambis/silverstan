@@ -21,6 +21,7 @@ use function extension_loaded;
 use function getenv;
 use function is_array;
 use function preg_match;
+use const BASE_PATH;
 
 final class ConfigurationResolver
 {
@@ -127,7 +128,7 @@ final class ConfigurationResolver
         (new PrivateStaticTransformer($this->classes))
             ->transform($this->getConfigCollection());
 
-        (new YamlTransformer(__DIR__ . '/../../', $this->finder))
+        (new YamlTransformer(BASE_PATH, $this->finder))
             ->addRule('classexists', function (string $class): bool {
                 return $this->reflectionProvider->hasClass($class);
             })
