@@ -19,6 +19,10 @@ final class ClassReflectionAnalyser
 
     public function isDataObject(ClassReflection $classReflection): bool
     {
+        if ($classReflection->is('SilverStripe\ORM\DataObject')) {
+            return true;
+        }
+
         if ($classReflection->isSubclassOf('SilverStripe\ORM\DataObject')) {
             return true;
         }

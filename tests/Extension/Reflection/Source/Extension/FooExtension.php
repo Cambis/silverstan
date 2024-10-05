@@ -15,18 +15,18 @@ final class FooExtension extends Extension implements TestOnly
         'ExtensionField' => 'Varchar(255)',
     ];
 
-    public function publicMethod(): bool
+    public function publicMethod(bool $arg): bool
     {
-        return true;
+        return $arg;
     }
 
-    protected function protectedMethod(): bool
+    protected function protectedMethod(bool $arg): bool
     {
-        return true;
+        return $arg;
     }
 
-    private function privateMethod(): bool
+    private function privateMethod(bool $arg): bool
     {
-        return true;
+        return $arg;
     }
 }

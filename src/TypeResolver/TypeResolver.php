@@ -12,15 +12,35 @@ use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryProviderInterfac
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
+use ReflectionProperty;
+use SilverStripe\Core\Extension;
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\FieldType\DBField;
 use function array_key_exists;
 use function is_array;
 use function is_string;
 
 final readonly class TypeResolver
 {
+    /**
+     * @var array<class-string<DBField>, class-string<Type>>
+     */
+    private const DBFIELD_TO_TYPE_MAPPING = [
+        'SilverStripe\ORM\FieldType\DBBoolean' => BooleanType::class,
+        'SilverStripe\ORM\FieldType\DBDecimal' => FloatType::class,
+        'SilverStripe\ORM\FieldType\DBFloat' => FloatType::class,
+        'SilverStripe\ORM\FieldType\DBInt' => IntegerType::class,
+    ];
+
     public function __construct(
         private ConfigurationResolver $configurationResolver,
         private InjectionResolver $injectionResolver,
@@ -29,6 +49,36 @@ final readonly class TypeResolver
         private TypeFactory $typeFactory,
         private TypeResolverRegistryProviderInterface $typeResolverRegistryProvider
     ) {
+    }
+
+    /**
+     * Resolve all injected property types using the registered resolvers.
+     *
+     * @see \Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface
+     * @return Type[]
+     */
+    public function resolveInjectedPropertyTypes(ClassReflection $classReflection): array
+    {
+        $types = [];
+
+        foreach ($classReflection->getNativeReflection()->getProperties(ReflectionProperty::IS_PRIVATE) as $reflectionProperty) {
+            $property = $this->reflectionResolver->resolveConfigurationPropertyReflection($classReflection, $reflectionProperty->getName());
+
+            if (!$property instanceof PropertyReflection) {
+                continue;
+            }
+
+            $types = [...$types, ...$this->resolveInjectedPropertyTypesFromConfigurationProperty($classReflection, $reflectionProperty->getName())];
+        }
+
+        if (!$classReflection->getParentClass() instanceof ClassReflection) {
+            return $types;
+        }
+
+        return [
+            ...$types,
+            ...$this->resolveInjectedPropertyTypes($classReflection->getParentClass()),
+        ];
     }
 
     /**
@@ -69,6 +119,36 @@ final readonly class TypeResolver
         return [];
     }
 
+    /**
+     * Resolve all injected method types using the registered resolvers.
+     *
+     * @see \Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface
+     * @return Type[]
+     */
+    public function resolveInjectedMethodTypes(ClassReflection $classReflection): array
+    {
+        $types = [];
+
+        foreach ($classReflection->getNativeReflection()->getProperties(ReflectionProperty::IS_PRIVATE) as $reflectionProperty) {
+            $property = $this->reflectionResolver->resolveConfigurationPropertyReflection($classReflection, $reflectionProperty->getName());
+
+            if (!$property instanceof PropertyReflection) {
+                continue;
+            }
+
+            $types = [...$types, ...$this->resolveInjectedMethodTypesFromConfigurationProperty($classReflection, $reflectionProperty->getName())];
+        }
+
+        if (!$classReflection->getParentClass() instanceof ClassReflection) {
+            return $types;
+        }
+
+        return [
+            ...$types,
+            ...$this->resolveInjectedMethodTypes($classReflection->getParentClass()),
+        ];
+    }
+
     public function resolveConfigurationPropertyType(?ClassReflection $classReflection, string $propertyName): ?Type
     {
         $property = $this->reflectionResolver->resolveConfigurationPropertyReflection($classReflection, $propertyName);
@@ -78,6 +158,67 @@ final readonly class TypeResolver
         }
 
         return $property->getReadableType();
+    }
+
+    /**
+     * @param class-string $className
+     * @param class-string<DBField> $fieldType
+     */
+    public function resolveDBFieldType(string $className, string $fieldName, string $fieldType): Type
+    {
+        // Instantiate the object so we can check existing properties
+        $object = $this->injectionResolver->create($className);
+        $objectClassReflection = $this->reflectionProvider->getClass($object::class);
+
+        // If there is an existing property tag, return that first
+        foreach ($objectClassReflection->getPropertyTags() as $propertyTagName => $propertyTag) {
+            if ($propertyTagName !== $fieldName) {
+                continue;
+            }
+
+            $propertyType = $propertyTag->getReadableType();
+
+            if (!$propertyType instanceof Type) {
+                continue;
+            }
+
+            return $propertyType;
+        }
+
+        /** @var DBField $field */
+        $field = $this->injectionResolver->create($fieldType, 'Temp');
+        $classReflection = $this->reflectionProvider->getClass($field::class);
+
+        foreach (self::DBFIELD_TO_TYPE_MAPPING as $dbClass => $type) {
+            if (!$this->reflectionProvider->hasClass($dbClass)) {
+                continue;
+            }
+
+            if (!$classReflection->is($dbClass)) {
+                continue;
+            }
+
+            return new $type();
+        }
+
+        // Fallback case
+        if (!$object instanceof DataObject && !$object instanceof Extension) {
+            return new StringType();
+        }
+
+        // If the object is an extension, create a mock DataObject and add the extension to it
+        if ($object instanceof Extension) {
+            $object = new class(creationType: DataObject::CREATE_SINGLETON) extends DataObject implements TestOnly {};
+            $object::add_extension($className);
+        }
+
+        // Check if the field is required
+        if ($object->getCMSCompositeValidator()->fieldIsRequired($fieldName)) {
+            return new StringType();
+        }
+
+        // This is not required and therefore is nullable
+        return TypeCombinator::addNull(new StringType());
     }
 
     /**

@@ -6,28 +6,27 @@ namespace Cambis\Silverstan\TypeResolver\TypeResolver;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
-use Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface;
+use Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverAwareInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
-use function is_array;
+use SilverStripe\ORM\FieldType\DBField;
 
-final class SimpleRelationMethodTypeResolver implements MethodTypeResolverInterface, TypeResolverAwareInterface
+final class FixedFieldsPropertyTypeResolver implements PropertyTypeResolverInterface, TypeResolverAwareInterface
 {
     private TypeResolver $typeResolver;
 
     public function __construct(
-        private readonly string $configurationPropertyName,
         private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly ConfigurationResolver $configurationResolver
+        private readonly ConfigurationResolver $configurationResolver,
     ) {
     }
 
     #[Override]
     public function getConfigurationPropertyName(): string
     {
-        return $this->configurationPropertyName;
+        return 'fixed_fields';
     }
 
     #[Override]
@@ -37,19 +36,21 @@ final class SimpleRelationMethodTypeResolver implements MethodTypeResolverInterf
             return [];
         }
 
-        $properties = [];
-        $relation = $this->configurationResolver->get($classReflection->getName(), $this->configurationPropertyName);
+        $fixedFields = [
+            'Title' => 'SilverStripe\ORM\FieldType\DBVarchar',
+            'OldID' => 'SilverStripe\ORM\FieldType\DBInt',
+            'ObsoleteClassName' => 'SilverStripe\ORM\FieldType\DBClassName',
+            ...(array) $this->configurationResolver->get('SilverStripe\ORM\DataObject', $this->getConfigurationPropertyName()),
+        ];
 
-        if (!is_array($relation) || $relation === []) {
-            return $properties;
+        $types = [];
+
+        /** @var class-string<DBField>[] $fixedFields */
+        foreach ($fixedFields as $fieldName => $fieldType) {
+            $types[$fieldName] = $this->typeResolver->resolveDBFieldType('SilverStripe\ORM\DataObject', $fieldName, $fieldType);
         }
 
-        /** @var string[] $relation */
-        foreach ($relation as $fieldName => $fieldType) {
-            $properties[$fieldName] = $this->typeResolver->resolveRelationFieldType($fieldType);
-        }
-
-        return $properties;
+        return $types;
     }
 
     #[Override]

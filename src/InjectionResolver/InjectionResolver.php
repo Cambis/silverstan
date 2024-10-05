@@ -7,7 +7,7 @@ namespace Cambis\Silverstan\InjectionResolver;
 use Exception;
 use SilverStripe\Core\Injector\Injector;
 
-final class InjectionResolver
+final readonly class InjectionResolver
 {
     /**
      * @template T
