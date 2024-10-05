@@ -12,7 +12,7 @@ use SilverStripe\ORM\DataObject;
  * @property string $TypehintedField
  */
 
-final class Foo extends DataObject implements TestOnly
+class Foo extends DataObject implements TestOnly
 {
     private static array $db = [
         'Boolean' => 'Boolean',

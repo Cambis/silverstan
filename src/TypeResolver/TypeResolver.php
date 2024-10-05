@@ -20,6 +20,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use ReflectionProperty;
 use SilverStripe\Core\Extension;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\DataObject;
@@ -48,6 +49,36 @@ final readonly class TypeResolver
         private TypeFactory $typeFactory,
         private TypeResolverRegistryProviderInterface $typeResolverRegistryProvider
     ) {
+    }
+
+    /**
+     * Resolve all injected property types using the registered resolvers.
+     *
+     * @see \Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface
+     * @return Type[]
+     */
+    public function resolveInjectedPropertyTypes(ClassReflection $classReflection): array
+    {
+        $types = [];
+
+        foreach ($classReflection->getNativeReflection()->getProperties(ReflectionProperty::IS_PRIVATE) as $reflectionProperty) {
+            $property = $this->reflectionResolver->resolveConfigurationPropertyReflection($classReflection, $reflectionProperty->getName());
+
+            if (!$property instanceof PropertyReflection) {
+                continue;
+            }
+
+            $types = [...$types, ...$this->resolveInjectedPropertyTypesFromConfigurationProperty($classReflection, $reflectionProperty->getName())];
+        }
+
+        if (!$classReflection->getParentClass() instanceof ClassReflection) {
+            return $types;
+        }
+
+        return [
+            ...$types,
+            ...$this->resolveInjectedPropertyTypes($classReflection->getParentClass()),
+        ];
     }
 
     /**
@@ -88,6 +119,36 @@ final readonly class TypeResolver
         return [];
     }
 
+    /**
+     * Resolve all injected method types using the registered resolvers.
+     *
+     * @see \Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface
+     * @return Type[]
+     */
+    public function resolveInjectedMethodTypes(ClassReflection $classReflection): array
+    {
+        $types = [];
+
+        foreach ($classReflection->getNativeReflection()->getProperties(ReflectionProperty::IS_PRIVATE) as $reflectionProperty) {
+            $property = $this->reflectionResolver->resolveConfigurationPropertyReflection($classReflection, $reflectionProperty->getName());
+
+            if (!$property instanceof PropertyReflection) {
+                continue;
+            }
+
+            $types = [...$types, ...$this->resolveInjectedMethodTypesFromConfigurationProperty($classReflection, $reflectionProperty->getName())];
+        }
+
+        if (!$classReflection->getParentClass() instanceof ClassReflection) {
+            return $types;
+        }
+
+        return [
+            ...$types,
+            ...$this->resolveInjectedMethodTypes($classReflection->getParentClass()),
+        ];
+    }
+
     public function resolveConfigurationPropertyType(?ClassReflection $classReflection, string $propertyName): ?Type
     {
         $property = $this->reflectionResolver->resolveConfigurationPropertyReflection($classReflection, $propertyName);
@@ -105,6 +166,25 @@ final readonly class TypeResolver
      */
     public function resolveDBFieldType(string $className, string $fieldName, string $fieldType): Type
     {
+        // Instantiate the object so we can check existing properties
+        $object = $this->injectionResolver->create($className);
+        $objectClassReflection = $this->reflectionProvider->getClass($object::class);
+
+        // If there is an existing property tag, return that first
+        foreach ($objectClassReflection->getPropertyTags() as $propertyTagName => $propertyTag) {
+            if ($propertyTagName !== $fieldName) {
+                continue;
+            }
+
+            $propertyType = $propertyTag->getReadableType();
+
+            if (!$propertyType instanceof Type) {
+                continue;
+            }
+
+            return $propertyType;
+        }
+
         /** @var DBField $field */
         $field = $this->injectionResolver->create($fieldType, 'Temp');
         $classReflection = $this->reflectionProvider->getClass($field::class);
@@ -121,9 +201,6 @@ final readonly class TypeResolver
             return new $type();
         }
 
-        // Instantiate the object so we can check for required fields
-        $object = $this->injectionResolver->create($className);
-
         // Fallback case
         if (!$object instanceof DataObject && !$object instanceof Extension) {
             return new StringType();
@@ -131,7 +208,7 @@ final readonly class TypeResolver
 
         // If the object is an extension, create a mock DataObject and add the extension to it
         if ($object instanceof Extension) {
-            $object = new class extends DataObject implements TestOnly {};
+            $object = new class(creationType: DataObject::CREATE_SINGLETON) extends DataObject implements TestOnly {};
             $object::add_extension($className);
         }
 

@@ -42,7 +42,14 @@ final readonly class ReflectionResolver
             $propertyReflections = [...$propertyReflections, ...$this->resolveInjectedPropertyReflectionsFromConfigurationProperty($classReflection, $reflectionProperty->getName())];
         }
 
-        return $propertyReflections;
+        if (!$classReflection->getParentClass() instanceof ClassReflection) {
+            return $propertyReflections;
+        }
+
+        return [
+            ...$propertyReflections,
+            ...$this->resolveInjectedPropertyReflections($classReflection->getParentClass()),
+        ];
     }
 
     /**
@@ -84,7 +91,14 @@ final readonly class ReflectionResolver
             $methodReflections = [...$methodReflections, ...$this->resolveInjectedMethodReflectionsFromConfigurationProperty($classReflection, $reflectionProperty->getName())];
         }
 
-        return $methodReflections;
+        if (!$classReflection->getParentClass() instanceof ClassReflection) {
+            return $methodReflections;
+        }
+
+        return [
+            ...$methodReflections,
+            ...$this->resolveInjectedMethodReflections($classReflection->getParentClass()),
+        ];
     }
 
     /**

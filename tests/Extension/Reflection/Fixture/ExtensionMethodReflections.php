@@ -7,6 +7,6 @@ use function PHPStan\Testing\assertType;
 
 $foo = Foo::create();
 
-assertType('bool', $foo->publicMethod());
-assertType('bool', $foo->protectedMethod());
-assertType('*ERROR*', $foo->privateMethod());
+assertType('bool', $foo->publicMethod(true));
+assertType('bool', $foo->protectedMethod(true));
+assertType('*ERROR*', $foo->privateMethod(true));

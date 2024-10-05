@@ -70,12 +70,6 @@ services:
         class: Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProviderInterface
         factory: Cambis\Silverstan\ReflectionResolver\LazyReflectionResolverRegistryProvider
     -
-        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\ExtensionMethodReflectionResolver
-        tags: [silverstan.reflectionResolver.methodReflectionResolver]
-    -
-        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\ExtensionPropertyReflectionResolver
-        tags: [silverstan.reflectionResolver.propertyReflectionResolver]
-    -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationMethodReflectionResolver
         tags: [silverstan.reflectionResolver.methodReflectionResolver]
         arguments:
@@ -85,6 +79,11 @@ services:
         tags: [silverstan.reflectionResolver.methodReflectionResolver]
         arguments:
             configurationPropertyName: 'belongs_to'
+    -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationMethodReflectionResolver
+        tags: [silverstan.reflectionResolver.methodReflectionResolver]
+        arguments:
+            configurationPropertyName: 'extensions'
     -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationMethodReflectionResolver
         tags: [silverstan.reflectionResolver.methodReflectionResolver]
@@ -104,12 +103,17 @@ services:
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
         arguments:
+            configurationPropertyName: 'belongs_to'
+    -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationPropertyReflectionResolver
+        tags: [silverstan.reflectionResolver.propertyReflectionResolver]
+        arguments:
             configurationPropertyName: 'db'
     -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
         arguments:
-            configurationPropertyName: 'belongs_to'
+            configurationPropertyName: 'extensions'
     -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
@@ -126,10 +130,14 @@ services:
         class: Cambis\Silverstan\TypeResolver\TypeResolver\DBPropertyTypeResolver
         tags: [silverstan.typeResolver.propertyTypeResolver]
     -
-        class: Cambis\Silverstan\TypeResolver\TypeResolver\ExtensionTypeResolver
-        tags:
-            - silverstan.typeResolver.methodTypeResolver
-            - silverstan.typeResolver.propertyTypeResolver
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\ExtensionMethodTypeResolver
+        tags: [silverstan.typeResolver.methodTypeResolver]
+    -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\ExtensionPropertyTypeResolver
+        tags: [silverstan.typeResolver.propertyTypeResolver]
+    -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\FixedFieldsPropertyTypeResolver
+        tags: [silverstan.typeResolver.propertyTypeResolver]
     -
         class: Cambis\Silverstan\TypeResolver\TypeResolver\ManyRelationMethodTypeResolver
         tags: [silverstan.typeResolver.methodTypeResolver]

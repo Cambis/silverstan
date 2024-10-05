@@ -2,11 +2,24 @@
 
 namespace Cambis\Silverstan\Tests\Extension\Reflection\Fixture;
 
+use Cambis\Silverstan\Tests\Extension\Reflection\Source\Model\Bar;
 use Cambis\Silverstan\Tests\Extension\Reflection\Source\Model\Foo;
 use function PHPStan\Testing\assertType;
+use function sprintf;
 
 $foo = Foo::create();
+$bar = Bar::create();
 
+// Fixed fields
+assertType('int', $foo->ID);
+assertType('int', $foo->OldID);
+assertType('string', $foo->Title);
+assertType(sprintf('class-string<%s>', Foo::class), $foo->ClassName);
+assertType('string', $foo->LastEdited);
+assertType('string', $foo->Created);
+assertType(sprintf('class-string<%s>|null', Foo::class), $foo->ObsoleteClassName);
+
+// Basic fields
 assertType('bool', $foo->Boolean);
 assertType('float', $foo->Currency);
 assertType('string|null', $foo->Date);
@@ -22,3 +35,20 @@ assertType('string|null', $foo->Time);
 assertType('string|null', $foo->Varchar);
 assertType('string', $foo->RequiredField);
 assertType('string', $foo->TypehintedField);
+
+// Inherited fields
+assertType('bool', $bar->Boolean);
+assertType('float', $bar->Currency);
+assertType('string|null', $bar->Date);
+assertType('float', $bar->Decimal);
+assertType('string|null', $bar->Enum);
+assertType('string|null', $bar->HTMLText);
+assertType('string|null', $bar->HTMLVarchar);
+assertType('int', $bar->Int);
+assertType('float', $bar->Percentage);
+assertType('string|null', $bar->Datetime);
+assertType('string|null', $bar->Text);
+assertType('string|null', $bar->Time);
+assertType('string|null', $bar->Varchar);
+assertType('string', $bar->RequiredField);
+assertType('string', $bar->TypehintedField);

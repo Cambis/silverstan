@@ -11,6 +11,7 @@ use Cambis\Silverstan\TypeResolver\Contract\TypeResolverAwareInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\Type;
 use SilverStripe\ORM\FieldType\DBField;
 use function is_array;
 
@@ -33,13 +34,32 @@ final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, Typ
     #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
+        return [
+            ...$this->resolveTypes($classReflection),
+            ...$this->typeResolver->resolveInjectedPropertyTypesFromConfigurationProperty($classReflection, 'fixed_fields'),
+        ];
+    }
+
+    #[Override]
+    public function setTypeResolver(TypeResolver $typeResolver): static
+    {
+        $this->typeResolver = $typeResolver;
+
+        return $this;
+    }
+
+    /**
+     * @return Type[]
+     */
+    private function resolveTypes(ClassReflection $classReflection): array
+    {
         if (!$this->classReflectionAnalyser->isDataObject($classReflection)) {
             return [];
         }
 
         $properties = [];
 
-        $db = $this->configurationResolver->get($classReflection->getName(), 'db');
+        $db = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName());
 
         if (!is_array($db) || $db === []) {
             return $properties;
@@ -50,14 +70,13 @@ final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, Typ
             $properties[$fieldName] = $this->typeResolver->resolveDBFieldType($classReflection->getName(), $fieldName, $fieldType);
         }
 
-        return $properties;
-    }
+        if (!$classReflection->getParentClass() instanceof ClassReflection) {
+            return $properties;
+        }
 
-    #[Override]
-    public function setTypeResolver(TypeResolver $typeResolver): static
-    {
-        $this->typeResolver = $typeResolver;
-
-        return $this;
+        return [
+            ...$properties,
+            ...$this->resolveTypes($classReflection->getParentClass()),
+        ];
     }
 }
