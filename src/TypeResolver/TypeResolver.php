@@ -21,13 +21,11 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use ReflectionProperty;
-use SilverStripe\Core\Extension;
-use SilverStripe\Dev\TestOnly;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use function array_key_exists;
 use function is_array;
 use function is_string;
+use function strtok;
 
 final readonly class TypeResolver
 {
@@ -166,9 +164,8 @@ final readonly class TypeResolver
      */
     public function resolveDBFieldType(string $className, string $fieldName, string $fieldType): Type
     {
-        // Instantiate the object so we can check existing properties
-        $object = $this->injectionResolver->create($className);
-        $objectClassReflection = $this->reflectionProvider->getClass($object::class);
+        $objectClassName = $this->configurationResolver->resolveClassName($className);
+        $objectClassReflection = $this->reflectionProvider->getClass($objectClassName);
 
         // If there is an existing property tag, return that first
         foreach ($objectClassReflection->getPropertyTags() as $propertyTagName => $propertyTag) {
@@ -185,39 +182,21 @@ final readonly class TypeResolver
             return $propertyType;
         }
 
-        /** @var DBField $field */
-        $field = $this->injectionResolver->create($fieldType, 'Temp');
-        $classReflection = $this->reflectionProvider->getClass($field::class);
+        $field = $this->configurationResolver->resolveClassName(strtok($fieldType, '('));
+        $fieldClassReflection = $this->reflectionProvider->getClass($field);
 
         foreach (self::DBFIELD_TO_TYPE_MAPPING as $dbClass => $type) {
             if (!$this->reflectionProvider->hasClass($dbClass)) {
                 continue;
             }
 
-            if (!$classReflection->is($dbClass)) {
+            if (!$fieldClassReflection->is($dbClass)) {
                 continue;
             }
 
             return new $type();
         }
 
-        // Fallback case
-        if (!$object instanceof DataObject && !$object instanceof Extension) {
-            return new StringType();
-        }
-
-        // If the object is an extension, create a mock DataObject and add the extension to it
-        if ($object instanceof Extension) {
-            $object = new class(creationType: DataObject::CREATE_SINGLETON) extends DataObject implements TestOnly {};
-            $object::add_extension($className);
-        }
-
-        // Check if the field is required
-        if ($object->getCMSCompositeValidator()->fieldIsRequired($fieldName)) {
-            return new StringType();
-        }
-
-        // This is not required and therefore is nullable
         return TypeCombinator::addNull(new StringType());
     }
 

@@ -1,8 +1,6 @@
 includes:
     - rules.neon
 parameters:
-    bootstrapFiles:
-        - bootstrap.php
     universalObjectCratesClasses:
         - SilverStripe\Core\Config\Config_ForClass
         - SilverStripe\Forms\GridField\GridState_Data
@@ -56,7 +54,7 @@ services:
         arguments:
             className: 'SilverStripe\View\ViewableData'
     -
-        class: Cambis\Silverstan\InjectionResolver\InjectionResolver
+        class: Cambis\Silverstan\Finder\SilverstripeConfigurationFileFinder
     -
         class: Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor
         tags: [phpstan.parser.richParserNodeVisitor]

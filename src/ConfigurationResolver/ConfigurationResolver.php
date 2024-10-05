@@ -4,13 +4,23 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ConfigurationResolver;
 
-use Cambis\Silverstan\InjectionResolver\InjectionResolver;
+use Cambis\Silverstan\Finder\SilverstripeConfigurationFileFinder;
+use Composer\InstalledVersions;
 use PHPStan\Reflection\ReflectionProvider;
-use SilverStripe\Core\Config\Config;
+use SilverStripe\Config\Collections\ConfigCollectionInterface;
+use SilverStripe\Config\Collections\MemoryConfigCollection;
+use SilverStripe\Config\Collections\MutableConfigCollectionInterface;
+use SilverStripe\Config\Transformer\PrivateStaticTransformer;
+use SilverStripe\Config\Transformer\YamlTransformer;
+use Symfony\Component\Finder\Finder;
+use function array_key_exists;
+use function class_exists;
 use function explode;
+use function getenv;
+use function is_array;
 use function preg_match;
 
-final readonly class ConfigurationResolver
+final class ConfigurationResolver
 {
     /**
      * @var string
@@ -18,9 +28,18 @@ final readonly class ConfigurationResolver
      */
     private const EXTENSION_CLASSNAME_REGEX = '/^([^(]*)/';
 
+    private ?MutableConfigCollectionInterface $configCollection = null;
+
+    private ?Finder $finder = null;
+
+    /**
+     * @var class-string[]
+     */
+    private array $classes = [];
+
     public function __construct(
-        private InjectionResolver $injectionResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly SilverstripeConfigurationFileFinder $silverstripeConfigurationFinder,
     ) {
     }
 
@@ -29,7 +48,34 @@ final readonly class ConfigurationResolver
      */
     public function get(string $className, string $name): mixed
     {
-        return Config::inst()->get($className, $name, Config::EXCLUDE_EXTRA_SOURCES | Config::UNINHERITED);
+        if ($this->getConfigCollection()->exists($className, $name)) {
+            return $this->getConfigCollection()->get($className, $name);
+        }
+
+        $this->generateConfigForClass($className);
+
+        return $this->getConfigCollection()->get($className, $name);
+    }
+
+    public function resolveClassName(string $className): string
+    {
+        $classConfig = $this->get('SilverStripe\Core\Injector\Injector', $className);
+
+        if (!is_array($classConfig)) {
+            return $className;
+        }
+
+        if (!array_key_exists('class', $classConfig)) {
+            return $className;
+        }
+
+        $injectedClassName = $classConfig['class'];
+
+        if (!$this->reflectionProvider->hasClass($injectedClassName)) {
+            return $className;
+        }
+
+        return $injectedClassName;
     }
 
     public function resolveDotNotation(string $fieldType): string
@@ -53,6 +99,61 @@ final readonly class ConfigurationResolver
             return null;
         }
 
-        return $this->injectionResolver->resolveInjectedClassName($resolved);
+        return $this->resolveClassName($resolved);
+    }
+
+    /**
+     * Generate a config entry for a given class.
+     *
+     * @param class-string $className
+     * @see https://github.com/silverstripe/silverstripe-config/blob/2/docs/usage.md
+     */
+    private function generateConfigForClass(string $className): void
+    {
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return;
+        }
+
+        if (!array_key_exists($className, $this->classes)) {
+            $this->classes[] = $className;
+        }
+
+        if (!$this->finder instanceof Finder) {
+            $this->finder = $this->silverstripeConfigurationFinder->findConfigurationFiles();
+        }
+
+        (new PrivateStaticTransformer($this->classes))
+            ->transform($this->getConfigCollection());
+
+        (new YamlTransformer(__DIR__ . '/../../', $this->finder))
+            ->addRule('classexists', function (string $class): bool {
+                return $this->reflectionProvider->hasClass($class);
+            })
+            ->addRule('envvarset', static function (string $var): bool {
+                return getenv($var) !== false;
+            })
+            ->addRule('constantdefined', function (string $const): bool {
+                return $this->reflectionProvider->hasClass($const);
+            })
+            ->addRule('moduleexists', static function (string $module): bool {
+                if (!class_exists(InstalledVersions::class)) {
+                    return true;
+                }
+
+                return InstalledVersions::isInstalled($module, true);
+            })
+            ->addRule('environment', static function (string $environment): bool {
+                return true;
+            })
+            ->transform($this->getConfigCollection());
+    }
+
+    private function getConfigCollection(): MutableConfigCollectionInterface
+    {
+        if (!$this->configCollection instanceof ConfigCollectionInterface) {
+            $this->configCollection = new MemoryConfigCollection();
+        }
+
+        return $this->configCollection;
     }
 }
