@@ -26,6 +26,7 @@ final class SilverstripeFileFinder
             ->files()
             ->name('/\.php$/')
             ->in(BASE_PATH)
+            ->exclude('stubs')
             ->ignoreVCSIgnored(true);
 
         return $vendorFiles->append($appFiles);

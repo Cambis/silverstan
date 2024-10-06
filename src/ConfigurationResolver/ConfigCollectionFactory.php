@@ -37,8 +37,18 @@ final class ConfigCollectionFactory
      */
     public function create(): ConfigCollectionInterface
     {
+        // Return a cached version is possible
         if (self::$cachedConfigCollection instanceof ConfigCollectionInterface) {
             return self::$cachedConfigCollection;
+        }
+
+        // Add Page/PageController stubs which may be required
+        if (!class_exists('Page')) {
+            require_once __DIR__ . '/../../stubs/Page.php';
+        }
+
+        if (!class_exists('PageController')) {
+            require_once __DIR__ . '/../../stubs/PageController.php';
         }
 
         $configCollection = (new MemoryConfigCollection())->transform(
@@ -104,7 +114,8 @@ final class ConfigCollectionFactory
                 continue;
             }
 
-            $classNames[] = $class->namespacedName->toString();
+            $className = $class->namespacedName->toString();
+            $classNames[] = $className;
         }
 
         return $classNames;
