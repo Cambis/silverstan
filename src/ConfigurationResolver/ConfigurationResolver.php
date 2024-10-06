@@ -4,26 +4,14 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ConfigurationResolver;
 
-use Cambis\Silverstan\Finder\SilverstripeConfigurationFileFinder;
-use Composer\InstalledVersions;
 use PHPStan\Reflection\ReflectionProvider;
 use SilverStripe\Config\Collections\ConfigCollectionInterface;
-use SilverStripe\Config\Collections\MemoryConfigCollection;
-use SilverStripe\Config\Collections\MutableConfigCollectionInterface;
-use SilverStripe\Config\Transformer\PrivateStaticTransformer;
-use SilverStripe\Config\Transformer\YamlTransformer;
-use Symfony\Component\Finder\Finder;
 use function array_key_exists;
-use function class_exists;
-use function defined;
 use function explode;
-use function extension_loaded;
-use function getenv;
 use function is_array;
 use function preg_match;
-use const BASE_PATH;
 
-final class ConfigurationResolver
+final readonly class ConfigurationResolver
 {
     /**
      * @var string
@@ -31,18 +19,9 @@ final class ConfigurationResolver
      */
     private const EXTENSION_CLASSNAME_REGEX = '/^([^(]*)/';
 
-    private ?MutableConfigCollectionInterface $configCollection = null;
-
-    private ?Finder $finder = null;
-
-    /**
-     * @var class-string[]
-     */
-    private array $classes = [];
-
     public function __construct(
-        private readonly ReflectionProvider $reflectionProvider,
-        private readonly SilverstripeConfigurationFileFinder $silverstripeConfigurationFinder,
+        private ConfigCollectionInterface $configCollection,
+        private ReflectionProvider $reflectionProvider,
     ) {
     }
 
@@ -51,13 +30,7 @@ final class ConfigurationResolver
      */
     public function get(string $className, string $name): mixed
     {
-        if ($this->getConfigCollection()->exists($className, $name)) {
-            return $this->getConfigCollection()->get($className, $name);
-        }
-
-        $this->generateConfigForClass($className);
-
-        return $this->getConfigCollection()->get($className, $name);
+        return $this->configCollection->get($className, $name);
     }
 
     public function resolveClassName(string $className): string
@@ -103,66 +76,5 @@ final class ConfigurationResolver
         }
 
         return $this->resolveClassName($resolved);
-    }
-
-    /**
-     * Generate a config entry for a given class.
-     *
-     * @param class-string $className
-     * @see https://github.com/silverstripe/silverstripe-config/blob/2/docs/usage.md
-     */
-    private function generateConfigForClass(string $className): void
-    {
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return;
-        }
-
-        if (!array_key_exists($className, $this->classes)) {
-            $this->classes[] = $className;
-        }
-
-        if (!$this->finder instanceof Finder) {
-            $this->finder = $this->silverstripeConfigurationFinder->findConfigurationFiles();
-        }
-
-        (new PrivateStaticTransformer($this->classes))
-            ->transform($this->getConfigCollection());
-
-        (new YamlTransformer(BASE_PATH, $this->finder))
-            ->addRule('classexists', function (string $class): bool {
-                return $this->reflectionProvider->hasClass($class);
-            })
-            ->addRule('envvarset', static function (string $var): bool {
-                return getenv($var) !== false;
-            })
-            ->addRule('constantdefined', function (string $const): bool {
-                return defined($const);
-            })
-            ->addRule('moduleexists', static function (string $module): bool {
-                if (!class_exists(InstalledVersions::class)) {
-                    return true;
-                }
-
-                return InstalledVersions::isInstalled($module, true);
-            })
-            ->addRule('environment', static function (string $environment): bool {
-                return true;
-            })
-            ->addRule('envorconstant', static function (string $var): bool {
-                return getenv($var) !== false || defined($var);
-            })
-            ->addRule('extensionloaded', static function (string $extension) {
-                return extension_loaded($extension);
-            })
-            ->transform($this->getConfigCollection());
-    }
-
-    private function getConfigCollection(): MutableConfigCollectionInterface
-    {
-        if (!$this->configCollection instanceof ConfigCollectionInterface) {
-            $this->configCollection = new MemoryConfigCollection();
-        }
-
-        return $this->configCollection;
     }
 }
