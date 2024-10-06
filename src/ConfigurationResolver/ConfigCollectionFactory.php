@@ -110,7 +110,7 @@ final class ConfigCollectionFactory
                 continue;
             }
 
-            if (!$class->namespacedName instanceof Name) {
+            if ($this->shouldSkipClass($class)) {
                 continue;
             }
 
@@ -119,5 +119,30 @@ final class ConfigCollectionFactory
         }
 
         return $classNames;
+    }
+
+    private function shouldSkipClass(Class_ $class): bool
+    {
+        if (!$class->namespacedName instanceof Name) {
+            return true;
+        }
+
+        foreach ($class->implements as $interface) {
+            if ($this->isNameTestOnly($interface) && !$this->shouldIncludeTests()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isNameTestOnly(Name $name): bool
+    {
+        return $name->toString() === 'SilverStripe\Dev\TestOnly';
+    }
+
+    private function shouldIncludeTests(): bool
+    {
+        return defined('PHPUNIT_COMPOSER_INSTALL') || defined('__PHPUNIT_PHAR__');
     }
 }
