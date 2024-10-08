@@ -27,16 +27,12 @@ $globalVars = CLIRequestBuilder::cleanEnvironment($globalVars);
 Environment::setVariables($globalVars);
 
 // Mock a Silverstripe application in order to access the Configuration API
-try {
-    $kernel = new class(BASE_PATH) extends DatabaselessKernel {
-        protected function getIncludeTests()
-        {
-            // Only include `\SilverStripe\Dev\TestOnly` if we are running PHPUnit
-            return defined('PHPUNIT_COMPOSER_INSTALL') || defined('__PHPUNIT_PHAR__');
-        }
-    };
+$kernel = new class(BASE_PATH) extends DatabaselessKernel {
+    protected function getIncludeTests()
+    {
+        // Yes, we want to include test classes so that we can analyse their configuration properties
+        return true;
+    }
+};
 
-    $kernel->boot();
-} catch (Throwable $e) {
-    echo $e->getMessage();
-}
+$kernel->boot();
