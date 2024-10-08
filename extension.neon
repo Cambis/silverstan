@@ -11,9 +11,6 @@ services:
     -
         class: Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory
     -
-        class: SilverStripe\Config\Collections\ConfigCollectionInterface
-        factory: @Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory::create
-    -
         class: Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver
     -
         class: Cambis\Silverstan\Extension\ClassPropertiesNode\ConfigurationPropertiesExtension
@@ -60,8 +57,6 @@ services:
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
         arguments:
             className: 'SilverStripe\View\ViewableData'
-    -
-        class: Cambis\Silverstan\Finder\SilverstripeFileFinder
     -
         class: Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor
         tags: [phpstan.parser.richParserNodeVisitor]

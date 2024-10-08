@@ -12,6 +12,7 @@
     "php": "^8.1",
     "phpstan/phpstan": "^1.12",
     "silverstripe/config": "^2.0",
+    "silverstripe/framework": "^5.2",
     "symplify/rule-doc-generator-contracts": "^11.1"
   },
   "suggest": {
