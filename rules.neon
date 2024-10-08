@@ -1,5 +1,6 @@
 parameters:
     silverstan:
+        includeTestOnly: false
         requireParentCallInOverridenMethod:
             enabled: true
             classes:
@@ -35,6 +36,7 @@ parameters:
 
 parametersSchema:
     silverstan: structure([
+        includeTestOnly: bool()
         requireParentCallInOverridenMethod: structure([
             enabled: bool()
             classes: arrayOf(

@@ -29,6 +29,6 @@ final class ConfigForClassGetReturnTypeExtensionTest extends TypeInferenceTestCa
     #[Override]
     public static function getAdditionalConfigFiles(): array
     {
-        return [__DIR__ . '/../../../extension.neon'];
+        return [__DIR__ . '/../../tests.neon'];
     }
 }

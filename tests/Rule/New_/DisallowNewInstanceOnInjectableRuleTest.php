@@ -30,7 +30,7 @@ final class DisallowNewInstanceOnInjectableRuleTest extends RuleTestCase
     public static function getAdditionalConfigFiles(): array
     {
         return [
-            __DIR__ . '/../../../extension.neon',
+            __DIR__ . '/../../tests.neon',
         ];
     }
 

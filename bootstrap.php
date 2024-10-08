@@ -2,11 +2,20 @@
 
 declare(strict_types=1);
 
+use Cambis\Silverstan\Application\SilverstanKernel;
+use PHPStan\DependencyInjection\Container;
+use PHPStan\ShouldNotHappenException;
 use SilverStripe\Control\CLIRequestBuilder;
-use SilverStripe\Core\DatabaselessKernel;
 use SilverStripe\Core\Environment;
 use SilverStripe\ORM\Connect\NullDatabase;
 use SilverStripe\ORM\DB;
+
+if (!$container instanceof Container) {
+    throw new ShouldNotHappenException('The autoloader did not receive the container.');
+}
+
+/** @var array{includeTestOnly: bool} $silverstanParams */
+$silverstanParams = $container->getParameter('silverstan');
 
 // Add Page/PageController stubs which may be required
 if (!class_exists(Page::class)) {
@@ -27,12 +36,5 @@ $globalVars = CLIRequestBuilder::cleanEnvironment($globalVars);
 Environment::setVariables($globalVars);
 
 // Mock a Silverstripe application in order to access the Configuration API
-$kernel = new class(BASE_PATH) extends DatabaselessKernel {
-    protected function getIncludeTests()
-    {
-        // Yes, we want to include test classes so that we can analyse their configuration properties
-        return true;
-    }
-};
-
+$kernel = new SilverstanKernel(BASE_PATH, $silverstanParams['includeTestOnly']);
 $kernel->boot();

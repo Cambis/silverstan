@@ -40,4 +40,17 @@ includes:
 
 ## Configuration 🚧
 
+### Rules
 Each rule can be enabled/disabled individually using the configuration options, please refer to the [rules overview](docs/rules_overview.md) for the available options.
+
+### Analysing `SilverStripe\Dev\TestOnly` classes
+Complex analysis of `SilverStripe\Dev\TestOnly` classes is disabled by default. This is because these classes often contain dependencies that aren't provided by Silverstripe.
+
+To enable complex analysis of these classes, please check the following option in your configuration file:
+```yml
+parameters:
+    silverstan:
+        includeTestOnly: true
+```
+
+If PHPStan complains about missing classes, be sure to add the corresponding package to your dev dependencies.

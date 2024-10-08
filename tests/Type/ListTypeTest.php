@@ -30,6 +30,6 @@ final class ListTypeTest extends TypeInferenceTestCase
     #[Override]
     public static function getAdditionalConfigFiles(): array
     {
-        return [__DIR__ . '/../../extension.neon'];
+        return [__DIR__ . '/../tests.neon'];
     }
 }

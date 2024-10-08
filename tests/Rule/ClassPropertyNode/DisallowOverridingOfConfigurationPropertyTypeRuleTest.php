@@ -32,7 +32,7 @@ final class DisallowOverridingOfConfigurationPropertyTypeRuleTest extends RuleTe
     public static function getAdditionalConfigFiles(): array
     {
         return [
-            __DIR__ . '/../../../extension.neon',
+            __DIR__ . '/../../tests.neon',
         ];
     }
 
