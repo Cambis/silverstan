@@ -1,5 +1,5 @@
 parameters:
-    silverstanRules:
+    silverstan:
         requireParentCallInOverridenMethod:
             enabled: true
             classes:
@@ -34,7 +34,7 @@ parameters:
             enabled: true
 
 parametersSchema:
-    silverstanRules: structure([
+    silverstan: structure([
         requireParentCallInOverridenMethod: structure([
             enabled: bool()
             classes: arrayOf(
@@ -77,37 +77,37 @@ parametersSchema:
 
 conditionalTags:
     Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule:
-        phpstan.rules.rule: %silverstanRules.requireParentCallInOverridenMethod.enabled%
+        phpstan.rules.rule: %silverstan.requireParentCallInOverridenMethod.enabled%
     Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule:
-        phpstan.rules.rule: %silverstanRules.disallowOverridingOfConfigurationPropertyType.enabled%
+        phpstan.rules.rule: %silverstan.disallowOverridingOfConfigurationPropertyType.enabled%
     Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule:
-        phpstan.rules.rule: %silverstanRules.requireConfigurationPropertyOverride.enabled%
+        phpstan.rules.rule: %silverstan.requireConfigurationPropertyOverride.enabled%
     Cambis\Silverstan\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRule:
-        phpstan.rules.rule: %silverstanRules.disallowMethodCallOnUnsafeDataObject.enabled%
+        phpstan.rules.rule: %silverstan.disallowMethodCallOnUnsafeDataObject.enabled%
     Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule:
-        phpstan.rules.rule: %silverstanRules.disallowNewInstanceOnInjectable.enabled%
+        phpstan.rules.rule: %silverstan.disallowNewInstanceOnInjectable.enabled%
     Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRule:
-        phpstan.rules.rule: %silverstanRules.disallowPropertyFetchOnConfigForClass.enabled%
+        phpstan.rules.rule: %silverstan.disallowPropertyFetchOnConfigForClass.enabled%
     Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRule:
-        phpstan.rules.rule: %silverstanRules.disallowPropertyFetchOnUnsafeDataObject.enabled%
+        phpstan.rules.rule: %silverstan.disallowPropertyFetchOnUnsafeDataObject.enabled%
     Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule:
-        phpstan.rules.rule: %silverstanRules.disallowStaticPropertyFetchOnConfigurationProperty.enabled%
+        phpstan.rules.rule: %silverstan.disallowStaticPropertyFetchOnConfigurationProperty.enabled%
 
 services:
     -
         class: Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule
         arguments:
-            classes: %silverstanRules.requireParentCallInOverridenMethod.classes%
+            classes: %silverstan.requireParentCallInOverridenMethod.classes%
     -
         class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule
     -
         class: Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule
         arguments:
-            classes: %silverstanRules.requireConfigurationPropertyOverride.classes%
+            classes: %silverstan.requireConfigurationPropertyOverride.classes%
     -
         class: Cambis\Silverstan\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRule
         arguments:
-            allowedMethodCalls: %silverstanRules.disallowMethodCallOnUnsafeDataObject.allowedMethodCalls%
+            allowedMethodCalls: %silverstan.disallowMethodCallOnUnsafeDataObject.allowedMethodCalls%
     -
         class: Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule
     -

@@ -10,7 +10,7 @@ Call `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` 
 
 ```yaml
 parameters:
-    silverstanRules:
+    silverstan:
         disallowMethodCallOnUnsafeDataObject:
             enabled: true
             allowedMethodCalls:
@@ -67,7 +67,7 @@ Disallow instantiating a `\SilverStripe\Core\Injectable` class using `new`. Use 
 
 ```yaml
 parameters:
-    silverstanRules:
+    silverstan:
         disallowNewInstanceOnInjectable:
             enabled: true
 ```
@@ -110,7 +110,7 @@ Disallow overriding types of configuration properties.
 
 ```yaml
 parameters:
-    silverstanRules:
+    silverstan:
         disallowOverridingOfConfigurationPropertyType:
             enabled: true
 ```
@@ -163,7 +163,7 @@ Disallow property fetch on `\SilverStripe\Core\Config\Config_ForClass`. PHPStan 
 
 ```yaml
 parameters:
-    silverstanRules:
+    silverstan:
         disallowPropertyFetchOnConfigForClass:
             enabled: true
 ```
@@ -212,7 +212,7 @@ Call `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` 
 
 ```yaml
 parameters:
-    silverstanRules:
+    silverstan:
         disallowPropertyFetchOnUnsafeDataObject:
             enabled: true
 ```
@@ -267,7 +267,7 @@ Disallow static property fetch on configuration properties.
 
 ```yaml
 parameters:
-    silverstanRules:
+    silverstan:
         disallowStaticPropertyFetchOnConfigurationProperty:
             enabled: true
 ```
@@ -316,7 +316,7 @@ Require a class to override a set of configuration properties.
 
 ```yaml
 parameters:
-    silverstanRules:
+    silverstan:
         requireConfigurationPropertyOverride:
             enabled: true
             classes:
@@ -363,7 +363,7 @@ Require parent call in an overriden method.
 
 ```yaml
 parameters:
-    silverstanRules:
+    silverstan:
         requireParentCallInOverridenMethod:
             enabled: true
             classes:
