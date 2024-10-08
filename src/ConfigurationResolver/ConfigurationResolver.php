@@ -11,7 +11,7 @@ use function explode;
 use function is_array;
 use function preg_match;
 
-final class ConfigurationResolver
+final readonly class ConfigurationResolver
 {
     /**
      * @var string
@@ -19,11 +19,9 @@ final class ConfigurationResolver
      */
     private const EXTENSION_CLASSNAME_REGEX = '/^([^(]*)/';
 
-    private ?ConfigCollectionInterface $configCollection = null;
-
     public function __construct(
-        private readonly ConfigCollectionFactory $configCollectionFactory,
-        private readonly ReflectionProvider $reflectionProvider,
+        private ConfigCollectionInterface $configCollection,
+        private ReflectionProvider $reflectionProvider,
     ) {
     }
 
@@ -32,10 +30,6 @@ final class ConfigurationResolver
      */
     public function get(string $className, string $name): mixed
     {
-        if (!$this->configCollection instanceof ConfigCollectionInterface) {
-            $this->configCollection = $this->configCollectionFactory->create();
-        }
-
         return $this->configCollection->get($className, $name);
     }
 

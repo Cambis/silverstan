@@ -11,6 +11,9 @@ services:
     -
         class: Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory
     -
+        class: SilverStripe\Config\Collections\ConfigCollectionInterface
+        factory: @Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory::create
+    -
         class: Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver
     -
         class: Cambis\Silverstan\Extension\ClassPropertiesNode\ConfigurationPropertiesExtension
