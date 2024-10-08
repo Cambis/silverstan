@@ -2,30 +2,30 @@
 
 namespace Cambis\Silverstan\Tests\Type\Fixture;
 
-use SilverStripe\Assets\File;
+use Cambis\Silverstan\Tests\Type\Source\Foo;
 use SilverStripe\ORM\ArrayList;
 use function PHPStan\Testing\assertType;
 
 $list = new ArrayList([
-    File::create([
+    Foo::create([
         'Name' => 'Foo',
     ])]);
 
 assertType(
-    ArrayList::class . '<' . File::class . '>',
+    ArrayList::class . '<' . Foo::class . '>',
     $list
 );
 
 assertType(
-    File::class . '|null',
+    Foo::class . '|null',
     $list->first()
 );
 
 assertType(
-    File::class . '|null',
+    Foo::class . '|null',
     $list->last()
 );
 
 foreach ($list as $item) {
-    assertType(File::class, $item);
+    assertType(Foo::class, $item);
 }

@@ -2,29 +2,29 @@
 
 namespace Cambis\Silverstan\Tests\Type\Fixture;
 
-use SilverStripe\Assets\File;
+use Cambis\Silverstan\Tests\Type\Source\Foo;
 use SilverStripe\Core\Injector\Injector;
 use function PHPStan\Testing\assertType;
 use function singleton;
 
 assertType(
-    File::class,
-    Injector::inst()->get(File::class)
+    Foo::class,
+    Injector::inst()->get(Foo::class)
 );
 
 assertType(
-    File::class,
-    singleton(File::class)
+    Foo::class,
+    singleton(Foo::class)
 );
 
 assertType(
-    File::class,
-    Injector::inst()->create(File::class)
+    Foo::class,
+    Injector::inst()->create(Foo::class)
 );
 
 assertType(
-    File::class,
-    Injector::inst()->createWithArgs(File::class, [
-        'Name' => 'Foo',
+    Foo::class,
+    Injector::inst()->createWithArgs(Foo::class, [
+        'Title' => 'Bar',
     ])
 );

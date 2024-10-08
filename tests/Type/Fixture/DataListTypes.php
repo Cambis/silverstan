@@ -2,21 +2,21 @@
 
 namespace Cambis\Silverstan\Tests\Type\Fixture;
 
-use SilverStripe\Assets\File;
+use Cambis\Silverstan\Tests\Type\Source\Foo;
 use SilverStripe\ORM\DataList;
 use function PHPStan\Testing\assertType;
 
 assertType(
-    DataList::class . '<' . File::class . '>',
-    File::get()
+    DataList::class . '<' . Foo::class . '>',
+    Foo::get()
 );
 
 assertType(
-    File::class . '|null',
-    File::get()->first()
+    Foo::class . '|null',
+    Foo::get()->first()
 );
 
 assertType(
-    File::class . '|null',
-    File::get()->last()
+    Foo::class . '|null',
+    Foo::get()->last()
 );

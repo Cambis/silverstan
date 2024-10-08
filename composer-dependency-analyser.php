@@ -18,4 +18,14 @@ return (new Configuration())
             __DIR__ . '/src',
         ],
         [ErrorType::SHADOW_DEPENDENCY]
+    )
+    ->ignoreErrorsOnPackagesAndPaths(
+        [
+            // These are bundled with phpstan/phpstan
+            'nikic/php-parser',
+        ],
+        [
+            __DIR__ . '/tests',
+        ],
+        [ErrorType::SHADOW_DEPENDENCY]
     );
