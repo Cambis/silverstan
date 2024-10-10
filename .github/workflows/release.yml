@@ -43,6 +43,7 @@ jobs:
             lint-staged.config.js \
             phpunit.xml.dist \
             tests \
+            composer-dependency-analyser.php \
             ecs.php \
             phpstan.neon.dist \
             phpstan-baseline.neon \
