@@ -2,7 +2,7 @@
 
 namespace Cambis\Silverstan\Tests\Type\Fixture;
 
-use Cambis\Silverstan\Tests\Type\Source\Foo;
+use Cambis\Silverstan\Tests\Type\Source\Model\Foo;
 use SilverStripe\ORM\ArrayList;
 use function PHPStan\Testing\assertType;
 

@@ -17,15 +17,6 @@ if (!$container instanceof Container) {
 /** @var array{includeTestOnly: bool} $silverstanParams */
 $silverstanParams = $container->getParameter('silverstan');
 
-// Add Page/PageController stubs which may be required
-if (!class_exists(Page::class)) {
-    require __DIR__ . '/stubs/Page.php';
-}
-
-if (!class_exists(PageController::class)) {
-    require __DIR__ . '/stubs/PageController.php';
-}
-
 // We don't need access to the database
 DB::set_conn(new NullDatabase());
 
@@ -37,4 +28,29 @@ Environment::setVariables($globalVars);
 
 // Mock a Silverstripe application in order to access the Configuration API
 $kernel = new SilverstanKernel(BASE_PATH, $silverstanParams['includeTestOnly']);
+
+$classLoader = $kernel->getClassLoader();
+
+// If Page does not exist, add it!
+if (!class_exists('Page')) {
+    $classLoader->getManifest()->handleFile(
+        __DIR__ . '/stubs',
+        __DIR__ . '/stubs/Page.php',
+        false
+    );
+
+    $classLoader->loadClass('Page');
+}
+
+// If PageController does not exist, add it!
+if (!class_exists('PageController')) {
+    $classLoader->getManifest()->handleFile(
+        __DIR__ . '/stubs',
+        __DIR__ . '/stubs/PageController.php',
+        false
+    );
+
+    $classLoader->loadClass('PageController');
+}
+
 $kernel->boot();

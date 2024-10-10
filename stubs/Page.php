@@ -3,7 +3,7 @@
 namespace {
     use SilverStripe\CMS\Model\SiteTree;
 
-    if (!class_exists(SilverStripe\CMS\Model\SiteTree::class)) {
+    if (!class_exists(SiteTree::class)) {
         return;
     }
 

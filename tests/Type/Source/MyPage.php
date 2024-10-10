@@ -2,9 +2,9 @@
 
 namespace Cambis\Silverstan\Tests\Type\Source;
 
+use Page;
 use SilverStripe\Dev\TestOnly;
-use SilverStripe\ORM\DataObject;
 
-final class Foo extends DataObject implements TestOnly
+final class MyPage extends Page implements TestOnly
 {
 }
