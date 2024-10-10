@@ -7,6 +7,7 @@ use PHPStan\DependencyInjection\Container;
 use PHPStan\ShouldNotHappenException;
 use SilverStripe\Control\CLIRequestBuilder;
 use SilverStripe\Core\Environment;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\Connect\NullDatabase;
 use SilverStripe\ORM\DB;
 
@@ -53,4 +54,10 @@ if (!class_exists('PageController')) {
     $classLoader->loadClass('PageController');
 }
 
-$kernel->boot();
+try {
+    $kernel->boot();
+} catch (Throwable $e) {
+    if (Injector::inst()->has('Psr\Log\LoggerInterface')) {
+        Injector::inst()->get('Psr\Log\LoggerInterface')->info($e->getMessage());
+    }
+}
