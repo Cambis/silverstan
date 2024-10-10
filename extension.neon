@@ -61,6 +61,9 @@ services:
         arguments:
             className: 'SilverStripe\View\ViewableData'
     -
+        class: Cambis\Silverstan\Extension\Type\ViewableDataHasFieldTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+    -
         class: Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor
         tags: [phpstan.parser.richParserNodeVisitor]
     -

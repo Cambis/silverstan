@@ -9,7 +9,7 @@ use Override;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
-use PHPStan\Type\NullType;
+use PHPStan\Type\MixedType;
 use function array_key_exists;
 
 /**
@@ -36,6 +36,6 @@ final class ViewableDataClassReflectionExtension implements PropertiesClassRefle
     #[Override]
     public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
     {
-        return new ExtensiblePropertyReflection($classReflection, new NullType(), new NullType());
+        return new ExtensiblePropertyReflection($classReflection, new MixedType(), new MixedType());
     }
 }
