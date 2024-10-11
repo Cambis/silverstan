@@ -161,23 +161,23 @@ final readonly class TypeResolver
      */
     public function resolveDBFieldType(string $className, string $fieldName, string $fieldType): Type
     {
-        $objectClassName = $this->configurationResolver->resolveClassName($className);
-        $objectClassReflection = $this->reflectionProvider->getClass($objectClassName);
+        // $objectClassName = $this->configurationResolver->resolveClassName($className);
+        // $objectClassReflection = $this->reflectionProvider->getClass($objectClassName);
 
-        // If there is an existing property tag, return that first
-        foreach ($objectClassReflection->getPropertyTags() as $propertyTagName => $propertyTag) {
-            if ($propertyTagName !== $fieldName) {
-                continue;
-            }
+        // // If there is an existing property tag, return that first
+        // foreach ($objectClassReflection->getPropertyTags() as $propertyTagName => $propertyTag) {
+        //     if ($propertyTagName !== $fieldName) {
+        //         continue;
+        //     }
 
-            $propertyType = $propertyTag->getReadableType();
+        //     $propertyType = $propertyTag->getReadableType();
 
-            if (!$propertyType instanceof Type) {
-                continue;
-            }
+        //     if (!$propertyType instanceof Type) {
+        //         continue;
+        //     }
 
-            return $propertyType;
-        }
+        //     return $propertyType;
+        // }
 
         $field = $this->configurationResolver->resolveClassName(strtok($fieldType, '('));
         $fieldClassReflection = $this->reflectionProvider->getClass($field);

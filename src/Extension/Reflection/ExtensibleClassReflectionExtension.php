@@ -82,11 +82,11 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
             return false;
         }
 
-        if ($this->annotationsPropertiesClassReflectionExtension->hasProperty($classReflection, $propertyName)) {
-            return true;
-        }
+        // if ($this->annotationsPropertiesClassReflectionExtension->hasProperty($classReflection, $propertyName)) {
+        //     return true;
+        // }
 
-        // // Let PHPStan handle this case
+        // Let PHPStan handle this case
         // if (array_key_exists($propertyName, $classReflection->getPropertyTags())) {
         //     return false;
         // }
