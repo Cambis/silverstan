@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ReflectionResolver;
 
+use Cambis\Silverstan\Reflection\ExtensiblePropertyReflection;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProviderInterface;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\PropertyReflection;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use ReflectionProperty;
+use function array_key_exists;
 
 final readonly class ReflectionResolver
 {
@@ -118,6 +121,63 @@ final readonly class ReflectionResolver
         }
 
         return [];
+    }
+
+    /**
+     * Resolve a property that is included in the class phpdoc.
+     */
+    public function resolveAnnotationPropertyReflection(ClassReflection $classReflection, ClassReflection $declaringClass, string $propertyName): ?PropertyReflection
+    {
+        $propertyTags = $classReflection->getPropertyTags();
+
+        if (array_key_exists($propertyName, $propertyTags)) {
+            $propertyTag = $propertyTags[$propertyName];
+
+            return new ExtensiblePropertyReflection(
+                $declaringClass,
+                $propertyTag->getReadableType() ?? new NeverType(),
+                $propertyTag->getWritableType() ?? new NeverType(),
+            );
+        }
+
+        foreach ($classReflection->getResolvedMixinTypes() as $mixinType) {
+            foreach ($mixinType->getObjectClassReflections() as $mixinReflection) {
+                $propertyReflection = $this->resolveAnnotationPropertyReflection($mixinReflection, $classReflection, $propertyName);
+
+                if (!$propertyReflection instanceof PropertyReflection) {
+                    continue;
+                }
+
+                return $propertyReflection;
+            }
+        }
+
+        foreach ($classReflection->getAncestors() as $ancestorReflection) {
+            // Ancestors includes the original class reflection itself
+            if ($ancestorReflection === $classReflection) {
+                continue;
+            }
+
+            if ($ancestorReflection->isTrait()) {
+                $propertyReflection = $this->resolveAnnotationPropertyReflection($ancestorReflection, $classReflection, $propertyName);
+
+                if (!$propertyReflection instanceof PropertyReflection) {
+                    continue;
+                }
+
+                return $propertyReflection;
+            }
+
+            $propertyReflection = $this->resolveAnnotationPropertyReflection($ancestorReflection, $ancestorReflection, $propertyName);
+
+            if (!$propertyReflection instanceof PropertyReflection) {
+                continue;
+            }
+
+            return $propertyReflection;
+        }
+
+        return null;
     }
 
     /**

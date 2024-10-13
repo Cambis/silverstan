@@ -6,7 +6,6 @@ namespace Cambis\Silverstan\Extension\Reflection;
 
 use Cambis\Silverstan\Reflection\ViewableDataPropertyReflection;
 use Override;
-use PHPStan\Reflection\Annotations\AnnotationsPropertiesClassReflectionExtension;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
@@ -18,7 +17,7 @@ use PHPStan\Reflection\PropertyReflection;
 final readonly class ViewableDataClassReflectionExtension implements PropertiesClassReflectionExtension
 {
     public function __construct(
-        private AnnotationsPropertiesClassReflectionExtension $annotationsPropertiesClassReflectionExtension,
+        private AnnotationClassReflectionExtension $annotationClassReflectionExtension
     ) {
     }
 
@@ -36,8 +35,8 @@ final readonly class ViewableDataClassReflectionExtension implements PropertiesC
     #[Override]
     public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
     {
-        if ($this->annotationsPropertiesClassReflectionExtension->hasProperty($classReflection, $propertyName)) {
-            return $this->annotationsPropertiesClassReflectionExtension->getProperty($classReflection, $propertyName);
+        if ($this->annotationClassReflectionExtension->hasProperty($classReflection, $propertyName)) {
+            return $this->annotationClassReflectionExtension->getProperty($classReflection, $propertyName);
         }
 
         $readableType = ParametersAcceptorSelector::selectSingle($classReflection->getNativeMethod('__get')->getVariants())->getReturnType();

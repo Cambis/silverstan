@@ -28,6 +28,8 @@ services:
         class: Cambis\Silverstan\Extension\PhpDoc\SilverstripeStubFilesExtension
         tags: [phpstan.stubFilesExtension]
     -
+        class: Cambis\Silverstan\Extension\Reflection\AnnotationClassReflectionExtension
+    -
         class: Cambis\Silverstan\Extension\Reflection\ExtensibleClassReflectionExtension
         tags: 
             - phpstan.broker.methodsClassReflectionExtension
