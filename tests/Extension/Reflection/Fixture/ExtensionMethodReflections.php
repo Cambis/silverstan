@@ -10,3 +10,5 @@ $foo = Foo::create();
 assertType('bool', $foo->publicMethod(true));
 assertType('bool', $foo->protectedMethod(true));
 assertType('*ERROR*', $foo->privateMethod(true));
+
+assertType('Cambis\Silverstan\Tests\Extension\Reflection\Source\Model\Foo', $foo->ExtensionHasOne());

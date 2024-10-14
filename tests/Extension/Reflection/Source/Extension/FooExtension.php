@@ -15,6 +15,10 @@ final class FooExtension extends Extension implements TestOnly
         'ExtensionField' => 'Varchar(255)',
     ];
 
+    private static array $has_one = [
+        'ExtensionHasOne' => Foo::class . '.extension',
+    ];
+
     public function publicMethod(bool $arg): bool
     {
         return $arg;

@@ -10,7 +10,7 @@ use PHPStan\Reflection\PropertyReflection;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Type;
 
-final readonly class ExtensiblePropertyReflection implements PropertyReflection
+final readonly class ViewableDataPropertyReflection implements PropertyReflection
 {
     public function __construct(
         private ClassReflection $classReflection,
@@ -64,7 +64,7 @@ final readonly class ExtensiblePropertyReflection implements PropertyReflection
     #[Override]
     public function canChangeTypeAfterAssignment(): bool
     {
-        return $this->readableType->equals($this->writableType);
+        return true;
     }
 
     #[Override]

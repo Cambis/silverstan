@@ -14,3 +14,7 @@ assertType('mixed', $foo->Bar);
 if ($foo->Bar instanceof Bar) {
     assertType(Bar::class, $foo->Bar);
 }
+
+$foo->Baz = 'baz';
+
+assertType("'baz'", $foo->Baz);

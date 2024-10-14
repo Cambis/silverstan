@@ -12,7 +12,6 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\MethodsClassReflectionExtension;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
-use PHPStan\ShouldNotHappenException;
 use function array_key_exists;
 
 /**
@@ -21,18 +20,19 @@ use function array_key_exists;
 final class ExtensibleClassReflectionExtension implements MethodsClassReflectionExtension, PropertiesClassReflectionExtension
 {
     /**
-     * @var PropertyReflection[][]
-     */
-    private array $propertyReflections = [];
-
-    /**
      * @var MethodReflection[][]
      */
     private array $methodReflections = [];
 
+    /**
+     * @var PropertyReflection[][]
+     */
+    private array $propertyReflections = [];
+
     public function __construct(
+        private readonly AnnotationClassReflectionExtension $annotationClassReflectionExtension,
         private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly ReflectionResolver $reflectionResolver,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -49,10 +49,14 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
             return false;
         }
 
-        // Let PHPStan handle this case
-        if (array_key_exists($methodName, $classReflection->getMethodTags())) {
-            return false;
+        if ($this->annotationClassReflectionExtension->hasMethod($classReflection, $methodName)) {
+            return true;
         }
+
+        // // Let PHPStan handle this case
+        // if (array_key_exists($methodName, $classReflection->getMethodTags())) {
+        //     return false;
+        // }
 
         $methodReflections = $this->resolveInjectedMethodReflections($classReflection);
 
@@ -74,9 +78,8 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
             return false;
         }
 
-        // Let PHPStan handle this case
-        if (array_key_exists($propertyName, $classReflection->getPropertyTags())) {
-            return false;
+        if ($this->annotationClassReflectionExtension->hasProperty($classReflection, $propertyName)) {
+            return true;
         }
 
         $propertyReflections = $this->resolveInjectedPropertyReflections($classReflection);
@@ -88,27 +91,21 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
     #[Override]
     public function getMethod(ClassReflection $classReflection, string $methodName): MethodReflection
     {
-        $methodReflections = $this->resolveInjectedMethodReflections($classReflection);
-        $methodReflection = $methodReflections[$methodName] ?? null;
-
-        if (!$methodReflection instanceof MethodReflection) {
-            throw new ShouldNotHappenException();
+        if ($this->annotationClassReflectionExtension->hasMethod($classReflection, $methodName)) {
+            return $this->annotationClassReflectionExtension->getMethod($classReflection, $methodName);
         }
 
-        return $methodReflection;
+        return $this->methodReflections[$classReflection->getCacheKey()][$methodName];
     }
 
     #[Override]
     public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
     {
-        $propertyReflections = $this->resolveInjectedPropertyReflections($classReflection);
-        $propertyReflection = $propertyReflections[$propertyName] ?? null;
-
-        if (!$propertyReflection instanceof PropertyReflection) {
-            throw new ShouldNotHappenException();
+        if ($this->annotationClassReflectionExtension->hasProperty($classReflection, $propertyName)) {
+            return $this->annotationClassReflectionExtension->getProperty($classReflection, $propertyName);
         }
 
-        return $propertyReflection;
+        return $this->propertyReflections[$classReflection->getCacheKey()][$propertyName];
     }
 
     /**
@@ -116,11 +113,11 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
      */
     private function resolveInjectedMethodReflections(ClassReflection $classReflection): array
     {
-        if (!array_key_exists($classReflection->getName(), $this->methodReflections)) {
-            $this->methodReflections[$classReflection->getName()] = $this->reflectionResolver->resolveInjectedMethodReflections($classReflection);
+        if (!array_key_exists($classReflection->getCacheKey(), $this->methodReflections)) {
+            $this->methodReflections[$classReflection->getCacheKey()] = $this->reflectionResolver->resolveInjectedMethodReflections($classReflection);
         }
 
-        return $this->methodReflections[$classReflection->getName()];
+        return $this->methodReflections[$classReflection->getCacheKey()];
     }
 
     /**
@@ -128,10 +125,10 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
      */
     private function resolveInjectedPropertyReflections(ClassReflection $classReflection): array
     {
-        if (!array_key_exists($classReflection->getName(), $this->propertyReflections)) {
-            $this->propertyReflections[$classReflection->getName()] = $this->reflectionResolver->resolveInjectedPropertyReflections($classReflection);
+        if (!array_key_exists($classReflection->getCacheKey(), $this->propertyReflections)) {
+            $this->propertyReflections[$classReflection->getCacheKey()] = $this->reflectionResolver->resolveInjectedPropertyReflections($classReflection);
         }
 
-        return $this->propertyReflections[$classReflection->getName()];
+        return $this->propertyReflections[$classReflection->getCacheKey()];
     }
 }
