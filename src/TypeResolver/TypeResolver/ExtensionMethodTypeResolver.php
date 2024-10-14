@@ -6,18 +6,16 @@ namespace Cambis\Silverstan\TypeResolver\TypeResolver;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
-use Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface;
+use Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverAwareInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
-use ReflectionMethod;
 use function array_unique;
 use function is_array;
 
-final class ExtensionMethodTypeResolver implements PropertyTypeResolverInterface, TypeResolverAwareInterface
+final class ExtensionMethodTypeResolver implements MethodTypeResolverInterface, TypeResolverAwareInterface
 {
     private TypeResolver $typeResolver;
 
@@ -62,20 +60,6 @@ final class ExtensionMethodTypeResolver implements PropertyTypeResolverInterface
 
             if (!$classReflection->isSubclassOf('SilverStripe\Core\Extension')) {
                 continue;
-            }
-
-            $reflectionMethods = $classReflection->getNativeReflection()->getMethods(
-                ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED
-            );
-
-            foreach ($reflectionMethods as $reflectionMethod) {
-                if (!$classReflection->hasNativeMethod($reflectionMethod->getName())) {
-                    continue;
-                }
-
-                $extendedMethodReflection = $classReflection->getNativeMethod($reflectionMethod->getName());
-
-                $types[$reflectionMethod->getName()] = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants())->getReturnType();
             }
 
             $types = [...$types, ...$this->typeResolver->resolveInjectedMethodTypes($classReflection)];
