@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ReflectionResolver;
 
+use Cambis\Silverstan\Reflection\ExtensibleMethodReflection;
 use Cambis\Silverstan\Reflection\ExtensiblePropertyReflection;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
@@ -175,6 +176,68 @@ final readonly class ReflectionResolver
             }
 
             return $propertyReflection;
+        }
+
+        return null;
+    }
+
+    /**
+     * Resolve a method that is included in the class phpdoc. Does not support methods with parameters.
+     */
+    public function resolveAnnotationMethodReflection(ClassReflection $classReflection, ClassReflection $declaringClass, string $methodName): ?MethodReflection
+    {
+        $methodTags = $classReflection->getMethodTags();
+
+        if (array_key_exists($methodName, $methodTags)) {
+            $methodTag = $methodTags[$methodName];
+
+            // Currently not supporting parameters
+            if ($methodTag->getParameters() !== []) {
+                return null;
+            }
+
+            return new ExtensibleMethodReflection(
+                $methodName,
+                $declaringClass,
+                $methodTag->getReturnType(),
+            );
+        }
+
+        foreach ($classReflection->getResolvedMixinTypes() as $mixinType) {
+            foreach ($mixinType->getObjectClassReflections() as $mixinReflection) {
+                $methodReflection = $this->resolveAnnotationMethodReflection($mixinReflection, $classReflection, $methodName);
+
+                if (!$methodReflection instanceof MethodReflection) {
+                    continue;
+                }
+
+                return $methodReflection;
+            }
+        }
+
+        foreach ($classReflection->getAncestors() as $ancestorReflection) {
+            // Ancestors includes the original class reflection itself
+            if ($ancestorReflection === $classReflection) {
+                continue;
+            }
+
+            if ($ancestorReflection->isTrait()) {
+                $methodReflection = $this->resolveAnnotationMethodReflection($ancestorReflection, $classReflection, $methodName);
+
+                if (!$methodReflection instanceof MethodReflection) {
+                    continue;
+                }
+
+                return $methodReflection;
+            }
+
+            $methodReflection = $this->resolveAnnotationMethodReflection($ancestorReflection, $ancestorReflection, $methodName);
+
+            if (!$methodReflection instanceof MethodReflection) {
+                continue;
+            }
+
+            return $methodReflection;
         }
 
         return null;

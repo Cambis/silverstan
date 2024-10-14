@@ -23,6 +23,11 @@ assertType(
     $foo->Siblings()
 );
 
+assertType(
+    sprintf('%s<%s>', HasManyList::class, Foo::class),
+    $foo->TypehintedHasMany()
+);
+
 // many_many
 assertType(
     sprintf('%s<%s>', ManyManyList::class, Foo::class),

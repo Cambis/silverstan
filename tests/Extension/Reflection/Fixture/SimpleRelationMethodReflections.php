@@ -12,3 +12,4 @@ assertType(Foo::class, $foo->Parent());
 
 // has_one
 assertType(Foo::class, $foo->Child());
+assertType(Foo::class, $foo->TypehintedHasOne());

@@ -12,10 +12,6 @@ parameters:
         - rector.php
         - '*/Fixture/*'
         - '*/Source/*'
-    ignoreErrors:
-        -
-          identifier: phpstanApi.method
-          path: src/Extension/Reflection/ExtensibleClassReflectionExtension.php
 services:
     -
         class: Symplify\PHPStanRules\Naming\ClassToSuffixResolver

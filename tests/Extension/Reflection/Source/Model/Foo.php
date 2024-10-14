@@ -5,9 +5,12 @@ namespace Cambis\Silverstan\Tests\Extension\Reflection\Source\Model;
 use Cambis\Silverstan\Tests\Extension\Reflection\Source\Extension\FooExtension;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\HasManyList;
 
 /**
  * @property string $TypehintedField
+ * @method Foo TypehintedHasOne()
+ * @method HasManyList<Foo> TypehintedHasMany()
  */
 
 class Foo extends DataObject implements TestOnly

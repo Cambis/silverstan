@@ -7,13 +7,11 @@ namespace Cambis\Silverstan\Extension\Reflection;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 use Override;
-use PHPStan\Reflection\Annotations\AnnotationsMethodsClassReflectionExtension;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\MethodsClassReflectionExtension;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
-use PHPStan\ShouldNotHappenException;
 use function array_key_exists;
 
 /**
@@ -22,18 +20,17 @@ use function array_key_exists;
 final class ExtensibleClassReflectionExtension implements MethodsClassReflectionExtension, PropertiesClassReflectionExtension
 {
     /**
-     * @var PropertyReflection[][]
-     */
-    private array $propertyReflections = [];
-
-    /**
      * @var MethodReflection[][]
      */
     private array $methodReflections = [];
 
+    /**
+     * @var PropertyReflection[][]
+     */
+    private array $propertyReflections = [];
+
     public function __construct(
         private readonly AnnotationClassReflectionExtension $annotationClassReflectionExtension,
-        private readonly AnnotationsMethodsClassReflectionExtension $annotationsMethodsClassReflectionExtension,
         private readonly ClassReflectionAnalyser $classReflectionAnalyser,
         private readonly ReflectionResolver $reflectionResolver
     ) {
@@ -52,7 +49,7 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
             return false;
         }
 
-        if ($this->annotationsMethodsClassReflectionExtension->hasMethod($classReflection, $methodName)) {
+        if ($this->annotationClassReflectionExtension->hasMethod($classReflection, $methodName)) {
             return true;
         }
 
@@ -94,18 +91,11 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
     #[Override]
     public function getMethod(ClassReflection $classReflection, string $methodName): MethodReflection
     {
-        if ($this->annotationsMethodsClassReflectionExtension->hasMethod($classReflection, $methodName)) {
-            return $this->annotationsMethodsClassReflectionExtension->getMethod($classReflection, $methodName);
+        if ($this->annotationClassReflectionExtension->hasMethod($classReflection, $methodName)) {
+            return $this->annotationClassReflectionExtension->getMethod($classReflection, $methodName);
         }
 
-        $methodReflections = $this->resolveInjectedMethodReflections($classReflection);
-        $methodReflection = $methodReflections[$methodName] ?? null;
-
-        if (!$methodReflection instanceof MethodReflection) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $methodReflection;
+        return $this->methodReflections[$classReflection->getCacheKey()][$methodName];
     }
 
     #[Override]
