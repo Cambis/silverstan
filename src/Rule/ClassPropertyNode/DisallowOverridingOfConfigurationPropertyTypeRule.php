@@ -12,11 +12,8 @@ use Override;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\Type\ParserNodeTypeToPHPStanType;
-use PHPStan\Type\TypehintHelper;
 use PHPStan\Type\VerbosityLevel;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -93,9 +90,9 @@ CODE_SAMPLE
             return [];
         }
 
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $node->getClassReflection();
 
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection->hasNativeProperty($node->getName())) {
             return [];
         }
 
@@ -109,8 +106,9 @@ CODE_SAMPLE
             return [];
         }
 
-        $nativeType = ParserNodeTypeToPHPStanType::resolve($node->getNativeType(), $classReflection);
-        $type = TypehintHelper::decideType($nativeType, $node->getPhpDocType());
+        $nativeType = $classReflection->getNativeProperty($node->getName())->getReadableType();
+        $type = $node->getPhpDocType() ?? $nativeType;
+
         $prototypeType = $prototype->getReadableType();
 
         if ($prototypeType->accepts($type, true)->yes()) {
