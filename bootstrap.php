@@ -30,11 +30,14 @@ Environment::setVariables($globalVars);
 // Mock a Silverstripe application in order to access the Configuration API
 $kernel = new SilverstanKernel(BASE_PATH, $silverstanParams['includeTestOnly']);
 
+// Preemptively generate the class manifest, so we can check for the existence of Page and PageController
 $classLoader = $kernel->getClassLoader();
+$classManifest = $classLoader->getManifest();
+$classManifest->init($silverstanParams['includeTestOnly'], false);
 
 // If Page does not exist, add it!
-if (!class_exists('Page')) {
-    $classLoader->getManifest()->handleFile(
+if (!array_key_exists('page', $classManifest->getClassNames())) {
+    $classManifest->handleFile(
         __DIR__ . '/stubs',
         __DIR__ . '/stubs/Page.php',
         false
@@ -44,8 +47,8 @@ if (!class_exists('Page')) {
 }
 
 // If PageController does not exist, add it!
-if (!class_exists('PageController')) {
-    $classLoader->getManifest()->handleFile(
+if (!array_key_exists('pagecontroller', $classManifest->getClassNames())) {
+    $classManifest->handleFile(
         __DIR__ . '/stubs',
         __DIR__ . '/stubs/PageController.php',
         false
