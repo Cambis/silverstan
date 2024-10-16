@@ -14,7 +14,6 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
-use ReflectionProperty;
 use function array_key_exists;
 
 final readonly class ReflectionResolver
@@ -36,14 +35,8 @@ final readonly class ReflectionResolver
     {
         $propertyReflections = [];
 
-        foreach ($classReflection->getNativeReflection()->getProperties(ReflectionProperty::IS_PRIVATE) as $reflectionProperty) {
-            $property = $this->resolveConfigurationPropertyReflection($classReflection, $reflectionProperty->getName());
-
-            if (!$property instanceof PropertyReflection) {
-                continue;
-            }
-
-            $propertyReflections = [...$propertyReflections, ...$this->resolveInjectedPropertyReflectionsFromConfigurationProperty($classReflection, $reflectionProperty->getName())];
+        foreach ($this->reflectionResolverRegistryProvider->getRegistry()->getPropertyReflectionResolvers() as $reflectionResolver) {
+            $propertyReflections = [...$propertyReflections, ...$reflectionResolver->resolve($classReflection)];
         }
 
         if (!$classReflection->getParentClass() instanceof ClassReflection) {
@@ -57,25 +50,6 @@ final readonly class ReflectionResolver
     }
 
     /**
-     * Resolve injected property reflections from a configuration property using the registered resolvers.
-     *
-     * @see \Cambis\Silverstan\ReflectionResolver\Contract\PropertyReflectionResolverInterface
-     * @return PropertyReflection[]
-     */
-    public function resolveInjectedPropertyReflectionsFromConfigurationProperty(ClassReflection $classReflection, string $propertyName): array
-    {
-        foreach ($this->reflectionResolverRegistryProvider->getRegistry()->getPropertyReflectionResolvers() as $reflectionResolver) {
-            if ($reflectionResolver->getConfigurationPropertyName() !== $propertyName) {
-                continue;
-            }
-
-            return $reflectionResolver->resolve($classReflection);
-        }
-
-        return [];
-    }
-
-    /**
      * Resolve all injected method reflections using the registered resolvers.
      *
      * @see \Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterface
@@ -85,14 +59,8 @@ final readonly class ReflectionResolver
     {
         $methodReflections = [];
 
-        foreach ($classReflection->getNativeReflection()->getProperties(ReflectionProperty::IS_PRIVATE) as $reflectionProperty) {
-            $property = $this->resolveConfigurationPropertyReflection($classReflection, $reflectionProperty->getName());
-
-            if (!$property instanceof PropertyReflection) {
-                continue;
-            }
-
-            $methodReflections = [...$methodReflections, ...$this->resolveInjectedMethodReflectionsFromConfigurationProperty($classReflection, $reflectionProperty->getName())];
+        foreach ($this->reflectionResolverRegistryProvider->getRegistry()->getMethodReflectionResolvers() as $reflectionResolver) {
+            $methodReflections = [...$methodReflections, ...$reflectionResolver->resolve($classReflection)];
         }
 
         if (!$classReflection->getParentClass() instanceof ClassReflection) {
@@ -103,25 +71,6 @@ final readonly class ReflectionResolver
             ...$methodReflections,
             ...$this->resolveInjectedMethodReflections($classReflection->getParentClass()),
         ];
-    }
-
-    /**
-     * Resolve injected method reflections from a configuration property using the registered resolvers.
-     *
-     * @see \Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterface
-     * @return MethodReflection[]
-     */
-    public function resolveInjectedMethodReflectionsFromConfigurationProperty(ClassReflection $classReflection, string $propertyName): array
-    {
-        foreach ($this->reflectionResolverRegistryProvider->getRegistry()->getMethodReflectionResolvers() as $reflectionResolver) {
-            if ($reflectionResolver->getConfigurationPropertyName() !== $propertyName) {
-                continue;
-            }
-
-            return $reflectionResolver->resolve($classReflection);
-        }
-
-        return [];
     }
 
     /**

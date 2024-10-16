@@ -46,7 +46,7 @@ final class FixedFieldsPropertyTypeResolver implements PropertyTypeResolverInter
 
         /** @var class-string[] $fixedFields */
         foreach ($fixedFields as $fieldName => $fieldType) {
-            $types[$fieldName] = $this->typeResolver->resolveDBFieldType('SilverStripe\ORM\DataObject', $fieldName, $fieldType);
+            $types[$fieldName] = $this->typeResolver->resolveDBFieldType($fieldType);
         }
 
         return $types;
