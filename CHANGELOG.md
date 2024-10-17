@@ -1,13 +1,7 @@
 # silverstan
 
-## 0.0.2
+## 0.1.0
 
-### Patch Changes
-
-- Update build config
-
-## 0.0.1
-
-### Patch Changes
+### Minor Changes
 
 - Initial release
