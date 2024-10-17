@@ -68,10 +68,6 @@ CODE_SAMPLE
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $table_name = 'Foo';
-
-    private static string $singlular_name = 'Foo';
-
-    private static string $plural_name = 'Foos';
 }
 CODE_SAMPLE
                     ,

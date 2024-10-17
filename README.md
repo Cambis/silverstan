@@ -1,8 +1,18 @@
 # Silverstan | Kaitiaki Ponga
 
-This project contains [PHPStan extensions and rules](https://github.com/phpstan/phpstan) for [Silverstripe CMS](https://github.com/silverstripe).
+[PHPStan extensions and rules](https://github.com/phpstan/phpstan) for [Silverstripe CMS](https://github.com/silverstripe).
 
-See the available [Silverstripe rules](docs/rules_overview.md).
+## Features ✨
+
+Here are some of the nice features this extension provides:
+
+- Support for read-write configuration properties.
+- Correct `SilverStripe\Core\Extension::$owner` and `SilverStripe\Core\Extension::getOwner()` return types.
+- `SilverStripe\Core\Extensible` magic methods and properties.
+- `SilverStripe\Config\Collections\ConfigCollectionInterface::get()` and `SilverStripe\Core\Config\Config_ForClass::get()` return types.
+- `SilverStripe\Core\Extensible::hasExtension()` and `SilverStripe\Core\Extensible::hasMethod()` type specification.
+- Various correct return types for commonly used Silverstripe modules.
+- [Configurable rules to help make your application safer](docs/rules_overview.md).
 
 ## Prerequisites 🦺
 
