@@ -15,6 +15,8 @@ use PHPStan\Reflection\PropertyReflection;
 use function array_key_exists;
 
 /**
+ * This extension resolves `SilverStripe\Core\Extensible` magic methods and properties.
+ *
  * @see \Cambis\Silverstan\Tests\Extension\Reflection\ExtensibleClassReflectionExtensionTest
  */
 final class ExtensibleClassReflectionExtension implements MethodsClassReflectionExtension, PropertiesClassReflectionExtension
@@ -52,11 +54,6 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
         if ($this->annotationClassReflectionExtension->hasMethod($classReflection, $methodName)) {
             return true;
         }
-
-        // // Let PHPStan handle this case
-        // if (array_key_exists($methodName, $classReflection->getMethodTags())) {
-        //     return false;
-        // }
 
         $methodReflections = $this->resolveInjectedMethodReflections($classReflection);
 

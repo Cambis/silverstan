@@ -11,7 +11,10 @@ use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
 
 /**
+ * This extension marks configuration properties as always read and written.
+ *
  * @see \Cambis\Silverstan\Tests\Extension\ClassPropertiesNode\ConfigurationPropertiesExtensionTest
+ * @see https://phpstan.org/developing-extensions/always-read-written-properties
  */
 final readonly class ConfigurationPropertiesExtension implements ReadWritePropertiesExtension
 {

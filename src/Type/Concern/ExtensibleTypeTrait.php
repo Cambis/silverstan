@@ -11,7 +11,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 
 /**
- * This trait allows the use of `Extensible&Extension` which would normally resolve to NEVER.
+ * This trait allows the use of `SilverStripe\Core\Extensible&SilverStripe\Core\Extension` which would normally resolve to NEVER.
  *
  * @requires-implements TypeWithClassName
  */

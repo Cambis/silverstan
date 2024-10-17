@@ -13,6 +13,11 @@ use PHPStan\Type\Type;
 
 final class TypeFactory
 {
+    /**
+     * Adds the `Cambis\Silverstan\Type\Concern\ExtensibleTypeTrait` to a type if it is a `PHPStan\Type\TypeWithClassName`.
+     *
+     * @see \Cambis\Silverstan\Type\Concern\ExtensibleTypeTrait
+     */
     public function createExtensibleTypeFromType(Type $type): Type
     {
         /** @phpstan-ignore-next-line phpstanApi.instanceofType */

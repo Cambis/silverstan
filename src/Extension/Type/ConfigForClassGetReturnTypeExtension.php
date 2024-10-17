@@ -19,7 +19,7 @@ use PHPStan\Type\Type;
 use function in_array;
 
 /**
- * This extension attempts to resolve the type of `\SilverStripe\Core\Config\Config_ForClass::get()` by looking for a matching native property from the called class or one of its parents.
+ * This extension attempts to resolve the type of `SilverStripe\Core\Config\Config_ForClass::get()` by looking for a matching native property from the called class or one of its parents.
  *
  * @see \Cambis\Silverstan\Tests\Extension\Type\ConfigForClassGetReturnTypeExtensionTest
  */

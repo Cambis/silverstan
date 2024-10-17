@@ -13,6 +13,15 @@ use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
 use function array_key_exists;
 
+/**
+ * This extension is used resolve methods and properties declared by annotations.
+ *
+ * Inspired by https://github.com/phpstan/phpstan-src/blob/1.12.x/src/Reflection/Annotations/AnnotationsPropertiesClassReflectionExtension.php, abeit a simpled version of it.
+ *
+ * We are not using the former as it is not covered by the backward compatibility promise.
+ *
+ * @see https://phpstan.org/developing-extensions/backward-compatibility-promise
+ */
 final class AnnotationClassReflectionExtension implements MethodsClassReflectionExtension, PropertiesClassReflectionExtension
 {
     /**

@@ -11,6 +11,8 @@ use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
 
 /**
+ * This extension resolves `SilverStripe\View\ViewableData` magic properties.
+ *
  * @see \Cambis\Silverstan\Tests\Extension\Reflection\ViewableDataClassReflectionExtensionTest
  */
 final readonly class ViewableDataClassReflectionExtension implements PropertiesClassReflectionExtension

@@ -11,6 +11,9 @@ use function explode;
 use function is_array;
 use function preg_match;
 
+/**
+ * This service provides access to the Silverstripe configuration API.
+ */
 final class ConfigurationResolver
 {
     /**
