@@ -14,12 +14,12 @@ use PHPStan\TrinaryLogic;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 
-final readonly class ExtensibleMethodReflection implements MethodReflection
+final class ExtensibleMethodReflection implements MethodReflection
 {
     public function __construct(
-        private string $name,
-        private ClassReflection $classReflection,
-        private Type $returnType
+        private readonly string $name,
+        private readonly ClassReflection $classReflection,
+        private readonly Type $returnType
     ) {
     }
 
