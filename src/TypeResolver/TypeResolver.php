@@ -19,7 +19,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
-use ReflectionProperty;
 use function array_key_exists;
 use function is_array;
 use function is_string;
@@ -56,14 +55,8 @@ final readonly class TypeResolver
     {
         $types = [];
 
-        foreach ($classReflection->getNativeReflection()->getProperties(ReflectionProperty::IS_PRIVATE) as $reflectionProperty) {
-            $property = $this->reflectionResolver->resolveConfigurationPropertyReflection($classReflection, $reflectionProperty->getName());
-
-            if (!$property instanceof PropertyReflection) {
-                continue;
-            }
-
-            $types = [...$types, ...$this->resolveInjectedPropertyTypesFromConfigurationProperty($classReflection, $reflectionProperty->getName())];
+        foreach ($this->typeResolverRegistryProvider->getRegistry()->getPropertyTypeResolvers() as $typeResolver) {
+            $types = [...$types, ...$typeResolver->resolve($classReflection)];
         }
 
         if (!$classReflection->getParentClass() instanceof ClassReflection) {
@@ -124,14 +117,8 @@ final readonly class TypeResolver
     {
         $types = [];
 
-        foreach ($classReflection->getNativeReflection()->getProperties(ReflectionProperty::IS_PRIVATE) as $reflectionProperty) {
-            $property = $this->reflectionResolver->resolveConfigurationPropertyReflection($classReflection, $reflectionProperty->getName());
-
-            if (!$property instanceof PropertyReflection) {
-                continue;
-            }
-
-            $types = [...$types, ...$this->resolveInjectedMethodTypesFromConfigurationProperty($classReflection, $reflectionProperty->getName())];
+        foreach ($this->typeResolverRegistryProvider->getRegistry()->getMethodTypeResolvers() as $typeResolver) {
+            $types = [...$types, ...$typeResolver->resolve($classReflection)];
         }
 
         if (!$classReflection->getParentClass() instanceof ClassReflection) {
