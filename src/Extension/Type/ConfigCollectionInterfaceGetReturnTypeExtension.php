@@ -24,7 +24,7 @@ use function in_array;
  *
  * @see \Cambis\Silverstan\Tests\Extension\Type\ConfigCollectionInterfaceGetReturnTypeExtensionTest
  */
-final readonly class ConfigCollectionInterfaceGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
+final class ConfigCollectionInterfaceGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     /**
      * @var string[]
@@ -34,9 +34,9 @@ final readonly class ConfigCollectionInterfaceGetReturnTypeExtension implements 
     ];
 
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private TypeResolver $configurationPropertyTypeResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly TypeResolver $configurationPropertyTypeResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

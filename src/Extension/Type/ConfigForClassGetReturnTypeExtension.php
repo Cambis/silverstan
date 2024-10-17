@@ -23,7 +23,7 @@ use function in_array;
  *
  * @see \Cambis\Silverstan\Tests\Extension\Type\ConfigForClassGetReturnTypeExtensionTest
  */
-final readonly class ConfigForClassGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
+final class ConfigForClassGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     /**
      * @var string[]
@@ -34,9 +34,9 @@ final readonly class ConfigForClassGetReturnTypeExtension implements DynamicMeth
     ];
 
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private TypeResolver $configurationPropertyTypeResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly TypeResolver $configurationPropertyTypeResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

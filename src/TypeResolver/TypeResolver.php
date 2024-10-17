@@ -25,7 +25,7 @@ use function is_array;
 use function is_string;
 use function strtok;
 
-final readonly class TypeResolver
+final class TypeResolver
 {
     /**
      * @var array<class-string, class-string>
@@ -38,11 +38,11 @@ final readonly class TypeResolver
     ];
 
     public function __construct(
-        private ConfigurationResolver $configurationResolver,
-        private ReflectionProvider $reflectionProvider,
-        private ReflectionResolver $reflectionResolver,
-        private TypeFactory $typeFactory,
-        private TypeResolverRegistryProviderInterface $typeResolverRegistryProvider
+        private readonly ConfigurationResolver $configurationResolver,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly TypeFactory $typeFactory,
+        private readonly TypeResolverRegistryProviderInterface $typeResolverRegistryProvider
     ) {
     }
 

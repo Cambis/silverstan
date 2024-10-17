@@ -16,13 +16,13 @@ use PHPStan\Type\ObjectType;
 use function array_unique;
 use function is_array;
 
-final readonly class ExtensionTypeResolver implements MethodTypeResolverInterface, PropertyTypeResolverInterface
+final class ExtensionTypeResolver implements MethodTypeResolverInterface, PropertyTypeResolverInterface
 {
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private ConfigurationResolver $configurationResolver,
-        private ReflectionProvider $reflectionProvider,
-        private TypeFactory $typeFactory
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly ConfigurationResolver $configurationResolver,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly TypeFactory $typeFactory
     ) {
     }
 
