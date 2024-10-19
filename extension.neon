@@ -9,7 +9,8 @@ parameters:
         - Symbiote\QueuedJobs\Services\AbstractQueuedJob
 services:
     -
-        class: Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory
+        class: Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInterface
+        factory: Cambis\Silverstan\ConfigurationResolver\LazyConfigCollectionFactory
     -
         class: Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver
     -

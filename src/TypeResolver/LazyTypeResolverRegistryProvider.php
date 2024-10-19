@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\TypeResolver;
 
+use Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface;
+use Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryProviderInterface;
 use Override;
@@ -26,9 +28,9 @@ final class LazyTypeResolverRegistryProvider implements TypeResolverRegistryProv
             $this->registry = new TypeResolverRegistry(
                 $this->container->getByType(TypeResolver::class),
                 /** @phpstan-ignore-next-line argument.type */
-                array_reverse($this->container->getServicesByTag('silverstan.typeResolver.propertyTypeResolver')),
+                array_reverse($this->container->getServicesByTag(PropertyTypeResolverInterface::SERVICE_NAME)),
                 /** @phpstan-ignore-next-line argument.type */
-                array_reverse($this->container->getServicesByTag('silverstan.typeResolver.methodTypeResolver'))
+                array_reverse($this->container->getServicesByTag(MethodTypeResolverInterface::SERVICE_NAME))
             );
         }
 

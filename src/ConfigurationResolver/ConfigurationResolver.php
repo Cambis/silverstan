@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ConfigurationResolver;
 
+use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInterface;
 use PHPStan\Reflection\ReflectionProvider;
 use SilverStripe\Config\Collections\ConfigCollectionInterface;
 use function array_key_exists;
@@ -25,7 +26,7 @@ final class ConfigurationResolver
     private ?ConfigCollectionInterface $configCollection = null;
 
     public function __construct(
-        private readonly ConfigCollectionFactory $configCollectionFactory,
+        private readonly ConfigCollectionFactoryInterface $configCollectionFactory,
         private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
