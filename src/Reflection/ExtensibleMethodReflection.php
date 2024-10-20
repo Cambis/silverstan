@@ -9,6 +9,7 @@ use PHPStan\Reflection\ClassMemberReflection;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionVariant;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Generic\TemplateTypeMap;
@@ -16,23 +17,31 @@ use PHPStan\Type\Type;
 
 final readonly class ExtensibleMethodReflection implements MethodReflection
 {
+    /**
+     * @param ParameterReflection[] $parameters
+     */
     public function __construct(
         private string $name,
-        private ClassReflection $classReflection,
-        private Type $returnType
+        private ClassReflection $declaringClass,
+        private Type $returnType,
+        private array $parameters,
+        private bool $isStatic,
+        private bool $isVariadic,
+        private ?Type $throwType,
+        private TemplateTypeMap $templateTypeMap,
     ) {
     }
 
     #[Override]
     public function getDeclaringClass(): ClassReflection
     {
-        return $this->classReflection;
+        return $this->declaringClass;
     }
 
     #[Override]
     public function isStatic(): bool
     {
-        return false;
+        return $this->isStatic;
     }
 
     #[Override]
@@ -73,10 +82,10 @@ final readonly class ExtensibleMethodReflection implements MethodReflection
     {
         return [
             new FunctionVariant(
-                TemplateTypeMap::createEmpty(),
-                TemplateTypeMap::createEmpty(),
-                [],
-                false,
+                $this->templateTypeMap,
+                null,
+                $this->parameters,
+                $this->isVariadic,
                 $this->returnType
             ),
         ];
@@ -109,7 +118,7 @@ final readonly class ExtensibleMethodReflection implements MethodReflection
     #[Override]
     public function getThrowType(): ?Type
     {
-        return null;
+        return $this->throwType;
     }
 
     #[Override]

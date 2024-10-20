@@ -12,6 +12,7 @@ use Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProv
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\PropertyReflection;
+use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use function array_key_exists;
@@ -149,6 +150,11 @@ final readonly class ReflectionResolver
                 $methodName,
                 $declaringClass,
                 $methodTag->getReturnType(),
+                [],
+                false,
+                false,
+                null,
+                TemplateTypeMap::createEmpty()
             );
         }
 

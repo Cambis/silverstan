@@ -6,9 +6,15 @@ namespace Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\Reflection\ExtensibleMethodReflection;
+use Cambis\Silverstan\Reflection\ExtensibleParameterReflection;
 use Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterface;
 use Override;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\PassedByReference;
+use PHPStan\Type\Generic\TemplateTypeMap;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
 use function is_array;
 
 /**
@@ -44,11 +50,12 @@ final readonly class DisplayLogicCriteriaComparisonsMethodReflectionResolver imp
             return [];
         }
 
-        $returnType = $classReflection->getNativeMethod('__call')->getVariants()[0]->getReturnType();
+        $parameters = [new ExtensibleParameterReflection('val', new MixedType(), PassedByReference::createNo(), true, true, new NullType())];
+        $returnType = new ObjectType('UncleCheese\DisplayLogic\Criteria');
 
         /** @var string[] $comparisons */
         foreach ($comparisons as $comparison) {
-            $methodReflections[$comparison] = new ExtensibleMethodReflection($comparison, $classReflection, $returnType);
+            $methodReflections[$comparison] = new ExtensibleMethodReflection($comparison, $classReflection, $returnType, $parameters, false, true, null, TemplateTypeMap::createEmpty());
         }
 
         return $methodReflections;

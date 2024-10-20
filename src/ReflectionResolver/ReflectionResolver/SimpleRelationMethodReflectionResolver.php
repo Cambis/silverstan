@@ -10,6 +10,7 @@ use Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterf
 use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\Generic\TemplateTypeMap;
 
 final readonly class SimpleRelationMethodReflectionResolver implements MethodReflectionResolverInterface
 {
@@ -38,7 +39,7 @@ final readonly class SimpleRelationMethodReflectionResolver implements MethodRef
         $methodReflections = [];
 
         foreach ($types as $name => $type) {
-            $methodReflections[$name] = new ExtensibleMethodReflection($name, $classReflection, $type);
+            $methodReflections[$name] = new ExtensibleMethodReflection($name, $classReflection, $type, [], false, false, null, TemplateTypeMap::createEmpty());
         }
 
         return $methodReflections;

@@ -12,6 +12,7 @@ use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\Generic\TemplateTypeMap;
 use ReflectionMethod;
 use function array_unique;
 use function is_array;
@@ -44,7 +45,7 @@ final readonly class ExtensionMethodReflectionResolver implements MethodReflecti
         $methodReflections = [];
 
         foreach ($types as $name => $type) {
-            $methodReflections[$name] = new ExtensibleMethodReflection($name, $classReflection, $type);
+            $methodReflections[$name] = new ExtensibleMethodReflection($name, $classReflection, $type, [], false, false, null, TemplateTypeMap::createEmpty());
         }
 
         $extensions = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName());
