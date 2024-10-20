@@ -11,12 +11,12 @@ use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
 
-final readonly class SimpleRelationPropertyReflectionResolver implements PropertyReflectionResolverInterface
+final class SimpleRelationPropertyReflectionResolver implements PropertyReflectionResolverInterface
 {
     public function __construct(
-        private string $configurationPropertyName,
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private TypeResolver $typeResolver
+        private readonly string $configurationPropertyName,
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly TypeResolver $typeResolver
     ) {
     }
 

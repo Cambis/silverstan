@@ -15,10 +15,10 @@ use PHPStan\Reflection\PropertyReflection;
  *
  * @see \Cambis\Silverstan\Tests\Extension\Reflection\ViewableDataClassReflectionExtensionTest
  */
-final readonly class ViewableDataClassReflectionExtension implements PropertiesClassReflectionExtension
+final class ViewableDataClassReflectionExtension implements PropertiesClassReflectionExtension
 {
     public function __construct(
-        private AnnotationClassReflectionExtension $annotationClassReflectionExtension
+        private readonly AnnotationClassReflectionExtension $annotationClassReflectionExtension
     ) {
     }
 

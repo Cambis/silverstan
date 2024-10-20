@@ -23,11 +23,11 @@ use function sprintf;
  * @implements SilverstanRuleInterface<StaticPropertyFetch>
  * @see \Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRuleTest
  */
-final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements SilverstanRuleInterface
+final class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements SilverstanRuleInterface
 {
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly PropertyReflectionAnalyser $propertyReflectionAnalyser,
     ) {
     }
 
