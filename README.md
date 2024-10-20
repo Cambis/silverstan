@@ -12,7 +12,7 @@ Here are some of the nice features this extension provides:
 - `SilverStripe\Config\Collections\ConfigCollectionInterface::get()` and `SilverStripe\Core\Config\Config_ForClass::get()` return types.
 - `SilverStripe\Core\Extensible::hasExtension()` and `SilverStripe\Core\Extensible::hasMethod()` type specification.
 - Various correct return types for commonly used Silverstripe modules.
-- [Configurable rules to help make your application safer](docs/rules_overview.md).
+- [Customisable rules to help make your application safer](docs/rules_overview.md).
 
 ## Prerequisites 🦺
 
@@ -48,12 +48,12 @@ includes:
 
 </details>
 
-## Configuration 🚧
+## Rules 🚨
+Silverstan provides a set of customisable rules that can help make your application safer.
 
-### Rules
 Each rule can be enabled/disabled individually using the configuration options, please refer to the [rules overview](docs/rules_overview.md) for the available options.
 
-### Analysing `SilverStripe\Dev\TestOnly` classes
+## SilverStripe\Dev\TestOnly 👨‍🔬
 Complex analysis of `SilverStripe\Dev\TestOnly` classes is disabled by default. This is because these classes often contain dependencies that aren't provided by Silverstripe.
 
 To enable complex analysis of these classes, please check the following option in your configuration file:
@@ -64,3 +64,69 @@ parameters:
 ```
 
 If PHPStan complains about missing classes, be sure to add the corresponding package to your dev dependencies.
+
+## SilverStripe\Core\Extensible 🧑‍🔬
+
+### Solving magic methods and properties
+Silverstan provides support for magic `SilverStripe\Core\Extensible` methods and properties.
+
+Silverstan will attempt to resolve magic methods/properties by searching for existing annotations in the class ancestry first. If no annotation is found it will access the configuration API in order to resolve the magic method/property.
+
+Using annotations is preferred, as they can often provide more information, have stricter types, and reduce the number of calls to the configuration API.
+
+You can use [Silverstripe Rector](https://github.com/Cambis/silverstripe-rector) to create the annotations for you.
+
+### Solving SilverStripe\Core\Extensible::hasExtension() and SilverStripe\Core\Extensible::hasMethod()
+
+Silverstan provides type specifying extensions for these cases. However, these extensions can only be applied on a per class basis.
+
+The default configuration applies these extensions to `SilverStripe\View\ViewableData` only. If you wish to add them to other `SilverStripe\Core\Extensible` classes that aren't subclasses of the former you can use the following configuration:
+
+```yml
+services:
+    -
+        # Solves `Foo::hasExtension()`
+        class: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'Foo'
+    -
+        # Solves `Foo::hasMethod()`
+        class: Cambis\Silverstan\Extension\Type\ExtensibleHasMethodTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'Foo'
+```
+
+### Solving SilverStripe\Core\Extensible::has_extension()
+
+> [!WARNING]
+> Silverstan does not support type specification for `SilverStripe\Core\Extensible::has_extension()`. If you use this method in your codebase, consider using one of the following examples to help solve errors that may be reported by PHPStan.
+
+In the example below, we are adding a typehint to inform PHPStan of the expected type.
+```diff
+if (\SilverStripe\View\ViewableData::has_extension(Foo::class, FooExtension::class)) {
++  /** @var Foo&FooExtension $foo */
+  $foo = Foo::create();
+}
+```
+
+In the example below, we are changing the calls to use the dynamic `SilverStripe\Core\Extensible::hasExtension()` method which is supported by Silverstan.
+```diff
+$foo = Foo::create();
+
+- if ($foo->has_extension(FooExtension::class)) {
++ if ($foo->hasExtension(FooExtension::class)) {
+  // ...
+}
+
+- if ($foo::has_extension(FooExtension::class)) {
++ if ($foo->hasExtension(FooExtension::class)) {
+  // ...
+}
+```
+
+## SilverStripe\Core\Config\Config_ForClass 👩‍🔬
+
+> [!WARNING]
+> Silverstan cannot resolve the type of a property fetch on `SilverStripe\Core\Config\Config_ForClass`, use `SilverStripe\Core\Config\Config_ForClass::get()` instead. [See the rules overview](docs/rules_overview.md#disallowpropertyfetchonconfigforclassrule).
