@@ -35,7 +35,7 @@ final readonly class ExtensionMethodReflectionResolver implements MethodReflecti
     #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
-        if (!$this->classReflectionAnalyser->isDataObject($classReflection)) {
+        if (!$this->classReflectionAnalyser->isExtensible($classReflection)) {
             return [];
         }
 

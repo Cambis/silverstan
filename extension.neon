@@ -76,6 +76,9 @@ services:
         class: Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProviderInterface
         factory: Cambis\Silverstan\ReflectionResolver\LazyReflectionResolverRegistryProvider
     -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\DisplayLogicCriteriaComparisonsMethodReflectionResolver
+        tags: [silverstan.reflectionResolver.methodReflectionResolver]
+    -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\ExtensionMethodReflectionResolver
         tags: [silverstan.reflectionResolver.methodReflectionResolver]
     -
