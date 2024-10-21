@@ -2,10 +2,6 @@
 
 [PHPStan extensions and rules](https://github.com/phpstan/phpstan) for [Silverstripe CMS](https://github.com/silverstripe).
 
-> [!WARNING]
-> Use the `dev-main` version, not a tagged version.
-> `composer require --dev cambis/silverstan:dev-main`
-
 ## Features ✨
 
 Here are some of the nice features this extension provides:
@@ -35,7 +31,7 @@ To make the best use of this module, make sure that your classes are correctly a
 Install via composer.
 
 ```sh
-composer require --dev cambis/silverstan:dev-main
+composer require --dev cambis/silverstan
 ```
 
 If you also install [phpstan/extension-installer](https://github.com/phpstan/extension-installer) then you're all set!
