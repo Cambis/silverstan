@@ -1,6 +1,6 @@
 {
   "name": "cambis/silverstan",
-  "description": "PHPStan rules for Silverstripe.",
+  "description": "PHPStan extensions and rules for Silverstripe.",
   "license": "MIT",
   "type": "phpstan-extension",
   "authors": [
