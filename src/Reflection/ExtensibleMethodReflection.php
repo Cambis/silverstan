@@ -15,20 +15,20 @@ use PHPStan\TrinaryLogic;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 
-final readonly class ExtensibleMethodReflection implements MethodReflection
+final class ExtensibleMethodReflection implements MethodReflection
 {
     /**
      * @param ParameterReflection[] $parameters
      */
     public function __construct(
-        private string $name,
-        private ClassReflection $declaringClass,
-        private Type $returnType,
-        private array $parameters,
-        private bool $isStatic,
-        private bool $isVariadic,
-        private ?Type $throwType,
-        private TemplateTypeMap $templateTypeMap,
+        private readonly string $name,
+        private readonly ClassReflection $declaringClass,
+        private readonly Type $returnType,
+        private readonly array $parameters,
+        private readonly bool $isStatic,
+        private readonly bool $isVariadic,
+        private readonly ?Type $throwType,
+        private readonly TemplateTypeMap $templateTypeMap,
     ) {
     }
 

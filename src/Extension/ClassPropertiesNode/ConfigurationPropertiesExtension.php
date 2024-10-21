@@ -16,11 +16,11 @@ use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
  * @see \Cambis\Silverstan\Tests\Extension\ClassPropertiesNode\ConfigurationPropertiesExtensionTest
  * @see https://phpstan.org/developing-extensions/always-read-written-properties
  */
-final readonly class ConfigurationPropertiesExtension implements ReadWritePropertiesExtension
+final class ConfigurationPropertiesExtension implements ReadWritePropertiesExtension
 {
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly PropertyReflectionAnalyser $propertyReflectionAnalyser
     ) {
     }
 
