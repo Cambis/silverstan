@@ -3,6 +3,11 @@
     "description": "PHPStan extensions and rules for Silverstripe.",
     "license": "MIT",
     "type": "phpstan-extension",
+    "keywords": [
+        "silverstripe",
+        "phpstan",
+        "static analysis"
+    ],
     "authors": [
         {
             "name": "Cameron Bryers"
