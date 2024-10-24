@@ -42,6 +42,9 @@ services:
         class: Cambis\Silverstan\Extension\Type\ConfigForClassGetReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
     -
+        class: Cambis\Silverstan\Extension\Type\DataObjectDbObjectReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
         class: Cambis\Silverstan\Extension\Type\DataObjectDeleteTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
     -
@@ -61,6 +64,12 @@ services:
         arguments:
             className: 'SilverStripe\View\ViewableData'
     -
+        class: Cambis\Silverstan\Extension\Type\InjectorGetReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Cambis\Silverstan\Extension\Type\SingletonReturnTypeExtension
+        tags: [phpstan.broker.dynamicFunctionReturnTypeExtension]
+    -
         class: Cambis\Silverstan\Extension\Type\ViewableDataHasFieldTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
     -
@@ -75,6 +84,9 @@ services:
     -
         class: Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProviderInterface
         factory: Cambis\Silverstan\ReflectionResolver\LazyReflectionResolverRegistryProvider
+    -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\DependencyInjectionPropertyReflectionResolver
+        tags: [silverstan.reflectionResolver.propertyReflectionResolver]
     -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\DisplayLogicCriteriaComparisonsMethodReflectionResolver
         tags: [silverstan.reflectionResolver.methodReflectionResolver]
@@ -135,6 +147,9 @@ services:
         factory: Cambis\Silverstan\TypeResolver\LazyTypeResolverRegistryProvider
     -
         class: Cambis\Silverstan\TypeResolver\TypeResolver\DBPropertyTypeResolver
+        tags: [silverstan.typeResolver.propertyTypeResolver]
+    -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\DependencyInjectionPropertyTypeResolver
         tags: [silverstan.typeResolver.propertyTypeResolver]
     -
         class: Cambis\Silverstan\TypeResolver\TypeResolver\ExtensionMethodTypeResolver

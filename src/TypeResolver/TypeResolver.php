@@ -11,6 +11,7 @@ use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryProviderInterfac
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -21,8 +22,13 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use function array_key_exists;
 use function is_array;
+use function is_bool;
+use function is_numeric;
 use function is_string;
+use function str_contains;
+use function str_starts_with;
 use function strtok;
+use function substr;
 
 final readonly class TypeResolver
 {
@@ -193,5 +199,49 @@ final readonly class TypeResolver
         }
 
         return $this->typeFactory->createExtensibleTypeFromType(new ObjectType($className));
+    }
+
+    /**
+     * @param array<mixed>|bool|int|string $fieldType
+     */
+    public function resolveDependencyFieldType(array|bool|int|string $fieldType): Type
+    {
+        if (is_array($fieldType)) {
+            return new ArrayType(new IntegerType(), new MixedType());
+        }
+
+        if (is_bool($fieldType)) {
+            return new BooleanType();
+        }
+
+        if (is_numeric($fieldType)) {
+            return new IntegerType();
+        }
+
+        $name = $fieldType;
+
+        // Remove the prefix
+        if (str_contains($name, '%$')) {
+            $name = $this->configurationResolver->resolvePrefixNotation($fieldType);
+        }
+
+        // Remove leading backslash
+        if (str_starts_with($name, '\\')) {
+            $name = substr($name, 1);
+        }
+
+        if (str_contains($name, '.')) {
+            $name = $this->configurationResolver->resolveDotNotation($fieldType);
+        }
+
+        if (!$this->reflectionProvider->hasClass($name)) {
+            return new StringType();
+        }
+
+        if ($this->reflectionProvider->hasClass($name)) {
+            $name = $this->configurationResolver->resolveClassName($name);
+        }
+
+        return new ObjectType($name);
     }
 }

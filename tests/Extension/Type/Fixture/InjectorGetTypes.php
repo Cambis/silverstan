@@ -9,7 +9,17 @@ use function singleton;
 
 assertType(
     Foo::class,
+    Injector::inst()->get('Foo')
+);
+
+assertType(
+    Foo::class,
     Injector::inst()->get(Foo::class)
+);
+
+assertType(
+    Foo::class,
+    singleton('Foo')
 );
 
 assertType(

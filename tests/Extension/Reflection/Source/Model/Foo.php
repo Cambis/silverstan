@@ -15,6 +15,11 @@ use SilverStripe\ORM\HasManyList;
 
 class Foo extends DataObject implements TestOnly
 {
+    /**
+     * @var self[]
+     */
+    public array $typedDiArray;
+
     private static array $db = [
         'Boolean' => 'Boolean',
         'Currency' => 'Currency',
@@ -60,5 +65,15 @@ class Foo extends DataObject implements TestOnly
 
     private static array $extensions = [
         FooExtension::class,
+    ];
+
+    private static array $dependencies = [
+        'diObject' => '%$' . self::class,
+        'diArray' => [
+            '%$' . self::class,
+        ],
+        'typedDiArray' => [
+            '%$' . self::class,
+        ],
     ];
 }

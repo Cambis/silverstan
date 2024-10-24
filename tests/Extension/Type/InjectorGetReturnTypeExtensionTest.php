@@ -8,11 +8,11 @@ use Generator;
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
 
-final class InjectorTypeTest extends TypeInferenceTestCase
+final class InjectorGetReturnTypeExtensionTest extends TypeInferenceTestCase
 {
     public function typeFileAsserts(): Generator
     {
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/InjectorTypes.php');
+        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/InjectorGetTypes.php');
     }
 
     /**
@@ -29,6 +29,6 @@ final class InjectorTypeTest extends TypeInferenceTestCase
     #[Override]
     public static function getAdditionalConfigFiles(): array
     {
-        return [__DIR__ . '/../tests.neon'];
+        return [__DIR__ . '/../../tests.neon'];
     }
 }

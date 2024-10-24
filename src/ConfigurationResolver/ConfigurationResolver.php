@@ -87,4 +87,11 @@ final class ConfigurationResolver
 
         return $this->resolveClassName($resolved);
     }
+
+    public function resolvePrefixNotation(string $fieldType): string
+    {
+        [$_, $class] = explode('%$', $fieldType, 2);
+
+        return $class;
+    }
 }
