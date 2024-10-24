@@ -48,7 +48,7 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Silvers
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Call `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` methods as the object may not be present in the database. ' .
+            'Call `exists()` first before accessing any magic `SilverStripe\ORM\DataObject` methods as the object may not be present in the database. ' .
             'Database manipulation methods such as `write()` and `delete()` are allowed by default. ' .
             'If you think a method is safe to call by default add it to the `allowedMethodCalls` configuration.',
             [

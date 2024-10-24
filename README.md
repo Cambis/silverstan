@@ -6,11 +6,14 @@
 
 Here are some of the nice features this extension provides:
 
-- Support for read-write configuration properties.
-- Correct `SilverStripe\Core\Extension::$owner` and `SilverStripe\Core\Extension::getOwner()` return types.
-- `SilverStripe\Core\Extensible` magic methods and properties.
-- `SilverStripe\Config\Collections\ConfigCollectionInterface::get()` and `SilverStripe\Core\Config\Config_ForClass::get()` return types.
-- `SilverStripe\Core\Extensible::hasExtension()` and `SilverStripe\Core\Extensible::hasMethod()` type specification.
+- Recognition that configuration properties are always [read and written](https://phpstan.org/developing-extensions/always-read-written-properties).
+- Correct return type for `SilverStripe\Config\Collections\ConfigCollectionInterface::get()`.
+- Correct return type for `SilverStripe\Core\Config\Config_ForClass::get()`.
+- Resolution of `SilverStripe\Core\Extensible` magic methods and properties.
+- Type specification for `SilverStripe\Core\Extensible::hasExtension()` and `SilverStripe\Core\Extensible::hasMethod()` methods.
+- Correct return types for `SilverStripe\Core\Extension::$owner` and `SilverStripe\Core\Extension::getOwner()`.
+- Correct return types for `SilverStripe\Core\Injector\Injector::get()` and `SilverStripe\Core\Injector\Injector::create()`.
+- Correct return type for `SilverStripe\ORM\DataObject::dbObject()`.
 - Various correct return types for commonly used Silverstripe modules.
 - [Customisable rules to help make your application safer](docs/rules_overview.md).
 

@@ -33,7 +33,7 @@ final readonly class DisallowNewInstanceOnInjectableRule implements SilverstanRu
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Disallow instantiating a `\SilverStripe\Core\Injectable` class using `new`. Use create() instead.',
+            'Disallow instantiating a `SilverStripe\Core\Injectable` class using `new`. Use create() instead.',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'

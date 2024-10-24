@@ -2,7 +2,7 @@
 
 ## DisallowMethodCallOnUnsafeDataObjectRule
 
-Call `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` methods as the object may not be present in the database. Database manipulation methods such as `write()` and `delete()` are allowed by default. If you think a method is safe to call by default add it to the `allowedMethodCalls` configuration.
+Call `exists()` first before accessing any magic `SilverStripe\ORM\DataObject` methods as the object may not be present in the database. Database manipulation methods such as `write()` and `delete()` are allowed by default. If you think a method is safe to call by default add it to the `allowedMethodCalls` configuration.
 
 :wrench: **configure it!**
 
@@ -59,7 +59,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 ## DisallowNewInstanceOnInjectableRule
 
-Disallow instantiating a `\SilverStripe\Core\Injectable` class using `new`. Use `create()` instead.
+Disallow instantiating a `SilverStripe\Core\Injectable` class using `new`. Use `create()` instead.
 
 :wrench: **configure it!**
 
@@ -155,7 +155,7 @@ final class Bar extends Foo
 
 ## DisallowPropertyFetchOnConfigForClassRule
 
-Disallow property fetch on `\SilverStripe\Core\Config\Config_ForClass`. PHPStan cannot resolve the type of the property, use `self::config()->get('property_name')` instead.
+Disallow property fetch on `SilverStripe\Core\Config\Config_ForClass`. PHPStan cannot resolve the type of the property, use `self::config()->get('property_name')` instead.
 
 :wrench: **configure it!**
 
@@ -204,7 +204,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 ## DisallowPropertyFetchOnUnsafeDataObjectRule
 
-Call `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` properties as the object may not be present in the database. Property assignment is allowed.
+Call `exists()` first before accessing any magic `SilverStripe\ORM\DataObject` properties as the object may not be present in the database. Property assignment is allowed.
 
 :wrench: **configure it!**
 

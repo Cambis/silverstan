@@ -31,7 +31,7 @@ final readonly class DisallowPropertyFetchOnUnsafeDataObjectRule implements Silv
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Call `exists()` first before accessing any magic `\SilverStripe\ORM\DataObject` properties as the object may not be present in the database. ' .
+            'Call `exists()` first before accessing any magic `SilverStripe\ORM\DataObject` properties as the object may not be present in the database. ' .
             'Property assignment is allowed.',
             [
                 new ConfiguredCodeSample(

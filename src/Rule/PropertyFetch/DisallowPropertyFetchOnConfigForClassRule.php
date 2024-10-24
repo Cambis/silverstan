@@ -28,7 +28,7 @@ final readonly class DisallowPropertyFetchOnConfigForClassRule implements Silver
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Disallow property fetch on `\SilverStripe\Core\Config\Config_ForClass`. ' .
+            'Disallow property fetch on `SilverStripe\Core\Config\Config_ForClass`. ' .
             "PHPStan cannot resolve the type of the property, use `self::config()->get('property_name')` instead.",
             [
                 new ConfiguredCodeSample(
