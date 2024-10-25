@@ -22,10 +22,10 @@ use function is_array;
  *
  * @see \Cambis\Silverstan\Tests\Extension\Reflection\ExtensibleClassReflectionExtensionTest
  */
-final readonly class DisplayLogicCriteriaComparisonsMethodReflectionResolver implements MethodReflectionResolverInterface
+final class DisplayLogicCriteriaComparisonsMethodReflectionResolver implements MethodReflectionResolverInterface
 {
     public function __construct(
-        private ConfigurationResolver $configurationResolver
+        private readonly ConfigurationResolver $configurationResolver
     ) {
     }
 

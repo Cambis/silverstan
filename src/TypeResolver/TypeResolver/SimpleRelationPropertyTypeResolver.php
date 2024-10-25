@@ -12,11 +12,11 @@ use PHPStan\Type\IntegerType;
 use function array_keys;
 use function is_array;
 
-final readonly class SimpleRelationPropertyTypeResolver implements PropertyTypeResolverInterface
+final class SimpleRelationPropertyTypeResolver implements PropertyTypeResolverInterface
 {
     public function __construct(
-        private string $configurationPropertyName,
-        private ConfigurationResolver $configurationResolver,
+        private readonly string $configurationPropertyName,
+        private readonly ConfigurationResolver $configurationResolver,
     ) {
     }
 
