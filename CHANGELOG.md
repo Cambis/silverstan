@@ -1,5 +1,13 @@
 # silverstan
 
+## 0.3.0
+
+### Minor Changes
+
+- baa4268: - Add InjectorGetReturnTypeExtension
+  - Add SingletonReturnTypeExtension
+  - Add DataObjectDbObjectReturnTypeExtension
+
 ## 0.2.0
 
 ### Minor Changes
