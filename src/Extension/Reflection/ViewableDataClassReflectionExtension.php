@@ -30,7 +30,7 @@ final readonly class ViewableDataClassReflectionExtension implements PropertiesC
             return false;
         }
 
-        return $classReflection->isSubclassOf('SilverStripe\View\ViewableData');
+        return $classReflection->is('SilverStripe\View\ViewableData') || $classReflection->isSubclassOf('SilverStripe\View\ViewableData');
     }
 
     #[Override]

@@ -15,3 +15,13 @@ if (!$foo->hasField('Bar')) {
 if ($foo->hasField('Bar')) {
     assertType('mixed', $foo->Bar);
 }
+
+$bar = ViewableData::create();
+
+if (!$bar->hasField('Baz')) {
+    assertType('null', $bar->Baz);
+}
+
+if ($bar->hasField('Baz')) {
+    assertType('mixed', $bar->Baz);
+}
