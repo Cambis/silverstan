@@ -1,10 +1,17 @@
-# silverstan
+# @cambis/silverstan
+
+## 0.3.1
+
+### Patch Changes
+
+- 69e1025: Accept parent and subclasses of `SilverStripe\View\ViewableData` in ViewableDataClassReflectionExtension
 
 ## 0.3.0
 
 ### Minor Changes
 
-- baa4268: - Add InjectorGetReturnTypeExtension
+- baa4268:
+  - Add InjectorGetReturnTypeExtension
   - Add SingletonReturnTypeExtension
   - Add DataObjectDbObjectReturnTypeExtension
 
