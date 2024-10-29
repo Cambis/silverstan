@@ -22,7 +22,7 @@ use function sprintf;
  * @implements SilverstanRuleInterface<PropertyFetch>
  * @see \Cambis\Silverstan\Tests\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRuleTest
  */
-final readonly class DisallowPropertyFetchOnConfigForClassRule implements SilverstanRuleInterface
+final class DisallowPropertyFetchOnConfigForClassRule implements SilverstanRuleInterface
 {
     #[Override]
     public function getRuleDefinition(): RuleDefinition

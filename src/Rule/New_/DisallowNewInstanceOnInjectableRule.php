@@ -21,11 +21,11 @@ use function sprintf;
  * @implements SilverstanRuleInterface<New_>
  * @see \Cambis\Silverstan\Tests\Rule\New_\DisallowNewInstanceOnInjectableRuleTest
  */
-final readonly class DisallowNewInstanceOnInjectableRule implements SilverstanRuleInterface
+final class DisallowNewInstanceOnInjectableRule implements SilverstanRuleInterface
 {
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private ReflectionProvider $reflectionProvider
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 
