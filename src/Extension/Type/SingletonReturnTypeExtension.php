@@ -18,7 +18,7 @@ use function in_array;
 /**
  * @see \Cambis\Silverstan\Tests\Type\InjectorGetReturnTypeExtensionTest
  */
-final class SingletonReturnTypeExtension implements DynamicFunctionReturnTypeExtension
+final readonly class SingletonReturnTypeExtension implements DynamicFunctionReturnTypeExtension
 {
     /**
      * @var string[]
