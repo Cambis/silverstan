@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Extension\Type;
 
-use Generator;
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
 
 final class DataObjectDbObjectReturnTypeExtensionTest extends TypeInferenceTestCase
 {
-    public function typeFileAsserts(): Generator
+    /**
+     * @return iterable<mixed>
+     */
+    public static function dataFileAsserts(): iterable
     {
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/DataObjectDbObjectTypes.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/DataObjectDbObjectTypes.php');
     }
 
     /**
-     * @dataProvider typeFileAsserts
+     * @dataProvider dataFileAsserts
      */
     public function testFileAsserts(string $assertType, string $file, mixed ...$args): void
     {

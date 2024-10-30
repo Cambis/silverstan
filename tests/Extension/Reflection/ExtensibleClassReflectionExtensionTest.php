@@ -4,26 +4,28 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Extension\Reflection;
 
-use Generator;
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
 
 final class ExtensibleClassReflectionExtensionTest extends TypeInferenceTestCase
 {
-    public function typeFileAsserts(): Generator
+    /**
+     * @return iterable<mixed>
+     */
+    public static function dataFileAsserts(): iterable
     {
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/DBPropertyReflections.php');
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/DependencyInjectionPropertyReflections.php');
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/DisplayLogicMethodReflections.php');
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/ExtensionMethodReflections.php');
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/ExtensionPropertyReflections.php');
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/SimpleRelationMethodReflections.php');
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/SimpleRelationPropertyReflections.php');
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/ManyRelationMethodReflections.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/DBPropertyReflections.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/DependencyInjectionPropertyReflections.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/DisplayLogicMethodReflections.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ExtensionMethodReflections.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ExtensionPropertyReflections.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/SimpleRelationMethodReflections.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/SimpleRelationPropertyReflections.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ManyRelationMethodReflections.php');
     }
 
     /**
-     * @dataProvider typeFileAsserts
+     * @dataProvider dataFileAsserts
      */
     public function testFileAsserts(string $assertType, string $file, mixed ...$args): void
     {

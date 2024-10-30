@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Type;
 
-use Generator;
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
 
 final class PageTypeTest extends TypeInferenceTestCase
 {
-    public function typeFileAsserts(): Generator
+    /**
+     * @return iterable<mixed>
+     */
+    public static function dataFileAsserts(): iterable
     {
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/PageTypes.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/PageTypes.php');
     }
 
     /**
-     * @dataProvider typeFileAsserts
+     * @dataProvider dataFileAsserts
      */
     public function testFileAsserts(string $assertType, string $file, mixed ...$args): void
     {

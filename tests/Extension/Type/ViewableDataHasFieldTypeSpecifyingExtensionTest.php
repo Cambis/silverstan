@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Extension\Type;
 
-use Generator;
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
 
 final class ViewableDataHasFieldTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 {
-    public function typeFileAsserts(): Generator
+    /**
+     * @return iterable<mixed>
+     */
+    public static function dataFileAsserts(): iterable
     {
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/ViewableDataHasFieldTypes.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ViewableDataHasFieldTypes.php');
     }
 
     /**
-     * @dataProvider typeFileAsserts
+     * @dataProvider dataFileAsserts
      */
     public function testFileAsserts(string $assertType, string $file, mixed ...$args): void
     {

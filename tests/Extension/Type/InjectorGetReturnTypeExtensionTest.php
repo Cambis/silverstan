@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Type;
 
-use Generator;
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
 
 final class InjectorGetReturnTypeExtensionTest extends TypeInferenceTestCase
 {
-    public function typeFileAsserts(): Generator
+    /**
+     * @return iterable<mixed>
+     */
+    public static function dataFileAsserts(): iterable
     {
-        yield from $this->gatherAssertTypes(__DIR__ . '/Fixture/InjectorGetTypes.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/InjectorGetTypes.php');
     }
 
     /**
-     * @dataProvider typeFileAsserts
+     * @dataProvider dataFileAsserts
      */
     public function testFileAsserts(string $assertType, string $file, mixed ...$args): void
     {
