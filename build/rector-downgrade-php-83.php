@@ -7,4 +7,4 @@ use Rector\Set\ValueObject\DowngradeLevelSetList;
 
 return RectorConfig::configure()
     ->withImportNames(removeUnusedImports: true)
-    ->withSets([DowngradeLevelSetList::DOWN_TO_PHP_81]);
+    ->withSets([DowngradeLevelSetList::DOWN_TO_PHP_83]);

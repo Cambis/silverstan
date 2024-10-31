@@ -28,7 +28,7 @@ jobs:
       - run: vendor/bin/rector process config rules src --config build/rector-downgrade-php-81.php --ansi
 
       # Copy composer
-      - run: cp build/composer-php-81.json composer.json
+      - run: cp build/composer-php-83.json composer.json
 
       # Clear the dev files
       - run: |
@@ -63,7 +63,7 @@ jobs:
       # Publish to the same repository with a new tag
       - name: Tag downgraded code
         run: |
-          git commit -a -m ":package: ci: php-8.1 downgraded ${GITHUB_REF#refs/tags/}"
+          git commit -a -m ":package: ci: php-8.3 downgraded ${GITHUB_REF#refs/tags/}"
 
           # Force push tag, so there is only a single version
           git tag "${GITHUB_REF#refs/tags/}" --force

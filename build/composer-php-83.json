@@ -14,11 +14,11 @@
     }
   ],
   "require": {
-    "php": "^8.1",
-    "phpstan/phpstan": "^1.12",
-    "silverstripe/config": "^2.0",
-    "silverstripe/framework": "^5.2",
-    "symplify/rule-doc-generator-contracts": "^11.1"
+    "php": "^8.3",
+    "phpstan/phpstan": "^2.0",
+    "silverstripe/config": "^3.0",
+    "silverstripe/framework": "^6.0",
+    "symplify/rule-doc-generator-contracts": "^11.2"
   },
   "suggest": {
     "silverstripe/standards": "Verifies annotations inside of Silverstripe classes."
