@@ -3,7 +3,7 @@
 namespace Cambis\Silverstan\Tests\Type\Fixture;
 
 use Cambis\Silverstan\Tests\Type\Source\Model\Foo;
-use SilverStripe\ORM\ArrayList;
+use SilverStripe\Model\List\ArrayList;
 use function PHPStan\Testing\assertType;
 
 $list = new ArrayList([

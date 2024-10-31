@@ -66,7 +66,7 @@ final class ExtensibleHasExtensionTypeSpecifyingExtension implements MethodTypeS
         $expr = $node->getArgs()[0]->value;
         $extensionNameType = $scope->getType($expr);
 
-        if ($extensionNameType->isClassStringType()->no()) {
+        if ($extensionNameType->isClassString()->no()) {
             return new SpecifiedTypes();
         }
 
@@ -83,7 +83,6 @@ final class ExtensibleHasExtensionTypeSpecifyingExtension implements MethodTypeS
                 $extensionNameType->getClassStringObjectType(),
             ),
             TypeSpecifierContext::createTruthy(),
-            true,
             $scope
         );
     }

@@ -66,7 +66,6 @@ final class ModelDataHasFieldTypeSpecifyingExtension implements MethodTypeSpecif
             $propertyFetch,
             new NullType(),
             TypeSpecifierContext::createTruthy(),
-            true,
             $scope
         );
     }
