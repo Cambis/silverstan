@@ -8,8 +8,6 @@ use PHPStan\ShouldNotHappenException;
 use SilverStripe\Control\CLIRequestBuilder;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\ORM\Connect\NullDatabase;
-use SilverStripe\ORM\DB;
 
 if (!$container instanceof Container) {
     throw new ShouldNotHappenException('The autoloader did not receive the container.');
@@ -17,9 +15,6 @@ if (!$container instanceof Container) {
 
 /** @var array{includeTestOnly: bool} $silverstanParams */
 $silverstanParams = $container->getParameter('silverstan');
-
-// We don't need access to the database
-DB::set_conn(new NullDatabase());
 
 // Ensure that the proper globals are set
 $globalVars = Environment::getVariables();
