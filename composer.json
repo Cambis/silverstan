@@ -15,32 +15,28 @@
     ],
     "require": {
         "php": "^8.3",
-        "phpstan/phpstan": "^1.12",
-        "silverstripe/config": "^2.0",
-        "silverstripe/framework": "^5.2",
-        "symplify/rule-doc-generator-contracts": "^11.1"
+        "phpstan/phpstan": "^2.0",
+        "silverstripe/config": "^3.0",
+        "silverstripe/framework": "^6.0",
+        "symplify/rule-doc-generator-contracts": "^11.2"
     },
     "require-dev": {
         "cweagans/composer-patches": "^1.7",
         "ergebnis/composer-normalize": "^2.41",
         "php-parallel-lint/php-parallel-lint": "^1.3",
-        "phpstan/extension-installer": "^1.3",
-        "phpstan/phpstan-deprecation-rules": "^1.2",
-        "phpstan/phpstan-phpunit": "^1.3",
-        "phpstan/phpstan-strict-rules": "^1.5",
-        "phpunit/phpunit": "^9.6",
-        "rector/rector": "^1.2",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpunit/phpunit": "^11.0",
         "shipmonk/composer-dependency-analyser": "^1.7",
-        "silverstripe/assets": "^2.3",
-        "silverstripe/cms": "^5.2",
-        "silverstripe/versioned": "^2.2",
-        "silverstripe/versioned-admin": "^2.2",
+        "silverstripe/assets": "^3.0",
+        "silverstripe/cms": "^6.0",
+        "silverstripe/versioned": "^3.0",
+        "silverstripe/versioned-admin": "^3.0",
         "slevomat/coding-standard": "^8.14",
         "symplify/easy-coding-standard": "^12.0",
-        "symplify/phpstan-rules": "^12.4",
-        "symplify/rule-doc-generator": "^11.0",
-        "tomasvotruba/unused-public": "^0.4",
-        "unclecheese/display-logic": "^3.0"
+        "symplify/rule-doc-generator": "^12.0"
     },
     "suggest": {
         "silverstripe/standards": "Verifies annotations inside of Silverstripe classes."
