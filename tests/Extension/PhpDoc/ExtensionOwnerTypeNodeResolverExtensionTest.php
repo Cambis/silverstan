@@ -6,6 +6,7 @@ namespace Cambis\Silverstan\Tests\Extension\PhpDoc;
 
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ExtensionOwnerTypeNodeResolverExtensionTest extends TypeInferenceTestCase
 {
@@ -17,9 +18,7 @@ final class ExtensionOwnerTypeNodeResolverExtensionTest extends TypeInferenceTes
         yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ExtensionTypes.php');
     }
 
-    /**
-     * @dataProvider dataFileAsserts
-     */
+    #[DataProvider('dataFileAsserts')]
     public function testFileAsserts(string $assertType, string $file, mixed ...$args): void
     {
         $this->assertFileAsserts($assertType, $file, ...$args);

@@ -30,7 +30,8 @@ return RectorConfig::configure()
         DeclareStrictTypesRector::class,
     ])
     ->withSets([
-        PHPUnitSetList::PHPUNIT_90,
+        PHPUnitSetList::PHPUNIT_110,
+        PHPUnitSetList::PHPUNIT_CODE_QUALITY,
     ])
     ->withSkip([
         '*/Fixture/*',

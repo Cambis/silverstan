@@ -6,6 +6,7 @@ namespace Cambis\Silverstan\Tests\Extension\Type;
 
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ConfigCollectionInterfaceGetReturnTypeExtensionTest extends TypeInferenceTestCase
 {
@@ -17,9 +18,7 @@ final class ConfigCollectionInterfaceGetReturnTypeExtensionTest extends TypeInfe
         yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ConfigCollectionInterfacePropertyTypes.php');
     }
 
-    /**
-     * @dataProvider dataFileAsserts
-     */
+    #[DataProvider('dataFileAsserts')]
     public function testFileAsserts(string $assertType, string $file, mixed ...$args): void
     {
         $this->assertFileAsserts($assertType, $file, ...$args);

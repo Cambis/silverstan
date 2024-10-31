@@ -6,6 +6,7 @@ namespace Cambis\Silverstan\Tests\Extension\Reflection;
 
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ExtensibleClassReflectionExtensionTest extends TypeInferenceTestCase
 {
@@ -25,9 +26,7 @@ final class ExtensibleClassReflectionExtensionTest extends TypeInferenceTestCase
         yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ManyRelationMethodReflections.php');
     }
 
-    /**
-     * @dataProvider dataFileAsserts
-     */
+    #[DataProvider('dataFileAsserts')]
     public function testFileAsserts(string $assertType, string $file, mixed ...$args): void
     {
         $this->assertFileAsserts($assertType, $file, ...$args);

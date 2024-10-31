@@ -6,6 +6,7 @@ namespace Cambis\Silverstan\Tests\Extension\Type;
 
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ViewableDataHasFieldTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 {
@@ -17,9 +18,7 @@ final class ViewableDataHasFieldTypeSpecifyingExtensionTest extends TypeInferenc
         yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ViewableDataHasFieldTypes.php');
     }
 
-    /**
-     * @dataProvider dataFileAsserts
-     */
+    #[DataProvider('dataFileAsserts')]
     public function testFileAsserts(string $assertType, string $file, mixed ...$args): void
     {
         $this->assertFileAsserts($assertType, $file, ...$args);
