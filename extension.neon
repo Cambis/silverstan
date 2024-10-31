@@ -33,7 +33,7 @@ services:
             - phpstan.broker.methodsClassReflectionExtension
             - phpstan.broker.propertiesClassReflectionExtension
     -
-        class: Cambis\Silverstan\Extension\Reflection\ViewableDataClassReflectionExtension
+        class: Cambis\Silverstan\Extension\Reflection\ModelDataClassReflectionExtension
         tags: [phpstan.broker.propertiesClassReflectionExtension]
     -
         class: Cambis\Silverstan\Extension\Type\ConfigCollectionInterfaceGetReturnTypeExtension
@@ -57,12 +57,12 @@ services:
         class: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
         arguments:
-            className: 'SilverStripe\View\ViewableData'
+            className: 'SilverStripe\Model\ModelData'
     -
         class: Cambis\Silverstan\Extension\Type\ExtensibleHasMethodTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
         arguments:
-            className: 'SilverStripe\View\ViewableData'
+            className: 'SilverStripe\Model\ModelData'
     -
         class: Cambis\Silverstan\Extension\Type\InjectorGetReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
@@ -70,7 +70,7 @@ services:
         class: Cambis\Silverstan\Extension\Type\SingletonReturnTypeExtension
         tags: [phpstan.broker.dynamicFunctionReturnTypeExtension]
     -
-        class: Cambis\Silverstan\Extension\Type\ViewableDataHasFieldTypeSpecifyingExtension
+        class: Cambis\Silverstan\Extension\Type\ModelDataHasFieldTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
     -
         class: Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor

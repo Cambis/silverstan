@@ -10,7 +10,7 @@ use PHPStan\Reflection\PropertyReflection;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Type;
 
-final readonly class ViewableDataPropertyReflection implements PropertyReflection
+final readonly class ModelDataPropertyReflection implements PropertyReflection
 {
     public function __construct(
         private ClassReflection $classReflection,

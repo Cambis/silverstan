@@ -18,9 +18,9 @@ use PHPStan\Type\NullType;
 use function in_array;
 
 /**
- * @see \Cambis\Silverstan\Tests\Extension\Type\ViewableDataHasFieldTypeSpecifyingExtensionTest
+ * @see \Cambis\Silverstan\Tests\Extension\Type\ModelDataHasFieldTypeSpecifyingExtensionTest
  */
-final class ViewableDataHasFieldTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
+final class ModelDataHasFieldTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
     /**
      * @var string[]
@@ -34,7 +34,7 @@ final class ViewableDataHasFieldTypeSpecifyingExtension implements MethodTypeSpe
     #[Override]
     public function getClass(): string
     {
-        return 'SilverStripe\View\ViewableData';
+        return 'SilverStripe\Model\ModelData';
     }
 
     #[Override]

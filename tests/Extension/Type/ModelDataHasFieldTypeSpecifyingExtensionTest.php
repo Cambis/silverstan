@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\Tests\Extension\Reflection;
+namespace Cambis\Silverstan\Tests\Extension\Type;
 
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-final class ViewableDataClassReflectionExtensionTest extends TypeInferenceTestCase
+final class ModelDataHasFieldTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 {
     /**
      * @return iterable<mixed>
      */
     public static function dataFileAsserts(): iterable
     {
-        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ViewableDataPropertyReflections.php');
+        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ModelDataHasFieldTypes.php');
     }
 
     #[DataProvider('dataFileAsserts')]

@@ -4,10 +4,10 @@ namespace Cambis\Silverstan\Tests\Extension\Reflection\Fixture;
 
 use Cambis\Silverstan\Tests\Extension\Reflection\Source\Model\Bar;
 use SilverStripe\Dev\TestOnly;
-use SilverStripe\View\ViewableData;
+use SilverStripe\Model\ModelData;
 use function PHPStan\Testing\assertType;
 
-$foo = new class extends ViewableData implements TestOnly {};
+$foo = new class extends ModelData implements TestOnly {};
 
 assertType('mixed', $foo->Bar);
 

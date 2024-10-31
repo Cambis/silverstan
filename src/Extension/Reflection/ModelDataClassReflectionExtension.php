@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Extension\Reflection;
 
-use Cambis\Silverstan\Reflection\ViewableDataPropertyReflection;
+use Cambis\Silverstan\Reflection\ModelDataPropertyReflection;
 use Override;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
 
 /**
- * This extension resolves `SilverStripe\View\ViewableData` magic properties.
+ * This extension resolves `SilverStripe\Model\ModelData` magic properties.
  *
- * @see \Cambis\Silverstan\Tests\Extension\Reflection\ViewableDataClassReflectionExtensionTest
+ * @see \Cambis\Silverstan\Tests\Extension\Reflection\ModelDataClassReflectionExtensionTest
  */
-final readonly class ViewableDataClassReflectionExtension implements PropertiesClassReflectionExtension
+final readonly class ModelDataClassReflectionExtension implements PropertiesClassReflectionExtension
 {
     public function __construct(
         private AnnotationClassReflectionExtension $annotationClassReflectionExtension
@@ -30,11 +30,11 @@ final readonly class ViewableDataClassReflectionExtension implements PropertiesC
             return false;
         }
 
-        if ($classReflection->is('SilverStripe\View\ViewableData')) {
+        if ($classReflection->is('SilverStripe\Model\ModelData')) {
             return true;
         }
 
-        return $classReflection->isSubclassOf('SilverStripe\View\ViewableData');
+        return $classReflection->isSubclassOf('SilverStripe\Model\ModelData');
     }
 
     #[Override]
@@ -47,6 +47,6 @@ final readonly class ViewableDataClassReflectionExtension implements PropertiesC
         $readableType = $classReflection->getNativeMethod('__get')->getVariants()[0]->getReturnType();
         $writableType = $classReflection->getNativeMethod('__set')->getVariants()[0]->getParameters()[1]->getType();
 
-        return new ViewableDataPropertyReflection($classReflection, $readableType, $writableType);
+        return new ModelDataPropertyReflection($classReflection, $readableType, $writableType);
     }
 }

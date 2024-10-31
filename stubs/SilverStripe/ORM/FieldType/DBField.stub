@@ -3,7 +3,7 @@
 namespace SilverStripe\ORM\FieldType;
 
 use SilverStripe\ORM\FieldType\DBIndexable;
-use SilverStripe\View\ViewableData;
+use SilverStripe\Model\ModelData;
 
 abstract class DBField
 {
