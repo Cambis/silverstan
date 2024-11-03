@@ -1,6 +1,0 @@
----
-Name: test
----
-SilverStripe\Core\Injector\Injector:
-  Foo:
-    class: Cambis\Silverstan\Tests\Type\Source\Model\Foo
