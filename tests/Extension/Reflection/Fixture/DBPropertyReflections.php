@@ -50,3 +50,9 @@ assertType('string|null', $bar->Text);
 assertType('string|null', $bar->Time);
 assertType('string|null', $bar->Varchar);
 assertType('string', $bar->TypehintedField);
+
+// Default value fields
+assertType('bool', $foo->BooleanDefaultFalseWithSpace);
+
+// Malformed fields
+assertType('*ERROR*', $foo->MalformedField);

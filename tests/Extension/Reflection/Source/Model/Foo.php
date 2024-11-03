@@ -36,6 +36,8 @@ class Foo extends DataObject implements TestOnly
         'Varchar' => 'Varchar(255)',
         'RequiredField' => 'Varchar(255)',
         'TypehintedField' => 'Varchar(255)',
+        'BooleanDefaultFalseWithSpace' => 'Boolean (false)',
+        'MalformedField' => 'Barchar(255)',
     ];
 
     private static array $belongs_many_many = [

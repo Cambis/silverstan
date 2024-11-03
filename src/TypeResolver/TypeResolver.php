@@ -13,6 +13,7 @@ use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\ErrorType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
@@ -29,6 +30,7 @@ use function str_contains;
 use function str_starts_with;
 use function strtok;
 use function substr;
+use function trim;
 
 final readonly class TypeResolver
 {
@@ -155,7 +157,13 @@ final readonly class TypeResolver
      */
     public function resolveDBFieldType(string $fieldType): Type
     {
-        $field = $this->configurationResolver->resolveClassName(strtok($fieldType, '('));
+        $field = $this->configurationResolver->resolveClassName(trim(strtok($fieldType, '(')));
+
+        // If we can't resolve the class of the field it is likely that there is an error in the $db configuration, return an error type
+        if (!$this->reflectionProvider->hasClass($field)) {
+            return new ErrorType();
+        }
+
         $fieldClassReflection = $this->reflectionProvider->getClass($field);
 
         foreach (self::DBFIELD_TO_TYPE_MAPPING as $dbClass => $type) {
