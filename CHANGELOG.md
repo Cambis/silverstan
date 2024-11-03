@@ -1,5 +1,15 @@
 # @cambis/silverstan
 
+## 0.4.0
+
+### Minor Changes
+
+- da4d412: Update test case structure to be inline with common phpstan test cases
+
+### Patch Changes
+
+- f042f2c: Trim db field names when resolving their types
+
 ## 0.3.1
 
 ### Patch Changes
