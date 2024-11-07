@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 0.5.0
+
+### Minor Changes
+
+- b17bd5a: Add ResponsiveImageSetsMethodReflectionResolver
+
 ## 0.4.0
 
 ### Minor Changes
