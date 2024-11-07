@@ -31,6 +31,7 @@
         "phpunit/phpunit": "^9.6",
         "rector/rector": "^1.2",
         "shipmonk/composer-dependency-analyser": "^1.7",
+        "silverstripe/assets": "^2.3",
         "silverstripe/cms": "^5.2",
         "silverstripe/versioned": "^2.2",
         "silverstripe/versioned-admin": "^2.2",

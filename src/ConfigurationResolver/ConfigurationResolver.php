@@ -31,9 +31,6 @@ final class ConfigurationResolver
     ) {
     }
 
-    /**
-     * @param class-string $className
-     */
     public function get(string $className, string $name): mixed
     {
         if (!$this->configCollection instanceof ConfigCollectionInterface) {

@@ -94,6 +94,9 @@ services:
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\ExtensionMethodReflectionResolver
         tags: [silverstan.reflectionResolver.methodReflectionResolver]
     -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\ResponsiveImageSetsMethodReflectionResolver
+        tags: [silverstan.reflectionResolver.methodReflectionResolver]
+    -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationMethodReflectionResolver
         tags: [silverstan.reflectionResolver.methodReflectionResolver]
         arguments:
