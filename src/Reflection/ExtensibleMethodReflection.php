@@ -13,12 +13,13 @@ use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Generic\TemplateTypeMap;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 
 final readonly class ExtensibleMethodReflection implements MethodReflection
 {
     /**
-     * @param ParameterReflection[] $parameters
+     * @param list<ParameterReflection> $parameters
      */
     public function __construct(
         private string $name,
@@ -124,6 +125,14 @@ final readonly class ExtensibleMethodReflection implements MethodReflection
     #[Override]
     public function hasSideEffects(): TrinaryLogic
     {
-        return TrinaryLogic::createNo();
+        if ($this->returnType->isVoid()->yes()) {
+            return TrinaryLogic::createYes();
+        }
+
+        if ((new ThisType($this->declaringClass))->isSuperTypeOf($this->returnType)->yes()) {
+            return TrinaryLogic::createYes();
+        }
+
+        return TrinaryLogic::createMaybe();
     }
 }
