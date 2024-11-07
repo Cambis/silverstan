@@ -10,18 +10,18 @@ use Cambis\Silverstan\TypeResolver\Contract\TypeResolverAwareInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryInterface;
 use Override;
 
-final readonly class TypeResolverRegistry implements TypeResolverRegistryInterface
+final class TypeResolverRegistry implements TypeResolverRegistryInterface
 {
     public function __construct(
         TypeResolver $typeResolver,
         /**
          * @var PropertyTypeResolverInterface[]
          */
-        private array $propertyTypeResolvers,
+        private readonly array $propertyTypeResolvers,
         /**
          * @var MethodTypeResolverInterface[]
          */
-        private array $methodTypeResolvers
+        private readonly array $methodTypeResolvers
     ) {
         foreach ($propertyTypeResolvers as $propertyTypeResolver) {
             if (!$propertyTypeResolver instanceof TypeResolverAwareInterface) {

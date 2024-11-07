@@ -20,7 +20,7 @@ use function in_array;
  *
  * @see \Cambis\Silverstan\Tests\Type\InjectorGetReturnTypeExtensionTest
  */
-final readonly class InjectorGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
+final class InjectorGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     /**
      * @var string[]
@@ -32,8 +32,8 @@ final readonly class InjectorGetReturnTypeExtension implements DynamicMethodRetu
     ];
 
     public function __construct(
-        private ConfigurationResolver $configurationResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly ConfigurationResolver $configurationResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

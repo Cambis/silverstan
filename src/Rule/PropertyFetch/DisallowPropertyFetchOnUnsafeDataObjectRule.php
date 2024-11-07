@@ -25,7 +25,7 @@ use function sprintf;
  *
  * @see \Cambis\Silverstan\Tests\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRuleTest
  */
-final readonly class DisallowPropertyFetchOnUnsafeDataObjectRule implements SilverstanRuleInterface
+final class DisallowPropertyFetchOnUnsafeDataObjectRule implements SilverstanRuleInterface
 {
     #[Override]
     public function getRuleDefinition(): RuleDefinition

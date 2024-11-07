@@ -23,7 +23,7 @@ use function strtok;
  *
  * @see \Cambis\Silverstan\Tests\Extension\Type\DataObjectDbObjectReturnTypeExtensionTest
  */
-final readonly class DataObjectDbObjectReturnTypeExtension implements DynamicMethodReturnTypeExtension
+final class DataObjectDbObjectReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     /**
      * @var string[]
@@ -33,8 +33,8 @@ final readonly class DataObjectDbObjectReturnTypeExtension implements DynamicMet
     ];
 
     public function __construct(
-        private ConfigurationResolver $configurationResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly ConfigurationResolver $configurationResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

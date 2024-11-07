@@ -23,12 +23,12 @@ use function sprintf;
  * @implements SilverstanRuleInterface<ClassPropertyNode>
  * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRuleTest
  */
-final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implements SilverstanRuleInterface
+final class DisallowOverridingOfConfigurationPropertyTypeRule implements SilverstanRuleInterface
 {
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
-        private ReflectionResolver $reflectionResolver
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly PropertyReflectionAnalyser $propertyReflectionAnalyser,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
