@@ -7,6 +7,7 @@ namespace Cambis\Silverstan\Rule\PropertyFetch;
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Override;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -29,7 +30,7 @@ final readonly class DisallowPropertyFetchOnConfigForClassRule implements Silver
     {
         return new RuleDefinition(
             'Disallow property fetch on `SilverStripe\Core\Config\Config_ForClass`. ' .
-            "PHPStan cannot resolve the type of the property, use `self::config()->get('property_name')` instead.",
+            "PHPStan cannot resolve the type of the property, use `MyClass::config()->get('property_name')` instead.",
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
@@ -75,25 +76,29 @@ CODE_SAMPLE
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        $type = $scope->getType($node->var);
+
+        if ((new ObjectType('SilverStripe\Core\Config\Config_ForClass'))->isSuperTypeOf($type)->no()) {
+            return [];
+        }
+
         if (!$node->name instanceof Identifier) {
             return [];
         }
 
-        if (!$node->var instanceof StaticCall) {
+        if (!$node->var instanceof StaticCall && !$node->var instanceof MethodCall) {
             return [];
         }
 
-        if (!$node->var->class instanceof Name) {
-            return [];
+        if ($node->var instanceof StaticCall) {
+            $type = $node->var->class instanceof Name ? $scope->resolveTypeByName($node->var->class) : $scope->getType($node->var->class);
         }
 
-        $type = $scope->getType($node->var);
-
-        if ($type->isObject()->no()) {
-            return [];
+        if ($node->var instanceof MethodCall) {
+            $type = $scope->getType($node->var->var);
         }
 
-        if ($type->isSuperTypeOf(new ObjectType('SilverStripe\Core\Config_ForClass'))->no()) {
+        if ($type->getObjectClassNames() === []) {
             return [];
         }
 
@@ -101,9 +106,9 @@ CODE_SAMPLE
             RuleErrorBuilder::message(
                 sprintf(
                     "Cannot resolve the type of %s::config()->%s. Use %s::config()->get('%s') instead.",
-                    $scope->resolveName($node->var->class),
+                    $type->getObjectClassNames()[0],
                     $node->name->name,
-                    $scope->resolveName($node->var->class),
+                    $type->getObjectClassNames()[0],
                     $node->name->name,
                 )
             )

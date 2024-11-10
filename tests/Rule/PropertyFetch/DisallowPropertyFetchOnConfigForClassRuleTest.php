@@ -21,6 +21,14 @@ final class DisallowPropertyFetchOnConfigForClassRuleTest extends RuleTestCase
                 'Cannot resolve the type of Cambis\Silverstan\Tests\Rule\PropertyFetch\Fixture\DisallowPropertyFetch::config()->foo. Use Cambis\Silverstan\Tests\Rule\PropertyFetch\Fixture\DisallowPropertyFetch::config()->get(\'foo\') instead.',
                 16,
             ],
+            [
+                'Cannot resolve the type of Cambis\Silverstan\Tests\Rule\PropertyFetch\Fixture\DisallowPropertyFetch::config()->foo. Use Cambis\Silverstan\Tests\Rule\PropertyFetch\Fixture\DisallowPropertyFetch::config()->get(\'foo\') instead.',
+                19,
+            ],
+            [
+                'Cannot resolve the type of Cambis\Silverstan\Tests\Rule\PropertyFetch\Fixture\DisallowPropertyFetch::config()->foo. Use Cambis\Silverstan\Tests\Rule\PropertyFetch\Fixture\DisallowPropertyFetch::config()->get(\'foo\') instead.',
+                22,
+            ],
         ]);
     }
 

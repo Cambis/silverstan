@@ -13,7 +13,13 @@ final class DisallowPropertyFetch implements TestOnly
 
     public function bar(): void
     {
-        echo static::config()->foo;
-        echo static::config()->get('foo');
+        $this->config()->foo;
+        $this->config()->get('foo');
+
+        static::config()->foo;
+        static::config()->get('foo');
+
+        self::config()->foo;
+        self::config()->get('foo');
     }
 }
