@@ -1,6 +1,6 @@
 {
   "name": "@cambis/silverstan",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "PHPStan rules for Silverstripe.",
   "author": "Cameron Bryers",
   "license": "MIT",

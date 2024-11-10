@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 0.5.1
+
+### Patch Changes
+
+- 615e69b: Fix for DisallowPropertyFetchOnConfigForClassRule
+
 ## 0.5.0
 
 ### Minor Changes
