@@ -9,15 +9,15 @@ use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\PassedByReference;
 use PHPStan\Type\Type;
 
-final readonly class ExtensibleParameterReflection implements ParameterReflection
+final class ExtensibleParameterReflection implements ParameterReflection
 {
     public function __construct(
-        private string $name,
-        private Type $type,
-        private PassedByReference $passedByReference,
-        private bool $isOptional,
-        private bool $isVariadic,
-        private ?Type $defaultValue
+        private readonly string $name,
+        private readonly Type $type,
+        private readonly PassedByReference $passedByReference,
+        private readonly bool $isOptional,
+        private readonly bool $isVariadic,
+        private readonly ?Type $defaultValue
     ) {
     }
 
