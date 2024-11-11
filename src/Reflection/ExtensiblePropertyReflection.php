@@ -10,12 +10,12 @@ use PHPStan\Reflection\PropertyReflection;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Type;
 
-final readonly class ExtensiblePropertyReflection implements PropertyReflection
+final class ExtensiblePropertyReflection implements PropertyReflection
 {
     public function __construct(
-        private ClassReflection $classReflection,
-        private Type $readableType,
-        private Type $writableType,
+        private readonly ClassReflection $classReflection,
+        private readonly Type $readableType,
+        private readonly Type $writableType,
     ) {
     }
 

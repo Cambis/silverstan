@@ -19,10 +19,10 @@ use function is_array;
  *
  * @see \Cambis\Silverstan\Tests\Extension\Reflection\ExtensibleClassReflectionExtensionTest
  */
-final readonly class ResponsiveImageSetsMethodReflectionResolver implements MethodReflectionResolverInterface
+final class ResponsiveImageSetsMethodReflectionResolver implements MethodReflectionResolverInterface
 {
     public function __construct(
-        private ConfigurationResolver $configurationResolver
+        private readonly ConfigurationResolver $configurationResolver
     ) {
     }
 
