@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 0.5.2
+
+### Patch Changes
+
+- 1755764: Catch for mixed type in DisallowPropertyFetchOnConfigForClassRule
+
 ## 0.5.1
 
 ### Patch Changes
