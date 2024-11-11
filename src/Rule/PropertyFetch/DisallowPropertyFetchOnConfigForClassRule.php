@@ -14,7 +14,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\Type\ObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function sprintf;
@@ -78,8 +77,16 @@ CODE_SAMPLE
     {
         $type = $scope->getType($node->var);
 
-        if ((new ObjectType('SilverStripe\Core\Config\Config_ForClass'))->isSuperTypeOf($type)->no()) {
+        // Ensure the resolved type has class reflections
+        if ($type->getObjectClassReflections() === []) {
             return [];
+        }
+
+        // Resolved type must be `SilverStripe\Core\Config\Config_ForClass`
+        foreach ($type->getObjectClassReflections() as $classReflection) {
+            if (!$classReflection->is('SilverStripe\Core\Config\Config_ForClass')) {
+                return [];
+            }
         }
 
         if (!$node->name instanceof Identifier) {
