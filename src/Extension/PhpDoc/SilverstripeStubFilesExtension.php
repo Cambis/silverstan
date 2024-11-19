@@ -24,6 +24,7 @@ final class SilverstripeStubFilesExtension implements StubFilesExtension
     private const COMMON_STUBS = [
         __DIR__ . '/../../../stubs/Psr',
         __DIR__ . '/../../../stubs/SilverStripe/Core',
+        __DIR__ . '/../../../stubs/SilverStripe/Control',
         __DIR__ . '/../../../stubs/SilverStripe/Dev',
         __DIR__ . '/../../../stubs/SilverStripe/includes',
         __DIR__ . '/../../../stubs/SilverStripe/ORM',

@@ -1,0 +1,101 @@
+<?php
+
+namespace SilverStripe\Control;
+
+use ArrayAccess;
+
+/**
+ * @phpstan-type RequestVar string|int|float|bool
+ * @implements ArrayAccess<array-key, RequestVar>
+ */
+class HTTPRequest implements ArrayAccess
+{
+    /**
+     * @var RequestVar[]
+     */
+    protected $getVars = [];
+
+    /**
+     * @var RequestVar[]
+     */
+    protected $postVars = [];
+
+    /**
+     * @param string $httpMethod
+     * @param string $url
+     * @param RequestVar[] $getVars
+     * @param RequestVar[] $postVars
+     * @param ?string $body
+     */
+    public function __construct($httpMethod, $url, $getVars = [], $postVars = [], $body = null)
+    {
+    }
+
+    /**
+     * @return RequestVar[]
+     */
+    public function getVars()
+    {
+    }
+
+    /**
+     * @return RequestVar[]
+     */
+    public function postVars()
+    {
+    }
+
+    /**
+     * @return RequestVar[]
+     */
+    public function requestVars()
+    {
+    }
+
+    /**
+     * @param string $name
+     * @return RequestVar|null
+     */
+    public function getVar($name)
+    {
+    }
+
+    /**
+     * @param string $name
+     * @return RequestVar|null
+     */
+    public function postVar($name)
+    {
+    }
+
+    /**
+     * @param string $name
+     * @return RequestVar|null
+     */
+    public function requestVar($name)
+    {
+    }
+
+    /**
+     * @param array-key $offset
+     * @return RequestVar|null
+     */
+    public function offsetGet(mixed $offset): mixed
+    {
+    }
+
+    /**
+     * @param array-key|null $offset
+     * @param RequestVar $value
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+    }
+
+    /**
+     * @param array-key $offset
+     */
+    public function offsetUnset(mixed $offset): void
+    {
+    }
+}
