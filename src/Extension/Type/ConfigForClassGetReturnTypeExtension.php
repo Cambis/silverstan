@@ -55,15 +55,24 @@ final readonly class ConfigForClassGetReturnTypeExtension implements DynamicMeth
     #[Override]
     public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): ?Type
     {
-        if (!$methodCall->var instanceof StaticCall) {
+        // Attempt to resolve the type of the var
+        if (!$methodCall->var instanceof StaticCall && !$methodCall->var instanceof MethodCall) {
             return null;
         }
 
-        if (!$methodCall->var->class instanceof Name) {
+        if ($methodCall->var instanceof StaticCall) {
+            $type = $methodCall->var->class instanceof Name ? $scope->resolveTypeByName($methodCall->var->class) : $scope->getType($methodCall->var->class);
+        }
+
+        if ($methodCall->var instanceof MethodCall) {
+            $type = $scope->getType($methodCall->var->var);
+        }
+
+        if ($type->getObjectClassNames() === []) {
             return null;
         }
 
-        $className = $scope->resolveName($methodCall->var->class);
+        $className = $type->getObjectClassNames()[0];
 
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;

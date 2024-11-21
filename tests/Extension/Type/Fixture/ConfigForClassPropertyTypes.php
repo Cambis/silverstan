@@ -19,3 +19,11 @@ assertType('string', ConfigurableClass::config()->get('native_string'));
 assertType('string', ConfigurableClass::config()->get('phpdoc_string'));
 
 assertType('mixed', ConfigurableClass::config()->get('mixed'));
+
+new class extends ConfigurableClass {
+    public function doSomething(): void
+    {
+        assertType('array<string>', self::config()->get('iterable_typed_array'));
+        assertType('array<string>', $this->config()->get('iterable_typed_array'));
+    }
+};

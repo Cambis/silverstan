@@ -4,7 +4,7 @@ namespace Cambis\Silverstan\Tests\Extension\Type\Source;
 
 use SilverStripe\Core\Config\Configurable;
 
-final class ConfigurableClass
+class ConfigurableClass
 {
     use Configurable;
 
