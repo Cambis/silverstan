@@ -12,12 +12,12 @@ use Override;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Generic\TemplateTypeMap;
 
-final readonly class SimpleRelationMethodReflectionResolver implements MethodReflectionResolverInterface
+final class SimpleRelationMethodReflectionResolver implements MethodReflectionResolverInterface
 {
     public function __construct(
-        private string $configurationPropertyName,
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private TypeResolver $typeResolver
+        private readonly string $configurationPropertyName,
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly TypeResolver $typeResolver
     ) {
     }
 

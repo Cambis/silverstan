@@ -27,7 +27,7 @@ use function sprintf;
  *
  * @see \Cambis\Silverstan\Tests\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRuleTest
  */
-final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements SilverstanRuleInterface
+final class DisallowMethodCallOnUnsafeDataObjectRule implements SilverstanRuleInterface
 {
     /**
      * @var string[]
@@ -40,7 +40,7 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Silvers
 
     public function __construct(
         /** @var string[] */
-        private array $allowedMethodCalls = []
+        private readonly array $allowedMethodCalls = []
     ) {
     }
 
