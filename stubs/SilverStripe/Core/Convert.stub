@@ -1,0 +1,65 @@
+<?php
+
+namespace SilverStripe\Core;
+
+class Convert
+{
+    /**
+     * @param string[]|string $val String to escape, or array of strings
+     * @return ($val is string ? string : string[]) 
+     */
+    public static function raw2att($val)
+    {
+    }
+
+    /**
+     * @param string[]|string $val String to escape, or array of strings
+     * @return ($val is string ? string : string[]) 
+     */
+    public static function raw2htmlname($val)
+    {
+    }
+
+    /**
+     * @param string[]|string $val String to escape, or array of strings
+     * @return ($val is string ? string : string[]) 
+     */
+    public static function raw2htmlid($val)
+    {
+    }
+
+    /**
+     * @param string[]|string $val String to escape, or array of strings
+     * @return ($val is string ? string : string[]) 
+     */
+    public static function raw2xml($val)
+    {
+    }
+
+    /**
+     * @param string[]|string $val String to escape, or array of strings
+     * @return ($val is string ? string : string[]) 
+     */
+    public static function raw2js($val)
+    {
+    }
+
+    /**
+     * @param string|string[] $val Input value, or list of values as an array
+     * @param boolean $quoted Flag indicating whether the value should be safely
+     * quoted, instead of only being escaped. By default this function will
+     * only escape the string (false).
+     * @return ($val is string ? string : string[]) Safely encoded value in the same format as the input
+     */
+    public static function raw2sql($val, $quoted = false)
+    {
+    }
+
+    /**
+     * @param string[]|string $val
+     * @return ($val is string ? string : string[])
+     */
+    public static function xml2raw($val)
+    {
+    }
+}
