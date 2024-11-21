@@ -1,5 +1,12 @@
 # @cambis/silverstan
 
+## 0.5.3
+
+### Patch Changes
+
+- 8af6e0d: Add stubs for SilverStripe\Control\HTTPRequest and SilverStripe\Core\Convert
+- 39d085f: Allow this calls in ConfigForClassGetReturnTypeExtension
+
 ## 0.5.2
 
 ### Patch Changes
