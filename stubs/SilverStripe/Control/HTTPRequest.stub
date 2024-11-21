@@ -5,7 +5,7 @@ namespace SilverStripe\Control;
 use ArrayAccess;
 
 /**
- * @phpstan-type RequestVar string|int|float|bool
+ * @phpstan-type RequestVar string|int|float|bool|array<string|int|float|bool>
  * @implements ArrayAccess<array-key, RequestVar>
  */
 class HTTPRequest implements ArrayAccess
