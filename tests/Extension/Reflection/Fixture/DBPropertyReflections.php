@@ -56,3 +56,7 @@ assertType('bool', $foo->BooleanDefaultFalseWithSpace);
 
 // Malformed fields
 assertType('*ERROR*', $foo->MalformedField);
+
+// Fields with getters
+assertType('string', $foo->FieldWithGetter);
+assertType('non-empty-string', $foo->FieldWithDefaultValueGetter);

@@ -155,8 +155,13 @@ final readonly class TypeResolver
      *
      * @param class-string $fieldType
      */
-    public function resolveDBFieldType(string $fieldType): Type
+    public function resolveDBFieldType(ClassReflection $classReflection, string $fieldName, string $fieldType): Type
     {
+        // Check for custom get<fieldName>() function https://docs.silverstripe.org/en/5/developer_guides/model/data_types_and_casting/#overriding
+        if ($classReflection->hasNativeMethod('get' . $fieldName)) {
+            return $classReflection->getNativeMethod('get' . $fieldName)->getVariants()[0]->getReturnType();
+        }
+
         $field = $this->configurationResolver->resolveClassName(trim(strtok($fieldType, '(')));
 
         // If we can't resolve the class of the field it is likely that there is an error in the $db configuration, return an error type

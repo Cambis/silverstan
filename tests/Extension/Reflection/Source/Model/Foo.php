@@ -38,6 +38,8 @@ class Foo extends DataObject implements TestOnly
         'TypehintedField' => 'Varchar(255)',
         'BooleanDefaultFalseWithSpace' => 'Boolean (false)',
         'MalformedField' => 'Barchar(255)',
+        'FieldWithGetter' => 'Varchar(255)',
+        'FieldWithDefaultValueGetter' => 'Varchar(255)',
     ];
 
     private static array $belongs_many_many = [
@@ -78,4 +80,17 @@ class Foo extends DataObject implements TestOnly
             '%$' . self::class,
         ],
     ];
+
+    public function getFieldWithGetter(): string
+    {
+        return $this->getField('FieldWithGetter') ?? '';
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getFieldWithDefaultValueGetter(): string
+    {
+        return $this->getField('FieldWithDefaultValueGetter') ?? 'Default value';
+    }
 }

@@ -35,18 +35,13 @@ final class FixedFieldsPropertyTypeResolver implements PropertyTypeResolverInter
             return [];
         }
 
-        $fixedFields = [
-            'Title' => 'SilverStripe\ORM\FieldType\DBVarchar',
-            'OldID' => 'SilverStripe\ORM\FieldType\DBInt',
-            'ObsoleteClassName' => 'SilverStripe\ORM\FieldType\DBClassName',
-            ...(array) $this->configurationResolver->get('SilverStripe\ORM\DataObject', $this->getConfigurationPropertyName()),
-        ];
+        $fixedFields = (array) $this->configurationResolver->get('SilverStripe\ORM\DataObject', $this->getConfigurationPropertyName());
 
         $types = [];
 
         /** @var class-string[] $fixedFields */
         foreach ($fixedFields as $fieldName => $fieldType) {
-            $types[$fieldName] = $this->typeResolver->resolveDBFieldType($fieldType);
+            $types[$fieldName] = $this->typeResolver->resolveDBFieldType($classReflection, $fieldName, $fieldType);
         }
 
         return $types;
