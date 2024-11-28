@@ -9,17 +9,17 @@ use Cambis\Silverstan\ReflectionResolver\Contract\PropertyReflectionResolverInte
 use Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryInterface;
 use Override;
 
-final readonly class ReflectionResolverRegistry implements ReflectionResolverRegistryInterface
+final class ReflectionResolverRegistry implements ReflectionResolverRegistryInterface
 {
     public function __construct(
         /**
          * @var PropertyReflectionResolverInterface[]
          */
-        private array $propertyReflectionResolvers,
+        private readonly array $propertyReflectionResolvers,
         /**
          * @var MethodReflectionResolverInterface[]
          */
-        private array $methodReflectionTypeResolvers
+        private readonly array $methodReflectionTypeResolvers
     ) {
     }
 

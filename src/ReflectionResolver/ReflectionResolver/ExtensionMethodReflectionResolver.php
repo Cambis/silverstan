@@ -17,13 +17,13 @@ use ReflectionMethod;
 use function array_unique;
 use function is_array;
 
-final readonly class ExtensionMethodReflectionResolver implements MethodReflectionResolverInterface
+final class ExtensionMethodReflectionResolver implements MethodReflectionResolverInterface
 {
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private ConfigurationResolver $configurationResolver,
-        private ReflectionProvider $reflectionProvider,
-        private TypeResolver $typeResolver
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly ConfigurationResolver $configurationResolver,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly TypeResolver $typeResolver
     ) {
     }
 

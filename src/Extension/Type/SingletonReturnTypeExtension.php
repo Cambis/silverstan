@@ -18,7 +18,7 @@ use function in_array;
 /**
  * @see \Cambis\Silverstan\Tests\Type\InjectorGetReturnTypeExtensionTest
  */
-final readonly class SingletonReturnTypeExtension implements DynamicFunctionReturnTypeExtension
+final class SingletonReturnTypeExtension implements DynamicFunctionReturnTypeExtension
 {
     /**
      * @var string[]
@@ -28,8 +28,8 @@ final readonly class SingletonReturnTypeExtension implements DynamicFunctionRetu
     ];
 
     public function __construct(
-        private ConfigurationResolver $configurationResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly ConfigurationResolver $configurationResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

@@ -11,11 +11,11 @@ use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
 
-final readonly class DependencyInjectionPropertyReflectionResolver implements PropertyReflectionResolverInterface
+final class DependencyInjectionPropertyReflectionResolver implements PropertyReflectionResolverInterface
 {
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private TypeResolver $typeResolver
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly TypeResolver $typeResolver
     ) {
     }
 

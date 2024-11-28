@@ -17,12 +17,12 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use function array_key_exists;
 
-final readonly class ReflectionResolver
+final class ReflectionResolver
 {
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
-        private ReflectionResolverRegistryProviderInterface $reflectionResolverRegistryProvider
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly PropertyReflectionAnalyser $propertyReflectionAnalyser,
+        private readonly ReflectionResolverRegistryProviderInterface $reflectionResolverRegistryProvider
     ) {
     }
 
