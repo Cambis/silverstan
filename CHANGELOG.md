@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 0.5.4
+
+### Patch Changes
+
+- 5003ae8: Resolve db field type from getter if present
+
 ## 0.5.3
 
 ### Patch Changes
