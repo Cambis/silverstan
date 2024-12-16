@@ -1,0 +1,23 @@
+parameters:
+    bootstrapFiles:
+        - silverstripe-autoloader.php
+services:
+    - 
+        class: Cambis\Silverstan\Autoloader\Autoloader
+    configCollectionFactory:
+        class: Cambis\Silverstan\ConfigurationResolver\ExperimentalLazyConfigCollectionFactory
+    -
+        class: Cambis\Silverstan\ClassManifest\ClassManifest
+        arguments:
+            includeTestOnly: %silverstan.includeTestOnly%
+            parser: @currentPhpVersionPhpParser
+    -
+        class: Cambis\Silverstan\ModuleFinder\ModuleFinder
+        arguments:
+            includeTestOnly: %silverstan.includeTestOnly%
+    -
+        class: Cambis\Silverstan\NodeVisitor\TestOnlyFinderVisitor
+    -
+        class: Composer\ClassMapGenerator\ClassMapGenerator
+        arguments:
+            extensions: ['php']

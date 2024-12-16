@@ -11,8 +11,16 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\Connect\NullDatabase;
 use SilverStripe\ORM\DB;
 
-if (!$container instanceof Container) {
+if (!isset($container) || !$container instanceof Container) {
     throw new ShouldNotHappenException('The autoloader did not receive the container.');
+}
+
+/** @var string[] $bootstrapFiles */
+$bootstrapFiles = $container->getParameter('bootstrapFiles');
+
+// Use the new bleedingEdge autoloader
+if (in_array(BASE_PATH . '/silverstripe-autoloader.php', $bootstrapFiles)) {
+    return;
 }
 
 /** @var array{includeTestOnly: bool} $silverstanParams */

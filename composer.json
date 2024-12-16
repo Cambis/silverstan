@@ -15,6 +15,7 @@
     ],
     "require": {
         "php": "^8.3",
+        "composer/class-map-generator": "^1.5",
         "phpstan/phpstan": "^1.12",
         "silverstripe/config": "^2.0",
         "silverstripe/framework": "^5.2",

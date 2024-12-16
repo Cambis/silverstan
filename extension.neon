@@ -8,9 +8,11 @@ parameters:
         - SilverStripe\Forms\GridField\GridState_Data
         - Symbiote\QueuedJobs\Services\AbstractQueuedJob
 services:
+    configCollectionFactory:
+        class: Cambis\Silverstan\ConfigurationResolver\LazyConfigCollectionFactory
     -
         class: Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInterface
-        factory: Cambis\Silverstan\ConfigurationResolver\LazyConfigCollectionFactory
+        factory: @configCollectionFactory
     -
         class: Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver
     -
