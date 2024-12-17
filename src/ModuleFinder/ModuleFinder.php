@@ -26,6 +26,11 @@ final class ModuleFinder
      */
     private ?array $vendorModuleDirectories = null;
 
+    /**
+     * @var ?list<string>
+     */
+    private ?array $vendorModuleRootDirectories = null;
+
     public function __construct(
         private readonly bool $includeTestOnly
     ) {
@@ -44,12 +49,15 @@ final class ModuleFinder
     public function getYamlConfigFiles(): Finder
     {
         return Finder::create()
-            ->in($this->getIncludedDirectories())
+            ->in([
+                ...$this->getAppDirectories(),
+                ...$this->getVendorModuleRootDirectories(),
+            ])
             ->files()
+            ->path('/\_config/')
+            ->notPath($this->getExcludedDirectories())
             ->name(['*.yml', '*.yaml'])
-            ->path('_config')
-            ->depth('< 2')
-            ->notPath($this->getExcludedDirectories());
+            ->depth('< 2');
     }
 
     /**
@@ -123,18 +131,16 @@ final class ModuleFinder
     }
 
     /**
-     * Get a list of `silverstripe-vendormodule` directories.
-     *
      * @return list<string>
      */
-    private function getVendorModuleDirectories(): array
+    private function getVendorModuleRootDirectories(): array
     {
-        if ($this->vendorModuleDirectories !== null) {
-            return $this->vendorModuleDirectories;
+        if ($this->vendorModuleRootDirectories !== null) {
+            return $this->vendorModuleRootDirectories;
         }
 
         $installedVersions = InstalledVersions::getInstalledPackagesByType('silverstripe-vendormodule');
-        $vendorModuleDirs = [];
+        $vendorModuleRootDirs = [];
 
         foreach ($installedVersions as $packageName) {
             $installPath = InstalledVersions::getInstallPath($packageName);
@@ -147,11 +153,27 @@ final class ModuleFinder
                 $installPath = realpath($installPath);
             }
 
-            $vendorModuleDirs[] = $installPath;
+            $vendorModuleRootDirs[] = $installPath;
+        }
+
+        $this->vendorModuleRootDirectories = $vendorModuleRootDirs;
+
+        return $this->vendorModuleRootDirectories;
+    }
+
+    /**
+     * Get a list of `silverstripe-vendormodule` directories.
+     *
+     * @return list<string>
+     */
+    private function getVendorModuleDirectories(): array
+    {
+        if ($this->vendorModuleDirectories !== null) {
+            return $this->vendorModuleDirectories;
         }
 
         $hits = Finder::create()
-            ->in($vendorModuleDirs)
+            ->in($this->getVendorModuleRootDirectories())
             ->directories()
             ->notPath(['lang', 'tests', 'thirdparty']);
 

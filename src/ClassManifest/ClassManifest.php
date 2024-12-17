@@ -13,16 +13,13 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
-use PHPStan\Cache\Cache;
 use SilverStripe\Core\Manifest\ClassContentRemover;
-use function md5;
 
 final readonly class ClassManifest
 {
     public ClassMap $classMap;
 
     public function __construct(
-        private Cache $cache,
         private ClassMapGenerator $classMapGenerator,
         private ModuleFinder $moduleFinder,
         private NameResolver $nameResolver,
@@ -31,18 +28,7 @@ final readonly class ClassManifest
         private Parser $parser,
         private TestOnlyFinderVisitor $testOnlyFinderVisitor,
     ) {
-        /** @var ?array<class-string, non-empty-string> $cached */
-        $cached = $this->cache->load(md5(__FILE__), '');
-
-        if ($cached === null) {
-            $this->classMap = $this->generateClassMap();
-            $this->cache->save(md5(__FILE__), '', $this->classMap->getMap());
-
-            return;
-        }
-
-        $this->classMap = new ClassMap();
-        $this->classMap->map = $cached;
+        $this->classMap = $this->generateClassMap();
     }
 
     private function generateClassMap(): ClassMap
@@ -54,12 +40,12 @@ final readonly class ClassManifest
 
         $classMap = $this->classMapGenerator->getClassMap();
 
-        // Register Page if it does not exist
+        // Register `Page` if it does not exist
         if (!$classMap->hasClass('Page')) {
             $classMap->addClass('Page', __DIR__ . '/../../stubs/Page.php');
         }
 
-        // Register PageController if it does not exist
+        // Register `PageController` if it does not exist
         if (!$classMap->hasClass('PageController')) {
             $classMap->addClass('PageController', __DIR__ . '/../../stubs/PageController.php');
         }
@@ -69,6 +55,7 @@ final readonly class ClassManifest
             return $classMap;
         }
 
+        // Iterate over class map and remove implementors of `SilverStripe\Dev\TestOnly`
         foreach ($classMap->map as $path) {
             // Strip out all unecessary content from the file
             $contents = ClassContentRemover::remove_class_content($path);
@@ -89,7 +76,7 @@ final readonly class ClassManifest
             // Grab all class like nodes
             $classLikes = $this->nodeFinder->findInstanceOf($stmts, ClassLike::class);
 
-            // Iterate over nodes and check for implementors of SilverStripe\Dev\TestOnly
+            // Iterate over nodes and check for implementors of `SilverStripe\Dev\TestOnly`
             foreach ($classLikes as $classLike) {
                 if (!$classLike instanceof ClassLike) {
                     continue;
@@ -100,12 +87,12 @@ final readonly class ClassManifest
                     continue;
                 }
 
-                // Class is not implementor of SilverStripe\Dev\TestOnly, skip
+                // Class is not implementor of `SilverStripe\Dev\TestOnly`, skip
                 if (!$classLike->hasAttribute(TestOnlyFinderVisitor::ATTRIBUTE_KEY)) {
                     continue;
                 }
 
-                // Remove implementor of SilverStripe\Dev\TestOnly from the class map
+                // Remove implementor of `SilverStripe\Dev\TestOnly` from the class map
                 unset($classMap->map[$classLike->namespacedName->toString()]);
             }
         }
