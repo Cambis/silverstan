@@ -12,6 +12,8 @@ services:
             includeTestOnly: %silverstan.includeTestOnly%
             parser: @currentPhpVersionPhpParser
     -
+        class: Cambis\Silverstan\FileCleaner\FileCleaner
+    -
         class: Cambis\Silverstan\ModuleFinder\ModuleFinder
         arguments:
             includeTestOnly: %silverstan.includeTestOnly%

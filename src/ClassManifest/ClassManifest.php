@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ClassManifest;
 
+use Cambis\Silverstan\FileCleaner\FileCleaner;
 use Cambis\Silverstan\ModuleFinder\ModuleFinder;
 use Cambis\Silverstan\NodeVisitor\TestOnlyFinderVisitor;
 use Composer\ClassMapGenerator\ClassMap;
@@ -13,7 +14,6 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
-use SilverStripe\Core\Manifest\ClassContentRemover;
 
 final readonly class ClassManifest
 {
@@ -21,6 +21,7 @@ final readonly class ClassManifest
 
     public function __construct(
         private ClassMapGenerator $classMapGenerator,
+        private FileCleaner $fileCleaner,
         private ModuleFinder $moduleFinder,
         private NameResolver $nameResolver,
         private NodeFinder $nodeFinder,
@@ -58,7 +59,7 @@ final readonly class ClassManifest
         // Iterate over class map and remove implementors of `SilverStripe\Dev\TestOnly`
         foreach ($classMap->map as $path) {
             // Strip out all unecessary content from the file
-            $contents = ClassContentRemover::remove_class_content($path);
+            $contents = $this->fileCleaner->cleanFile($path);
 
             $stmts = $this->parser->parse($contents) ?? [];
 
