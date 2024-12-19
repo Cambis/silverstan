@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Cambis\Silverstan\Application\SilverstanKernel;
+use Composer\InstalledVersions;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\ShouldNotHappenException;
 use SilverStripe\Control\CLIRequestBuilder;
@@ -21,6 +22,11 @@ $bootstrapFiles = $container->getParameter('bootstrapFiles');
 // Use the new bleedingEdge autoloader
 if (in_array(BASE_PATH . '/silverstripe-autoloader.php', $bootstrapFiles)) {
     return;
+}
+
+// Don't run this if there is no Silverstripe installation
+if (!InstalledVersions::isInstalled('silverstripe/framework')) {
+    throw new ShouldNotHappenException('Could not find `silverstripe/framework`, did you forget to install?');
 }
 
 /** @var array{includeTestOnly: bool} $silverstanParams */

@@ -18,7 +18,6 @@
         "composer/class-map-generator": "^1.5",
         "phpstan/phpstan": "^1.12",
         "silverstripe/config": "^2.0",
-        "silverstripe/framework": "^5.2",
         "symplify/rule-doc-generator-contracts": "^11.1"
     },
     "require-dev": {
@@ -34,6 +33,7 @@
         "shipmonk/composer-dependency-analyser": "^1.7",
         "silverstripe/assets": "^2.3",
         "silverstripe/cms": "^5.2",
+        "silverstripe/framework": "^5.2",
         "silverstripe/versioned": "^2.2",
         "silverstripe/versioned-admin": "^2.2",
         "slevomat/coding-standard": "^8.14",
