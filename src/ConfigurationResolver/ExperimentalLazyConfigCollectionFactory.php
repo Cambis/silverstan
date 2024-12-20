@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\ConfigurationResolver;
 
 use Cambis\Silverstan\ClassManifest\ClassManifest;
+use Cambis\Silverstan\ConfigurationResolver\ConfigCollection\SimpleConfigCollection;
 use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInterface;
 use Cambis\Silverstan\ModuleFinder\ModuleFinder;
 use Composer\InstalledVersions;
-use OutOfBoundsException;
 use Override;
+use PHPStan\Cache\Cache;
 use SilverStripe\Config\Collections\ConfigCollectionInterface;
-use SilverStripe\Config\Collections\MemoryConfigCollection;
 use SilverStripe\Config\Transformer\PrivateStaticTransformer;
 use SilverStripe\Config\Transformer\YamlTransformer;
 use function array_keys;
@@ -19,10 +19,12 @@ use function class_exists;
 use function constant;
 use function defined;
 use function extension_loaded;
+use function sha1;
 
 final readonly class ExperimentalLazyConfigCollectionFactory implements ConfigCollectionFactoryInterface
 {
     public function __construct(
+        private Cache $cache,
         private ClassManifest $classManifest,
         private ModuleFinder $moduleFinder
     ) {
@@ -31,11 +33,22 @@ final readonly class ExperimentalLazyConfigCollectionFactory implements ConfigCo
     #[Override]
     public function create(): ConfigCollectionInterface
     {
-        return (new MemoryConfigCollection())
+        /**
+         * @var string[] $config
+         * @phpstan-ignore phpstanApi.method
+         */
+        $config = $this->cache->load(sha1(__FILE__), 'v1') ?? [];
+
+        $collection = (new SimpleConfigCollection($config))
             ->transform([
                 $this->getPrivateStaticTransformer(),
                 $this->getYamlTransformer(),
             ]);
+
+        /** @phpstan-ignore phpstanApi.method */
+        $this->cache->save(sha1(__FILE__), 'v1', $collection->getAll());
+
+        return $collection;
     }
 
     private function getYamlTransformer(): YamlTransformer
@@ -68,12 +81,7 @@ final readonly class ExperimentalLazyConfigCollectionFactory implements ConfigCo
             })
             // Search installed composer packages for module
             ->addRule('moduleexists', static function (string $module): bool {
-                try {
-                    return InstalledVersions::getInstallPath($module) !== null;
-                } catch (OutOfBoundsException) {
-                }
-
-                return false;
+                return InstalledVersions::isInstalled($module);
             })
             ->addRule('extensionloaded', static function (string $extension): bool {
                 return extension_loaded($extension);
