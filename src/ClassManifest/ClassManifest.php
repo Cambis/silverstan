@@ -14,6 +14,9 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
+use function str_starts_with;
+use function strcmp;
+use function uksort;
 
 final readonly class ClassManifest
 {
@@ -50,6 +53,19 @@ final readonly class ClassManifest
         if (!$classMap->hasClass('PageController')) {
             $classMap->addClass('PageController', __DIR__ . '/../../stubs/PageController.php');
         }
+
+        // Sort the class map so that `SilverStripe` classes have priority
+        uksort($classMap->map, static function (string $a, string $b): int {
+            if (str_starts_with($a, 'SilverStripe\\') && !str_starts_with($b, 'SilverStripe\\')) {
+                return -1;
+            }
+
+            if (!str_starts_with($a, 'SilverStripe\\') && str_starts_with($b, 'SilverStripe\\')) {
+                return 1;
+            }
+
+            return strcmp($a, $b);
+        });
 
         // No further processing is needed, return
         if ($this->includeTestOnly) {
