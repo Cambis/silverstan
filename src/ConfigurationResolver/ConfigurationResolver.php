@@ -31,7 +31,7 @@ final class ConfigurationResolver
     ) {
     }
 
-    public function get(string $className, string $name): mixed
+    public function get(string $className, ?string $name = null): mixed
     {
         if (!$this->configCollection instanceof ConfigCollectionInterface) {
             $this->configCollection = $this->configCollectionFactory->create();

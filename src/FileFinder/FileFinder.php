@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\ModuleFinder;
+namespace Cambis\Silverstan\FileFinder;
 
 use Composer\InstalledVersions;
 use Symfony\Component\Finder\Finder;
 use function dirname;
 use function realpath;
 
-final class ModuleFinder
+final class FileFinder
 {
     /**
      * @var ?list<string>

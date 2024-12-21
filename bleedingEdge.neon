@@ -14,7 +14,7 @@ services:
     -
         class: Cambis\Silverstan\FileCleaner\FileCleaner
     -
-        class: Cambis\Silverstan\ModuleFinder\ModuleFinder
+        class: Cambis\Silverstan\FileFinder\FileFinder
         arguments:
             includeTestOnly: %silverstan.includeTestOnly%
     -

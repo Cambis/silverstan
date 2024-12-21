@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\ClassManifest;
 
 use Cambis\Silverstan\FileCleaner\FileCleaner;
-use Cambis\Silverstan\ModuleFinder\ModuleFinder;
+use Cambis\Silverstan\FileFinder\FileFinder;
 use Cambis\Silverstan\NodeVisitor\TestOnlyFinderVisitor;
 use Composer\ClassMapGenerator\ClassMap;
 use Composer\ClassMapGenerator\ClassMapGenerator;
@@ -25,7 +25,7 @@ final readonly class ClassManifest
     public function __construct(
         private ClassMapGenerator $classMapGenerator,
         private FileCleaner $fileCleaner,
-        private ModuleFinder $moduleFinder,
+        private FileFinder $moduleFinder,
         private NameResolver $nameResolver,
         private NodeFinder $nodeFinder,
         private bool $includeTestOnly,
