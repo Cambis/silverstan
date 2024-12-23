@@ -1,0 +1,16 @@
+<?php
+
+namespace SilverStripe\Config\Middleware;
+
+interface Middleware
+{
+    /**
+     * Get config for a class
+     *
+     * @param class-string $class Name of class
+     * @param int|true $excludeMiddleware Middleware disable flags
+     * @param callable(class-string, int|true): mixed[] $next Callback to next middleware
+     * @return mixed[] Complete class config
+     */
+    public function getClassConfig($class, $excludeMiddleware, $next);
+}

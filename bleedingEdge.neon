@@ -4,8 +4,17 @@ parameters:
 services:
     - 
         class: Cambis\Silverstan\Autoloader\Autoloader
+    -
+        class: Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryProviderInterface
+        factory: Cambis\Silverstan\ConfigurationResolver\LazyMiddlewareRegistryProvider
     configCollectionFactory:
         class: Cambis\Silverstan\ConfigurationResolver\ExperimentalLazyConfigCollectionFactory
+    -
+        class: Cambis\Silverstan\ConfigurationResolver\Middleware\ExtensionMiddleware
+        tags: [silverstan.configurationResolver.middleware]
+    -
+        class: Cambis\Silverstan\ConfigurationResolver\Middleware\InheritanceMiddleware
+        tags: [silverstan.configurationResolver.middleware]
     -
         class: Cambis\Silverstan\ClassManifest\ClassManifest
         arguments:

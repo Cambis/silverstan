@@ -7,7 +7,7 @@ namespace Cambis\Silverstan\ConfigurationResolver;
 use Cambis\Silverstan\ClassManifest\ClassManifest;
 use Cambis\Silverstan\ConfigurationResolver\ConfigCollection\SimpleConfigCollection;
 use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInterface;
-use Cambis\Silverstan\ConfigurationResolver\Middleware\InheritanceMiddleware;
+use Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryProviderInterface;
 use Cambis\Silverstan\FileFinder\FileFinder;
 use Composer\InstalledVersions;
 use Override;
@@ -27,7 +27,8 @@ final readonly class ExperimentalLazyConfigCollectionFactory implements ConfigCo
     public function __construct(
         private Cache $cache,
         private ClassManifest $classManifest,
-        private FileFinder $moduleFinder
+        private FileFinder $moduleFinder,
+        private MiddlewareRegistryProviderInterface $middlewareRegistryProvider
     ) {
     }
 
@@ -46,7 +47,7 @@ final readonly class ExperimentalLazyConfigCollectionFactory implements ConfigCo
                 $this->getYamlTransformer(),
             ]);
 
-        $collection->addMiddleware(new InheritanceMiddleware($collection));
+        $collection->setMiddlewares($this->middlewareRegistryProvider->getRegistry()->getMiddlewares());
 
         /** @phpstan-ignore phpstanApi.method */
         $this->cache->save(sha1(__FILE__), 'v1', $collection->getAll());

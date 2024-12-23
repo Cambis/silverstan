@@ -18,6 +18,20 @@ use function preg_match;
 final class ConfigurationResolver
 {
     /**
+     * Source options bitmask value - only get configuration set for this specific class, not any of it's parents.
+     *
+     * @var int
+     */
+    public const UNINHERITED = 1;
+
+    /**
+     * Source options bitmask value - do not use additional statics sources (such as extension).
+     *
+     * @var int
+     */
+    public const EXCLUDE_EXTRA_SOURCES = 4;
+
+    /**
      * @var string
      * @see https://regex101.com/r/ZXIMlR/1
      */
@@ -31,13 +45,13 @@ final class ConfigurationResolver
     ) {
     }
 
-    public function get(string $className, ?string $name = null): mixed
+    public function get(string $className, ?string $name = null, true|int $excludeMiddleware = 0): mixed
     {
         if (!$this->configCollection instanceof ConfigCollectionInterface) {
             $this->configCollection = $this->configCollectionFactory->create();
         }
 
-        return $this->configCollection->get($className, $name);
+        return $this->configCollection->get($className, $name, $excludeMiddleware);
     }
 
     public function resolveClassName(string $className): string
