@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\Tests\Type;
+namespace Cambis\Silverstan\Tests\Extension\Type;
 
 use Override;
 use PHPStan\Testing\TypeInferenceTestCase;
