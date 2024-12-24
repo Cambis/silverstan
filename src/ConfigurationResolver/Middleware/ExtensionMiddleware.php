@@ -9,7 +9,6 @@ use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigurationResolverAwareI
 use Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareInterface;
 use Override;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\ShouldNotHappenException;
 use SilverStripe\Config\MergeStrategy\Priority;
 use SilverStripe\Config\Middleware\MiddlewareCommon;
 use Throwable;
@@ -82,7 +81,7 @@ final class ExtensionMiddleware implements MiddlewareInterface, ConfigurationRes
             $extension = $this->configurationResolver->resolveExtensionClassName($extension);
 
             if ($extension === null) {
-                throw new ShouldNotHappenException();
+                continue;
             }
 
             $extensionClass = $this->reflectionProvider->getClass($extension);
