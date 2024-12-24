@@ -26,4 +26,15 @@ return (new Configuration())
         ],
         [__DIR__ . '/tests'],
         [ErrorType::SHADOW_DEPENDENCY]
+    )
+    ->ignoreErrorsOnPackagesAndPaths(
+        [
+            'silverstripe/framework',
+        ],
+        [
+            __DIR__ . '/bootstrap.php',
+            __DIR__ . '/src/Application/SilverstanKernel.php',
+            __DIR__ . '/src/ConfigurationResolver/LazyConfigCollectionFactory.php',
+        ],
+        [ErrorType::DEV_DEPENDENCY_IN_PROD]
     );

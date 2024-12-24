@@ -15,6 +15,7 @@
     ],
     "require": {
         "php": "^8.3",
+        "ext-tokenizer": "*",
         "composer/class-map-generator": "^1.5",
         "phpstan/phpstan": "^1.12",
         "silverstripe/config": "^2.0",

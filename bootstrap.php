@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Cambis\Silverstan\Application\SilverstanKernel;
-use Composer\InstalledVersions;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\ShouldNotHappenException;
 use SilverStripe\Control\CLIRequestBuilder;
@@ -24,8 +23,8 @@ if (in_array(__DIR__ . '/silverstripe-autoloader.php', $bootstrapFiles)) {
     return;
 }
 
-// Don't run this if there is no Silverstripe installation
-if (!InstalledVersions::isInstalled('silverstripe/framework')) {
+// Don't continue if there is no Silverstripe installation
+if (!class_exists('SilverStripe\Core\Config\Config')) {
     throw new ShouldNotHappenException('Could not find `silverstripe/framework`, did you forget to install?');
 }
 
