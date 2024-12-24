@@ -74,6 +74,14 @@ final class ConfigurationResolverTest extends PHPStanTestCase
         );
     }
 
+    public function testGetExtraConfig(): void
+    {
+        $this->assertSame(
+            ['test_4'],
+            $this->configurationResolver->get(Bar::class, 'fourth')
+        );
+    }
+
     /**
      * @return string[]
      */

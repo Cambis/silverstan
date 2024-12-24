@@ -20,4 +20,11 @@ final class BarExtension extends Extension implements TestOnly
      * @var string[]
      */
     private static array $third = ['test_3'];
+
+    public static function get_extra_config(string $className, string $extensionName, array $args): array
+    {
+        return [
+            'fourth' => ['test_4'],
+        ];
+    }
 }
