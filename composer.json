@@ -44,9 +44,6 @@
         "tomasvotruba/unused-public": "^0.4",
         "unclecheese/display-logic": "^3.0"
     },
-    "suggest": {
-        "silverstripe/standards": "Verifies annotations inside of Silverstripe classes."
-    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
