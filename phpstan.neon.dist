@@ -12,6 +12,13 @@ parameters:
         - rector.php
         - '*/Fixture/*'
         - '*/Source/*'
+    ignoreErrors:
+        -
+            # Prefer dynamic calls in PHPUnit
+            messages:
+                - '#Dynamic call to static method PHPUnit\\Framework\\#'
+            identifier: staticMethod.dynamicCall
+            reportUnmatched: false
 services:
     -
         class: Symplify\PHPStanRules\Naming\ClassToSuffixResolver

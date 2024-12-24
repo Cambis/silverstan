@@ -89,17 +89,12 @@ final class ExtensionMiddleware implements MiddlewareInterface, ConfigurationRes
 
             // Check class hierarchy from root up
             foreach ($extensionClass->getAncestors() as $extensionClassParent) {
-                // Ancestors start at the current class
-                if ($extensionClass === $extensionClassParent) {
+                if (!$extensionClassParent->isSubclassOf('SilverStripe\Core\Extension')) {
                     continue;
                 }
 
-                // Skip base classes
-                if ($extensionClassParent->is('SilverStripe\Core\Extension')) {
-                    continue;
-                }
-
-                if ($extensionClass->is('SilverStripe\ORM\DataExtension')) {
+                // Skip base class
+                if ($extensionClass->getName() === 'SilverStripe\ORM\DataExtension') {
                     continue;
                 }
 

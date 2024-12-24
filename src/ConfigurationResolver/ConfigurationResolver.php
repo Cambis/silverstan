@@ -14,6 +14,8 @@ use function preg_match;
 
 /**
  * This service provides access to the Silverstripe configuration API.
+ *
+ * @see \Cambis\Silverstan\Tests\ConfigurationResolver\ConfigurationResolverTest
  */
 final class ConfigurationResolver
 {
