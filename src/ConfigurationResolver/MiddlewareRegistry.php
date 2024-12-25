@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\ConfigurationResolver;
 
 use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigurationResolverAwareInterface;
-use Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareInterface;
 use Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryInterface;
 use Override;
+use SilverStripe\Config\Middleware\Middleware as MiddlewareInterface;
 
 final readonly class MiddlewareRegistry implements MiddlewareRegistryInterface
 {

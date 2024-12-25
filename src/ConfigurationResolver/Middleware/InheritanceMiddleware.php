@@ -6,9 +6,9 @@ namespace Cambis\Silverstan\ConfigurationResolver\Middleware;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigurationResolverAwareInterface;
-use Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareInterface;
 use Override;
 use SilverStripe\Config\MergeStrategy\Priority;
+use SilverStripe\Config\Middleware\Middleware as MiddlewareInterface;
 use SilverStripe\Config\Middleware\MiddlewareCommon;
 use function class_exists;
 use function get_parent_class;

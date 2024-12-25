@@ -6,10 +6,10 @@ namespace Cambis\Silverstan\ConfigurationResolver\Middleware;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigurationResolverAwareInterface;
-use Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareInterface;
 use Override;
 use PHPStan\Reflection\ReflectionProvider;
 use SilverStripe\Config\MergeStrategy\Priority;
+use SilverStripe\Config\Middleware\Middleware as MiddlewareInterface;
 use SilverStripe\Config\Middleware\MiddlewareCommon;
 use Throwable;
 use function is_array;

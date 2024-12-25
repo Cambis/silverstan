@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ConfigurationResolver\Contract;
 
+use SilverStripe\Config\Middleware\Middleware as MiddlewareInterface;
+
 interface MiddlewareRegistryInterface
 {
     /**
