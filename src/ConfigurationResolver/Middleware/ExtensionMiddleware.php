@@ -14,6 +14,10 @@ use SilverStripe\Config\Middleware\MiddlewareCommon;
 use Throwable;
 use function is_array;
 
+/**
+ * Inspired by https://github.com/silverstripe/silverstripe-framework/blob/5/src/Core/Config/Middleware/ExtensionMiddleware.php.
+ */
+
 final class ExtensionMiddleware implements MiddlewareInterface, ConfigurationResolverAwareInterface
 {
     use MiddlewareCommon;

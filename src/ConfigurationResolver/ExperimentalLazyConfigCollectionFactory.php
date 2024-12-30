@@ -20,14 +20,13 @@ use function class_exists;
 use function constant;
 use function defined;
 use function extension_loaded;
-use function sha1;
 
 final readonly class ExperimentalLazyConfigCollectionFactory implements ConfigCollectionFactoryInterface
 {
     public function __construct(
         private Cache $cache,
         private ClassManifest $classManifest,
-        private FileFinder $moduleFinder,
+        private FileFinder $fileFinder,
         private MiddlewareRegistryProviderInterface $middlewareRegistryProvider
     ) {
     }
@@ -36,21 +35,24 @@ final readonly class ExperimentalLazyConfigCollectionFactory implements ConfigCo
     public function create(): ConfigCollectionInterface
     {
         /**
-         * @var string[] $config
+         * @var mixed[] $config
          * @phpstan-ignore phpstanApi.method
          */
-        $config = $this->cache->load(sha1(__FILE__), 'v1') ?? [];
+        $config = $this->cache->load($this->fileFinder->getConfigCacheKey(), 'v1') ?? [];
 
         $collection = (new SimpleConfigCollection($config))
-            ->transform([
+            ->setMiddlewares($this->middlewareRegistryProvider->getRegistry()->getMiddlewares());
+
+        // If the config was cached, don't transform a second time
+        if ($config === []) {
+            $collection->transform([
                 $this->getPrivateStaticTransformer(),
                 $this->getYamlTransformer(),
             ]);
-
-        $collection->setMiddlewares($this->middlewareRegistryProvider->getRegistry()->getMiddlewares());
+        }
 
         /** @phpstan-ignore phpstanApi.method */
-        $this->cache->save(sha1(__FILE__), 'v1', $collection->getAll());
+        $this->cache->save($this->fileFinder->getConfigCacheKey(), 'v1', $collection->getAll());
 
         return $collection;
     }
@@ -58,8 +60,8 @@ final readonly class ExperimentalLazyConfigCollectionFactory implements ConfigCo
     private function getYamlTransformer(): YamlTransformer
     {
         return YamlTransformer::create(
-            $this->moduleFinder->getAppRootDirectory(),
-            $this->moduleFinder->getYamlConfigFiles()
+            $this->fileFinder->getAppRootDirectory(),
+            $this->fileFinder->getYamlConfigFiles()
         )
             ->addRule('classexists', static function (string $class): bool {
                 return class_exists($class);
@@ -94,8 +96,8 @@ final readonly class ExperimentalLazyConfigCollectionFactory implements ConfigCo
 
     private function getPrivateStaticTransformer(): PrivateStaticTransformer
     {
-        return new PrivateStaticTransformer(
-            array_keys($this->classManifest->classMap->getMap())
-        );
+        return new PrivateStaticTransformer(function (): array {
+            return array_keys($this->classManifest->classMap->getMap());
+        });
     }
 }

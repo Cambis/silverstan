@@ -9,7 +9,7 @@ use SilverStripe\Config\Collections\MemoryConfigCollection;
 final class SimpleConfigCollection extends MemoryConfigCollection
 {
     /**
-     * @param string[] $config
+     * @param mixed[] $config
      */
     public function __construct(
         array $config

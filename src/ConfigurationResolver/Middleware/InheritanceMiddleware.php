@@ -14,6 +14,9 @@ use function class_exists;
 use function get_parent_class;
 use function is_array;
 
+/**
+ * Inspired by https://github.com/silverstripe/silverstripe-framework/blob/5/src/Core/Config/Middleware/InheritanceMiddleware.php.
+ */
 final class InheritanceMiddleware implements MiddlewareInterface, ConfigurationResolverAwareInterface
 {
     use MiddlewareCommon;

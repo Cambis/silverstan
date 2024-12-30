@@ -17,7 +17,7 @@ use const T_STRING;
 use const T_TRAIT;
 
 /**
- * @see https://github.com/silverstripe/silverstripe-framework/blob/5/src/Core/Manifest/ClassContentRemover.php
+ * Modified from https://github.com/silverstripe/silverstripe-framework/blob/5/src/Core/Manifest/ClassContentRemover.php.
  */
 final class FileCleaner
 {

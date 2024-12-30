@@ -8,6 +8,8 @@ use Composer\InstalledVersions;
 use Symfony\Component\Finder\Finder;
 use function dirname;
 use function realpath;
+use function sha1;
+use function sprintf;
 
 final class FileFinder
 {
@@ -92,6 +94,32 @@ final class FileFinder
         $path = realpath($root['install_path']);
 
         return $path !== false ? $path : $root['install_path'];
+    }
+
+    /**
+     * Generate a cache key determined by the last modified time of yaml/php files.
+     *
+     * @return non-empty-string
+     */
+    public function getConfigCacheKey(): string
+    {
+        $configFiles = $this->getYamlConfigFiles()
+            ->sortByModifiedTime()
+            ->reverseSorting();
+
+        $phpFiles = $this->getPhpFiles()
+            ->sortByModifiedTime()
+            ->reverseSorting();
+
+        if (!$configFiles->hasResults() || !$phpFiles->hasResults()) {
+            return sha1('config-');
+        }
+
+        return sha1(sprintf(
+            'config-%s-%s',
+            $configFiles->getIterator()->current()->getMTime(),
+            $phpFiles->getIterator()->current()->getMTime()
+        ));
     }
 
     /**
