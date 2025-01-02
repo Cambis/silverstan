@@ -27,6 +27,8 @@ services:
     -
         class: Cambis\Silverstan\ClassManifest\ClassManifest
         arguments:
+            excludedClasses:
+                - 'SilverStripe\Core\Manifest\ClassManifestErrorHandler'
             includeTestOnly: %silverstan.includeTestOnly%
             parser: @currentPhpVersionPhpParser
     -

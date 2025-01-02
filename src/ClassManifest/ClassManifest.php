@@ -24,8 +24,14 @@ final readonly class ClassManifest
 
     public function __construct(
         private ClassMapGenerator $classMapGenerator,
+        /**
+         * A list of classes that should be excluded from the manifest.
+         *
+         * @var list<class-string>
+         */
+        private array $excludedClasses,
         private FileCleaner $fileCleaner,
-        private FileFinder $moduleFinder,
+        private FileFinder $fileFinder,
         private NameResolver $nameResolver,
         private NodeFinder $nodeFinder,
         private bool $includeTestOnly,
@@ -39,7 +45,7 @@ final readonly class ClassManifest
     {
         // Generate the class map
         $this->classMapGenerator->scanPaths(
-            $this->moduleFinder->getPhpFiles()
+            $this->fileFinder->getPhpFiles()
         );
 
         $classMap = $this->classMapGenerator->getClassMap();
@@ -52,6 +58,15 @@ final readonly class ClassManifest
         // Register `PageController` if it does not exist
         if (!$classMap->hasClass('PageController')) {
             $classMap->addClass('PageController', __DIR__ . '/../../stubs/PageController.php');
+        }
+
+        // Remove excluded classes
+        foreach ($this->excludedClasses as $excludedClass) {
+            if (!$classMap->hasClass($excludedClass)) {
+                continue;
+            }
+
+            unset($classMap->map[$excludedClass]);
         }
 
         // Sort the class map so that `SilverStripe` classes have priority
