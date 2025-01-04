@@ -58,6 +58,11 @@ final class ConfigurationResolverTest extends PHPStanTestCase
         );
     }
 
+    public function testGetExcludeMiddleware(): void
+    {
+        $this->assertNull($this->configurationResolver->get(Bar::class, 'third', true));
+    }
+
     public function testGetExcludeExtraSources(): void
     {
         $this->assertSame(

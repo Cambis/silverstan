@@ -9,12 +9,12 @@ parameters:
         - Symbiote\QueuedJobs\Services\AbstractQueuedJob
 services:
     configCollectionFactory:
-        class: Cambis\Silverstan\ConfigurationResolver\LazyConfigCollectionFactory
+        class: Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory\LazyConfigCollectionFactory
+    -
+        class: Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver
     -
         class: Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInterface
         factory: @configCollectionFactory
-    -
-        class: Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver
     -
         class: Cambis\Silverstan\Extension\ClassPropertiesNode\ConfigurationPropertiesExtension
         tags: [phpstan.properties.readWriteExtension]

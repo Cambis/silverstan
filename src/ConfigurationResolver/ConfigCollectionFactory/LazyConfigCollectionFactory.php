@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\ConfigurationResolver;
+namespace Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory;
 
 use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInterface;
 use Override;

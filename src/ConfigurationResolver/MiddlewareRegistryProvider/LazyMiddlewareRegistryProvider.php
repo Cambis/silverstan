@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\ConfigurationResolver;
+namespace Cambis\Silverstan\ConfigurationResolver\MiddlewareRegistryProvider;
 
+use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryInterface;
 use Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryProviderInterface;
+use Cambis\Silverstan\ConfigurationResolver\MiddlewareRegistry\MiddlewareRegistry;
 use Override;
 use PHPStan\DependencyInjection\Container;
 use function array_reverse;

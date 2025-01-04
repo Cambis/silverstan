@@ -12,22 +12,22 @@ services:
         class: Cambis\Silverstan\ConfigurationResolver\ConfigCollection\CachedConfigCollection
     -
         class: Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryProviderInterface
-        factory: Cambis\Silverstan\ConfigurationResolver\LazyMiddlewareRegistryProvider
+        factory: Cambis\Silverstan\ConfigurationResolver\MiddlewareRegistryProvider\LazyMiddlewareRegistryProvider
     configCollectionFactory:
-        class: Cambis\Silverstan\ConfigurationResolver\ExperimentalLazyConfigCollectionFactory
+        class: Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory\ExperimentalLazyConfigCollectionFactory
     -
         class: Cambis\Silverstan\ConfigurationResolver\Extension\PhpDoc\ConfigCacheExtension
         arguments:
             cache: @configCache
         tags: [phpstan.stubFilesExtension]
     -
+        class: Cambis\Silverstan\ConfigurationResolver\Middleware\PrivateStaticMiddleware
+        tags: [silverstan.configurationResolver.middleware]
+    -
         class: Cambis\Silverstan\ConfigurationResolver\Middleware\ExtensionMiddleware
         tags: [silverstan.configurationResolver.middleware]
     -
         class: Cambis\Silverstan\ConfigurationResolver\Middleware\InheritanceMiddleware
-        tags: [silverstan.configurationResolver.middleware]
-    -
-        class: Cambis\Silverstan\ConfigurationResolver\Middleware\PrivateStaticMiddleware
         tags: [silverstan.configurationResolver.middleware]
     -
         class: Cambis\Silverstan\ClassManifest\ClassManifest

@@ -19,21 +19,26 @@ use function preg_match;
  */
 final class ConfigurationResolver
 {
-    public const EXCLUDE_PRIVATE_STATIC = 1;
-
     /**
-     * Source options bitmask value - only get configuration set for this specific class, not any of it's parents.
+     * Source options bitmask value - only get configuration set for this specific class, not any of its parents.
      *
      * @var int
      */
-    public const UNINHERITED = 2;
+    public const UNINHERITED = 1;
 
     /**
      * Source options bitmask value - do not use additional statics sources (such as extension).
      *
      * @var int
      */
-    public const EXCLUDE_EXTRA_SOURCES = 4;
+    public const EXCLUDE_EXTRA_SOURCES = 2;
+
+    /**
+     * Source options bitmask value - do not use class member configuration.
+     *
+     * @var int
+     */
+    public const EXCLUDE_PRIVATE_STATIC = 4;
 
     /**
      * @var string

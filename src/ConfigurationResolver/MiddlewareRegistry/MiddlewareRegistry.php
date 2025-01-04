@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\ConfigurationResolver;
+namespace Cambis\Silverstan\ConfigurationResolver\MiddlewareRegistry;
 
+use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigurationResolverAwareInterface;
 use Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryInterface;
 use Override;

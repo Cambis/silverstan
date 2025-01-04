@@ -15,6 +15,11 @@ use function array_key_exists;
 use function is_array;
 use function strtolower;
 
+/**
+ * Cached collection that uses PHPStan's inbuilt cache.
+ *
+ * Methods from `SilverStripe\Config\Collections\MutableConfigCollectionInterface` are not strongly typed so they are backwards compatible.
+ */
 final class CachedConfigCollection implements MutableConfigCollectionInterface
 {
     use MiddlewareAware;
@@ -22,7 +27,7 @@ final class CachedConfigCollection implements MutableConfigCollectionInterface
     /**
      * @var string
      */
-    private const CACHE_VERSION = 'v1';
+    private const CACHE_VERSION = 'v1-config';
 
     private readonly string $cacheKey;
 
@@ -79,6 +84,7 @@ final class CachedConfigCollection implements MutableConfigCollectionInterface
      * @param mixed $value
      * @param mixed[] $metadata
      */
+    #[Override]
     public function set($class, $name, $value, $metadata = []): static
     {
         $config = $this->getAll();
@@ -103,6 +109,7 @@ final class CachedConfigCollection implements MutableConfigCollectionInterface
      * @param string $name
      * @param mixed[] $value
      */
+    #[Override]
     public function merge($class, $name, $value): static
     {
         $existing = $this->get($class, $name, true);
@@ -120,6 +127,7 @@ final class CachedConfigCollection implements MutableConfigCollectionInterface
      * @param string $class
      * @param ?string $name
      */
+    #[Override]
     public function remove($class, $name = null): static
     {
         $config = $this->getAll();
@@ -139,6 +147,7 @@ final class CachedConfigCollection implements MutableConfigCollectionInterface
         return $this;
     }
 
+    #[Override]
     public function removeAll(): void
     {
         /** @phpstan-ignore phpstanApi.method */
@@ -203,7 +212,7 @@ final class CachedConfigCollection implements MutableConfigCollectionInterface
         $classKey = strtolower($class);
 
         if ($excludeMiddleware === true) {
-            return isset($config[$classKey]) ? $config[$classKey] : [];
+            return $config[$classKey] ?? [];
         }
 
         // Check cache
