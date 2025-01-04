@@ -1,0 +1,43 @@
+<?php
+
+namespace SilverStripe\Config\Collections;
+
+use SilverStripe\Config\Middleware\Middleware;
+
+/**
+ * This represents a collection of config keys and values.
+ */
+interface ConfigCollectionInterface
+{
+    /**
+     * Returns the entire metadata
+     *
+     * @return mixed[]
+     */
+    public function getMetadata();
+
+    /**
+     * Returns the entire history
+     *
+     * @return mixed[]
+     */
+    public function getHistory();
+
+    /**
+     * @return list<Middleware>
+     */
+    public function getMiddlewares();
+
+    /**
+     * @param list<Middleware> $middlewares
+     * @return $this
+     */
+    public function setMiddlewares($middlewares);
+
+    /**
+     * Get complete config (excludes middleware)
+     *
+     * @return mixed[]
+     */
+    public function getAll();
+}

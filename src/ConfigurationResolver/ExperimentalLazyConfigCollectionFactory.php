@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\ConfigurationResolver;
 
 use Cambis\Silverstan\ClassManifest\ClassManifest;
+use Cambis\Silverstan\ConfigurationResolver\ConfigCollection\CachedConfigCollection;
 use Cambis\Silverstan\ConfigurationResolver\ConfigCollection\SimpleConfigCollection;
 use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInterface;
 use Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryProviderInterface;
@@ -27,34 +28,43 @@ final readonly class ExperimentalLazyConfigCollectionFactory implements ConfigCo
         private Cache $cache,
         private ClassManifest $classManifest,
         private FileFinder $fileFinder,
-        private MiddlewareRegistryProviderInterface $middlewareRegistryProvider
+        private MiddlewareRegistryProviderInterface $middlewareRegistryProvider,
+        private CachedConfigCollection $cachedConfigCollection
     ) {
     }
 
     #[Override]
     public function create(): ConfigCollectionInterface
     {
-        /**
-         * @var mixed[] $config
-         * @phpstan-ignore phpstanApi.method
-         */
-        $config = $this->cache->load($this->fileFinder->getConfigCacheKey(), 'v1') ?? [];
+        // /**
+        // * @var mixed[] $config
+        //  * @phpstan-ignore phpstanApi.method
+        //  */
+        // $config = $this->cache->load($this->fileFinder->getConfigCacheKey(), 'v1') ?? [];
 
-        $collection = (new SimpleConfigCollection($config))
-            ->setMiddlewares($this->middlewareRegistryProvider->getRegistry()->getMiddlewares());
+        // $collection = (new SimpleConfigCollection($config))
+        //     ->setMiddlewares($this->middlewareRegistryProvider->getRegistry()->getMiddlewares());
 
-        // If the config was cached, don't transform a second time
-        if ($config === []) {
-            $collection->transform([
-                $this->getPrivateStaticTransformer(),
-                $this->getYamlTransformer(),
-            ]);
+        // // If the config was cached, don't transform a second time
+        // if ($config === []) {
+        //     $collection->transform([
+        //         $this->getPrivateStaticTransformer(),
+        //         $this->getYamlTransformer(),
+        //     ]);
+        // }
+
+        // /** @phpstan-ignore phpstanApi.method */
+        // $this->cache->save($this->fileFinder->getConfigCacheKey(), 'v1', $collection->getAll());
+
+        // return $collection;
+
+        $this->cachedConfigCollection->setMiddlewares($this->middlewareRegistryProvider->getRegistry()->getMiddlewares());
+
+        if ($this->cachedConfigCollection->getAll() === []) {
+            $this->cachedConfigCollection->transform([$this->getYamlTransformer()]);
         }
 
-        /** @phpstan-ignore phpstanApi.method */
-        $this->cache->save($this->fileFinder->getConfigCacheKey(), 'v1', $collection->getAll());
-
-        return $collection;
+        return $this->cachedConfigCollection;
     }
 
     private function getYamlTransformer(): YamlTransformer

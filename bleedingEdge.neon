@@ -9,6 +9,8 @@ services:
         arguments:
             directory: %tmpDir%/cache/PHPStan
     -
+        class: Cambis\Silverstan\ConfigurationResolver\ConfigCollection\CachedConfigCollection
+    -
         class: Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryProviderInterface
         factory: Cambis\Silverstan\ConfigurationResolver\LazyMiddlewareRegistryProvider
     configCollectionFactory:
@@ -23,6 +25,9 @@ services:
         tags: [silverstan.configurationResolver.middleware]
     -
         class: Cambis\Silverstan\ConfigurationResolver\Middleware\InheritanceMiddleware
+        tags: [silverstan.configurationResolver.middleware]
+    -
+        class: Cambis\Silverstan\ConfigurationResolver\Middleware\PrivateStaticMiddleware
         tags: [silverstan.configurationResolver.middleware]
     -
         class: Cambis\Silverstan\ClassManifest\ClassManifest
