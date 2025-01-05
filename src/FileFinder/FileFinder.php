@@ -97,28 +97,23 @@ final class FileFinder
     }
 
     /**
-     * Generate a cache key determined by the last modified time of yaml/php files.
+     * Generate a cache key determined by the last modified time of yaml files.
      *
      * @return non-empty-string
      */
-    public function getConfigCacheKey(): string
+    public function getYamlConfigCacheKey(): string
     {
         $configFiles = $this->getYamlConfigFiles()
             ->sortByModifiedTime()
             ->reverseSorting();
 
-        $phpFiles = $this->getPhpFiles()
-            ->sortByModifiedTime()
-            ->reverseSorting();
-
-        if (!$configFiles->hasResults() || !$phpFiles->hasResults()) {
-            return sha1('config-');
+        if (!$configFiles->hasResults()) {
+            return sha1('config');
         }
 
         return sha1(sprintf(
-            'config-%s-%s',
+            'config-%s',
             $configFiles->getIterator()->current()->getMTime(),
-            $phpFiles->getIterator()->current()->getMTime()
         ));
     }
 
