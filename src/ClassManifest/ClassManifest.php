@@ -15,9 +15,11 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use function array_key_exists;
-use function array_keys;
 use function strtolower;
 
+/**
+ * @see \Cambis\Silverstan\Tests\ClassManifest\ClassManifestTest
+ */
 final class ClassManifest
 {
     /**
@@ -25,7 +27,7 @@ final class ClassManifest
      *
      * @var array<lowercase-string, class-string>
      */
-    private array $classes;
+    private array $classes = [];
 
     private readonly ClassMap $classMap;
 
@@ -46,7 +48,10 @@ final class ClassManifest
         private readonly TestOnlyFinderVisitor $testOnlyFinderVisitor,
     ) {
         $this->classMap = $this->generateClassMap();
-        $this->classes = $this->generateClasses();
+
+        foreach ($this->classMap->map as $className => $path) {
+            $this->addClass($className, $path);
+        }
 
         // Register `Page` if it does not exist
         if (!$this->hasClass('Page')) {
@@ -197,19 +202,5 @@ final class ClassManifest
         }
 
         return $testOnlyClasses;
-    }
-
-    /**
-     * @return array<lowercase-string, class-string>
-     */
-    private function generateClasses(): array
-    {
-        $classes = [];
-
-        foreach (array_keys($this->classMap->map) as $className) {
-            $classes[strtolower($className)] = $className;
-        }
-
-        return $classes;
     }
 }
