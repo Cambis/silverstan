@@ -28,10 +28,10 @@ final readonly class Autoloader
     private function autoload(string $className): void
     {
         /** @var class-string $className */
-        if (!$this->classManifest->classMap->hasClass($className)) {
+        if (!$this->classManifest->hasClass($className)) {
             return;
         }
 
-        require_once $this->classManifest->classMap->getClassPath($className);
+        require_once $this->classManifest->getClassPath($className);
     }
 }

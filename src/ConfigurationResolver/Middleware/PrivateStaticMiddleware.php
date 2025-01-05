@@ -40,7 +40,7 @@ final class PrivateStaticMiddleware implements MiddlewareInterface
         }
 
         // Skip if class is not in the manifest
-        if (!$this->classManifest->classMap->hasClass($class)) {
+        if (!$this->classManifest->hasClass($class)) {
             return $config;
         }
 

@@ -14,13 +14,21 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
+use function array_key_exists;
+use function array_keys;
 use function str_starts_with;
 use function strcmp;
+use function strtolower;
 use function uksort;
 
 final readonly class ClassManifest
 {
-    public ClassMap $classMap;
+    /**
+     * @var array<lowercase-string, class-string>
+     */
+    public array $classes;
+
+    private ClassMap $classMap;
 
     public function __construct(
         private ClassMapGenerator $classMapGenerator,
@@ -39,6 +47,25 @@ final readonly class ClassManifest
         private TestOnlyFinderVisitor $testOnlyFinderVisitor,
     ) {
         $this->classMap = $this->generateClassMap();
+        $this->classes = $this->generateClasses();
+    }
+
+    /**
+     * @param class-string $className
+     */
+    public function hasClass(string $className): bool
+    {
+        return array_key_exists(strtolower($className), $this->classes);
+    }
+
+    /**
+     * @param class-string $className
+     */
+    public function getClassPath(string $className): string
+    {
+        $classEntry = $this->classes[strtolower($className)];
+
+        return $this->classMap->getClassPath($classEntry);
     }
 
     private function generateClassMap(): ClassMap
@@ -70,17 +97,17 @@ final readonly class ClassManifest
         }
 
         // Sort the class map so that `SilverStripe` classes have priority
-        uksort($classMap->map, static function (string $a, string $b): int {
-            if (str_starts_with($a, 'SilverStripe\\') && !str_starts_with($b, 'SilverStripe\\')) {
-                return -1;
-            }
+        // uksort($classMap->map, static function (string $a, string $b): int {
+        //     if (str_starts_with($a, 'SilverStripe\\') && !str_starts_with($b, 'SilverStripe\\')) {
+        //         return -1;
+        //     }
 
-            if (!str_starts_with($a, 'SilverStripe\\') && str_starts_with($b, 'SilverStripe\\')) {
-                return 1;
-            }
+        //     if (!str_starts_with($a, 'SilverStripe\\') && str_starts_with($b, 'SilverStripe\\')) {
+        //         return 1;
+        //     }
 
-            return strcmp($a, $b);
-        });
+        //     return strcmp($a, $b);
+        // });
 
         // No further processing is needed, return
         if ($this->includeTestOnly) {
@@ -130,5 +157,19 @@ final readonly class ClassManifest
         }
 
         return $classMap;
+    }
+
+    /**
+     * @return array<lowercase-string, class-string>
+     */
+    private function generateClasses(): array
+    {
+        $classes = [];
+
+        foreach (array_keys($this->classMap->map) as $className) {
+            $classes[strtolower($className)] = $className;
+        }
+
+        return $classes;
     }
 }

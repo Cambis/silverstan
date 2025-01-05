@@ -160,6 +160,7 @@ final class CachedConfigCollection implements MutableConfigCollectionInterface
      * Trigger transformers to load into this store
      *
      * @param list<TransformerInterface> $transformers
+     * @api
      */
     public function transform(array $transformers): static
     {

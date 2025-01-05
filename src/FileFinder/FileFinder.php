@@ -56,7 +56,7 @@ final class FileFinder
                 ...$this->getVendorModuleRootDirectories(),
             ])
             ->files()
-            ->path('/\_config/')
+            ->path('/\_config\//')
             ->notPath($this->getExcludedDirectories())
             ->name(['*.yml', '*.yaml'])
             ->depth('< 2');
