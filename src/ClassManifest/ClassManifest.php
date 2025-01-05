@@ -16,14 +16,15 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use function array_key_exists;
 use function array_keys;
-use function str_starts_with;
-use function strcmp;
 use function strtolower;
-use function uksort;
 
 final readonly class ClassManifest
 {
     /**
+     * A map of lowercase class names to proper class names.
+     *
+     * @api
+     *
      * @var array<lowercase-string, class-string>
      */
     public array $classes;
@@ -95,19 +96,6 @@ final readonly class ClassManifest
 
             unset($classMap->map[$excludedClass]);
         }
-
-        // Sort the class map so that `SilverStripe` classes have priority
-        // uksort($classMap->map, static function (string $a, string $b): int {
-        //     if (str_starts_with($a, 'SilverStripe\\') && !str_starts_with($b, 'SilverStripe\\')) {
-        //         return -1;
-        //     }
-
-        //     if (!str_starts_with($a, 'SilverStripe\\') && str_starts_with($b, 'SilverStripe\\')) {
-        //         return 1;
-        //     }
-
-        //     return strcmp($a, $b);
-        // });
 
         // No further processing is needed, return
         if ($this->includeTestOnly) {
