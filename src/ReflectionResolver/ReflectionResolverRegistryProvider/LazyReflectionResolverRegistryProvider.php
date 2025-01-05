@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\ReflectionResolver;
+namespace Cambis\Silverstan\ReflectionResolver\ReflectionResolverRegistryProvider;
 
 use Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterface;
 use Cambis\Silverstan\ReflectionResolver\Contract\PropertyReflectionResolverInterface;
 use Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryInterface;
 use Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProviderInterface;
+use Cambis\Silverstan\ReflectionResolver\ReflectionResolverRegistry\ReflectionResolverRegistry;
 use Override;
 use PHPStan\DependencyInjection\Container;
 use function array_reverse;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\ReflectionResolver;
+namespace Cambis\Silverstan\ReflectionResolver\ReflectionResolverRegistry;
 
 use Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterface;
 use Cambis\Silverstan\ReflectionResolver\Contract\PropertyReflectionResolverInterface;

@@ -85,7 +85,7 @@ services:
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver
     -
         class: Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProviderInterface
-        factory: Cambis\Silverstan\ReflectionResolver\LazyReflectionResolverRegistryProvider
+        factory: Cambis\Silverstan\ReflectionResolver\ReflectionResolverRegistryProvider\LazyReflectionResolverRegistryProvider
     -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\DependencyInjectionPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
@@ -149,7 +149,7 @@ services:
         class: Cambis\Silverstan\TypeResolver\TypeResolver
     -
         class: Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryProviderInterface
-        factory: Cambis\Silverstan\TypeResolver\LazyTypeResolverRegistryProvider
+        factory: Cambis\Silverstan\TypeResolver\TypeResolverRegistryProvider\LazyTypeResolverRegistryProvider
     -
         class: Cambis\Silverstan\TypeResolver\TypeResolver\DBPropertyTypeResolver
         tags: [silverstan.typeResolver.propertyTypeResolver]

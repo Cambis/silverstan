@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\TypeResolver;
+namespace Cambis\Silverstan\TypeResolver\TypeResolverRegistry;
 
 use Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverAwareInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryInterface;
+use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 
 final readonly class TypeResolverRegistry implements TypeResolverRegistryInterface

@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Cambis\Silverstan\TypeResolver;
+namespace Cambis\Silverstan\TypeResolver\TypeResolverRegistryProvider;
 
 use Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryProviderInterface;
+use Cambis\Silverstan\TypeResolver\TypeResolver;
+use Cambis\Silverstan\TypeResolver\TypeResolverRegistry\TypeResolverRegistry;
 use Override;
 use PHPStan\DependencyInjection\Container;
 use function array_reverse;
