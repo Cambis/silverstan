@@ -11,7 +11,6 @@ use Cambis\Silverstan\TypeResolver\Contract\TypeResolverAwareInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\Type;
 use function is_array;
 
 final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, TypeResolverAwareInterface
@@ -32,25 +31,6 @@ final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, Typ
 
     #[Override]
     public function resolve(ClassReflection $classReflection): array
-    {
-        return [
-            ...$this->resolveTypes($classReflection),
-            ...$this->typeResolver->resolveInjectedPropertyTypesFromConfigurationProperty($classReflection, 'fixed_fields'),
-        ];
-    }
-
-    #[Override]
-    public function setTypeResolver(TypeResolver $typeResolver): static
-    {
-        $this->typeResolver = $typeResolver;
-
-        return $this;
-    }
-
-    /**
-     * @return Type[]
-     */
-    private function resolveTypes(ClassReflection $classReflection): array
     {
         if (!$this->classReflectionAnalyser->isDataObject($classReflection)) {
             return [];
@@ -75,7 +55,15 @@ final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, Typ
 
         return [
             ...$properties,
-            ...$this->resolveTypes($classReflection->getParentClass()),
+            ...$this->resolve($classReflection->getParentClass()),
         ];
+    }
+
+    #[Override]
+    public function setTypeResolver(TypeResolver $typeResolver): static
+    {
+        $this->typeResolver = $typeResolver;
+
+        return $this;
     }
 }
