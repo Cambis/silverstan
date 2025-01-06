@@ -15,6 +15,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use function array_key_exists;
+use function ksort;
 use function strtolower;
 
 /**
@@ -89,9 +90,12 @@ final class ClassManifest
     {
         if (!$this->classMap->hasClass($className)) {
             $this->classMap->addClass($className, $path);
+            $this->classMap->sort();
         }
 
         $this->classes[strtolower($className)] = $className;
+
+        ksort($this->classes);
 
         if ($this->includeTestOnly) {
             return $this;
@@ -148,7 +152,10 @@ final class ClassManifest
             $this->fileFinder->getPhpFiles()
         );
 
-        return $this->classMapGenerator->getClassMap();
+        $classMap = $this->classMapGenerator->getClassMap();
+        $classMap->sort();
+
+        return $classMap;
     }
 
     /**
