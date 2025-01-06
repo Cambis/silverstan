@@ -2,12 +2,13 @@
 
 namespace Cambis\Silverstan\Tests\Extension\Type\Source\Model;
 
+use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\DataObject;
 
 /**
  * @method Foo Bar()
  */
-final class Foo extends DataObject
+final class Foo extends DataObject implements TestOnly
 {
     private static array $db = [
         'Boolean' => 'Boolean',
