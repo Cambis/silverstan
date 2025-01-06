@@ -7,10 +7,11 @@ namespace Cambis\Silverstan\ConfigurationResolver\Middleware;
 use Cambis\Silverstan\ClassManifest\ClassManifest;
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Override;
-use PHPStan\Reflection\ReflectionProvider;
+use ReflectionClass;
 use ReflectionProperty;
 use SilverStripe\Config\MergeStrategy\Priority;
 use Throwable;
+use function class_exists;
 use function str_contains;
 
 /**
@@ -19,8 +20,7 @@ use function str_contains;
 final class PrivateStaticMiddleware extends AbstractMiddleware
 {
     public function __construct(
-        private readonly ClassManifest $classManifest,
-        private readonly ReflectionProvider $reflectionProvider
+        private readonly ClassManifest $classManifest
     ) {
         parent::__construct(ConfigurationResolver::EXCLUDE_PRIVATE_STATIC);
     }
@@ -44,18 +44,21 @@ final class PrivateStaticMiddleware extends AbstractMiddleware
             return $config;
         }
 
-        if (!$this->reflectionProvider->hasClass($class)) {
+        // Skip if class does not exist!
+        if (!class_exists($class)) {
             return $config;
         }
 
-        $classReflection = $this->reflectionProvider->getClass($class);
+        $classReflection = new ReflectionClass($class);
 
-        $nativePropertyReflections = $classReflection->getNativeReflection()->getProperties(ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_STATIC);
+        $nativePropertyReflections = $classReflection->getProperties(ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_STATIC);
         $classConfig = [];
 
         foreach ($nativePropertyReflections as $nativePropertyReflection) {
+            $docComment = $nativePropertyReflection->getDocComment() === false ? '' : $nativePropertyReflection->getDocComment();
+
             // Properties with the `@internal` annotation are not considered configuration properties
-            if (str_contains($nativePropertyReflection->getBetterReflection()->getDocComment() ?? '', '@internal')) {
+            if (str_contains($docComment, '@internal')) {
                 continue;
             }
 
