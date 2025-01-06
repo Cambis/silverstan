@@ -10,25 +10,25 @@ use Override;
 use PHPStan\Reflection\ReflectionProvider;
 use ReflectionProperty;
 use SilverStripe\Config\MergeStrategy\Priority;
-use SilverStripe\Config\Middleware\Middleware as MiddlewareInterface;
-use SilverStripe\Config\Middleware\MiddlewareCommon;
 use Throwable;
 use function str_contains;
 
 /**
  * Basic middleware used to resolve private static configuration properties.
  */
-final class PrivateStaticMiddleware implements MiddlewareInterface
+final class PrivateStaticMiddleware extends AbstractMiddleware
 {
-    use MiddlewareCommon;
-
     public function __construct(
         private readonly ClassManifest $classManifest,
         private readonly ReflectionProvider $reflectionProvider
     ) {
-        $this->setDisableFlag(ConfigurationResolver::EXCLUDE_PRIVATE_STATIC);
+        parent::__construct(ConfigurationResolver::EXCLUDE_PRIVATE_STATIC);
     }
 
+    /**
+     * @param true|int-mask-of<ConfigurationResolver::EXCLUDE_*> $excludeMiddleware
+     * @phpstan-ignore-next-line method.childParameterType
+     */
     #[Override]
     public function getClassConfig($class, $excludeMiddleware, $next)
     {

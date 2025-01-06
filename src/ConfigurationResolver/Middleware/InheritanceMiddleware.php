@@ -8,8 +8,6 @@ use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigurationResolverAwareInterface;
 use Override;
 use SilverStripe\Config\MergeStrategy\Priority;
-use SilverStripe\Config\Middleware\Middleware as MiddlewareInterface;
-use SilverStripe\Config\Middleware\MiddlewareCommon;
 use function class_exists;
 use function get_parent_class;
 use function is_array;
@@ -17,17 +15,19 @@ use function is_array;
 /**
  * Inspired by https://github.com/silverstripe/silverstripe-framework/blob/5/src/Core/Config/Middleware/InheritanceMiddleware.php.
  */
-final class InheritanceMiddleware implements MiddlewareInterface, ConfigurationResolverAwareInterface
+final class InheritanceMiddleware extends AbstractMiddleware implements ConfigurationResolverAwareInterface
 {
-    use MiddlewareCommon;
-
     private ConfigurationResolver $configurationResolver;
 
     public function __construct()
     {
-        $this->setDisableFlag(ConfigurationResolver::UNINHERITED);
+        parent::__construct(ConfigurationResolver::EXCLUDE_INHERITED);
     }
 
+    /**
+     * @param true|int-mask-of<ConfigurationResolver::EXCLUDE_*> $excludeMiddleware
+     * @phpstan-ignore-next-line method.childParameterType
+     */
     #[Override]
     public function getClassConfig($class, $excludeMiddleware, $next): array
     {

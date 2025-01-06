@@ -19,7 +19,11 @@ final class DependencyInjectionPropertyTypeResolver implements PropertyTypeResol
 
     public function __construct(
         private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly ConfigurationResolver $configurationResolver
+        private readonly ConfigurationResolver $configurationResolver,
+        /**
+         * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
+         */
+        private readonly true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
     ) {
     }
 
@@ -30,6 +34,12 @@ final class DependencyInjectionPropertyTypeResolver implements PropertyTypeResol
     }
 
     #[Override]
+    public function getExcludeMiddleware(): true|int
+    {
+        return $this->excludeMiddleware;
+    }
+
+    #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
         if (!$this->classReflectionAnalyser->isInjectable($classReflection)) {
@@ -37,7 +47,7 @@ final class DependencyInjectionPropertyTypeResolver implements PropertyTypeResol
         }
 
         $types = [];
-        $dependencies = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName());
+        $dependencies = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName(), $this->excludeMiddleware);
 
         if (!is_array($dependencies) || $dependencies === []) {
             return $types;

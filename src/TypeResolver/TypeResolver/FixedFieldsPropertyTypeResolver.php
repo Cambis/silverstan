@@ -19,6 +19,10 @@ final class FixedFieldsPropertyTypeResolver implements PropertyTypeResolverInter
     public function __construct(
         private readonly ClassReflectionAnalyser $classReflectionAnalyser,
         private readonly ConfigurationResolver $configurationResolver,
+        /**
+         * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
+         */
+        private readonly true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
     ) {
     }
 
@@ -29,13 +33,19 @@ final class FixedFieldsPropertyTypeResolver implements PropertyTypeResolverInter
     }
 
     #[Override]
+    public function getExcludeMiddleware(): true|int
+    {
+        return $this->excludeMiddleware;
+    }
+
+    #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
         if (!$this->classReflectionAnalyser->isDataObject($classReflection)) {
             return [];
         }
 
-        $fixedFields = (array) $this->configurationResolver->get('SilverStripe\ORM\DataObject', $this->getConfigurationPropertyName());
+        $fixedFields = (array) $this->configurationResolver->get('SilverStripe\ORM\DataObject', $this->getConfigurationPropertyName(), $this->excludeMiddleware);
 
         $types = [];
 

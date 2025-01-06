@@ -46,7 +46,7 @@ final class ConfigurationResolverTest extends PHPStanTestCase
     {
         $this->assertSame(
             ['test_2'],
-            $this->configurationResolver->get(Bar::class, 'first', ConfigurationResolver::UNINHERITED)
+            $this->configurationResolver->get(Bar::class, 'first', ConfigurationResolver::EXCLUDE_INHERITED)
         );
     }
 
@@ -75,7 +75,7 @@ final class ConfigurationResolverTest extends PHPStanTestCase
     {
         $this->assertSame(
             ['test_2'],
-            $this->configurationResolver->get(Bar::class, 'third', ConfigurationResolver::UNINHERITED | ConfigurationResolver::EXCLUDE_EXTRA_SOURCES)
+            $this->configurationResolver->get(Bar::class, 'third', ConfigurationResolver::EXCLUDE_INHERITED | ConfigurationResolver::EXCLUDE_EXTRA_SOURCES)
         );
     }
 

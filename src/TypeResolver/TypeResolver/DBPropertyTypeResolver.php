@@ -20,6 +20,10 @@ final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, Typ
     public function __construct(
         private readonly ClassReflectionAnalyser $classReflectionAnalyser,
         private readonly ConfigurationResolver $configurationResolver,
+        /**
+         * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
+         */
+        private readonly true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
     ) {
     }
 
@@ -27,6 +31,12 @@ final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, Typ
     public function getConfigurationPropertyName(): string
     {
         return 'db';
+    }
+
+    #[Override]
+    public function getExcludeMiddleware(): true|int
+    {
+        return $this->excludeMiddleware;
     }
 
     #[Override]
@@ -38,7 +48,7 @@ final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, Typ
 
         $properties = [];
 
-        $db = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName());
+        $db = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName(), $this->excludeMiddleware);
 
         if (!is_array($db) || $db === []) {
             return $properties;

@@ -23,6 +23,10 @@ final class ExtensionMethodTypeResolver implements MethodTypeResolverInterface, 
         private readonly ClassReflectionAnalyser $classReflectionAnalyser,
         private readonly ConfigurationResolver $configurationResolver,
         private readonly ReflectionProvider $reflectionProvider,
+        /**
+         * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
+         */
+        private readonly true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
     ) {
     }
 
@@ -33,13 +37,19 @@ final class ExtensionMethodTypeResolver implements MethodTypeResolverInterface, 
     }
 
     #[Override]
+    public function getExcludeMiddleware(): true|int
+    {
+        return $this->excludeMiddleware;
+    }
+
+    #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
         if (!$this->classReflectionAnalyser->isExtensible($classReflection)) {
             return [];
         }
 
-        $extensions = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName());
+        $extensions = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName(), $this->excludeMiddleware);
 
         if (!is_array($extensions) || $extensions === []) {
             return [];

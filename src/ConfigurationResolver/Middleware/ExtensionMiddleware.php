@@ -9,27 +9,26 @@ use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigurationResolverAwareI
 use Override;
 use PHPStan\Reflection\ReflectionProvider;
 use SilverStripe\Config\MergeStrategy\Priority;
-use SilverStripe\Config\Middleware\Middleware as MiddlewareInterface;
-use SilverStripe\Config\Middleware\MiddlewareCommon;
 use Throwable;
 use function is_array;
 
 /**
  * Inspired by https://github.com/silverstripe/silverstripe-framework/blob/5/src/Core/Config/Middleware/ExtensionMiddleware.php.
  */
-
-final class ExtensionMiddleware implements MiddlewareInterface, ConfigurationResolverAwareInterface
+final class ExtensionMiddleware extends AbstractMiddleware implements ConfigurationResolverAwareInterface
 {
-    use MiddlewareCommon;
-
     private ConfigurationResolver $configurationResolver;
 
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider
     ) {
-        $this->setDisableFlag(ConfigurationResolver::EXCLUDE_EXTRA_SOURCES);
+        parent::__construct(ConfigurationResolver::EXCLUDE_EXTRA_SOURCES);
     }
 
+    /**
+     * @param true|int-mask-of<ConfigurationResolver::EXCLUDE_*> $excludeMiddleware
+     * @phpstan-ignore-next-line method.childParameterType
+     */
     #[Override]
     public function getClassConfig($class, $excludeMiddleware, $next)
     {
@@ -40,7 +39,10 @@ final class ExtensionMiddleware implements MiddlewareInterface, ConfigurationRes
             return $config;
         }
 
-        foreach ($this->getExtraConfig($class, $excludeMiddleware) as $extra) {
+        /** @var int-mask-of<ConfigurationResolver::EXCLUDE_*> $excludeMiddleware */
+        $extraConfig = $this->getExtraConfig($class, $excludeMiddleware);
+
+        foreach ($extraConfig as $extra) {
             $config = Priority::mergeArray($config, $extra);
         }
 
@@ -59,11 +61,15 @@ final class ExtensionMiddleware implements MiddlewareInterface, ConfigurationRes
      * Applied config to a class from its extensions.
      *
      * @param class-string $class
+     * @param int-mask-of<ConfigurationResolver::EXCLUDE_*> $excludeMiddleware
      * @return iterable<mixed[]>
      */
-    private function getExtraConfig(string $class, int|true $excludeMiddleware): iterable
+    private function getExtraConfig(string $class, int $excludeMiddleware): iterable
     {
-        $extensionSourceConfig = $this->configurationResolver->get($class, null, ConfigurationResolver::UNINHERITED | $excludeMiddleware | $this->disableFlag);
+        /** @var int-mask-of<ConfigurationResolver::EXCLUDE_*> $mask */
+        $mask = ConfigurationResolver::EXCLUDE_INHERITED | $excludeMiddleware | $this->disableFlag;
+
+        $extensionSourceConfig = $this->configurationResolver->get($class, null, $mask);
 
         if (!is_array($extensionSourceConfig) || $extensionSourceConfig === []) {
             return;
@@ -105,7 +111,7 @@ final class ExtensionMiddleware implements MiddlewareInterface, ConfigurationRes
                 $extensionConfig = $this->configurationResolver->get(
                     $extensionClassParent->getName(),
                     null,
-                    ConfigurationResolver::EXCLUDE_EXTRA_SOURCES | ConfigurationResolver::UNINHERITED
+                    ConfigurationResolver::EXCLUDE_EXTRA_SOURCES | ConfigurationResolver::EXCLUDE_INHERITED
                 );
 
                 if (is_array($extensionConfig) && $extensionConfig !== []) {

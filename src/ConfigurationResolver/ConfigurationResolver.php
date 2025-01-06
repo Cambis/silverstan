@@ -20,11 +20,18 @@ use function preg_match;
 final class ConfigurationResolver
 {
     /**
+     * Source options bitmask value - do not exclude any middleware.
+     *
+     * @var int
+     */
+    public const EXCLUDE_NONE = 0;
+
+    /**
      * Source options bitmask value - only get configuration set for this specific class, not any of its parents.
      *
      * @var int
      */
-    public const UNINHERITED = 1;
+    public const EXCLUDE_INHERITED = 1;
 
     /**
      * Source options bitmask value - do not use additional statics sources (such as extension).
@@ -54,6 +61,9 @@ final class ConfigurationResolver
     ) {
     }
 
+    /**
+     * @param true|int-mask-of<self::EXCLUDE_*> $excludeMiddleware
+     */
     public function get(string $className, ?string $name = null, true|int $excludeMiddleware = 0): mixed
     {
         if (!$this->configCollection instanceof ConfigCollectionInterface) {

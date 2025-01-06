@@ -21,11 +21,15 @@ final class ManyRelationMethodTypeResolver implements MethodTypeResolverInterfac
     private TypeResolver $typeResolver;
 
     public function __construct(
-        private readonly string $configurationPropertyName,
-        private readonly string $listName,
         private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly string $configurationPropertyName,
         private readonly ConfigurationResolver $configurationResolver,
-        private readonly TypeFactory $typeFactory
+        private readonly string $listName,
+        private readonly TypeFactory $typeFactory,
+        /**
+         * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
+         */
+        private readonly true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
     ) {
     }
 
@@ -33,6 +37,12 @@ final class ManyRelationMethodTypeResolver implements MethodTypeResolverInterfac
     public function getConfigurationPropertyName(): string
     {
         return $this->configurationPropertyName;
+    }
+
+    #[Override]
+    public function getExcludeMiddleware(): true|int
+    {
+        return $this->excludeMiddleware;
     }
 
     #[Override]
@@ -44,7 +54,7 @@ final class ManyRelationMethodTypeResolver implements MethodTypeResolverInterfac
 
         $types = [];
 
-        $relation = $this->configurationResolver->get($classReflection->getName(), $this->configurationPropertyName);
+        $relation = $this->configurationResolver->get($classReflection->getName(), $this->configurationPropertyName, $this->excludeMiddleware);
 
         if (!is_array($relation) || $relation === []) {
             return $types;

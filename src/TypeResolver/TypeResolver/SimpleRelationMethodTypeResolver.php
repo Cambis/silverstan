@@ -18,9 +18,13 @@ final class SimpleRelationMethodTypeResolver implements MethodTypeResolverInterf
     private TypeResolver $typeResolver;
 
     public function __construct(
-        private readonly string $configurationPropertyName,
         private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly ConfigurationResolver $configurationResolver
+        private readonly string $configurationPropertyName,
+        private readonly ConfigurationResolver $configurationResolver,
+        /**
+         * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
+         */
+        private readonly true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
     ) {
     }
 
@@ -31,6 +35,12 @@ final class SimpleRelationMethodTypeResolver implements MethodTypeResolverInterf
     }
 
     #[Override]
+    public function getExcludeMiddleware(): true|int
+    {
+        return $this->excludeMiddleware;
+    }
+
+    #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
         if (!$this->classReflectionAnalyser->isDataObject($classReflection)) {
@@ -38,7 +48,7 @@ final class SimpleRelationMethodTypeResolver implements MethodTypeResolverInterf
         }
 
         $properties = [];
-        $relation = $this->configurationResolver->get($classReflection->getName(), $this->configurationPropertyName);
+        $relation = $this->configurationResolver->get($classReflection->getName(), $this->configurationPropertyName, $this->excludeMiddleware);
 
         if (!is_array($relation) || $relation === []) {
             return $properties;

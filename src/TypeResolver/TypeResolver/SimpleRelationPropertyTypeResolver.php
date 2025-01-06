@@ -15,8 +15,12 @@ use function is_array;
 final readonly class SimpleRelationPropertyTypeResolver implements PropertyTypeResolverInterface
 {
     public function __construct(
-        private string $configurationPropertyName,
         private ConfigurationResolver $configurationResolver,
+        private string $configurationPropertyName,
+        /**
+         * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
+         */
+        private readonly true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
     ) {
     }
 
@@ -27,10 +31,16 @@ final readonly class SimpleRelationPropertyTypeResolver implements PropertyTypeR
     }
 
     #[Override]
+    public function getExcludeMiddleware(): true|int
+    {
+        return $this->excludeMiddleware;
+    }
+
+    #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
         $types = [];
-        $relation = $this->configurationResolver->get($classReflection->getName(), $this->configurationPropertyName);
+        $relation = $this->configurationResolver->get($classReflection->getName(), $this->configurationPropertyName, $this->excludeMiddleware);
 
         if (!is_array($relation) || $relation === []) {
             return $types;
