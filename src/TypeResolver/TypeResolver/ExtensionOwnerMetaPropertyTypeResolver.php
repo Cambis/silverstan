@@ -80,7 +80,7 @@ final readonly class ExtensionOwnerMetaPropertyTypeResolver implements PropertyT
         // No owners
         if ($owners === []) {
             return [
-                '___getOwners' => new GenericObjectType($classReflection->getParentClassesNames()[0], [$staticType]),
+                '__getOwners' => new GenericObjectType($classReflection->getParentClassesNames()[0], [$staticType]),
             ];
         }
 
