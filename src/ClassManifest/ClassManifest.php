@@ -15,8 +15,10 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use function array_key_exists;
-use function ksort;
+use function str_starts_with;
+use function strcmp;
 use function strtolower;
+use function uksort;
 
 /**
  * @see \Cambis\Silverstan\Tests\ClassManifest\ClassManifestTest
@@ -95,8 +97,6 @@ final class ClassManifest
 
         $this->classes[strtolower($className)] = $className;
 
-        ksort($this->classes);
-
         if ($this->includeTestOnly) {
             return $this;
         }
@@ -153,7 +153,18 @@ final class ClassManifest
         );
 
         $classMap = $this->classMapGenerator->getClassMap();
-        $classMap->sort();
+
+        // Sort the class map so that `SilverStripe` classes have priority
+        uksort($classMap->map, static function (string $a, string $b): int {
+            if (str_starts_with($a, 'SilverStripe\\') && !str_starts_with($b, 'SilverStripe\\')) {
+                return -1;
+            }
+            if (!str_starts_with($a, 'SilverStripe\\') && str_starts_with($b, 'SilverStripe\\')) {
+                return 1;
+            }
+
+            return strcmp($a, $b);
+        });
 
         return $classMap;
     }
