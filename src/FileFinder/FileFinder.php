@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\FileFinder;
 
 use Composer\InstalledVersions;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use function dirname;
+use function file_exists;
 use function realpath;
 use function sha1;
 use function sprintf;
@@ -198,6 +200,9 @@ final class FileFinder
         $hits = Finder::create()
             ->in($this->getVendorModuleRootDirectories())
             ->directories()
+            ->filter(static function (SplFileInfo $splFileInfo): bool {
+                return file_exists($splFileInfo->getPathname());
+            })
             ->notPath(['lang', 'tests', 'thirdparty']);
 
         $this->vendorModuleDirectories = [];
