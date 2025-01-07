@@ -7,6 +7,7 @@ namespace Cambis\Silverstan\TypeResolver\TypeResolver;
 use Cambis\Silverstan\ClassManifest\ClassManifest;
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\TypeFactory\TypeFactory;
+use Cambis\Silverstan\TypeResolver\Contract\LazyTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface;
 use Override;
 use PHPStan\Reflection\ClassReflection;
@@ -22,7 +23,7 @@ use function in_array;
 /**
  * This resolver tracks extension owners and saves them in a meta property `__getOwners`.
  */
-final readonly class ExtensionOwnerMetaPropertyTypeResolver implements PropertyTypeResolverInterface
+final readonly class ExtensionOwnerMetaPropertyTypeResolver implements PropertyTypeResolverInterface, LazyTypeResolverInterface
 {
     public function __construct(
         private ConfigurationResolver $configurationResolver,

@@ -7,6 +7,7 @@ namespace Cambis\Silverstan\TypeResolver;
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 use Cambis\Silverstan\TypeFactory\TypeFactory;
+use Cambis\Silverstan\TypeResolver\Contract\LazyTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryProviderInterface;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertyReflection;
@@ -55,6 +56,7 @@ final readonly class TypeResolver
 
     /**
      * Resolve all injected property types using the registered resolvers.
+     * Does not resolve implementors of `Cambis\Silverstan\TypeResolver\Contract\LazyTypeResolverInterface`.
      *
      * @see \Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface
      * @return Type[]
@@ -64,6 +66,10 @@ final readonly class TypeResolver
         $types = [];
 
         foreach ($this->typeResolverRegistryProvider->getRegistry()->getPropertyTypeResolvers() as $typeResolver) {
+            if ($typeResolver instanceof LazyTypeResolverInterface) {
+                continue;
+            }
+
             $types = [...$types, ...$typeResolver->resolve($classReflection)];
         }
 
@@ -117,6 +123,7 @@ final readonly class TypeResolver
 
     /**
      * Resolve all injected method types using the registered resolvers.
+     * Does not resolve implementors of `Cambis\Silverstan\TypeResolver\Contract\LazyTypeResolverInterface`.
      *
      * @see \Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface
      * @return Type[]
@@ -126,6 +133,10 @@ final readonly class TypeResolver
         $types = [];
 
         foreach ($this->typeResolverRegistryProvider->getRegistry()->getMethodTypeResolvers() as $typeResolver) {
+            if ($typeResolver instanceof LazyTypeResolverInterface) {
+                continue;
+            }
+
             $types = [...$types, ...$typeResolver->resolve($classReflection)];
         }
 
