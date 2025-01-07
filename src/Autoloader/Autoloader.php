@@ -7,9 +7,6 @@ namespace Cambis\Silverstan\Autoloader;
 use Cambis\Silverstan\ClassManifest\ClassManifest;
 use function spl_autoload_register;
 
-/**
- * @internal
- */
 final readonly class Autoloader
 {
     public function __construct(
