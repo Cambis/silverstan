@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Autoloader;
 
 use Cambis\Silverstan\ClassManifest\ClassManifest;
+use function file_exists;
 use function spl_autoload_register;
 
 final readonly class Autoloader
@@ -26,6 +27,11 @@ final readonly class Autoloader
     {
         /** @var class-string $className */
         if (!$this->classManifest->hasClass($className)) {
+            return;
+        }
+
+        // Safety check
+        if (!file_exists($this->classManifest->getClassPath($className))) {
             return;
         }
 
