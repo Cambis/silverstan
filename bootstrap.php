@@ -11,6 +11,10 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\Connect\NullDatabase;
 use SilverStripe\ORM\DB;
 
+/**
+ * @deprecated since 1.0.0
+ */
+
 if (!isset($container) || !$container instanceof Container) {
     throw new ShouldNotHappenException('The autoloader did not receive the container.');
 }

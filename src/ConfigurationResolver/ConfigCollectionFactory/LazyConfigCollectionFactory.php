@@ -11,6 +11,9 @@ use SilverStripe\Config\Collections\MemoryConfigCollection;
 use SilverStripe\Core\Config\ConfigLoader;
 use function class_exists;
 
+/**
+ * @deprecated since 1.0.0
+ */
 final class LazyConfigCollectionFactory implements ConfigCollectionFactoryInterface
 {
     #[Override]

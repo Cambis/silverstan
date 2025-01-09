@@ -13,6 +13,9 @@ if (!class_exists(DatabaselessKernel::class)) {
     throw new ShouldNotHappenException('Could not find `silverstripe/framework`, did you forget to install?');
 }
 
+/**
+ * @deprecated since 1.0.0
+ */
 final class SilverstanKernel extends DatabaselessKernel
 {
     public function __construct(

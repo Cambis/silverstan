@@ -34,7 +34,7 @@ return (new Configuration())
         [
             __DIR__ . '/bootstrap.php',
             __DIR__ . '/src/Application/SilverstanKernel.php',
-            __DIR__ . '/src/ConfigurationResolver/LazyConfigCollectionFactory.php',
+            __DIR__ . '/src/ConfigurationResolver/ConfigCollectionFactory/LazyConfigCollectionFactory.php',
         ],
         [ErrorType::DEV_DEPENDENCY_IN_PROD]
     );
