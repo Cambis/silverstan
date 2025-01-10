@@ -46,27 +46,20 @@ final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, Typ
             return [];
         }
 
-        $properties = [];
+        $types = [];
 
         $db = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName(), $this->excludeMiddleware);
 
         if (!is_array($db) || $db === []) {
-            return $properties;
+            return $types;
         }
 
         /** @var class-string[] $db */
         foreach ($db as $fieldName => $fieldType) {
-            $properties[$fieldName] = $this->typeResolver->resolveDBFieldType($classReflection, $fieldName, $fieldType);
+            $types[$fieldName] = $this->typeResolver->resolveDBFieldType($classReflection, $fieldName, $fieldType);
         }
 
-        if (!$classReflection->getParentClass() instanceof ClassReflection) {
-            return $properties;
-        }
-
-        return [
-            ...$properties,
-            ...$this->resolve($classReflection->getParentClass()),
-        ];
+        return $types;
     }
 
     #[Override]
