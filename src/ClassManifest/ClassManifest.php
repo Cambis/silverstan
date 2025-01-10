@@ -18,7 +18,7 @@ use function array_key_exists;
 use function str_starts_with;
 use function strcmp;
 use function strtolower;
-use function uksort;
+use function uasort;
 
 /**
  * @see \Cambis\Silverstan\Tests\ClassManifest\ClassManifestTest
@@ -74,6 +74,8 @@ final class ClassManifest
 
             $this->removeClass($excludedClass);
         }
+
+        $this->sort();
     }
 
     /**
@@ -92,7 +94,6 @@ final class ClassManifest
     {
         if (!$this->classMap->hasClass($className)) {
             $this->classMap->addClass($className, $path);
-            $this->classMap->sort();
         }
 
         $this->classes[strtolower($className)] = $className;
@@ -145,6 +146,27 @@ final class ClassManifest
         return $this->classMap->getClassPath($classEntry);
     }
 
+    /**
+     * Sort the classes by the following priority
+     *
+     * - SilverStripe\\...
+     * - ...everyting else
+     */
+    public function sort(): void
+    {
+        uasort($this->classes, static function (string $a, string $b): int {
+            if (str_starts_with($a, 'SilverStripe\\') && !str_starts_with($b, 'SilverStripe\\')) {
+                return -1;
+            }
+
+            if (!str_starts_with($a, 'SilverStripe\\') && str_starts_with($b, 'SilverStripe\\')) {
+                return 1;
+            }
+
+            return strcmp($a, $b);
+        });
+    }
+
     private function generateClassMap(): ClassMap
     {
         // Generate the class map
@@ -152,21 +174,7 @@ final class ClassManifest
             $this->fileFinder->getPhpFiles()
         );
 
-        $classMap = $this->classMapGenerator->getClassMap();
-
-        // Sort the class map so that `SilverStripe` classes have priority
-        uksort($classMap->map, static function (string $a, string $b): int {
-            if (str_starts_with($a, 'SilverStripe\\') && !str_starts_with($b, 'SilverStripe\\')) {
-                return -1;
-            }
-            if (!str_starts_with($a, 'SilverStripe\\') && str_starts_with($b, 'SilverStripe\\')) {
-                return 1;
-            }
-
-            return strcmp($a, $b);
-        });
-
-        return $classMap;
+        return $this->classMapGenerator->getClassMap();
     }
 
     /**
