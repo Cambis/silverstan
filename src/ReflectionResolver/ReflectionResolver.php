@@ -40,14 +40,7 @@ final readonly class ReflectionResolver
             $propertyReflections = [...$propertyReflections, ...$reflectionResolver->resolve($classReflection)];
         }
 
-        if (!$classReflection->getParentClass() instanceof ClassReflection) {
-            return $propertyReflections;
-        }
-
-        return [
-            ...$propertyReflections,
-            ...$this->resolveInjectedPropertyReflections($classReflection->getParentClass()),
-        ];
+        return $propertyReflections;
     }
 
     /**
@@ -68,10 +61,7 @@ final readonly class ReflectionResolver
             return $methodReflections;
         }
 
-        return [
-            ...$methodReflections,
-            ...$this->resolveInjectedMethodReflections($classReflection->getParentClass()),
-        ];
+        return $methodReflections;
     }
 
     /**

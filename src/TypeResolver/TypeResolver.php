@@ -73,14 +73,7 @@ final readonly class TypeResolver
             $types = [...$types, ...$typeResolver->resolve($classReflection)];
         }
 
-        if (!$classReflection->getParentClass() instanceof ClassReflection) {
-            return $types;
-        }
-
-        return [
-            ...$types,
-            ...$this->resolveInjectedPropertyTypes($classReflection->getParentClass()),
-        ];
+        return $types;
     }
 
     /**
@@ -140,14 +133,7 @@ final readonly class TypeResolver
             $types = [...$types, ...$typeResolver->resolve($classReflection)];
         }
 
-        if (!$classReflection->getParentClass() instanceof ClassReflection) {
-            return $types;
-        }
-
-        return [
-            ...$types,
-            ...$this->resolveInjectedMethodTypes($classReflection->getParentClass()),
-        ];
+        return $types;
     }
 
     public function resolveConfigurationPropertyType(?ClassReflection $classReflection, string $propertyName): ?Type
