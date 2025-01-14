@@ -19,6 +19,7 @@ use function array_filter;
 use function array_map;
 use function array_values;
 use function in_array;
+use function is_array;
 
 /**
  * This resolver tracks extension owners and saves them in a meta property `__getOwners`.
@@ -56,11 +57,17 @@ final readonly class ExtensionOwnerMetaPropertyTypeResolver implements PropertyT
 
         // Loop over class manifest and find owners of this extension
         $owners = array_filter(array_values($this->classManifest->getClasses()), function (string $owner) use ($classReflection): bool {
-            /** @var array<class-string|null> $extensions */
-            $extensions = $this->configurationResolver->get($owner, 'extensions', $this->getExcludeMiddleware()) ?? [];
+            $extensions = $this->configurationResolver->get($owner, 'extensions', $this->getExcludeMiddleware());
 
-            // Clean nullified named extensions
-            $extensions = array_filter(array_values($extensions), static function (?string $value): bool {
+            if (!is_array($extensions) || $extensions === []) {
+                return false;
+            }
+
+            /**
+             * @var array<class-string|null> $extensions
+             * @var array<class-string> $extensionsFiltered
+             */
+            $extensionsFiltered = array_filter(array_values($extensions), static function (?string $value): bool {
                 return $value !== null;
             });
 
@@ -69,7 +76,7 @@ final readonly class ExtensionOwnerMetaPropertyTypeResolver implements PropertyT
                 $classReflection->getName(),
                 array_map(function (string $extensionName): string {
                     return $this->configurationResolver->resolveClassName($extensionName);
-                }, $extensions),
+                }, $extensionsFiltered),
                 true
             );
         });

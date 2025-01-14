@@ -55,11 +55,15 @@ final class ExtensionMethodTypeResolver implements MethodTypeResolverInterface, 
             return [];
         }
 
-        /** @var string[] $extensions */
+        /** @var array<class-string|null> $extensions */
         $extensions = array_unique($extensions);
         $types = [];
 
         foreach ($extensions as $extension) {
+            if ($extension === null) {
+                continue;
+            }
+
             $extensionClassName = $this->configurationResolver->resolveExtensionClassName($extension);
 
             if ($extensionClassName === null) {

@@ -54,10 +54,14 @@ final readonly class ExtensionMethodReflectionResolver implements MethodReflecti
             return $methodReflections;
         }
 
-        /** @var string[] $extensions */
+        /** @var array<class-string|null> $extensions */
         $extensions = array_unique($extensions);
 
         foreach ($extensions as $extension) {
+            if ($extension === null) {
+                continue;
+            }
+
             $extensionClassName = $this->configurationResolver->resolveExtensionClassName($extension);
 
             if ($extensionClassName === null) {

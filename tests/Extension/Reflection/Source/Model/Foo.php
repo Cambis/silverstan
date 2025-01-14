@@ -68,7 +68,8 @@ class Foo extends DataObject implements TestOnly
     ];
 
     private static array $extensions = [
-        FooExtension::class,
+        'fooExtension' => FooExtension::class,
+        'nullifiedExtension' => null,
     ];
 
     private static array $dependencies = [
