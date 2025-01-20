@@ -34,18 +34,18 @@ final class ConfigurationResolver
     public const EXCLUDE_INHERITED = 1;
 
     /**
-     * Source options bitmask value - do not use additional statics sources (such as extension).
-     *
-     * @var int
-     */
-    public const EXCLUDE_EXTRA_SOURCES = 2;
-
-    /**
      * Source options bitmask value - do not use class member configuration.
      *
      * @var int
      */
-    public const EXCLUDE_PRIVATE_STATIC = 4;
+    public const EXCLUDE_PRIVATE_STATIC = 2;
+
+    /**
+     * Source options bitmask value - do not use additional statics sources (such as extension).
+     *
+     * @var int
+     */
+    public const EXCLUDE_EXTRA_SOURCES = 4;
 
     /**
      * @var string
