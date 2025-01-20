@@ -18,18 +18,6 @@ Here are some of the nice features this extension provides:
 - Various correct return types for commonly used Silverstripe modules.
 - [Customisable rules to help make your application safer](docs/rules_overview.md).
 
-## Prerequisites 🦺
-
-```sh
-silverstripe/framework ^5.2
-```
-
-### Why Silverstripe 5.2?
-
-Silverstripe 5.2 introduces [generic typehints](https://docs.silverstripe.org/en/5/changelogs/beta/5.2.0-beta1/#generics). These changes allow the module to infer the types of objects without relying on an extension.
-
-To make the best use of this module, make sure that your classes are correctly annotated using a combination of generics, and property/method annotations.
-
 ## Installation 👷‍♀️
 
 Install via composer.
@@ -51,6 +39,15 @@ includes:
 ```
 
 </details>
+
+
+### Silverstripe 5.2 or greater is recommended
+
+While this extension is not tied to a specific Silverstripe version it is recommended that you are on at least Silverstripe 5.2.
+
+Silverstripe 5.2 introduces [generic typehints](https://docs.silverstripe.org/en/5/changelogs/beta/5.2.0-beta1/#generics). These changes allow the module to infer the types of objects without relying on an extension.
+
+To make the best use of this module, make sure that your classes are correctly annotated using a combination of generics, and property/method annotations.
 
 ## Rules 🚨
 Silverstan provides a set of customisable rules that can help make your application safer.
