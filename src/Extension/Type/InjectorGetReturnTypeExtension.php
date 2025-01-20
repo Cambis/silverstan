@@ -20,8 +20,16 @@ use function in_array;
  *
  * @see \Cambis\Silverstan\Tests\Type\InjectorGetReturnTypeExtensionTest
  */
-final readonly class InjectorGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
+final class InjectorGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var string[]
      */
@@ -31,45 +39,37 @@ final readonly class InjectorGetReturnTypeExtension implements DynamicMethodRetu
         'get',
     ];
 
-    public function __construct(
-        private ConfigurationResolver $configurationResolver,
-        private ReflectionProvider $reflectionProvider
-    ) {
+    public function __construct(ConfigurationResolver $configurationResolver, ReflectionProvider $reflectionProvider)
+    {
+        $this->configurationResolver = $configurationResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
-    #[Override]
     public function getClass(): string
     {
         return 'SilverStripe\Core\Injector\Injector';
     }
 
-    #[Override]
     public function isMethodSupported(MethodReflection $methodReflection): bool
     {
         return in_array($methodReflection->getName(), self::SUPPORTED_METHODS, true);
     }
 
-    #[Override]
     public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): ?Type
     {
         $serviceNameType = $scope->getType($methodCall->getArgs()[0]->value);
-
         if ($serviceNameType->isString()->no()) {
             return null;
         }
-
         if ($serviceNameType->getConstantStrings() === []) {
             return null;
         }
-
         $serviceName = $serviceNameType->getConstantStrings()[0]->getValue();
         $serviceName = $this->configurationResolver->resolveDotNotation($serviceName);
         $serviceName = $this->configurationResolver->resolveClassName($serviceName);
-
         if (!$this->reflectionProvider->hasClass($serviceName)) {
             return null;
         }
-
         return new ObjectType($serviceName);
     }
 }

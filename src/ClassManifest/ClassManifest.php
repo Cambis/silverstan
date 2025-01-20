@@ -26,46 +26,81 @@ use function uasort;
 final class ClassManifest
 {
     /**
+     * @readonly
+     */
+    private ClassMapGenerator $classMapGenerator;
+    /**
+     * @readonly
+     */
+    private array $excludedClasses;
+    /**
+     * @readonly
+     */
+    private FileCleaner $fileCleaner;
+    /**
+     * @readonly
+     */
+    private FileFinder $fileFinder;
+    /**
+     * @readonly
+     */
+    private NameResolver $nameResolver;
+    /**
+     * @readonly
+     */
+    private NodeFinder $nodeFinder;
+    /**
+     * @readonly
+     */
+    private bool $includeTestOnly;
+    /**
+     * @readonly
+     */
+    private Parser $parser;
+    /**
+     * @readonly
+     */
+    private TestOnlyFinderVisitor $testOnlyFinderVisitor;
+    /**
      * A map of lowercase class names to proper class names.
      *
      * @var array<lowercase-string, class-string>
      */
     private array $classes = [];
 
-    private readonly ClassMap $classMap;
+    /**
+     * @readonly
+     */
+    private ClassMap $classMap;
 
-    public function __construct(
-        private readonly ClassMapGenerator $classMapGenerator,
+    public function __construct(ClassMapGenerator $classMapGenerator, array $excludedClasses, FileCleaner $fileCleaner, FileFinder $fileFinder, NameResolver $nameResolver, NodeFinder $nodeFinder, bool $includeTestOnly, Parser $parser, TestOnlyFinderVisitor $testOnlyFinderVisitor)
+    {
+        $this->classMapGenerator = $classMapGenerator;
         /**
          * A list of classes that should be excluded from the manifest.
          *
          * @var list<class-string>
          */
-        private readonly array $excludedClasses,
-        private readonly FileCleaner $fileCleaner,
-        private readonly FileFinder $fileFinder,
-        private readonly NameResolver $nameResolver,
-        private readonly NodeFinder $nodeFinder,
-        private readonly bool $includeTestOnly,
-        private readonly Parser $parser,
-        private readonly TestOnlyFinderVisitor $testOnlyFinderVisitor,
-    ) {
+        $this->excludedClasses = $excludedClasses;
+        $this->fileCleaner = $fileCleaner;
+        $this->fileFinder = $fileFinder;
+        $this->nameResolver = $nameResolver;
+        $this->nodeFinder = $nodeFinder;
+        $this->includeTestOnly = $includeTestOnly;
+        $this->parser = $parser;
+        $this->testOnlyFinderVisitor = $testOnlyFinderVisitor;
         $this->classMap = $this->generateClassMap();
-
         foreach ($this->classMap->map as $className => $path) {
             $this->addClass($className, $path);
         }
-
         // Register `Page` if it does not exist
         if (!$this->hasClass('Page')) {
             $this->addClass('Page', __DIR__ . '/../../stubs/Page.php');
         }
-
         // Register `PageController` if it does not exist
         if (!$this->hasClass('PageController')) {
             $this->addClass('PageController', __DIR__ . '/../../stubs/PageController.php');
         }
-
         // Remove excluded classes
         foreach ($this->excludedClasses as $excludedClass) {
             if (!$this->hasClass($excludedClass)) {
@@ -74,7 +109,6 @@ final class ClassManifest
 
             $this->removeClass($excludedClass);
         }
-
         $this->sort();
     }
 
@@ -89,8 +123,9 @@ final class ClassManifest
     /**
      * @param class-string $className
      * @param non-empty-string $path
+     * @return static
      */
-    public function addClass(string $className, string $path): static
+    public function addClass(string $className, string $path)
     {
         if (!$this->classMap->hasClass($className)) {
             $this->classMap->addClass($className, $path);
@@ -115,8 +150,9 @@ final class ClassManifest
 
     /**
      * @param class-string $className
+     * @return static
      */
-    public function removeClass(string $className): static
+    public function removeClass(string $className)
     {
         unset($this->classMap->map[$className]);
         unset($this->classes[strtolower($className)]);
@@ -155,11 +191,11 @@ final class ClassManifest
     public function sort(): void
     {
         uasort($this->classes, static function (string $a, string $b): int {
-            if (str_starts_with($a, 'SilverStripe\\') && !str_starts_with($b, 'SilverStripe\\')) {
+            if (strncmp($a, 'SilverStripe\\', strlen('SilverStripe\\')) === 0 && strncmp($b, 'SilverStripe\\', strlen('SilverStripe\\')) !== 0) {
                 return -1;
             }
 
-            if (!str_starts_with($a, 'SilverStripe\\') && str_starts_with($b, 'SilverStripe\\')) {
+            if (strncmp($a, 'SilverStripe\\', strlen('SilverStripe\\')) !== 0 && strncmp($b, 'SilverStripe\\', strlen('SilverStripe\\')) === 0) {
                 return 1;
             }
 

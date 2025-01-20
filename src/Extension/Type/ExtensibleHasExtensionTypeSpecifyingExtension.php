@@ -24,6 +24,18 @@ use function in_array;
 final class ExtensibleHasExtensionTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
     /**
+     * @readonly
+     */
+    private string $className;
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
+    /**
      * @var string[]
      */
     private const SUPPORTED_METHODS = [
@@ -32,50 +44,41 @@ final class ExtensibleHasExtensionTypeSpecifyingExtension implements MethodTypeS
 
     private TypeSpecifier $typeSpecifier;
 
-    public function __construct(
+    public function __construct(string $className, ClassReflectionAnalyser $classReflectionAnalyser, TypeFactory $typeFactory)
+    {
         /** @var class-string */
-        private readonly string $className,
-        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly TypeFactory $typeFactory,
-    ) {
+        $this->className = $className;
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->typeFactory = $typeFactory;
     }
 
-    #[Override]
     public function getClass(): string
     {
         return $this->className;
     }
 
-    #[Override]
     public function isMethodSupported(MethodReflection $methodReflection, MethodCall $node, TypeSpecifierContext $context): bool
     {
         if (!$this->classReflectionAnalyser->isExtensible($methodReflection->getDeclaringClass())) {
             return false;
         }
-
         if (!in_array($methodReflection->getName(), self::SUPPORTED_METHODS, true)) {
             return false;
         }
-
         return $context->truthy();
     }
 
-    #[Override]
     public function specifyTypes(MethodReflection $methodReflection, MethodCall $node, Scope $scope, TypeSpecifierContext $context): SpecifiedTypes
     {
         $expr = $node->getArgs()[0]->value;
         $extensionNameType = $scope->getType($expr);
-
         if ($extensionNameType->isClassStringType()->no()) {
             return new SpecifiedTypes();
         }
-
         $extensibleType = $scope->getType($node->var);
-
         if ($extensibleType->isObject()->no()) {
             return new SpecifiedTypes();
         }
-
         return $this->typeSpecifier->create(
             $node->var,
             TypeCombinator::intersect(
@@ -88,7 +91,6 @@ final class ExtensibleHasExtensionTypeSpecifyingExtension implements MethodTypeS
         );
     }
 
-    #[Override]
     public function setTypeSpecifier(TypeSpecifier $typeSpecifier): void
     {
         $this->typeSpecifier = $typeSpecifier;
