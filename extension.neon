@@ -163,9 +163,6 @@ services:
         class: Cambis\Silverstan\TypeResolver\TypeResolver\ExtensionPropertyTypeResolver
         tags: [silverstan.typeResolver.propertyTypeResolver]
     -
-        class: Cambis\Silverstan\TypeResolver\TypeResolver\FixedFieldsPropertyTypeResolver
-        tags: [silverstan.typeResolver.propertyTypeResolver]
-    -
         class: Cambis\Silverstan\TypeResolver\TypeResolver\ManyRelationMethodTypeResolver
         tags: [silverstan.typeResolver.methodTypeResolver]
         arguments:
