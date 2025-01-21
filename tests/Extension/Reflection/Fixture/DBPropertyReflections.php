@@ -2,6 +2,7 @@
 
 namespace Cambis\Silverstan\Tests\Extension\Reflection\Fixture;
 
+use Cambis\Silverstan\Tests\Extension\Reflection\Source\DBField\FooField;
 use Cambis\Silverstan\Tests\Extension\Reflection\Source\Model\Bar;
 use Cambis\Silverstan\Tests\Extension\Reflection\Source\Model\Foo;
 use function PHPStan\Testing\assertType;
@@ -60,3 +61,6 @@ assertType('*ERROR*', $foo->MalformedField);
 // Fields with getters
 assertType('string', $foo->FieldWithGetter);
 assertType('non-empty-string', $foo->FieldWithDefaultValueGetter);
+
+// Custom db fields
+assertType(FooField::class, $foo->FooField);

@@ -40,6 +40,7 @@ class Foo extends DataObject implements TestOnly
         'MalformedField' => 'Barchar(255)',
         'FieldWithGetter' => 'Varchar(255)',
         'FieldWithDefaultValueGetter' => 'Varchar(255)',
+        'FooField' => 'FooField',
     ];
 
     private static array $belongs_many_many = [
