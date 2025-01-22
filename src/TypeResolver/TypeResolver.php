@@ -28,7 +28,6 @@ use function array_map;
 use function is_array;
 use function is_bool;
 use function is_numeric;
-use function is_string;
 use function str_contains;
 use function str_starts_with;
 use function strtok;
@@ -202,25 +201,11 @@ final readonly class TypeResolver
      */
     public function resolveRelationFieldType(array|string $fieldType): Type
     {
-        $className = '';
-
-        if (is_array($fieldType) && !array_key_exists('through', $fieldType)) {
-            return new MixedType();
-        }
-
         if (is_array($fieldType)) {
-            $className = $fieldType['through'];
+            return $this->resolveArrayRelationFieldType($fieldType);
         }
 
-        if (is_string($fieldType)) {
-            $className = $this->configurationResolver->resolveDotNotation($fieldType);
-        }
-
-        if ($this->reflectionProvider->hasClass($className)) {
-            $className = $this->configurationResolver->resolveClassName($className);
-        }
-
-        return $this->typeFactory->createExtensibleTypeFromType(new ObjectType($className));
+        return $this->resolveStringRelationFieldType($fieldType);
     }
 
     /**
@@ -265,5 +250,36 @@ final readonly class TypeResolver
         }
 
         return new ObjectType($name);
+    }
+
+    /**
+     * @param string[] $fieldType
+     */
+    private function resolveArrayRelationFieldType(array $fieldType): Type
+    {
+        if (array_key_exists('class', $fieldType)) {
+            return $this->resolveStringRelationFieldType($fieldType['class']);
+        }
+
+        if (array_key_exists('through', $fieldType)) {
+            return $this->resolveStringRelationFieldType($fieldType['through']);
+        }
+
+        // Likely an error in the configuration, return an error type
+        return new ErrorType();
+    }
+
+    private function resolveStringRelationFieldType(string $fieldType): Type
+    {
+        $className = $this->configurationResolver->resolveDotNotation($fieldType);
+
+        if (!$this->reflectionProvider->hasClass($className)) {
+            // Likely an error in the configuration, return an error type
+            return new ErrorType();
+        }
+
+        $className = $this->configurationResolver->resolveClassName($className);
+
+        return $this->typeFactory->createExtensibleTypeFromType(new ObjectType($className));
     }
 }
