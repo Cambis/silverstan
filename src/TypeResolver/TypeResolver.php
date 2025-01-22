@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\TypeResolver;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
+use Cambis\Silverstan\Normaliser\Normaliser;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 use Cambis\Silverstan\TypeFactory\TypeFactory;
 use Cambis\Silverstan\TypeResolver\Contract\LazyTypeResolverInterface;
@@ -28,10 +29,7 @@ use function array_map;
 use function is_array;
 use function is_bool;
 use function is_numeric;
-use function str_contains;
-use function str_starts_with;
 use function strtok;
-use function substr;
 use function trim;
 
 final readonly class TypeResolver
@@ -51,6 +49,7 @@ final readonly class TypeResolver
 
     public function __construct(
         private ConfigurationResolver $configurationResolver,
+        private Normaliser $normaliser,
         private ReflectionProvider $reflectionProvider,
         private ReflectionResolver $reflectionResolver,
         private TypeFactory $typeFactory,
@@ -225,21 +224,14 @@ final readonly class TypeResolver
             return new IntegerType();
         }
 
-        $name = $fieldType;
-
         // Remove the prefix
-        if (str_contains($name, '%$')) {
-            $name = $this->configurationResolver->resolvePrefixNotation($fieldType);
-        }
+        $name = $this->normaliser->normalisePrefixNotation($fieldType);
 
         // Remove leading backslash
-        if (str_starts_with($name, '\\')) {
-            $name = substr($name, 1);
-        }
+        $name = $this->normaliser->normaliseNamespace($name);
 
-        if (str_contains($name, '.')) {
-            $name = $this->configurationResolver->resolveDotNotation($fieldType);
-        }
+        // Remove dot notation
+        $name = $this->normaliser->normaliseDotNotation($name);
 
         if (!$this->reflectionProvider->hasClass($name)) {
             return new StringType();
@@ -271,7 +263,7 @@ final readonly class TypeResolver
 
     private function resolveStringRelationFieldType(string $fieldType): Type
     {
-        $className = $this->configurationResolver->resolveDotNotation($fieldType);
+        $className = $this->normaliser->normaliseDotNotation($fieldType);
 
         if (!$this->reflectionProvider->hasClass($className)) {
             // Likely an error in the configuration, return an error type

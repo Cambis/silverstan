@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Extension\Type;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
+use Cambis\Silverstan\Normaliser\Normaliser;
 use Override;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
@@ -29,6 +30,7 @@ final readonly class SingletonReturnTypeExtension implements DynamicFunctionRetu
 
     public function __construct(
         private ConfigurationResolver $configurationResolver,
+        private Normaliser $normaliser,
         private ReflectionProvider $reflectionProvider
     ) {
     }
@@ -53,7 +55,7 @@ final readonly class SingletonReturnTypeExtension implements DynamicFunctionRetu
         }
 
         $serviceName = $serviceNameType->getConstantStrings()[0]->getValue();
-        $serviceName = $this->configurationResolver->resolveDotNotation($serviceName);
+        $serviceName = $this->normaliser->normaliseDotNotation($serviceName);
         $serviceName = $this->configurationResolver->resolveClassName($serviceName);
 
         if (!$this->reflectionProvider->hasClass($serviceName)) {

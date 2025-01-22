@@ -8,7 +8,6 @@ use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInte
 use PHPStan\Reflection\ReflectionProvider;
 use SilverStripe\Config\Collections\ConfigCollectionInterface;
 use function array_key_exists;
-use function explode;
 use function is_array;
 use function preg_match;
 
@@ -94,13 +93,6 @@ final class ConfigurationResolver
         return $injectedClassName;
     }
 
-    public function resolveDotNotation(string $fieldType): string
-    {
-        [$class] = explode('.', $fieldType, 2);
-
-        return $class;
-    }
-
     public function resolveExtensionClassName(string $extensionName): ?string
     {
         $matches = [];
@@ -116,12 +108,5 @@ final class ConfigurationResolver
         }
 
         return $this->resolveClassName($resolved);
-    }
-
-    public function resolvePrefixNotation(string $fieldType): string
-    {
-        [$_, $class] = explode('%$', $fieldType, 2);
-
-        return $class;
     }
 }

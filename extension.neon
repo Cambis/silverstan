@@ -78,6 +78,8 @@ services:
         class: Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor
         tags: [phpstan.parser.richParserNodeVisitor]
     -
+        class: Cambis\Silverstan\Normaliser\Normaliser
+    -
         class: Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser
     -
         class: Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser
