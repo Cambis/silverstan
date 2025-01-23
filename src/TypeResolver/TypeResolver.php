@@ -16,16 +16,12 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\ErrorType;
-use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeCombinator;
 use function array_key_exists;
-use function array_map;
 use function is_array;
 use function is_bool;
 use function is_numeric;
@@ -34,19 +30,6 @@ use function trim;
 
 final readonly class TypeResolver
 {
-    /**
-     * @var array<class-string, list<class-string<Type>>>
-     */
-    private const DBFIELD_TO_TYPE_MAPPING = [
-        'SilverStripe\ORM\FieldType\DBBoolean' => [BooleanType::class],
-        'SilverStripe\ORM\FieldType\DBDate' => [StringType::class, NullType::class],
-        'SilverStripe\ORM\FieldType\DBDecimal' => [FloatType::class],
-        'SilverStripe\ORM\FieldType\DBFloat' => [FloatType::class],
-        'SilverStripe\ORM\FieldType\DBInt' => [IntegerType::class],
-        'SilverStripe\ORM\FieldType\DBString' => [StringType::class, NullType::class],
-        'SilverStripe\ORM\FieldType\DBTime' => [StringType::class, NullType::class],
-    ];
-
     public function __construct(
         private ConfigurationResolver $configurationResolver,
         private Normaliser $normaliser,
@@ -171,25 +154,12 @@ final readonly class TypeResolver
 
         $fieldClassReflection = $this->reflectionProvider->getClass($field);
 
-        // Check if the field is in our custom mapping
-        foreach (self::DBFIELD_TO_TYPE_MAPPING as $dbClass => $typeMapping) {
-            if (!$this->reflectionProvider->hasClass($dbClass)) {
-                continue;
-            }
-
-            // Check if $dbClass is or is a subclass of $fieldClassReflection
-            if (!$fieldClassReflection->is($dbClass)) {
-                continue;
-            }
-
-            $types = array_map(static function (string $type): Type {
-                return new $type();
-            }, $typeMapping);
-
-            return TypeCombinator::union(...$types);
+        // Return the type from the `getValue` method
+        if ($fieldClassReflection->hasNativeMethod('getValue')) {
+            return $fieldClassReflection->getNativeMethod('getValue')->getVariants()[0]->getReturnType();
         }
 
-        // Return the field as an object type
+        // Fallback, return the field as an object type
         return new ObjectType($field);
     }
 

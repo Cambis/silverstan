@@ -15,7 +15,7 @@ class DataObject
 {
     /**
      * @param string $fieldName Name of the field
-     * @return ?\SilverStripe\ORM\FieldType\DBField The field as a DBField object
+     * @return ?\SilverStripe\ORM\FieldType\DBField<mixed, mixed> The field as a DBField object
      */
     public function dbObject($fieldName)
     {

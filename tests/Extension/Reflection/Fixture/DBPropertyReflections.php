@@ -2,7 +2,6 @@
 
 namespace Cambis\Silverstan\Tests\Extension\Reflection\Fixture;
 
-use Cambis\Silverstan\Tests\Extension\Reflection\Source\DBField\FooField;
 use Cambis\Silverstan\Tests\Extension\Reflection\Source\Model\Bar;
 use Cambis\Silverstan\Tests\Extension\Reflection\Source\Model\Foo;
 use SilverStripe\ORM\DataObject;
@@ -64,7 +63,7 @@ assertType('string', $foo->FieldWithGetter);
 assertType('non-empty-string', $foo->FieldWithDefaultValueGetter);
 
 // Custom db fields
-assertType(FooField::class, $foo->FooField);
+assertType('array<int, string>', $foo->FooField);
 
 // Multi-relational has one
 assertType(DataObject::class, $foo->CarerOf());

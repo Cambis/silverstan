@@ -7,6 +7,14 @@ parameters:
         - SilverStripe\Core\Config\Config_ForClass
         - SilverStripe\Forms\GridField\GridState_Data
         - Symbiote\QueuedJobs\Services\AbstractQueuedJob
+    ignoreErrors:
+        -
+            # Generics are used internally to give better types for DBFields, we won't enforce them outside this extension
+            messages:
+                - '#extends generic class SilverStripe\\ORM\\FieldType\\\DBField but does not specify its types#'
+                - '#in PHPDoc tag @return does not specify all template types of class SilverStripe\\ORM\\FieldType\\DBField#'
+                - '#return type with generic class SilverStripe\\ORM\\FieldType\\DBField does not specify its types#'
+            reportUnmatched: false
 services:
     configCollectionFactory:
         class: Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory\LazyConfigCollectionFactory

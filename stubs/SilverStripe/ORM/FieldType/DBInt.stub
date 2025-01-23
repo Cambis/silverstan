@@ -1,0 +1,10 @@
+<?php
+
+namespace SilverStripe\ORM\FieldType;
+
+/**
+ * @extends DBField<int, int>
+ */
+class DBInt extends DBField
+{
+}

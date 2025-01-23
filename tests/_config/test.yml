@@ -5,4 +5,4 @@ SilverStripe\Core\Injector\Injector:
   Foo:
     class: Cambis\Silverstan\Tests\Type\Source\Model\Foo
   FooField:
-    class: Cambis\Silverstan\Tests\Extension\Reflection\Source\DBField\FooField
+    class: Cambis\Silverstan\Tests\Extension\Reflection\Source\ORM\FieldType\DBField\FooField

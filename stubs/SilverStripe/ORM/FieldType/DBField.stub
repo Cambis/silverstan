@@ -5,8 +5,41 @@ namespace SilverStripe\ORM\FieldType;
 use SilverStripe\ORM\FieldType\DBIndexable;
 use SilverStripe\View\ViewableData;
 
+/**
+ * @template R
+ * @template W
+ */
 abstract class DBField
 {
+    /**
+     * Returns the value of this field.
+     *
+     * @return R
+     */
+    public function getValue()
+    {
+    }
+
+    /**
+     * Set the value of this field in various formats.
+     * Used by {@link DataObject->getField()}, {@link DataObject->setCastedField()}
+     * {@link DataObject->dbObject()} and {@link DataObject->write()}.
+     *
+     * As this method is used both for initializing the field after construction,
+     * and actually changing its values, it needs a {@link $markChanged}
+     * parameter.
+     *
+     * @param W $value
+     * @param \SilverStripe\ORM\DataObject|mixed[]|null $record An array or object that this field is part of
+     * @param bool $markChanged Indicate whether this field should be marked changed.
+     *  Set to FALSE if you are initializing this field after construction, rather
+     *  than setting a new value.
+     * @return static
+     */
+    public function setValue($value, $record = null, $markChanged = true)
+    {
+    }
+
     /**
      * Create a DBField object that's not bound to any particular field.
      *

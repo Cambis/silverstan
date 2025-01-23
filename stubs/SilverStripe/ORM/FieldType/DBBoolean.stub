@@ -1,0 +1,10 @@
+<?php
+
+namespace SilverStripe\ORM\FieldType;
+
+/**
+ * @extends DBField<bool, int<0, 1>|bool>
+ */
+class DBBoolean extends DBField
+{
+}
