@@ -97,6 +97,9 @@ services:
         class: Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProviderInterface
         factory: Cambis\Silverstan\ReflectionResolver\ReflectionResolverRegistryProvider\LazyReflectionResolverRegistryProvider
     -
+        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\DBPropertyReflectionResolver
+        tags: [silverstan.reflectionResolver.propertyReflectionResolver]
+    -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\DependencyInjectionPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
     -
@@ -138,11 +141,6 @@ services:
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
         arguments:
             configurationPropertyName: 'belongs_to'
-    -
-        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationPropertyReflectionResolver
-        tags: [silverstan.reflectionResolver.propertyReflectionResolver]
-        arguments:
-            configurationPropertyName: 'db'
     -
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]

@@ -6,9 +6,27 @@ namespace Cambis\Silverstan\Normaliser;
 
 use function explode;
 use function ltrim;
+use function strtok;
+use function trim;
 
 final class Normaliser
 {
+    /**
+     * Remove trailing bracket notation.
+     *
+     * Foo('') => Foo
+     */
+    public function normaliseBracketNotation(string $bracketNotation): string
+    {
+        $result = strtok($bracketNotation, '(');
+
+        if ($result === false) {
+            return $bracketNotation;
+        }
+
+        return trim($result);
+    }
+
     /**
      * Remove trailing dot notation.
      *

@@ -56,7 +56,7 @@ final class DBPropertyTypeResolver implements PropertyTypeResolverInterface, Typ
 
         /** @var class-string[] $db */
         foreach ($db as $fieldName => $fieldType) {
-            $types[$fieldName] = $this->typeResolver->resolveDBFieldType($classReflection, $fieldName, $fieldType);
+            $types[$fieldName] = $this->typeResolver->resolveDBFieldType($fieldType);
         }
 
         return $types;
