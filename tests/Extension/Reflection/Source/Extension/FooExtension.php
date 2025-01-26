@@ -24,6 +24,11 @@ final class FooExtension extends Extension implements TestOnly
         return $arg;
     }
 
+    public static function publicStaticMethod(bool $arg): bool
+    {
+        return $arg;
+    }
+
     protected function protectedMethod(bool $arg): bool
     {
         return $arg;

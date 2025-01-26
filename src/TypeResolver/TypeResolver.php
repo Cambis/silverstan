@@ -28,6 +28,9 @@ use function is_numeric;
 use function strtok;
 use function trim;
 
+/**
+ * @api
+ */
 final readonly class TypeResolver
 {
     public function __construct(

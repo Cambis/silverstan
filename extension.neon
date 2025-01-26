@@ -147,11 +147,6 @@ services:
         class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationPropertyReflectionResolver
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
         arguments:
-            configurationPropertyName: 'extensions'
-    -
-        class: Cambis\Silverstan\ReflectionResolver\ReflectionResolver\SimpleRelationPropertyReflectionResolver
-        tags: [silverstan.reflectionResolver.propertyReflectionResolver]
-        arguments:
             configurationPropertyName: 'has_one'
     -
         class: Cambis\Silverstan\TypeFactory\TypeFactory
@@ -165,12 +160,6 @@ services:
         tags: [silverstan.typeResolver.propertyTypeResolver]
     -
         class: Cambis\Silverstan\TypeResolver\TypeResolver\DependencyInjectionPropertyTypeResolver
-        tags: [silverstan.typeResolver.propertyTypeResolver]
-    -
-        class: Cambis\Silverstan\TypeResolver\TypeResolver\ExtensionMethodTypeResolver
-        tags: [silverstan.typeResolver.methodTypeResolver]
-    -
-        class: Cambis\Silverstan\TypeResolver\TypeResolver\ExtensionPropertyTypeResolver
         tags: [silverstan.typeResolver.propertyTypeResolver]
     -
         class: Cambis\Silverstan\TypeResolver\TypeResolver\ManyRelationMethodTypeResolver
