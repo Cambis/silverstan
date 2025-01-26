@@ -6,6 +6,7 @@ namespace Cambis\Silverstan\Normaliser;
 
 use function explode;
 use function ltrim;
+use function str_contains;
 use function strtok;
 use function trim;
 
@@ -36,6 +37,10 @@ final class Normaliser
      */
     public function normaliseDotNotation(string $dotNotated): string
     {
+        if (!str_contains($dotNotated, '.')) {
+            return $dotNotated;
+        }
+
         [$class] = explode('.', $dotNotated, 2);
 
         return $class;
@@ -50,6 +55,10 @@ final class Normaliser
      */
     public function normalisePrefixNotation(string $prefixNotated): string
     {
+        if (!str_contains($prefixNotated, '%$')) {
+            return $prefixNotated;
+        }
+
         [$_, $class] = explode('%$', $prefixNotated, 2);
 
         return $class;
