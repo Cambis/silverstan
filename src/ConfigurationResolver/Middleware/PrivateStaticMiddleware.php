@@ -51,10 +51,14 @@ final class PrivateStaticMiddleware extends AbstractMiddleware
 
         $classReflection = new ReflectionClass($class);
 
-        $nativePropertyReflections = $classReflection->getProperties(ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_STATIC);
+        $nativePropertyReflections = $classReflection->getProperties(ReflectionProperty::IS_PRIVATE);
         $classConfig = [];
 
         foreach ($nativePropertyReflections as $nativePropertyReflection) {
+            if (!$nativePropertyReflection->isStatic()) {
+                continue;
+            }
+
             $docComment = $nativePropertyReflection->getDocComment() === false ? '' : $nativePropertyReflection->getDocComment();
 
             // Properties with the `@internal` annotation are not considered configuration properties
