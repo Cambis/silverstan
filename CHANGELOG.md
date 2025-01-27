@@ -1,5 +1,26 @@
 # @cambis/silverstan
 
+## 1.0.0
+
+### Major Changes
+
+- 8ab62f8: - Add custom autoloader and configuration resolution. The intention here is to allow this extension to not be tied to any specific Silverstripe version. This will also allow us to use PHPStan 2.0 with Silverstripe 5.x, currently the two are not compatitable. These features are currently opt-in using the bleedingEdge config but will become standard in 2.0
+  - Various bugfixes
+
+### Minor Changes
+
+- b04375c: Add generic stubs for DBField
+- fa49499: Add normaliser service
+
+### Patch Changes
+
+- 0c2d0c6: Update bitmask values
+- d45a6fb: Add support for multi-relational has one
+- 93162dd: Remove Extension type resolvers
+- 8798233: Fallback to ObjectType in TypeResolver::resolveDBFieldType()
+- e3dccc0: Resolve readable and writable types for db fields
+- 638b255: Remove FixedFieldsPropertyTypeResolver
+
 ## 0.5.4
 
 ### Patch Changes
