@@ -8,42 +8,43 @@ use Cambis\Silverstan\Reflection\ExtensiblePropertyReflection;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\Contract\PropertyReflectionResolverInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
-use Override;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
 
-final readonly class DBPropertyReflectionResolver implements PropertyReflectionResolverInterface
+final class DBPropertyReflectionResolver implements PropertyReflectionResolverInterface
 {
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private TypeResolver $typeResolver
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private TypeResolver $typeResolver;
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, TypeResolver $typeResolver)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->typeResolver = $typeResolver;
     }
 
-    #[Override]
     public function getConfigurationPropertyName(): string
     {
         return 'db';
     }
 
-    #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
         if (!$this->classReflectionAnalyser->isDataObject($classReflection)) {
             return [];
         }
-
         $types = $this->typeResolver->resolveInjectedPropertyTypesFromConfigurationProperty($classReflection, 'db');
-
         $propertyReflections = [];
-
         foreach ($types as $name => $type) {
             $readableType = $this->getReadableType($classReflection, $type, $name);
             $writableType = $this->getWritableType($classReflection, $type, $name);
 
             $propertyReflections[$name] = new ExtensiblePropertyReflection($classReflection, $readableType, $writableType);
         }
-
         return $propertyReflections;
     }
 

@@ -17,13 +17,25 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use function array_key_exists;
 
-final readonly class ReflectionResolver
+final class ReflectionResolver
 {
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
-        private ReflectionResolverRegistryProviderInterface $reflectionResolverRegistryProvider
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private PropertyReflectionAnalyser $propertyReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ReflectionResolverRegistryProviderInterface $reflectionResolverRegistryProvider;
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, PropertyReflectionAnalyser $propertyReflectionAnalyser, ReflectionResolverRegistryProviderInterface $reflectionResolverRegistryProvider)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->propertyReflectionAnalyser = $propertyReflectionAnalyser;
+        $this->reflectionResolverRegistryProvider = $reflectionResolverRegistryProvider;
     }
 
     /**
@@ -37,7 +49,7 @@ final readonly class ReflectionResolver
         $propertyReflections = [];
 
         foreach ($this->reflectionResolverRegistryProvider->getRegistry()->getPropertyReflectionResolvers() as $reflectionResolver) {
-            $propertyReflections = [...$propertyReflections, ...$reflectionResolver->resolve($classReflection)];
+            $propertyReflections = array_merge($propertyReflections, $reflectionResolver->resolve($classReflection));
         }
 
         return $propertyReflections;
@@ -54,7 +66,7 @@ final readonly class ReflectionResolver
         $methodReflections = [];
 
         foreach ($this->reflectionResolverRegistryProvider->getRegistry()->getMethodReflectionResolvers() as $reflectionResolver) {
-            $methodReflections = [...$methodReflections, ...$reflectionResolver->resolve($classReflection)];
+            $methodReflections = array_merge($methodReflections, $reflectionResolver->resolve($classReflection));
         }
 
         if (!$classReflection->getParentClass() instanceof ClassReflection) {
