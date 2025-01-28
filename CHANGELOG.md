@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 1.0.1
+
+### Patch Changes
+
+- 1195a33: Update db stubs
+
 ## 1.0.0
 
 ### Major Changes
