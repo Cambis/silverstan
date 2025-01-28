@@ -3,7 +3,8 @@
 namespace SilverStripe\ORM\FieldType;
 
 /**
- * @extends DBField<float, float>
+ * @property-read float $value
+ * @property-write float $value
  */
 class DBDecimal extends DBField
 {

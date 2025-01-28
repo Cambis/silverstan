@@ -4,18 +4,13 @@ namespace Cambis\Silverstan\Tests\Extension\Reflection\Source\ORM\FieldType\DBFi
 
 use SilverStripe\ORM\FieldType\DBField;
 
+/**
+ * @property-read list<string> $value
+ */
 final class FooField extends DBField
 {
     public function requireField(): void
     {
         // Noop
-    }
-
-    /**
-     * @return list<string>
-     */
-    public function getValue()
-    {
-        return [''];
     }
 }

@@ -6,7 +6,8 @@ namespace SilverStripe\ORM;
  * @property int $ID ID of the DataObject, 0 if the DataObject doesn't exist in database.
  * @property int $OldID ID of object, if deleted
  * @property string $Title
- * @property class-string<static> $ClassName Class name of the DataObject
+ * @property-read class-string<static> $ClassName Class name of the DataObject
+ * @property-write class-string<self> $ClassName Class name of the DataObject
  * @property string $LastEdited Date and time of DataObject's last modification.
  * @property string $Created Date and time of DataObject creation.
  * @property ?class-string<static> $ObsoleteClassName If ClassName no longer exists this will be set to the legacy value
@@ -15,7 +16,7 @@ class DataObject
 {
     /**
      * @param string $fieldName Name of the field
-     * @return ?\SilverStripe\ORM\FieldType\DBField<mixed, mixed> The field as a DBField object
+     * @return ?\SilverStripe\ORM\FieldType\DBField The field as a DBField object
      */
     public function dbObject($fieldName)
     {

@@ -3,7 +3,8 @@
 namespace SilverStripe\ORM\FieldType;
 
 /**
- * @extends DBField<?string, ?string>
+ * @property-read ?string $value
+ * @property-write ?string $value
  */
 class DBTime extends DBField
 {

@@ -3,7 +3,8 @@
 namespace SilverStripe\ORM\FieldType;
 
 /**
- * @extends DBField<int, int>
+ * @property-read int $value
+ * @property-write int $value
  */
 class DBInt extends DBField
 {

@@ -3,7 +3,8 @@
 namespace SilverStripe\ORM\FieldType;
 
 /**
- * @extends DBField<bool, int<0, 1>|bool>
+ * @property-read bool $value
+ * @property-write int<0, 1>|bool $value
  */
 class DBBoolean extends DBField
 {

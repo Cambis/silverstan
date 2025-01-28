@@ -9,6 +9,7 @@ use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\Contract\PropertyReflectionResolverInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
+use PHPStan\Analyser\OutOfClassScope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
 
@@ -69,9 +70,9 @@ final readonly class DBPropertyReflectionResolver implements PropertyReflectionR
             return $classReflection->getNativeMethod('get' . $name)->getVariants()[0]->getReturnType();
         }
 
-        // Attempt to return the type from the `getValue` method
-        if ($fieldClassReflection->hasNativeMethod('getValue')) {
-            return $fieldClassReflection->getNativeMethod('getValue')->getVariants()[0]->getReturnType();
+        // Attempt to return the type from the property
+        if ($fieldClassReflection->hasProperty('value')) {
+            return $fieldClassReflection->getProperty('value', new OutOfClassScope())->getReadableType();
         }
 
         // Fallback, return the original type
@@ -104,16 +105,12 @@ final readonly class DBPropertyReflectionResolver implements PropertyReflectionR
             }
         }
 
-        // Return the type from the `setValue` method
-        if ($fieldClassReflection->hasNativeMethod('setValue')) {
-            $parameters = $fieldClassReflection->getNativeMethod('setValue')->getVariants()[0]->getParameters();
-
-            if ($parameters !== []) {
-                return $parameters[0]->getType();
-            }
+        // Attempt to return the type from the property
+        if ($fieldClassReflection->hasProperty('value')) {
+            return $fieldClassReflection->getProperty('value', new OutOfClassScope())->getWritableType();
         }
 
-        // Fallback, return original type
+        // Fallback, return the original type
         return $type;
     }
 }
