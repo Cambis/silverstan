@@ -5,7 +5,7 @@ namespace Cambis\Silverstan\Tests\Extension\Reflection\Source\ORM\FieldType\DBFi
 use SilverStripe\ORM\FieldType\DBField;
 
 /**
- * @property-read list<string> $value
+ * @property list<string> $value
  */
 final class FooField extends DBField
 {
