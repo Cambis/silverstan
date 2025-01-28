@@ -9,12 +9,16 @@ use SilverStripe\Config\Middleware\Middleware;
 
 abstract class AbstractMiddleware implements Middleware
 {
-    public function __construct(
+    /**
+     * @readonly
+     */
+    protected int $disableFlag = ConfigurationResolver::EXCLUDE_NONE;
+    public function __construct(int $disableFlag = ConfigurationResolver::EXCLUDE_NONE)
+    {
         /**
          * @var ConfigurationResolver::EXCLUDE_*
          */
-        protected readonly int $disableFlag = ConfigurationResolver::EXCLUDE_NONE
-    ) {
+        $this->disableFlag = $disableFlag;
     }
 
     /**
@@ -22,7 +26,7 @@ abstract class AbstractMiddleware implements Middleware
      *
      * @param true|int-mask-of<ConfigurationResolver::EXCLUDE_*> $excludeMiddleware
      */
-    final protected function enabled(true|int $excludeMiddleware): bool
+    final protected function enabled($excludeMiddleware): bool
     {
         if ($excludeMiddleware === true) {
             return false;
