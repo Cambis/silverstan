@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\MethodCall;
 
-use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\Extension\Type\DataObjectDeleteTypeSpecifyingExtension;
 use Cambis\Silverstan\Extension\Type\DataObjectExistsTypeSpecifyingExtension;
 use Cambis\Silverstan\Extension\Type\DataObjectWriteTypeSpecifyingExtension;
@@ -15,19 +14,18 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function in_array;
 use function property_exists;
 use function sprintf;
 
 /**
- * @implements SilverstanRuleInterface<MethodCall>
+ * @implements Rule<MethodCall>
  *
  * @see \Cambis\Silverstan\Tests\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRuleTest
  */
-final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements SilverstanRuleInterface
+final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
 {
     /**
      * @var string[]
@@ -42,55 +40,6 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Silvers
         /** @var string[] */
         private array $allowedMethodCalls = []
     ) {
-    }
-
-    #[Override]
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition(
-            'Call `exists()` first before accessing any magic `SilverStripe\ORM\DataObject` methods as the object may not be present in the database. ' .
-            'Database manipulation methods such as `write()` and `delete()` are allowed by default. ' .
-            'If you think a method is safe to call by default add it to the `allowedMethodCalls` configuration.',
-            [
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
-/**
- * @method \SilverStripe\ORM\DataObject Bar()
- */
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    public function doSomething(): string
-    {
-        return $this->Bar()->doSomething();
-    }
-}
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
-/**
- * @method \SilverStripe\ORM\DataObject Bar()
- */
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    public function doSomething(): string
-    {
-        if (!$this->Bar()->exists()) {
-            return '';
-        }
-
-        return $this->Bar()->doSomething();
-    }
-}
-CODE_SAMPLE
-                    ,
-                    [
-                        'enabled' => true,
-                        'allowedMethodCalls' => [
-                            'mySafeMethod',
-                        ],
-                    ]
-                )],
-        );
     }
 
     #[Override]
