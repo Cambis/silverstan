@@ -18,8 +18,7 @@
     "ext-tokenizer": "*",
     "composer/class-map-generator": "^1.5",
     "phpstan/phpstan": "^1.12",
-    "silverstripe/config": "^1.4 || ^2.0 || ^3.0",
-    "symplify/rule-doc-generator-contracts": "^9.3 || ^10.0 || ^11.0"
+    "silverstripe/config": "^1.4 || ^2.0 || ^3.0"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
