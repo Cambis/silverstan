@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\ClassPropertyNode;
 
-use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
@@ -13,65 +12,22 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
 use PHPStan\Reflection\PropertyReflection;
+use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\VerbosityLevel;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function sprintf;
 
 /**
- * @implements SilverstanRuleInterface<ClassPropertyNode>
+ * @implements Rule<ClassPropertyNode>
  * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRuleTest
  */
-final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implements SilverstanRuleInterface
+final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implements Rule
 {
     public function __construct(
         private ClassReflectionAnalyser $classReflectionAnalyser,
         private PropertyReflectionAnalyser $propertyReflectionAnalyser,
         private ReflectionResolver $reflectionResolver
     ) {
-    }
-
-    #[Override]
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition(
-            'Disallow overriding types of configuration properties.',
-            [
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
-namespace App\Model;
-
-class Foo extends \SilverStripe\ORM\DataObject
-{
-    private static string $foo = 'foo';
-}
-
-final class Bar extends Foo
-{
-    private static string|bool $foo = false;
-}
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
-namespace App\Model;
-
-class Foo extends \SilverStripe\ORM\DataObject
-{
-    private static string $foo = 'foo';
-}
-
-final class Bar extends Foo
-{
-    private static string $foo = 'bar';
-}
-CODE_SAMPLE
-                    ,
-                    [
-                        'enabled' => true,
-                    ]
-                )],
-        );
     }
 
     #[Override]

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\InClassNode;
 
-use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\ValueObject\ClassRequiredProperty;
 use Override;
 use PhpParser\Node;
@@ -12,9 +11,8 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function array_key_exists;
 use function array_reverse;
 use function in_array;
@@ -22,10 +20,10 @@ use function sprintf;
 use function str_contains;
 
 /**
- * @implements SilverstanRuleInterface<InClassNode>
+ * @implements Rule<InClassNode>
  * @see \Cambis\Silverstan\Tests\Rule\InClassNode\RequireConfigurationPropertyOverrideRuleTest
  */
-final class RequireConfigurationPropertyOverrideRule implements SilverstanRuleInterface
+final class RequireConfigurationPropertyOverrideRule implements Rule
 {
     /**
      * @var string[][]
@@ -49,39 +47,6 @@ final class RequireConfigurationPropertyOverrideRule implements SilverstanRuleIn
         foreach (array_reverse($classes) as $klass) {
             $this->classRequiredProperties[] = new ClassRequiredProperty($klass['class'], $klass['properties']);
         }
-    }
-
-    #[Override]
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition(
-            'Require a class to override a set of configuration properties.',
-            [
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-}
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    private static string $table_name = 'Foo';
-}
-CODE_SAMPLE
-                    ,
-                    [
-                        'enabled' => true,
-                        'classes' => [
-                            [
-                                'class' => 'SilverStripe\ORM\DataObject',
-                                'properties' => ['table_name'],
-                            ],
-                        ],
-                    ]
-                )],
-        );
     }
 
     #[Override]
