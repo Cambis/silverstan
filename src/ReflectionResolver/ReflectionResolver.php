@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ReflectionResolver;
 
-use Cambis\Silverstan\Reflection\ExtensibleMethodReflection;
-use Cambis\Silverstan\Reflection\ExtensiblePropertyReflection;
+use Cambis\Silverstan\Reflection\MethodReflection\ExtensibleMethodReflection;
+use Cambis\Silverstan\Reflection\PropertyReflection\ExtensiblePropertyReflection;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\Contract\ReflectionResolverRegistryProviderInterface;

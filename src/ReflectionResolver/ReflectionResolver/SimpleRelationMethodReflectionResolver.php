@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 
-use Cambis\Silverstan\Reflection\ExtensibleMethodReflection;
+use Cambis\Silverstan\Reflection\MethodReflection\ExtensibleMethodReflection;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;

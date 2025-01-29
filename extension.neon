@@ -16,92 +16,29 @@ services:
         class: Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInterface
         factory: @configCollectionFactory
     -
-        class: Cambis\Silverstan\Extension\ClassPropertiesNode\ConfigurationPropertiesExtension
-        tags: [phpstan.properties.readWriteExtension]
-    -
-        class: Cambis\Silverstan\Extension\PhpDoc\DataObjectTypeNodeResolverExtension
-        tags: [phpstan.phpDoc.typeNodeResolverExtension]
-    -
-        class: Cambis\Silverstan\Extension\PhpDoc\ExtensionOwnerTypeNodeResolverExtension
-        tags: [phpstan.phpDoc.typeNodeResolverExtension]
-    -
-        class: Cambis\Silverstan\Extension\PhpDoc\SilverstripeStubFilesExtension
-        tags: [phpstan.stubFilesExtension]
-    -
-        class: Cambis\Silverstan\Extension\Reflection\AnnotationClassReflectionExtension
-    -
-        class: Cambis\Silverstan\Extension\Reflection\ExtensibleClassReflectionExtension
-        tags: 
-            - phpstan.broker.methodsClassReflectionExtension
-            - phpstan.broker.propertiesClassReflectionExtension
-    -
-        class: Cambis\Silverstan\Extension\Reflection\ViewableDataClassReflectionExtension
-        tags: [phpstan.broker.propertiesClassReflectionExtension]
-    -
-        class: Cambis\Silverstan\Extension\Type\ConfigCollectionInterfaceGetReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-    -
-        class: Cambis\Silverstan\Extension\Type\ConfigForClassGetReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-    -
-        class: Cambis\Silverstan\Extension\Type\DataObjectDbObjectReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-    -
-        class: Cambis\Silverstan\Extension\Type\DataObjectDeleteTypeSpecifyingExtension
-        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
-    -
-        class: Cambis\Silverstan\Extension\Type\DataObjectExistsTypeSpecifyingExtension
-        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
-    -
-        class: Cambis\Silverstan\Extension\Type\DataObjectWriteTypeSpecifyingExtension
-        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
-    # silverstripe/framework: <= 6.x
-    -
-        class: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
-        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
-        arguments:
-            className: 'SilverStripe\View\ViewableData'
-    # silverstripe/framework: >= 6.x
-    -
-        class: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
-        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
-        arguments:
-            className: 'SilverStripe\Model\ModelData'
-    # silverstripe/framework: <= 6.x
-    -
-        class: Cambis\Silverstan\Extension\Type\ExtensibleHasMethodTypeSpecifyingExtension
-        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
-        arguments:
-            className: 'SilverStripe\View\ViewableData'
-    # silverstripe/framework: >= 6.x
-    -
-        class: Cambis\Silverstan\Extension\Type\ExtensibleHasMethodTypeSpecifyingExtension
-        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
-        arguments:
-            className: 'SilverStripe\Model\ModelData'
-    -
-        class: Cambis\Silverstan\Extension\Type\InjectorGetReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-    -
-        class: Cambis\Silverstan\Extension\Type\SingletonReturnTypeExtension
-        tags: [phpstan.broker.dynamicFunctionReturnTypeExtension]
-    # silverstripe/framework <= 6.x
-    -
-        class: Cambis\Silverstan\Extension\Type\ViewableDataHasFieldTypeSpecifyingExtension
-        arguments:
-          className: 'SilverStripe\View\ViewableData'
-        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
-    # silverstripe/framework >= 6.x
-    -
-        class: Cambis\Silverstan\Extension\Type\ViewableDataHasFieldTypeSpecifyingExtension
-        arguments:
-          className: 'SilverStripe\Model\ModelData'
-        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
-    -
         class: Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor
         tags: [phpstan.parser.richParserNodeVisitor]
     -
         class: Cambis\Silverstan\Normaliser\Normaliser
+    -
+        class: Cambis\Silverstan\PhpDoc\StubFilesExtension\SilverstripeStubFilesExtension
+        tags: [phpstan.stubFilesExtension]
+    -
+        class: Cambis\Silverstan\PhpDoc\TypeNodeResolverExtension\DataObjectTypeNodeResolverExtension
+        tags: [phpstan.phpDoc.typeNodeResolverExtension]
+    -
+        class: Cambis\Silverstan\PhpDoc\TypeNodeResolverExtension\ExtensionOwnerTypeNodeResolverExtension
+        tags: [phpstan.phpDoc.typeNodeResolverExtension]
+    -
+        class: Cambis\Silverstan\Reflection\ClassReflectionExtension\AnnotationClassReflectionExtension
+    -
+        class: Cambis\Silverstan\Reflection\ClassReflectionExtension\ExtensibleClassReflectionExtension
+        tags: 
+            - phpstan.broker.methodsClassReflectionExtension
+            - phpstan.broker.propertiesClassReflectionExtension
+    -
+        class: Cambis\Silverstan\Reflection\ClassReflectionExtension\ViewableDataClassReflectionExtension
+        tags: [phpstan.broker.propertiesClassReflectionExtension]
     -
         class: Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser
     -
@@ -161,6 +98,72 @@ services:
         tags: [silverstan.reflectionResolver.propertyReflectionResolver]
         arguments:
             configurationPropertyName: 'has_one'
+    -
+        class: Cambis\Silverstan\Rule\ClassPropertiesNode\ReadWritePropertiesExtension\ConfigurationPropertiesExtension
+        tags: [phpstan.properties.readWriteExtension]
+    -
+        class: Cambis\Silverstan\Type\DynamicReturnTypeExtension\ConfigCollectionInterfaceGetReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Cambis\Silverstan\Type\DynamicReturnTypeExtension\ConfigForClassGetReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Cambis\Silverstan\Type\DynamicReturnTypeExtension\DataObjectDbObjectReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Cambis\Silverstan\Type\DynamicReturnTypeExtension\ExtensionGetOwnerReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Cambis\Silverstan\Type\DynamicReturnTypeExtension\InjectorGetReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Cambis\Silverstan\Type\DynamicReturnTypeExtension\SingletonReturnTypeExtension
+        tags: [phpstan.broker.dynamicFunctionReturnTypeExtension]
+    -
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectDeleteTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+    -
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectExistsTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+    -
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectWriteTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+    # silverstripe/framework: <= 6.x
+    -
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\ExtensibleHasExtensionTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'SilverStripe\View\ViewableData'
+    # silverstripe/framework: >= 6.x
+    -
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\ExtensibleHasExtensionTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'SilverStripe\Model\ModelData'
+    # silverstripe/framework: <= 6.x
+    -
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\ExtensibleHasMethodTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'SilverStripe\View\ViewableData'
+    # silverstripe/framework: >= 6.x
+    -
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\ExtensibleHasMethodTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'SilverStripe\Model\ModelData'
+    # silverstripe/framework: <= 6.x
+    -
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\ViewableDataHasFieldTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'SilverStripe\View\ViewableData'
+    # silverstripe/framework: >= 6.x
+    -
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\ViewableDataHasFieldTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'SilverStripe\Model\ModelData'
     -
         class: Cambis\Silverstan\TypeFactory\TypeFactory
     -
