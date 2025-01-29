@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\PropertyFetch;
 
 use Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor;
-use Cambis\Silverstan\Type\UnsafeObjectType;
+use Cambis\Silverstan\Type\ObjectType\UnsafeObjectType;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
