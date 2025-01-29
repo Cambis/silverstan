@@ -482,13 +482,13 @@ The default configuration applies these extensions to `SilverStripe\View\Viewabl
 services:
     -
         # Solves `Foo::hasExtension()`
-        class: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\ExtensibleHasExtensionTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
         arguments:
             className: 'Foo'
     -
         # Solves `Foo::hasMethod()`
-        class: Cambis\Silverstan\Extension\Type\ExtensibleHasMethodTypeSpecifyingExtension
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\ExtensibleHasMethodTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
         arguments:
             className: 'Foo'
@@ -525,4 +525,4 @@ $foo = Foo::create();
 ## SilverStripe\Core\Config\Config_ForClass 👩‍🔬
 
 > [!WARNING]
-> Silverstan cannot resolve the type of a property fetch on `SilverStripe\Core\Config\Config_ForClass`, use `SilverStripe\Core\Config\Config_ForClass::get()` instead. [See the rules overview](docs/rules_overview.md#disallowpropertyfetchonconfigforclassrule).
+> Silverstan cannot resolve the type of a property fetch on `SilverStripe\Core\Config\Config_ForClass`, use `SilverStripe\Core\Config\Config_ForClass::get()` instead. [See the rules overview](#disallowpropertyfetchonconfigforclassrule).

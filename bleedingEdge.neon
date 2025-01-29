@@ -35,9 +35,6 @@ services:
             includeTestOnly: %silverstan.includeTestOnly%
             parser: @currentPhpVersionPhpParser
     -
-        class: Cambis\Silverstan\Extension\Type\ExtensionGetOwnerReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-    -
         class: Cambis\Silverstan\FileCleaner\FileCleaner
     -
         class: Cambis\Silverstan\FileFinder\FileFinder

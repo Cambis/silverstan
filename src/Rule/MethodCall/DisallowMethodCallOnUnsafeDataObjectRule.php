@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\MethodCall;
 
-use Cambis\Silverstan\Extension\Type\DataObjectDeleteTypeSpecifyingExtension;
-use Cambis\Silverstan\Extension\Type\DataObjectExistsTypeSpecifyingExtension;
-use Cambis\Silverstan\Extension\Type\DataObjectWriteTypeSpecifyingExtension;
-use Cambis\Silverstan\Type\UnsafeObjectType;
+use Cambis\Silverstan\Type\ObjectType\UnsafeObjectType;
+use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectDeleteTypeSpecifyingExtension;
+use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectExistsTypeSpecifyingExtension;
+use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectWriteTypeSpecifyingExtension;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr;

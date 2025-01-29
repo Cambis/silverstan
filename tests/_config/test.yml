@@ -3,6 +3,6 @@ Name: test
 ---
 SilverStripe\Core\Injector\Injector:
   Foo:
-    class: Cambis\Silverstan\Tests\Type\Source\Model\Foo
+    class: Cambis\Silverstan\Tests\Type\DynamicReturnTypeExtension\Source\Model\Foo
   FooField:
-    class: Cambis\Silverstan\Tests\Extension\Reflection\Source\ORM\FieldType\DBField\FooField
+    class: Cambis\Silverstan\Tests\Reflection\ClassReflectionExtension\Source\ORM\FieldType\DBField\FooField
