@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 1.0.2
+
+### Patch Changes
+
+- 285305e: Explicitly require classes in Autoloader
+
 ## 1.0.1
 
 ### Patch Changes
