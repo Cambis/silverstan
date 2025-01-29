@@ -21,6 +21,11 @@ use function sprintf;
  */
 final readonly class DisallowNewInstanceOnInjectableRule implements Rule
 {
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.newInjectable';
+
     public function __construct(
         private ClassReflectionAnalyser $classReflectionAnalyser,
         private ReflectionProvider $reflectionProvider
@@ -61,7 +66,7 @@ final readonly class DisallowNewInstanceOnInjectableRule implements Rule
                     $node->class->toString(),
                 )
             )
-                ->identifier('silverstan.newInjectable')
+                ->identifier(self::IDENTIFIER)
                 ->build(),
         ];
     }

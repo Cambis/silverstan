@@ -22,6 +22,11 @@ use function sprintf;
  */
 final readonly class DisallowPropertyFetchOnConfigForClassRule implements Rule
 {
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.unresolvableConfigurationPropertyType';
+
     #[Override]
     public function getNodeType(): string
     {
@@ -78,7 +83,7 @@ final readonly class DisallowPropertyFetchOnConfigForClassRule implements Rule
                     $node->name->name,
                 )
             )
-                ->identifier('silverstan.propertyFetch')
+                ->identifier(self::IDENTIFIER)
                 ->build(),
         ];
     }

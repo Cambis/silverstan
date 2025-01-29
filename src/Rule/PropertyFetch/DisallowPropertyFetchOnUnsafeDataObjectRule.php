@@ -25,6 +25,11 @@ use function sprintf;
  */
 final readonly class DisallowPropertyFetchOnUnsafeDataObjectRule implements Rule
 {
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.unsafeDataObjectAccess';
+
     #[Override]
     public function getNodeType(): string
     {
@@ -85,7 +90,7 @@ final readonly class DisallowPropertyFetchOnUnsafeDataObjectRule implements Rule
                 )
             )
                 ->tip('See https://api.silverstripe.org/5/SilverStripe/ORM/DataObject.html#method_exists')
-                ->identifier('silverstan.unsafeDataObjectAccess')
+                ->identifier(self::IDENTIFIER)
                 ->build(),
         ];
     }

@@ -26,6 +26,11 @@ use function str_contains;
 final class RequireConfigurationPropertyOverrideRule implements Rule
 {
     /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.requiredConfigurationProperty';
+
+    /**
      * @var string[][]
      */
     private const PROPERTY_ALLOWLIST = [
@@ -98,7 +103,7 @@ final class RequireConfigurationPropertyOverrideRule implements Rule
                     $property
                 )
             )
-                ->identifier('silverstan.configurationProperty')
+                ->identifier(self::IDENTIFIER)
                 ->build();
         }
 

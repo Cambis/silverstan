@@ -23,6 +23,11 @@ use function sprintf;
  */
 final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implements Rule
 {
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.invalidConfigurationPropertyType';
+
     public function __construct(
         private ClassReflectionAnalyser $classReflectionAnalyser,
         private PropertyReflectionAnalyser $propertyReflectionAnalyser,
@@ -83,7 +88,7 @@ final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implement
                     $node->getName()
                 )
             )
-                ->identifier('silverstan.configurationProperty')
+                ->identifier(self::IDENTIFIER)
                 ->build(),
         ];
     }
