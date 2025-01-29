@@ -30,11 +30,13 @@ final readonly class Autoloader
             return;
         }
 
+        $path = $this->classManifest->getClassPath($className);
+
         // Safety check
-        if (!file_exists($this->classManifest->getClassPath($className))) {
+        if (!file_exists($path)) {
             return;
         }
 
-        require_once $this->classManifest->getClassPath($className);
+        (static function (string $path): void { require $path; })($path);
     }
 }
