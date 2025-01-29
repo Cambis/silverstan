@@ -23,6 +23,11 @@ use function sprintf;
  */
 final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements Rule
 {
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.unsafeConfigurationPropertyAccess';
+
     public function __construct(
         private ClassReflectionAnalyser $classReflectionAnalyser,
         private PropertyReflectionAnalyser $propertyReflectionAnalyser,
@@ -88,7 +93,7 @@ final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule impl
                     $node->name->name
                 )
             )
-                ->identifier('silverstan.configurationProperty')
+                ->identifier(self::IDENTIFIER)
                 ->tip('See: https://docs.silverstripe.org/en/5/developer_guides/configuration/configuration/#accessing-configuration-properties')
                 ->build(),
         ];

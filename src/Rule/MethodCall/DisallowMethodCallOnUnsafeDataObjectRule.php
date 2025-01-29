@@ -36,6 +36,11 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
         ...DataObjectWriteTypeSpecifyingExtension::SUPPORTED_METHODS,
     ];
 
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.unsafeDataObjectAccess';
+
     public function __construct(
         /** @var string[] */
         private array $allowedMethodCalls = []
@@ -105,7 +110,7 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
                 )
             )
                 ->tip('See https://api.silverstripe.org/5/SilverStripe/ORM/DataObject.html#method_exists')
-                ->identifier('silverstan.unsafeDataObjectAccess')
+                ->identifier(self::IDENTIFIER)
                 ->build(),
         ];
     }

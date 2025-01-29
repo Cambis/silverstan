@@ -27,6 +27,11 @@ use function sprintf;
 final class RequireParentCallInOverridenMethodRule implements Rule
 {
     /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.requiredParentCall';
+
+    /**
      * @var ClassParentMethodCall[]
      */
     private array $classParentMethodCalls;
@@ -87,7 +92,7 @@ final class RequireParentCallInOverridenMethodRule implements Rule
                         $classParentMethodCall->methodName
                     )
                 )
-                    ->identifier('silverstan.requiredParentCall')
+                    ->identifier(self::IDENTIFIER)
                     ->build(),
             ];
         }
@@ -103,7 +108,7 @@ final class RequireParentCallInOverridenMethodRule implements Rule
                         $classParentMethodCall->methodName
                     )
                 )
-                    ->identifier('silverstan.requiredParentCall')
+                    ->identifier(self::IDENTIFIER)
                     ->build(),
             ];
         }
@@ -128,7 +133,7 @@ final class RequireParentCallInOverridenMethodRule implements Rule
                         $classParentMethodCall->methodName
                     )
                 )
-                    ->identifier('silverstan.requiredParentCall')
+                    ->identifier(self::IDENTIFIER)
                     ->build(),
             ];
         }
