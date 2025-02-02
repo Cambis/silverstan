@@ -1,13 +1,21 @@
 includes:
     - rules.neon
 parameters:
-    bootstrapFiles:
-        - bootstrap.php
     universalObjectCratesClasses:
         - SilverStripe\Core\Config\Config_ForClass
         - SilverStripe\Forms\GridField\GridState_Data
         - Symbiote\QueuedJobs\Services\AbstractQueuedJob
+    bootstrapFiles:
+        - silverstripe-autoloader.php
+    earlyTerminatingMethodCalls:
+        SilverStripe\Control\RequestHandler:
+            - httpError
 services:
+    -
+        class: Cambis\Silverstan\Analyser\ResultCache\ResultCacheMetaExtension\ConfigCacheMetaExtension
+        tags: [phpstan.resultCacheMetaExtension]
+    -
+        class: Cambis\Silverstan\Autoloader\Autoloader
     configCollectionFactory:
         class: Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory\LazyConfigCollectionFactory
     -
@@ -16,8 +24,35 @@ services:
         class: Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInterface
         factory: @configCollectionFactory
     -
+        class: Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryProviderInterface
+        factory: Cambis\Silverstan\ConfigurationResolver\MiddlewareRegistryProvider\LazyMiddlewareRegistryProvider
+    -
+        class: Cambis\Silverstan\ConfigurationResolver\Middleware\PrivateStaticMiddleware
+        tags: [silverstan.configurationResolver.middleware]
+    -
+        class: Cambis\Silverstan\ConfigurationResolver\Middleware\ExtensionMiddleware
+        tags: [silverstan.configurationResolver.middleware]
+    -
+        class: Cambis\Silverstan\ConfigurationResolver\Middleware\InheritanceMiddleware
+        tags: [silverstan.configurationResolver.middleware]
+    -
+        class: Cambis\Silverstan\ClassManifest\ClassManifest
+        arguments:
+            excludedClasses:
+                - 'SilverStripe\Core\Manifest\ClassManifestErrorHandler'
+            includeTestOnly: %silverstan.includeTestOnly%
+            parser: @currentPhpVersionPhpParser
+    -
+        class: Cambis\Silverstan\FileCleaner\FileCleaner
+    -
+        class: Cambis\Silverstan\FileFinder\FileFinder
+        arguments:
+            includeTestOnly: %silverstan.includeTestOnly%
+    -
         class: Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor
         tags: [phpstan.parser.richParserNodeVisitor]
+    -
+        class: Cambis\Silverstan\NodeVisitor\TestOnlyFinderVisitor
     -
         class: Cambis\Silverstan\Normaliser\Normaliser
     -
@@ -178,6 +213,9 @@ services:
         class: Cambis\Silverstan\TypeResolver\TypeResolver\DependencyInjectionPropertyTypeResolver
         tags: [silverstan.typeResolver.propertyTypeResolver]
     -
+        class: Cambis\Silverstan\TypeResolver\TypeResolver\ExtensionOwnerMetaPropertyTypeResolver
+        tags: [silverstan.typeResolver.propertyTypeResolver]
+    -
         class: Cambis\Silverstan\TypeResolver\TypeResolver\ManyRelationMethodTypeResolver
         tags: [silverstan.typeResolver.methodTypeResolver]
         arguments:
@@ -215,5 +253,9 @@ services:
         tags: [silverstan.typeResolver.propertyTypeResolver]
         arguments:
             configurationPropertyName: 'has_one'
+    -
+        class: Composer\ClassMapGenerator\ClassMapGenerator
+        arguments:
+            extensions: ['php']
     - 
         class: PhpParser\NodeFinder
