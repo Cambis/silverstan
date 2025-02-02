@@ -65,12 +65,6 @@
         "sort-packages": true
     },
     "extra": {
-        "composer-exit-on-patch-failure": true,
-        "patches": {
-            "symplify/rule-doc-generator": {
-                "Custom rule docs": "patches/symplify/rule-doc-generator/custom-rule-docs.patch"
-            }
-        },
         "phpstan": {
             "includes": [
                 "extension.neon"
