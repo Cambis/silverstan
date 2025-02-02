@@ -19,7 +19,7 @@ use function in_array;
 /**
  * This extension resolves the return type of `SilverStripe\Core\Injector\Injector::get()`.
  *
- * @see \Cambis\Silverstan\Tests\Type\InjectorGetReturnTypeExtensionTest
+ * @see \Cambis\Silverstan\Tests\Type\DynamicReturnTypeExtension\InjectorGetReturnTypeExtensionTest
  */
 final readonly class InjectorGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
