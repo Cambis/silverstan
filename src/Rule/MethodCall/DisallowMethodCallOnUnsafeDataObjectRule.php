@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\MethodCall;
 
+use Cambis\Silverstan\Normaliser\Normaliser;
 use Cambis\Silverstan\Type\ObjectType\UnsafeObjectType;
 use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectDeleteTypeSpecifyingExtension;
 use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectExistsTypeSpecifyingExtension;
 use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectWriteTypeSpecifyingExtension;
+use Cambis\Silverstan\ValueObject\ClassAllowedMethodCall;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use function array_map;
 use function in_array;
 use function property_exists;
 use function sprintf;
@@ -41,10 +45,30 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
      */
     private const IDENTIFIER = 'silverstan.unsafeDataObjectAccess';
 
+    /**
+     * @var list<ClassAllowedMethodCall>
+     */
+    private array $classAllowedMethodCalls;
+
+    /**
+     * @param array<class-string, list<string>> $allowedMethodCalls
+     */
     public function __construct(
-        /** @var string[] */
-        private array $allowedMethodCalls = []
+        private Normaliser $normaliser,
+        array $allowedMethodCalls = []
     ) {
+        $classAllowedMethodCalls = [new ClassAllowedMethodCall('SilverStripe\ORM\DataObject', self::DEFAULT_ALLOWED_METHODS_CALLS)];
+
+        foreach ($allowedMethodCalls as $className => $methodCalls) {
+            // Normalise calls, remove brackets etc
+            $normalisedMethodCalls = array_map(function (string $methodCall): string {
+                return $this->normaliser->normaliseBracketNotation($methodCall);
+            }, $methodCalls);
+
+            $classAllowedMethodCalls[] = new ClassAllowedMethodCall($this->normaliser->normaliseNamespace($className), $normalisedMethodCalls);
+        }
+
+        $this->classAllowedMethodCalls = $classAllowedMethodCalls;
     }
 
     #[Override]
@@ -63,13 +87,13 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
             return [];
         }
 
-        if (in_array($node->name->toString(), self::DEFAULT_ALLOWED_METHODS_CALLS, true)) {
-            return [];
-        }
+        // if (in_array($node->name->toString(), self::DEFAULT_ALLOWED_METHODS_CALLS, true)) {
+        //     return [];
+        // }
 
-        if (in_array($node->name->toString(), $this->allowedMethodCalls, true)) {
-            return [];
-        }
+        // if (in_array($node->name->toString(), $this->allowedMethodCalls, true)) {
+        //     return [];
+        // }
 
         if (!$node->var instanceof MethodCall) {
             return [];
@@ -79,19 +103,30 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
             return [];
         }
 
+        // Type of the method owner
+        $type = $scope->getType($node->var);
+
+        // Only interested in DataObjects
+        if (!$type instanceof UnsafeObjectType) {
+            return [];
+        }
+
         $ownerType = $scope->getType($node->var->var);
 
-        // Skip any native methods, we're only interested in magic ones
         foreach ($ownerType->getObjectClassReflections() as $classReflection) {
+            // Skip any native methods, we're only interested in magic ones
             if ($classReflection->hasNativeMethod($node->var->name->toString())) {
                 return [];
             }
         }
 
-        $type = $scope->getType($node->var);
+        foreach ($type->getObjectClassReflections() as $classReflection) {
+            $classAllowedMethodCall = $this->getClassAllowedMethodCall($classReflection, $node->name->toString());
 
-        if (!$type instanceof UnsafeObjectType) {
-            return [];
+            // Check that the method call is allowed via configuration
+            if ($classAllowedMethodCall instanceof ClassAllowedMethodCall) {
+                return [];
+            }
         }
 
         $varName = $this->resolveExprName($node->var->var);
@@ -130,5 +165,22 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
         }
 
         return '$' . $expr->name;
+    }
+
+    private function getClassAllowedMethodCall(ClassReflection $classReflection, string $methodName): ?ClassAllowedMethodCall
+    {
+        foreach ($this->classAllowedMethodCalls as $classAllowedMethodCall) {
+            if (!$classReflection->is($classAllowedMethodCall->className)) {
+                continue;
+            }
+
+            if (!in_array($methodName, $classAllowedMethodCall->methodNames, true)) {
+                continue;
+            }
+
+            return $classAllowedMethodCall;
+        }
+
+        return null;
     }
 }
