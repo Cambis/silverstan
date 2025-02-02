@@ -76,7 +76,7 @@ final readonly class ExtensibleMethodReflection implements MethodReflection
     }
 
     /**
-     * @return ParametersAcceptor[]
+     * @return list<ParametersAcceptor>
      */
     #[Override]
     public function getVariants(): array

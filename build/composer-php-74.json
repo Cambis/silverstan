@@ -17,7 +17,7 @@
     "php": "^7.4 || ^8.0",
     "ext-tokenizer": "*",
     "composer/class-map-generator": "^1.5",
-    "phpstan/phpstan": "^1.12",
+    "phpstan/phpstan": "^2.1.2",
     "silverstripe/config": "^1.4 || ^2.0 || ^3.0"
   },
   "minimum-stability": "dev",

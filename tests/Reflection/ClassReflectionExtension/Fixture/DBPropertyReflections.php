@@ -63,7 +63,7 @@ assertType('string', $foo->FieldWithGetter);
 assertType('non-empty-string', $foo->FieldWithDefaultValueGetter);
 
 // Custom db fields
-assertType('array<int, string>', $foo->FooField);
+assertType('list<string>', $foo->FooField);
 
 // Multi-relational has one
 assertType(DataObject::class, $foo->CarerOf());

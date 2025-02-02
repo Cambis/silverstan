@@ -64,7 +64,6 @@ final class DataObjectWriteTypeSpecifyingExtension implements MethodTypeSpecifyi
             $node->var,
             $this->typeFactory->createObjectTypeFromUnsafeObjectType($objectType),
             TypeSpecifierContext::createTruthy(),
-            true,
             $scope
         );
     }

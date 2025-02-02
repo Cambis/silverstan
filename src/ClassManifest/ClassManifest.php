@@ -9,6 +9,7 @@ use Cambis\Silverstan\FileFinder\FileFinder;
 use Cambis\Silverstan\NodeVisitor\TestOnlyFinderVisitor;
 use Composer\ClassMapGenerator\ClassMap;
 use Composer\ClassMapGenerator\ClassMapGenerator;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
@@ -217,7 +218,7 @@ final class ClassManifest
             }
 
             // Class is missing namespaced name, skip
-            if ($classLike->namespacedName === null) {
+            if (!$classLike->namespacedName instanceof Name) {
                 continue;
             }
 

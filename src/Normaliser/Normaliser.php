@@ -68,6 +68,8 @@ final class Normaliser
      * Strip leading backslashes from namespace.
      *
      * \\Foo => Foo
+     *
+     * @return ($namespace is class-string ? class-string : string)
      */
     public function normaliseNamespace(string $namespace): string
     {

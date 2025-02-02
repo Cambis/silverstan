@@ -63,7 +63,6 @@ final class DataObjectDeleteTypeSpecifyingExtension implements MethodTypeSpecify
             $node->var,
             $this->typeFactory->createUnsafeObjectTypeFromObjectType($objectType),
             TypeSpecifierContext::createTruthy(),
-            true,
             $scope
         );
     }
