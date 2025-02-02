@@ -2,22 +2,16 @@ parameters:
     bootstrapFiles:
         - silverstripe-autoloader.php
 services:
-    - 
+    -
+        class: Cambis\Silverstan\Analyser\ResultCache\ResultCacheMetaExtension\ConfigCacheMetaExtension
+        tags: [phpstan.resultCacheMetaExtension]
+    -
         class: Cambis\Silverstan\Autoloader\Autoloader
-    simpleStubFileCacheStorage:
-        class: Cambis\Silverstan\Cache\CacheStorage\SimpleStubFileCacheStorage
-        arguments:
-            directory: %tmpDir%/cache/PHPStan
     -
         class: Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryProviderInterface
         factory: Cambis\Silverstan\ConfigurationResolver\MiddlewareRegistryProvider\LazyMiddlewareRegistryProvider
     configCollectionFactory:
         class: Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory\ExperimentalLazyConfigCollectionFactory
-    -
-        class: Cambis\Silverstan\ConfigurationResolver\Extension\PhpDoc\ConfigCacheExtension
-        arguments:
-            cache: @configCache
-        tags: [phpstan.stubFilesExtension]
     -
         class: Cambis\Silverstan\ConfigurationResolver\Middleware\PrivateStaticMiddleware
         tags: [silverstan.configurationResolver.middleware]
@@ -46,11 +40,6 @@ services:
         class: Composer\ClassMapGenerator\ClassMapGenerator
         arguments:
             extensions: ['php']
-    configCache:
-        autowired: false
-        class: PHPStan\Cache\Cache
-        arguments:
-            storage: @simpleStubFileCacheStorage
     -
         class: Cambis\Silverstan\TypeResolver\TypeResolver\ExtensionOwnerMetaPropertyTypeResolver
         tags: [silverstan.typeResolver.propertyTypeResolver]
