@@ -10,7 +10,6 @@ use Override;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -34,7 +33,6 @@ final readonly class DataObjectDbObjectReturnTypeExtension implements DynamicMet
 
     public function __construct(
         private ConfigurationResolver $configurationResolver,
-        private ReflectionProvider $reflectionProvider,
         private TypeResolver $typeResolver,
     ) {
     }

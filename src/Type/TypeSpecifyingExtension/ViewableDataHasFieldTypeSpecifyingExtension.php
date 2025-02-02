@@ -66,7 +66,6 @@ final class ViewableDataHasFieldTypeSpecifyingExtension implements MethodTypeSpe
             $propertyFetch,
             new NullType(),
             TypeSpecifierContext::createTruthy(),
-            true,
             $scope
         );
     }

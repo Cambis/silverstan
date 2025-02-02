@@ -67,7 +67,6 @@ final class DataObjectExistsTypeSpecifyingExtension implements MethodTypeSpecify
             $node->var,
             $this->typeFactory->createObjectTypeFromUnsafeObjectType($objectType),
             TypeSpecifierContext::createTruthy(),
-            true,
             $scope
         );
     }
