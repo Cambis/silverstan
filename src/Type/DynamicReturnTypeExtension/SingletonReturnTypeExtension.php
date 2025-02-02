@@ -17,7 +17,7 @@ use PHPStan\Type\Type;
 use function in_array;
 
 /**
- * @see \Cambis\Silverstan\Tests\Type\InjectorGetReturnTypeExtensionTest
+ * @see \Cambis\Silverstan\Tests\Type\DynamicReturnTypeExtension\InjectorGetReturnTypeExtensionTest
  */
 final readonly class SingletonReturnTypeExtension implements DynamicFunctionReturnTypeExtension
 {
