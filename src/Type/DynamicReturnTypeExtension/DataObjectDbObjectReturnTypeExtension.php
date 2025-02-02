@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Type\DynamicReturnTypeExtension;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
+use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
@@ -16,12 +17,11 @@ use PHPStan\Type\Type;
 use function array_key_exists;
 use function in_array;
 use function is_array;
-use function strtok;
 
 /**
  * This extension resolves the return type of `SilverStripe\ORM\DataObject::dbObject()`.
  *
- * @see \Cambis\Silverstan\Tests\Type\DynamicMethodReturnTypeExtension\DataObjectDbObjectReturnTypeExtensionTest
+ * @see \Cambis\Silverstan\Tests\Type\DynamicReturnTypeExtension\DataObjectDbObjectReturnTypeExtensionTest
  */
 final readonly class DataObjectDbObjectReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
@@ -34,7 +34,8 @@ final readonly class DataObjectDbObjectReturnTypeExtension implements DynamicMet
 
     public function __construct(
         private ConfigurationResolver $configurationResolver,
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private TypeResolver $typeResolver,
     ) {
     }
 
@@ -53,6 +54,11 @@ final readonly class DataObjectDbObjectReturnTypeExtension implements DynamicMet
     #[Override]
     public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): ?Type
     {
+        // Safety check
+        if ($methodCall->getArgs() === []) {
+            return null;
+        }
+
         // Type to represent the $fieldName argument
         $fieldNameType = $scope->getType($methodCall->getArgs()[0]->value);
 
@@ -90,20 +96,12 @@ final readonly class DataObjectDbObjectReturnTypeExtension implements DynamicMet
         }
 
         $fieldClassName = $db[$fieldName];
+        $fieldType = $this->typeResolver->resolveDBFieldType($fieldClassName);
 
-        // Remove trailing brackets e.g. Varchar(255) -> Varchar
-        $fieldClassName = strtok($fieldClassName, '(');
-
-        if ($fieldClassName === false) {
+        if ((new ObjectType('SilverStripe\ORM\FieldType\DBField'))->isSuperTypeOf($fieldType)->no()) {
             return null;
         }
 
-        $fieldClassName = $this->configurationResolver->resolveClassName($fieldClassName);
-
-        if (!$this->reflectionProvider->hasClass($fieldClassName)) {
-            return null;
-        }
-
-        return new ObjectType($fieldClassName);
+        return $fieldType;
     }
 }
