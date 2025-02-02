@@ -19,7 +19,7 @@ use PHPStan\Type\TypeCombinator;
 use function in_array;
 
 /**
- * @see \Cambis\Silverstan\Tests\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtensionTest
+ * @see \Cambis\Silverstan\Tests\Type\TypeSpecifyingExtension\ExtensibleHasExtensionTypeSpecifyingExtensionTest
  */
 final class ExtensibleHasExtensionTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {

@@ -13,7 +13,7 @@ use PHPStan\Reflection\PropertyReflection;
 /**
  * This extension resolves `SilverStripe\View\ViewableData` and `SilverStripe\Model\ModelData` magic properties.
  *
- * @see \Cambis\Silverstan\Tests\Extension\Reflection\ViewableDataClassReflectionExtensionTest
+ * @see \Cambis\Silverstan\Tests\Reflection\ClassReflectionExtension\ViewableDataClassReflectionExtensionTest
  */
 final readonly class ViewableDataClassReflectionExtension implements PropertiesClassReflectionExtension
 {

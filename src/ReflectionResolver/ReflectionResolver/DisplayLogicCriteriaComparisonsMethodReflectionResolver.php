@@ -20,7 +20,7 @@ use function is_array;
 /**
  * Resolves magic comparison methods from `UncleCheese\DisplayLogic\Criteria`.
  *
- * @see \Cambis\Silverstan\Tests\Extension\Reflection\ExtensibleClassReflectionExtensionTest
+ * @see \Cambis\Silverstan\Tests\Reflection\ClassReflectionExtension\ExtensibleClassReflectionExtensionTest
  */
 final readonly class DisplayLogicCriteriaComparisonsMethodReflectionResolver implements MethodReflectionResolverInterface
 {

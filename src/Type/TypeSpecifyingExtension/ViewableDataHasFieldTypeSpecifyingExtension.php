@@ -18,7 +18,7 @@ use PHPStan\Type\NullType;
 use function in_array;
 
 /**
- * @see \Cambis\Silverstan\Tests\Extension\Type\ViewableDataHasFieldTypeSpecifyingExtensionTest
+ * @see \Cambis\Silverstan\Tests\Type\TypeSpecifyingExtension\ViewableDataHasFieldTypeSpecifyingExtensionTest
  */
 final class ViewableDataHasFieldTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {

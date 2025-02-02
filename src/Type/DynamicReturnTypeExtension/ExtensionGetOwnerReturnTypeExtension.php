@@ -18,7 +18,7 @@ use function in_array;
 /**
  * This extension resolves the return type of `SilverStripe\Core\Extension::getOwner()` if the class is missing the `@extends` annotation.
  *
- * @see \Cambis\Silverstan\Tests\Extension\Type\ExtensionGetOwnerReturnTypeExtensionTest
+ * @see \Cambis\Silverstan\Tests\Type\DynamicReturnTypeExtension\ExtensionGetOwnerReturnTypeExtensionTest
  */
 final readonly class ExtensionGetOwnerReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
