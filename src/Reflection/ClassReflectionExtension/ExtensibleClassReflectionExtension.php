@@ -17,7 +17,7 @@ use function array_key_exists;
 /**
  * This extension resolves `SilverStripe\Core\Extensible` magic methods and properties.
  *
- * @see \Cambis\Silverstan\Tests\Extension\Reflection\ExtensibleClassReflectionExtensionTest
+ * @see \Cambis\Silverstan\Tests\Reflection\ClassReflectionExtension\ExtensibleClassReflectionExtensionTest
  */
 final class ExtensibleClassReflectionExtension implements MethodsClassReflectionExtension, PropertiesClassReflectionExtension
 {

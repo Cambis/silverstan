@@ -17,7 +17,7 @@ use function is_array;
 /**
  * Resolves magic sets methods from `Heyday\ResponsiveImages\ResponsiveImageExtension`.
  *
- * @see \Cambis\Silverstan\Tests\Extension\Reflection\ExtensibleClassReflectionExtensionTest
+ * @see \Cambis\Silverstan\Tests\Reflection\ClassReflectionExtension\ExtensibleClassReflectionExtensionTest
  */
 final readonly class ResponsiveImageSetsMethodReflectionResolver implements MethodReflectionResolverInterface
 {

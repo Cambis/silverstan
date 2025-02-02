@@ -21,7 +21,7 @@ use function strtok;
 /**
  * This extension resolves the return type of `SilverStripe\ORM\DataObject::dbObject()`.
  *
- * @see \Cambis\Silverstan\Tests\Extension\Type\DataObjectDbObjectReturnTypeExtensionTest
+ * @see \Cambis\Silverstan\Tests\Type\DynamicMethodReturnTypeExtension\DataObjectDbObjectReturnTypeExtensionTest
  */
 final readonly class DataObjectDbObjectReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
