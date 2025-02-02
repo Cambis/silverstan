@@ -83,7 +83,6 @@ final class ExtensibleHasMethodTypeSpecifyingExtension implements MethodTypeSpec
                 new HasMethodType($methodNameType->getConstantStrings()[0]->getValue()),
             ),
             TypeSpecifierContext::createTruthy(),
-            true,
             $scope
         );
     }

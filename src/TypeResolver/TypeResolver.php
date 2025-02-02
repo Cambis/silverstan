@@ -136,8 +136,6 @@ final readonly class TypeResolver
 
     /**
      * Resolve the type of a field from `SilverStripe\ORM\DataObject::$db`.
-     *
-     * @param class-string $fieldType
      */
     public function resolveDBFieldType(string $fieldType): Type
     {
