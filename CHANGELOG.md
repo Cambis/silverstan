@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 1.0.3
+
+### Patch Changes
+
+- 79776b4: Prevent double inclusion of vendormodule directories
+
 ## 1.0.2
 
 ### Patch Changes
