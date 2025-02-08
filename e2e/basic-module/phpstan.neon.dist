@@ -1,7 +1,0 @@
-includes:
-    - vendor/cambis/silverstan/extension.neon
-    - vendor/cambis/silverstan/bleedingEdge.neon
-parameters:
-    level: 9
-    paths:
-        - src
