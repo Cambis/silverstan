@@ -14,6 +14,7 @@ lint-staged.config.js export-ignore
 
 # Tests
 phpunit.xml.dist export-ignore
+e2e export-ignore
 tests export-ignore
 
 # Coding standards

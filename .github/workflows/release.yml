@@ -49,6 +49,7 @@ jobs:
             phpstan-baseline.neon \
             rector.php \
             build \
+            e2e \
             patches \
             package.json \
             .node-version \
