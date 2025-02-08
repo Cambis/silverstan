@@ -13,6 +13,7 @@ compose.yml
 # Silverstripe
 public/
 app/
+!e2e/*/app
 
 # Dependencies
 node_modules/

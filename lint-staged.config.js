@@ -4,7 +4,7 @@ module.exports = {
     'php vendor/bin/parallel-lint --colors --blame',
     'php vendor/bin/ecs check --fix --ansi',
   ],
-  'composer.json': [
+  '!(e2e/*/composer.json)composer.json': [
     'composer normalize --ansi'
   ],
 };
