@@ -3,7 +3,7 @@ name: End to end 🥚 ➡️ 🐔
 on:
   push:
     branches:
-      - bugfix/file-finder-handling
+      - dev-main
 
 env:
   # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
