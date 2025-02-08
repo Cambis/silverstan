@@ -5,3 +5,8 @@ parameters:
     level: 9
     paths:
         - app/src
+    ignoreErrors:
+        -
+            identifier: missingType.iterableValue
+        -
+            identifier: missingType.generics

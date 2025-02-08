@@ -179,6 +179,11 @@ final class FileFinder
                 $installPath = realpath($installPath);
             }
 
+            // Check again, prevent double ups
+            if ($installPath === $this->getAppRootDirectory()) {
+                continue;
+            }
+
             $vendorModuleRootDirs[] = $installPath;
         }
 
