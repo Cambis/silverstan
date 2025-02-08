@@ -74,19 +74,6 @@ final class FileFinder
     }
 
     /**
-     * Get a list of directories that are discoverable by the manifest.
-     *
-     * @return list<string>
-     */
-    public function getIncludedDirectories(): array
-    {
-        return [
-            ...$this->getVendorModuleDirectories(),
-            ...$this->getAppDirectories(),
-        ];
-    }
-
-    /**
      * Get the root directory of the Silverstripe application.
      */
     public function getAppRootDirectory(): string
