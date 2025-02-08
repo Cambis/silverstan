@@ -16,6 +16,10 @@ use function sprintf;
 final class FileFinder
 {
     /**
+     * @readonly
+     */
+    private bool $includeTestOnly;
+    /**
      * @var ?list<string>
      */
     private ?array $excludedDirectories = null;
@@ -35,9 +39,9 @@ final class FileFinder
      */
     private ?array $vendorModuleRootDirectories = null;
 
-    public function __construct(
-        private readonly bool $includeTestOnly
-    ) {
+    public function __construct(bool $includeTestOnly)
+    {
+        $this->includeTestOnly = $includeTestOnly;
     }
 
     public function getPhpFiles(): Finder

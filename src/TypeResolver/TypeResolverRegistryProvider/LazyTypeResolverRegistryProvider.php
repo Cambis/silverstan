@@ -10,20 +10,22 @@ use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryProviderInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Cambis\Silverstan\TypeResolver\TypeResolverRegistry\TypeResolverRegistry;
-use Override;
 use PHPStan\DependencyInjection\Container;
 use function array_reverse;
 
 final class LazyTypeResolverRegistryProvider implements TypeResolverRegistryProviderInterface
 {
+    /**
+     * @readonly
+     */
+    private Container $container;
     private ?TypeResolverRegistryInterface $registry = null;
 
-    public function __construct(
-        private readonly Container $container
-    ) {
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
     }
 
-    #[Override]
     public function getRegistry(): TypeResolverRegistryInterface
     {
         if (!$this->registry instanceof TypeResolverRegistryInterface) {
@@ -35,7 +37,6 @@ final class LazyTypeResolverRegistryProvider implements TypeResolverRegistryProv
                 array_reverse($this->container->getServicesByTag(MethodTypeResolverInterface::SERVICE_NAME))
             );
         }
-
         return $this->registry;
     }
 }
