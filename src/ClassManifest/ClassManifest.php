@@ -14,6 +14,7 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
+use Throwable;
 use function array_key_exists;
 use function str_starts_with;
 use function strcmp;
@@ -186,7 +187,12 @@ final class ClassManifest
     {
         // Strip out all unecessary content from the file
         $contents = $this->fileCleaner->cleanFile($path);
-        $stmts = $this->parser->parse($contents) ?? [];
+
+        try {
+            $stmts = $this->parser->parse($contents) ?? [];
+        } catch (Throwable) {
+            return [];
+        }
 
         if ($stmts === []) {
             return [];

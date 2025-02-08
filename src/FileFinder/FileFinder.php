@@ -42,12 +42,21 @@ final class FileFinder
 
     public function getPhpFiles(): Finder
     {
-        return Finder::create()
-            ->in($this->getIncludedDirectories())
+        $app = Finder::create()
+            ->in($this->getAppDirectories())
+            ->files()
+            ->name('*.php')
+            ->notName(['index.php', 'cli-script.php'])
+            ->notPath([...$this->getExcludedDirectories(), 'vendor']);
+
+        $vendor = Finder::create()
+            ->in($this->getVendorModuleDirectories())
             ->files()
             ->name('*.php')
             ->notName(['index.php', 'cli-script.php'])
             ->notPath($this->getExcludedDirectories());
+
+        return $app->append($vendor);
     }
 
     public function getYamlConfigFiles(): Finder
@@ -171,6 +180,11 @@ final class FileFinder
             $installPath = InstalledVersions::getInstallPath($packageName);
 
             if ($installPath === null) {
+                continue;
+            }
+
+            // Prevent double ups
+            if ($installPath === $this->getAppRootDirectory()) {
                 continue;
             }
 
