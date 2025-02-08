@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 1.0.4
+
+### Patch Changes
+
+- Check realpath and unaltered path, update e2e tests.
+
 ## 1.0.3
 
 ### Patch Changes
