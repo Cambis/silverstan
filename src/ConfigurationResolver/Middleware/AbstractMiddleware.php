@@ -18,6 +18,32 @@ abstract class AbstractMiddleware implements Middleware
     }
 
     /**
+     * @internal
+     *
+     * @deprecated for backwards compatitability only.
+     *
+     * @return string
+     * @phpstan-ignore public.method.unused
+     */
+    public function serialize()
+    {
+        return '';
+    }
+
+    /**
+     * @internal
+     *
+     * @deprecated for backwards compatitability only.
+     *
+     * @param mixed[] $data
+     * @phpstan-return void
+     * @phpstan-ignore public.method.unused
+     */
+    public function unserialize($data)
+    {
+    }
+
+    /**
      * Check if this middlware is enabled
      *
      * @param true|int-mask-of<ConfigurationResolver::EXCLUDE_*> $excludeMiddleware
