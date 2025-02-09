@@ -1,5 +1,12 @@
 # @cambis/silverstan
 
+## 1.0.5
+
+### Patch Changes
+
+- 66fbc88: - Add proper support for silverstripe/config:^1.4
+  - Update e2e configuration to test multiple versions
+
 ## 1.0.4
 
 ### Patch Changes
