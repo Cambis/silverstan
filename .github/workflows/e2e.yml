@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/phpstan-2.0-upgrade
   pull_request:
     branches:
       - main
