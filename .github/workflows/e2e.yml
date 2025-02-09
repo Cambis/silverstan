@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/silverstripe-config-1-x-support
 
 env:
   # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
@@ -18,8 +19,16 @@ jobs:
         include:
           - directory: e2e/basic-app
             php-version: 8.1
+            framework-version: 5.3
+            cms-version: 5.3
+          - directory: e2e/basic-app
+            php-version: 7.4
+            framework-version: 4.13
+            cms-version: 4.13
           - directory: e2e/basic-module
             php-version: 8.1
+            framework-version: 5.3
+            cms-version: 5.3
     steps:
       # Build source code
       - uses: actions/checkout@v4
@@ -39,12 +48,22 @@ jobs:
 
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php_version }}
+          php-version: ${{ matrix.php-version }}
 
       # Reinstall to clear out any unwanted dependencies
-      - uses: ramsey/composer-install@v2
-        with:
-          dependency-versions: highest
+      - run: rm -rf vendor composer.lock
+
+      # - uses: ramsey/composer-install@v2
+      #   with:
+      #     dependency-versions: highest
+
+      - if: ${{ matrix.framework-version }} && ${{ matrix.cms-version }}
+        run: composer require php:^${{ matrix.php-version }} silverstripe/framework:^${{ matrix.framework-version }} silverstripe/cms:^${{ matrix.cms-version }}
+        working-directory: ${{ matrix.directory }}
+
+      - if: ${{ matrix.framework-version }} && ${{ !matrix.cms-version }}
+        run: composer require php:^${{ matrix.php-version }} silverstripe/framework:^${{ matrix.framework-version }}
+        working-directory: ${{ matrix.directory }}
 
       # Set up e2e directory
       - uses: ramsey/composer-install@v2
