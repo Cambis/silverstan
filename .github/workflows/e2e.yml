@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - main
-      - feature/silverstripe-config-1-x-support
+  pull_request:
+    branches:
+      - main
 
 env:
   # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
@@ -41,7 +43,6 @@ jobs:
             php-version: 8.1
             framework-version: 5.3
             cms-version: 5.3
-
     steps:
       # Build source code
       - uses: actions/checkout@v4
@@ -51,7 +52,7 @@ jobs:
           php-version: 8.3
           coverage: none
 
-      - uses: ramsey/composer-install@v2
+      - uses: ramsey/composer-install@v3
 
       # Downgrade to PHP 7.4
       - run: vendor/bin/rector process config rules src --config build/rector-downgrade-php-74.php --ansi --no-diffs
@@ -66,7 +67,7 @@ jobs:
       # Clear out any unwanted dependencies
       - run: rm -rf vendor composer.lock
 
-      # Install appropriate dependencies
+      # Setup e2e directory
       - if: ${{ matrix.framework-version }} && ${{ matrix.cms-version }}
         run: composer require php:^${{ matrix.php-version }} silverstripe/framework:~${{ matrix.framework-version }} silverstripe/cms:~${{ matrix.cms-version }}
         working-directory: ${{ matrix.directory }}
@@ -75,11 +76,6 @@ jobs:
         run: composer require php:^${{ matrix.php-version }} silverstripe/framework:~${{ matrix.framework-version }}
         working-directory: ${{ matrix.directory }}
 
-      # Set up e2e directory
-      - uses: ramsey/composer-install@v2
-        with:
-          working-directory: ${{ matrix.directory }}
-      
       # Run phpstan on the e2e directory
       - run: vendor/bin/phpstan analyse --configuration=phpstan.neon.dist
         working-directory: ${{ matrix.directory }}
