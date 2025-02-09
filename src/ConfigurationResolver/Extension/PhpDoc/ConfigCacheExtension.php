@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\ConfigurationResolver\Extension\PhpDoc;
 
 use Cambis\Silverstan\FileFinder\FileFinder;
-use Override;
 use PHPStan\Cache\Cache;
 use PHPStan\PhpDoc\StubFilesExtension;
 use function sprintf;
@@ -15,23 +14,30 @@ use function sprintf;
  *
  * @todo this can likely be replaced once the following issue is resolved: https://github.com/phpstan/phpstan-symfony/issues/255.
  */
-final readonly class ConfigCacheExtension implements StubFilesExtension
+final class ConfigCacheExtension implements StubFilesExtension
 {
+    /**
+     * @readonly
+     */
+    private Cache $cache;
     /**
      * @var string
      */
     private const CACHE_VERSION = 'v1-config-version';
 
+    /**
+     * @readonly
+     */
     private string $cacheKey;
 
     public function __construct(
-        private Cache $cache,
+        Cache $cache,
         FileFinder $fileFinder
     ) {
+        $this->cache = $cache;
         $this->cacheKey = $fileFinder->getYamlConfigCacheKey();
     }
 
-    #[Override]
     public function getFiles(): array
     {
         /**
@@ -39,7 +45,6 @@ final readonly class ConfigCacheExtension implements StubFilesExtension
          * @phpstan-ignore phpstanApi.method
          */
         $path = $this->cache->load($this->cacheKey, self::CACHE_VERSION);
-
         if ($path === null) {
             /** @phpstan-ignore phpstanApi.method */
             $this->cache->save(
@@ -54,7 +59,6 @@ final readonly class ConfigCacheExtension implements StubFilesExtension
              */
             $path = $this->cache->load($this->cacheKey, self::CACHE_VERSION);
         }
-
         return [$path];
     }
 }

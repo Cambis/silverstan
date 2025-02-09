@@ -29,16 +29,40 @@ use function is_numeric;
 /**
  * @api
  */
-final readonly class TypeResolver
+final class TypeResolver
 {
-    public function __construct(
-        private ConfigurationResolver $configurationResolver,
-        private Normaliser $normaliser,
-        private ReflectionProvider $reflectionProvider,
-        private ReflectionResolver $reflectionResolver,
-        private TypeFactory $typeFactory,
-        private TypeResolverRegistryProviderInterface $typeResolverRegistryProvider
-    ) {
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    /**
+     * @readonly
+     */
+    private Normaliser $normaliser;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
+    /**
+     * @readonly
+     */
+    private TypeResolverRegistryProviderInterface $typeResolverRegistryProvider;
+    public function __construct(ConfigurationResolver $configurationResolver, Normaliser $normaliser, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, TypeFactory $typeFactory, TypeResolverRegistryProviderInterface $typeResolverRegistryProvider)
+    {
+        $this->configurationResolver = $configurationResolver;
+        $this->normaliser = $normaliser;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->reflectionResolver = $reflectionResolver;
+        $this->typeFactory = $typeFactory;
+        $this->typeResolverRegistryProvider = $typeResolverRegistryProvider;
     }
 
     /**
@@ -57,7 +81,7 @@ final readonly class TypeResolver
                 continue;
             }
 
-            $types = [...$types, ...$typeResolver->resolve($classReflection)];
+            $types = array_merge($types, $typeResolver->resolve($classReflection));
         }
 
         return $types;
@@ -117,7 +141,7 @@ final readonly class TypeResolver
                 continue;
             }
 
-            $types = [...$types, ...$typeResolver->resolve($classReflection)];
+            $types = array_merge($types, $typeResolver->resolve($classReflection));
         }
 
         return $types;
@@ -157,7 +181,7 @@ final readonly class TypeResolver
      *
      * @param string[]|string $fieldType
      */
-    public function resolveRelationFieldType(array|string $fieldType): Type
+    public function resolveRelationFieldType($fieldType): Type
     {
         if (is_array($fieldType)) {
             return $this->resolveArrayRelationFieldType($fieldType);
@@ -169,7 +193,7 @@ final readonly class TypeResolver
     /**
      * @param array<mixed>|bool|int|string $fieldType
      */
-    public function resolveDependencyFieldType(array|bool|int|string $fieldType): Type
+    public function resolveDependencyFieldType($fieldType): Type
     {
         if (is_array($fieldType)) {
             return new ArrayType(new IntegerType(), new MixedType());
