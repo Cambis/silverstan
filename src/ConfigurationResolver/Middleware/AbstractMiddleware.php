@@ -20,6 +20,30 @@ abstract class AbstractMiddleware implements Middleware
     /**
      * @internal
      *
+     * For backwards compatitability only.
+     *
+     * @return mixed[]
+     */
+    public function __serialize(): array
+    {
+        return [];
+    }
+
+    /**
+     * @internal
+     *
+     * For backwards compatitability only.
+     *
+     * @param mixed[] $data
+     */
+    public function __unserialize(array $data): void
+    {
+        // Noop
+    }
+
+    /**
+     * @internal
+     *
      * @deprecated for backwards compatitability only.
      *
      * @return string
@@ -41,6 +65,7 @@ abstract class AbstractMiddleware implements Middleware
      */
     public function unserialize($data)
     {
+        // Noop
     }
 
     /**
