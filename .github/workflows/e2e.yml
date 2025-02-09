@@ -18,17 +18,30 @@ jobs:
       matrix:
         include:
           - directory: e2e/basic-app
+            php-version: 7.4
+            framework-version: 4.13
+            cms-version: 4.13
+          - directory: e2e/basic-app
+            php-version: 8.1
+            framework-version: 5.1
+            cms-version: 5.1
+          - directory: e2e/basic-app
             php-version: 8.1
             framework-version: 5.3
             cms-version: 5.3
-          - directory: e2e/basic-app
+          - directory: e2e/basic-module
             php-version: 7.4
             framework-version: 4.13
             cms-version: 4.13
           - directory: e2e/basic-module
             php-version: 8.1
+            framework-version: 5.1
+            cms-version: 5.1
+          - directory: e2e/basic-module
+            php-version: 8.1
             framework-version: 5.3
             cms-version: 5.3
+
     steps:
       # Build source code
       - uses: actions/checkout@v4
@@ -50,19 +63,16 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
 
-      # Reinstall to clear out any unwanted dependencies
+      # Clear out any unwanted dependencies
       - run: rm -rf vendor composer.lock
 
-      # - uses: ramsey/composer-install@v2
-      #   with:
-      #     dependency-versions: highest
-
+      # Install appropriate dependencies
       - if: ${{ matrix.framework-version }} && ${{ matrix.cms-version }}
-        run: composer require php:^${{ matrix.php-version }} silverstripe/framework:^${{ matrix.framework-version }} silverstripe/cms:^${{ matrix.cms-version }}
+        run: composer require php:^${{ matrix.php-version }} silverstripe/framework:~${{ matrix.framework-version }} silverstripe/cms:~${{ matrix.cms-version }}
         working-directory: ${{ matrix.directory }}
 
       - if: ${{ matrix.framework-version }} && ${{ !matrix.cms-version }}
-        run: composer require php:^${{ matrix.php-version }} silverstripe/framework:^${{ matrix.framework-version }}
+        run: composer require php:^${{ matrix.php-version }} silverstripe/framework:~${{ matrix.framework-version }}
         working-directory: ${{ matrix.directory }}
 
       # Set up e2e directory
