@@ -68,11 +68,11 @@ jobs:
       - run: rm -rf vendor composer.lock
 
       # Setup e2e directory
-      - if: ${{ matrix.framework-version }} && ${{ matrix.cms-version }}
+      - if: ${{ matrix.framework-version && matrix.cms-version }}
         run: composer require php:^${{ matrix.php-version }} silverstripe/framework:~${{ matrix.framework-version }} silverstripe/cms:~${{ matrix.cms-version }}
         working-directory: ${{ matrix.directory }}
 
-      - if: ${{ matrix.framework-version }} && ${{ !matrix.cms-version }}
+      - if: ${{ matrix.framework-version && !matrix.cms-version }}
         run: composer require php:^${{ matrix.php-version }} silverstripe/framework:~${{ matrix.framework-version }}
         working-directory: ${{ matrix.directory }}
 

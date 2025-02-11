@@ -1,6 +1,7 @@
 {
   "name": "cambis/silverstan-basic-module",
   "type": "silverstripe-vendormodule",
+  "description": "",
   "require": {
     "php": "^8.1",
     "silverstripe/cms": "^5.3",
@@ -12,8 +13,7 @@
   "repositories": [
     {
       "type": "path",
-      "url": "../../",
-      "version": "dev-main"
+      "url": "../../"
     }
   ],
   "autoload": {
