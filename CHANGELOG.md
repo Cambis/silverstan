@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 1.0.6
+
+### Patch Changes
+
+- c567bae: Update stubs for ClassInfo, Extensible and Versioned
+
 ## 1.0.5
 
 ### Patch Changes
