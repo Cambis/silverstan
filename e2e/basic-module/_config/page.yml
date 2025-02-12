@@ -1,3 +1,0 @@
-Page:
-  extensions:
-    isFeatured: App\Extension\Page\IsFeaturedExtension
