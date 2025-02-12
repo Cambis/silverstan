@@ -1,0 +1,88 @@
+<?php
+
+namespace SilverStripe\Core;
+
+class ClassInfo
+{
+    /**
+     * Wrapper for classes getter.
+     *
+     * @return array<lowercase-string, class-string> List of all class names
+     */
+    public static function allClasses()
+    {
+    }
+
+    /**
+     * Returns the manifest of all classes which are present in the database.
+     *
+     * @param string $class Class name to check enum values for ClassName field
+     * @param boolean $includeUnbacked Flag indicating whether or not to include
+     * types that don't exist as implemented classes. By default these are excluded.
+     * @return array<lowercase-string, class-string> List of subclasses
+     */
+    public static function getValidSubClasses($class = 'SilverStripe\CMS\Model\SiteTree', $includeUnbacked = false)
+    {
+    }
+
+    /**
+     * Returns an array of the current class and all its ancestors and children
+     * which require a DB table.
+     *
+     * @param string|object $nameOrObject Class or object instance
+     * @return array<lowercase-string, class-string>
+     */
+    public static function dataClassesFor($nameOrObject)
+    {
+    }
+
+    /**
+     * Returns a list of classes that inherit from the given class.
+     * The resulting array includes the base class passed
+     * through the $class parameter as the first array value.
+     * Note that keys are lowercase, while the values are correct case.
+     *
+     * Example usage:
+     * <code>
+     * ClassInfo::subclassesFor('BaseClass');
+     *  array(
+     *  'baseclass' => 'BaseClass',
+     *  'childclass' => 'ChildClass',
+     *  'grandchildclass' => 'GrandChildClass'
+     * )
+     * </code>
+     *
+     * @param string|object $nameOrObject The classname or object
+     * @param bool $includeBaseClass Whether to include the base class or not. Defaults to true.
+     * @return array<lowercase-string, class-string> List of class names with lowercase keys and correct-case values
+     * @throws \ReflectionException
+     */
+    public static function subclassesFor($nameOrObject, $includeBaseClass = true)
+    {
+    }
+
+    /**
+     * Convert a class name in any case and return it as it was defined in PHP
+     *
+     * eg: ClassInfo::class_name('dataobJEct'); //returns 'DataObject'
+     *
+     * @param string|object $nameOrObject The classname or object you want to normalise
+     * @throws \ReflectionException
+     * @return class-string The normalised class name
+     */
+    public static function class_name($nameOrObject)
+    {
+    }
+
+    /**
+     * Returns the passed class name along with all its parent class names in an
+     * array, sorted with the root class first.
+     *
+     * @param string|object $nameOrObject Class or object instance
+     * @param bool $tablesOnly Only return classes that have a table in the db.
+     * @return array<lowercase-string, class-string> List of class names with lowercase keys and correct-case values
+     */
+    public static function ancestry($nameOrObject, $tablesOnly = false)
+    {
+    }
+}

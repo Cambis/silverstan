@@ -1,0 +1,20 @@
+<?php
+
+namespace SilverStripe\Versioned;
+
+class Versioned
+{
+    /**
+     * Invoke a callback which may modify reading mode, but ensures this mode is restored
+     * after completion, without modifying global state.
+     *
+     * The desired reading mode should be set by the callback directly
+     *
+     * @template T
+     * @param callable(): T $callback
+     * @return T Result of $callback
+     */
+    public static function withVersionedMode($callback)
+    {
+    }
+}

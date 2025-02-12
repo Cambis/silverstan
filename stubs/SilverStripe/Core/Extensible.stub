@@ -1,0 +1,39 @@
+<?php
+
+namespace SilverStripe\Core;
+
+trait Extensible
+{
+    /**
+     * Calls a method if available on both this object and all applied {@link Extensions}, and then attempts to merge
+     * all results into an array
+     *
+     * @template T
+     * @param string $method the method name to call
+     * @param T ...$arguments List of arguments
+     * @return list<mixed> List of results with nulls filtered out
+     */
+    public function invokeWithExtensions($method, &...$arguments)
+    {
+    }
+
+    /**
+     * Run the given function on all of this object's extensions. Note that this method originally returned void, so if
+     * you wanted to return results, you're hosed
+     *
+     * Currently returns an array, with an index resulting every time the function is called. Only adds returns if
+     * they're not NULL, to avoid bogus results from methods just defined on the parent extension. This is important for
+     * permission-checks through extend, as they use min() to determine if any of the returns is FALSE. As min() doesn't
+     * do type checking, an included NULL return would fail the permission checks.
+     *
+     * The extension methods are defined during {@link __construct()} in {@link defineMethods()}.
+     *
+     * @template T
+     * @param string $method the name of the method to call on each extension
+     * @param T ...$arguments
+     * @return list<mixed>
+     */
+    public function extend($method, &...$arguments)
+    {
+    }
+}
