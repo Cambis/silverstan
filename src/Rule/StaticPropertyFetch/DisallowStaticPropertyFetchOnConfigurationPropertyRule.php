@@ -120,7 +120,7 @@ CODE_SAMPLE
         return [
             RuleErrorBuilder::message(
                 sprintf(
-                    "Unsafe access to configuration property %s::$%s through %s::. Use %s::config->get('%s') instead.",
+                    "Unsafe access to configuration property %s::$%s through %s::. Use %s::config()->get('%s') instead.",
                     $classReflection->getName(),
                     $node->name->name,
                     $varName,
