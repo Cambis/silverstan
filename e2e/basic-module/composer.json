@@ -16,11 +16,6 @@
       "url": "../../"
     }
   ],
-  "autoload": {
-    "psr-4": {
-      "App\\": "src"
-    }
-  },
   "config": {
     "allow-plugins": {
       "composer/installers": true,

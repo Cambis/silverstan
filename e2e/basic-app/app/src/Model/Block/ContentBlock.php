@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Block;
+namespace App\Model\Block;
 
-use App\Block;
+use App\Model\Block;
 
 final class ContentBlock extends Block
 {
