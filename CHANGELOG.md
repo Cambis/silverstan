@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 1.0.7
+
+### Patch Changes
+
+- c4dc024: Set reflection property to accessible in PrivateStaticMiddleware
+
 ## 1.0.6
 
 ### Patch Changes
