@@ -6,11 +6,19 @@ namespace Cambis\Silverstan\TypeResolver\ValueObject;
 
 use PHPStan\Type\Type;
 
-final readonly class ResolvedTypes
+final class ResolvedTypes
 {
-    public function __construct(
-        public Type $readableType,
-        public Type $writableType
-    ) {
+    /**
+     * @readonly
+     */
+    public Type $readableType;
+    /**
+     * @readonly
+     */
+    public Type $writableType;
+    public function __construct(Type $readableType, Type $writableType)
+    {
+        $this->readableType = $readableType;
+        $this->writableType = $writableType;
     }
 }

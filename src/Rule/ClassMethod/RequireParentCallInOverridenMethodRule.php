@@ -29,6 +29,10 @@ use function sprintf;
 final class RequireParentCallInOverridenMethodRule implements SilverstanRuleInterface
 {
     /**
+     * @readonly
+     */
+    private NodeFinder $nodeFinder;
+    /**
      * @var ClassParentMethodCall[]
      */
     private array $classParentMethodCalls;
@@ -37,9 +41,10 @@ final class RequireParentCallInOverridenMethodRule implements SilverstanRuleInte
      * @param array<array{class: class-string, method: string, isFirst?: bool}> $classes
      */
     public function __construct(
-        private readonly NodeFinder $nodeFinder,
+        NodeFinder $nodeFinder,
         array $classes
     ) {
+        $this->nodeFinder = $nodeFinder;
         foreach ($classes as $classParentCall) {
             $this->classParentMethodCalls[] = new ClassParentMethodCall(
                 $classParentCall['class'],
@@ -49,7 +54,6 @@ final class RequireParentCallInOverridenMethodRule implements SilverstanRuleInte
         }
     }
 
-    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -203,7 +207,6 @@ CODE_SAMPLE
         );
     }
 
-    #[Override]
     public function getNodeType(): string
     {
         return ClassMethod::class;
@@ -212,26 +215,20 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         $classReflection = $scope->getClassReflection();
-
         if (!$classReflection instanceof ClassReflection) {
             return [];
         }
-
         $classParentMethodCall = $this->getClassParentMethodCall($node, $classReflection);
-
         if (!$classParentMethodCall instanceof ClassParentMethodCall) {
             return [];
         }
-
         // Get all nodes that aren't an expression
         $nodes = $this->nodeFinder->find((array) $node->stmts, static function (Node $node): bool {
             return !$node instanceof Expression;
         });
-
         // If there are no calls, return an error
         if ($nodes === []) {
             return [
@@ -247,7 +244,6 @@ CODE_SAMPLE
                     ->build(),
             ];
         }
-
         // Check if we have the required call
         if (!$this->hasClassParentMethodCall($nodes, $classParentMethodCall)) {
             return [
@@ -263,14 +259,11 @@ CODE_SAMPLE
                     ->build(),
             ];
         }
-
         // Extra condition if the parent call should come first
         if (!$classParentMethodCall->isFirstCall) {
             return [];
         }
-
         $firstCall = $nodes[0];
-
         if (
             !$firstCall instanceof StaticCall ||
             ($firstCall->name instanceof Identifier && $firstCall->name->toString() !== $classParentMethodCall->methodName)
@@ -288,7 +281,6 @@ CODE_SAMPLE
                     ->build(),
             ];
         }
-
         return [];
     }
 
