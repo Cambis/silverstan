@@ -1,10 +1,10 @@
 <?php
 
-use SilverStripe\CMS\Controllers\ContentController;
+namespace {
 
-class PageController extends ContentController
-{
-    private static array $has_many = [
-        'Blocks' => 'HTMLText',
-    ];
+    use SilverStripe\CMS\Controllers\ContentController;
+
+    class PageController extends ContentController
+    {
+    }
 }

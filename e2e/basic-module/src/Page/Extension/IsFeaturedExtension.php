@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Extension\Page;
+namespace App\Page\Extension;
 
 use SilverStripe\Core\Extension;
 use SilverStripe\Forms\CheckboxField;
