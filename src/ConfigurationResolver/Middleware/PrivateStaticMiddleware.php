@@ -68,6 +68,7 @@ final class PrivateStaticMiddleware extends AbstractMiddleware
 
             // Accessing the value may throw an exception if the value does not exist
             try {
+                $nativePropertyReflection->setAccessible(true);
                 $classConfig[$nativePropertyReflection->getName()] = $nativePropertyReflection->getValue();
             } catch (Throwable) {
                 continue;
