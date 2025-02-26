@@ -64,7 +64,7 @@ final class DataObjectDeleteTypeSpecifyingExtension implements MethodTypeSpecify
             $this->typeFactory->createUnsafeObjectTypeFromObjectType($objectType),
             TypeSpecifierContext::createTruthy(),
             $scope
-        );
+        )->setAlwaysOverwriteTypes();
     }
 
     #[Override]
