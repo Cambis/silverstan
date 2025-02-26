@@ -44,6 +44,9 @@ jobs:
             php-version: 8.1
             framework-version: 5.3
             cms-version: 5.3
+          - directory: e2e/model-delete-narrowed-type-false-positive
+            php-version: 8.1
+            framework-version: 5.3
     steps:
       # Build source code
       - uses: actions/checkout@v4

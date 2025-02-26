@@ -42,4 +42,27 @@ class DataObject
     public static function get_by_id($classOrID, $idOrCache = null, $cache = true)
     {
     }
+
+    /**
+     * Delete this data object.
+     * $this->onBeforeDelete() gets called.
+     * Note that in Versioned objects, both Stage and Live will be deleted.
+     * @uses DataExtension::augmentSQL()
+     *
+     * @return void
+     */
+    public function delete()
+    {
+    }
+
+     /**
+     * Delete the record with the given ID.
+     *
+     * @param string $className The class name of the record to be deleted
+     * @param int $id ID of record to be deleted
+     * @return void
+     */
+    public static function delete_by_id($className, $id)
+    {
+    }
 }
