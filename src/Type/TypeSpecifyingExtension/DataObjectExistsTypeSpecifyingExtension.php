@@ -68,7 +68,7 @@ final class DataObjectExistsTypeSpecifyingExtension implements MethodTypeSpecify
             $this->typeFactory->createObjectTypeFromUnsafeObjectType($objectType),
             TypeSpecifierContext::createTruthy(),
             $scope
-        );
+        )->setAlwaysOverwriteTypes();
     }
 
     #[Override]

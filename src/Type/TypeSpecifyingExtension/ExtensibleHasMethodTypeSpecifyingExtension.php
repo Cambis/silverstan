@@ -84,7 +84,7 @@ final class ExtensibleHasMethodTypeSpecifyingExtension implements MethodTypeSpec
             ),
             TypeSpecifierContext::createTruthy(),
             $scope
-        );
+        )->setAlwaysOverwriteTypes();
     }
 
     #[Override]

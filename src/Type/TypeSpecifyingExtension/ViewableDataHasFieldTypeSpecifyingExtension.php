@@ -67,7 +67,7 @@ final class ViewableDataHasFieldTypeSpecifyingExtension implements MethodTypeSpe
             new NullType(),
             TypeSpecifierContext::createTruthy(),
             $scope
-        );
+        )->setAlwaysOverwriteTypes();
     }
 
     #[Override]
