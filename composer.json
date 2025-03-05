@@ -79,10 +79,13 @@
         "docs": "vendor/bin/rule-doc-generator generate src/Rule --output-file docs/rules_overview.md --ansi",
         "lint": [
             "vendor/bin/parallel-lint src tests --colors --blame",
+            "vendor/bin/rector process --dry-run --ansi",
             "vendor/bin/ecs check --ansi",
             "vendor/bin/phpstan analyse --ansi --memory-limit=-1"
         ],
-        "lint:fix": "vendor/bin/ecs check --fix",
-        "rector": "vendor/bin/rector process --dry-run --ansi"
+        "lint:fix": [
+            "vendor/bin/rector process --ansi",
+            "vendor/bin/ecs check --fix"
+        ]
     }
 }
