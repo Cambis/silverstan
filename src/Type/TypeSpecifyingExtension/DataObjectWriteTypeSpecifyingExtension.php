@@ -65,7 +65,7 @@ final class DataObjectWriteTypeSpecifyingExtension implements MethodTypeSpecifyi
             $this->typeFactory->createObjectTypeFromUnsafeObjectType($objectType),
             TypeSpecifierContext::createTruthy(),
             $scope
-        );
+        )->setAlwaysOverwriteTypes();
     }
 
     #[Override]
