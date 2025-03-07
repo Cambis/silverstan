@@ -2,11 +2,9 @@ includes:
     - vendor/cambis/silverstan/extension.neon
     - vendor/cambis/silverstan/bleedingEdge.neon
 parameters:
-    level: 9
+    level: max
     paths:
         - app/src
     ignoreErrors:
-        -
-            identifier: missingType.iterableValue
         -
             identifier: missingType.generics
