@@ -15,6 +15,11 @@ services:
         class: Cambis\Silverstan\Analyser\ResultCache\ResultCacheMetaExtension\ConfigCacheMetaExtension
         tags: [phpstan.resultCacheMetaExtension]
     -
+        class: Cambis\Silverstan\Analyser\IgnoreErrorExtension\ConfigurationPropertyTypeIgnoreExtension
+        tags: [phpstan.ignoreErrorExtension]
+        arguments:
+            enabled: %silverstan.ignoreConfigurationPropertyTypeIterableValue%
+    -
         class: Cambis\Silverstan\Autoloader\Autoloader
     configCollectionFactory:
         class: Cambis\Silverstan\ConfigurationResolver\ConfigCollectionFactory\LazyConfigCollectionFactory

@@ -1,6 +1,7 @@
 parameters:
     silverstan:
         includeTestOnly: false
+        ignoreConfigurationPropertyTypeIterableValue: true
         requireParentCallInOverridenMethod:
             enabled: true
             classes:
@@ -37,6 +38,7 @@ parameters:
 parametersSchema:
     silverstan: structure([
         includeTestOnly: bool()
+        ignoreConfigurationPropertyTypeIterableValue: bool()
         requireParentCallInOverridenMethod: structure([
             enabled: bool()
             classes: arrayOf(

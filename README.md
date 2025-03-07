@@ -458,6 +458,17 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 <br>
 
+## Ignoring the 'missingType.iterableValue' error on configuration properties 🙈
+
+The `missingType.iterableValue` error on configuration properties is ignored by default. This is because adding iterable information isn't useful unless the property is modifered or accessed inside the current scope.
+
+You can disable this behaviour in your configuration file.
+```yml
+parameters:
+    silverstan:
+        ignoreConfigurationPropertyTypeIterableValue: false
+```
+
 ## SilverStripe\Dev\TestOnly 👨‍🔬
 
 Complex analysis of `SilverStripe\Dev\TestOnly` classes is disabled by default. This is because these classes often contain dependencies that aren't provided by Silverstripe.
