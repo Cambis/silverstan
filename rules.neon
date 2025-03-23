@@ -19,10 +19,8 @@ parameters:
         requireConfigurationPropertyOverride:
             enabled: true
             classes:
-                -
-                    class: SilverStripe\ORM\DataObject
-                    properties:
-                        - table_name
+                SilverStripe\ORM\DataObject:
+                    - table_name
         disallowMethodCallOnUnsafeDataObject:
             enabled: true
             allowedMethodCalls: []
@@ -54,11 +52,14 @@ parametersSchema:
         ])
         requireConfigurationPropertyOverride: structure([
             enabled: bool()
-            classes: arrayOf(
-                structure([
-                    class: string(),
-                    properties: arrayOf(string())
-                ])
+            classes: anyOf(
+                arrayOf(listOf(string()), string()),
+                listOf(
+                    structure([
+                        class: string(),
+                        properties: listOf(string())
+                    ])
+                )
             )
         ])
         disallowMethodCallOnUnsafeDataObject: structure([

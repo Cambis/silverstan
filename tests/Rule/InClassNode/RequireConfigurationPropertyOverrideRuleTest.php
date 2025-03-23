@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Rule\InClassNode;
 
+use Cambis\Silverstan\Normaliser\Normaliser;
 use Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule;
 use Override;
 use PHPStan\Rules\Rule;
@@ -26,13 +27,21 @@ final class RequireConfigurationPropertyOverrideRuleTest extends RuleTestCase
     }
 
     #[Override]
+    public static function getAdditionalConfigFiles(): array
+    {
+        return [
+            __DIR__ . '/../../tests.neon',
+        ];
+    }
+
+    #[Override]
     protected function getRule(): Rule
     {
-        return new RequireConfigurationPropertyOverrideRule([
+        return new RequireConfigurationPropertyOverrideRule(
+            self::getContainer()->getByType(Normaliser::class),
             [
-                'class' => DataObject::class,
-                'properties' => ['table_name'],
+                DataObject::class => ['table_name'],
             ],
-        ]);
+        );
     }
 }
