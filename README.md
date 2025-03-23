@@ -368,10 +368,8 @@ parameters:
         requireConfigurationPropertyOverride:
             enabled: true
             classes:
-                -
-                    class: SilverStripe\ORM\DataObject
-                    properties:
-                        - table_name
+                SilverStripe\ORM\DataObject:
+                    - table_name
 ```
 
 ↓
