@@ -138,7 +138,7 @@ final class RequireConfigurationPropertyOverrideRule implements Rule
     private function getClassRequiredProperty(ClassReflection $classReflection): ?ClassRequiredProperty
     {
         foreach ($this->classRequiredProperties as $requiredProperty) {
-            if (!$classReflection->isSubclassOf($requiredProperty->className)) {
+            if (!$classReflection->is($requiredProperty->className)) {
                 continue;
             }
 

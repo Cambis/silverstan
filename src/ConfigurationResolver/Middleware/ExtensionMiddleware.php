@@ -66,6 +66,11 @@ final class ExtensionMiddleware extends AbstractMiddleware implements Configurat
      */
     private function getExtraConfig(string $class, int $excludeMiddleware): iterable
     {
+        // Safety check
+        if (!$this->reflectionProvider->hasClass('SilverStripe\Core\Extension')) {
+            return;
+        }
+
         /** @var int-mask-of<ConfigurationResolver::EXCLUDE_*> $mask */
         $mask = ConfigurationResolver::EXCLUDE_INHERITED | $excludeMiddleware | $this->disableFlag;
 
@@ -98,7 +103,7 @@ final class ExtensionMiddleware extends AbstractMiddleware implements Configurat
 
             // Check class hierarchy from root up
             foreach ($extensionClass->getAncestors() as $extensionClassParent) {
-                if (!$extensionClassParent->isSubclassOf('SilverStripe\Core\Extension')) {
+                if (!$extensionClassParent->isSubclassOfClass($this->reflectionProvider->getClass('SilverStripe\Core\Extension'))) {
                     continue;
                 }
 
