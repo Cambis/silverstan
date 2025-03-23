@@ -144,7 +144,7 @@ final class RequireParentCallInOverridenMethodRule implements Rule
     private function getClassParentMethodCall(ClassMethod $classMethod, ClassReflection $classReflection): ?ClassParentMethodCall
     {
         foreach ($this->classParentMethodCalls as $requiredParentCall) {
-            if (!$classReflection->isSubclassOf($requiredParentCall->className)) {
+            if (!$classReflection->is($requiredParentCall->className)) {
                 continue;
             }
 

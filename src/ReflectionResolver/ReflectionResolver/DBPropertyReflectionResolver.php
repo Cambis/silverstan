@@ -11,12 +11,14 @@ use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Analyser\OutOfClassScope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 
 final readonly class DBPropertyReflectionResolver implements PropertyReflectionResolverInterface
 {
     public function __construct(
         private ClassReflectionAnalyser $classReflectionAnalyser,
+        private ReflectionProvider $reflectionProvider,
         private TypeResolver $typeResolver
     ) {
     }
@@ -30,6 +32,10 @@ final readonly class DBPropertyReflectionResolver implements PropertyReflectionR
     #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
+        if (!$this->reflectionProvider->hasClass('SilverStripe\ORM\FieldType\DBField')) {
+            return [];
+        }
+
         if (!$this->classReflectionAnalyser->isDataObject($classReflection)) {
             return [];
         }
@@ -61,7 +67,7 @@ final readonly class DBPropertyReflectionResolver implements PropertyReflectionR
 
         $fieldClassReflection = $type->getObjectClassReflections()[0];
 
-        if (!$fieldClassReflection->isSubclassOf('SilverStripe\ORM\FieldType\DBField')) {
+        if (!$fieldClassReflection->isSubclassOfClass($this->reflectionProvider->getClass('SilverStripe\ORM\FieldType\DBField'))) {
             return $type;
         }
 
@@ -92,7 +98,7 @@ final readonly class DBPropertyReflectionResolver implements PropertyReflectionR
 
         $fieldClassReflection = $type->getObjectClassReflections()[0];
 
-        if (!$fieldClassReflection->isSubclassOf('SilverStripe\ORM\FieldType\DBField')) {
+        if (!$fieldClassReflection->isSubclassOfClass($this->reflectionProvider->getClass('SilverStripe\ORM\FieldType\DBField'))) {
             return $type;
         }
 

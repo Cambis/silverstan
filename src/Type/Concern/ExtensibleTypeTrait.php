@@ -27,7 +27,11 @@ trait ExtensibleTypeTrait
         }
 
         foreach ($type->getObjectClassReflections() as $classReflection) {
-            if ($this->getObjectClassNames() !== [] && $classReflection->isSubclassOf($this->getObjectClassNames()[0])) {
+            foreach ($this->getObjectClassReflections() as $selfClassReflection) {
+                if (!$classReflection->isSubclassOfClass($selfClassReflection)) {
+                    continue;
+                }
+
                 return new IsSuperTypeOfResult(TrinaryLogic::createYes(), []);
             }
 
@@ -35,7 +39,7 @@ trait ExtensibleTypeTrait
                 return new IsSuperTypeOfResult(TrinaryLogic::createMaybe(), []);
             }
 
-            if ($classReflection->isSubclassOf('SilverStripe\Core\Extension')) {
+            if ($classReflection->is('SilverStripe\Core\Extension')) {
                 return new IsSuperTypeOfResult(TrinaryLogic::createMaybe(), []);
             }
         }

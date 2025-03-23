@@ -10,7 +10,7 @@ final class ClassReflectionAnalyser
 {
     public function isConfigurable(ClassReflection $classReflection): bool
     {
-        if ($classReflection->isSubclassOf('SilverStripe\Core\Extension')) {
+        if ($classReflection->is('SilverStripe\Core\Extension')) {
             return true;
         }
 
@@ -23,11 +23,7 @@ final class ClassReflectionAnalyser
             return true;
         }
 
-        if ($classReflection->isSubclassOf('SilverStripe\ORM\DataObject')) {
-            return true;
-        }
-
-        return $classReflection->isSubclassOf('SilverStripe\Core\Extension');
+        return $classReflection->is('SilverStripe\Core\Extension');
     }
 
     public function isExtensible(ClassReflection $classReflection): bool

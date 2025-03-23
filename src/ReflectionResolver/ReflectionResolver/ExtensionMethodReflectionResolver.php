@@ -36,6 +36,10 @@ final readonly class ExtensionMethodReflectionResolver implements MethodReflecti
             return [];
         }
 
+        if (!$this->reflectionProvider->hasClass('SilverStripe\Core\Extension')) {
+            return [];
+        }
+
         $methodReflections = [];
 
         $extensions = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName());
@@ -60,7 +64,7 @@ final readonly class ExtensionMethodReflectionResolver implements MethodReflecti
 
             $classReflection = $this->reflectionProvider->getClass($extensionClassName);
 
-            if (!$classReflection->isSubclassOf('SilverStripe\Core\Extension')) {
+            if (!$classReflection->isSubclassOfClass($this->reflectionProvider->getClass('SilverStripe\Core\Extension'))) {
                 continue;
             }
 

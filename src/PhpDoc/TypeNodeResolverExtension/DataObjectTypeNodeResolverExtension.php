@@ -34,13 +34,17 @@ final readonly class DataObjectTypeNodeResolverExtension implements TypeNodeReso
 
         $className = $nameScope->resolveStringName($typeNode->name);
 
+        if (!$this->reflectionProvider->hasClass('SilverStripe\ORM\DataObject')) {
+            return null;
+        }
+
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
 
-        if (!$classReflection->isSubclassOf('SilverStripe\ORM\DataObject')) {
+        if (!$classReflection->isSubclassOfClass($this->reflectionProvider->getClass('SilverStripe\ORM\DataObject'))) {
             return null;
         }
 

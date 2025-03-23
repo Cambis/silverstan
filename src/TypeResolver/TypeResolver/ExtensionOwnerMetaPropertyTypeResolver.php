@@ -11,6 +11,7 @@ use Cambis\Silverstan\TypeResolver\Contract\LazyTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface;
 use Override;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
@@ -29,6 +30,7 @@ final readonly class ExtensionOwnerMetaPropertyTypeResolver implements PropertyT
     public function __construct(
         private ConfigurationResolver $configurationResolver,
         private ClassManifest $classManifest,
+        private ReflectionProvider $reflectionProvider,
         private TypeFactory $typeFactory
     ) {
     }
@@ -51,7 +53,11 @@ final readonly class ExtensionOwnerMetaPropertyTypeResolver implements PropertyT
     #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
-        if (!$classReflection->isSubclassOf('SilverStripe\Core\Extension')) {
+        if (!$this->reflectionProvider->hasClass('SilverStripe\Core\Extension')) {
+            return [];
+        }
+
+        if (!$classReflection->isSubclassOfClass($this->reflectionProvider->getClass('SilverStripe\Core\Extension'))) {
             return [];
         }
 

@@ -70,7 +70,7 @@ final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverE
                 return true;
             }
 
-            if ($classReflection->isSubclassOf('SilverStripe\Core\Extension')) {
+            if ($classReflection->is('SilverStripe\Core\Extension')) {
                 return true;
             }
         }
