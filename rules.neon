@@ -64,7 +64,7 @@ parametersSchema:
         ])
         disallowMethodCallOnUnsafeDataObject: structure([
             enabled: bool()
-            allowedMethodCalls: listOf(listOf(string()))
+            allowedMethodCalls: arrayOf(listOf(string()), string())
         ])
         disallowNewInstanceOnInjectable: structure([
             enabled: bool()
