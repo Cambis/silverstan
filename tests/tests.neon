@@ -1,6 +1,0 @@
-includes:
-    - ../extension.neon
-    - ../bleedingEdge.neon
-parameters:
-    silverstan:
-        includeTestOnly: true

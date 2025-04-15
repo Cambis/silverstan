@@ -16,6 +16,14 @@ use function sprintf;
 final class FileFinder
 {
     /**
+     * @readonly
+     */
+    private ?string $appRootDir;
+    /**
+     * @readonly
+     */
+    private bool $includeTestOnly;
+    /**
      * @var ?list<string>
      */
     private ?array $excludedDirectories = null;
@@ -35,10 +43,10 @@ final class FileFinder
      */
     private ?array $vendorModuleRootDirectories = null;
 
-    public function __construct(
-        private readonly ?string $appRootDir,
-        private readonly bool $includeTestOnly
-    ) {
+    public function __construct(?string $appRootDir, bool $includeTestOnly)
+    {
+        $this->appRootDir = $appRootDir;
+        $this->includeTestOnly = $includeTestOnly;
     }
 
     public function getPhpFiles(): Finder
