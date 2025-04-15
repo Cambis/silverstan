@@ -55,24 +55,47 @@ services:
     -
         class: Cambis\Silverstan\Extension\Type\DataObjectWriteTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+    # silverstripe/framework: <= 6.x
     -
         class: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
         arguments:
             className: 'SilverStripe\View\ViewableData'
+    # silverstripe/framework: >= 6.x
+    -
+        class: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'SilverStripe\Model\ModelData'
+    # silverstripe/framework: <= 6.x
     -
         class: Cambis\Silverstan\Extension\Type\ExtensibleHasMethodTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
         arguments:
             className: 'SilverStripe\View\ViewableData'
+    # silverstripe/framework: >= 6.x
+    -
+        class: Cambis\Silverstan\Extension\Type\ExtensibleHasMethodTypeSpecifyingExtension
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+        arguments:
+            className: 'SilverStripe\Model\ModelData'
     -
         class: Cambis\Silverstan\Extension\Type\InjectorGetReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
     -
         class: Cambis\Silverstan\Extension\Type\SingletonReturnTypeExtension
         tags: [phpstan.broker.dynamicFunctionReturnTypeExtension]
+    # silverstripe/framework <= 6.x
     -
         class: Cambis\Silverstan\Extension\Type\ViewableDataHasFieldTypeSpecifyingExtension
+        arguments:
+          className: 'SilverStripe\View\ViewableData'
+        tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
+    # silverstripe/framework >= 6.x
+    -
+        class: Cambis\Silverstan\Extension\Type\ViewableDataHasFieldTypeSpecifyingExtension
+        arguments:
+          className: 'SilverStripe\Model\ModelData'
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
     -
         class: Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor

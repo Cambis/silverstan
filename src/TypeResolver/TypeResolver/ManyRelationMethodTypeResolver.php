@@ -12,6 +12,7 @@ use Cambis\Silverstan\TypeResolver\Contract\TypeResolverAwareInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
 use function array_key_exists;
 use function is_array;
@@ -25,6 +26,7 @@ final class ManyRelationMethodTypeResolver implements MethodTypeResolverInterfac
         private readonly string $configurationPropertyName,
         private readonly ConfigurationResolver $configurationResolver,
         private readonly string $listName,
+        private readonly ReflectionProvider $reflectionProvider,
         private readonly TypeFactory $typeFactory,
         /**
          * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
@@ -49,6 +51,10 @@ final class ManyRelationMethodTypeResolver implements MethodTypeResolverInterfac
     public function resolve(ClassReflection $classReflection): array
     {
         if (!$this->classReflectionAnalyser->isDataObject($classReflection)) {
+            return [];
+        }
+
+        if (!$this->reflectionProvider->hasClass($this->listName)) {
             return [];
         }
 

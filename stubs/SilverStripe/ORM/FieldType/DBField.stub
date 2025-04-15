@@ -2,9 +2,6 @@
 
 namespace SilverStripe\ORM\FieldType;
 
-use SilverStripe\ORM\FieldType\DBIndexable;
-use SilverStripe\View\ViewableData;
-
 abstract class DBField
 {
     /**

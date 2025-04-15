@@ -31,10 +31,18 @@ final class ViewableDataHasFieldTypeSpecifyingExtension implements MethodTypeSpe
 
     private TypeSpecifier $typeSpecifier;
 
+    public function __construct(
+        /**
+         * @var class-string
+         */
+        private readonly string $className
+    ) {
+    }
+
     #[Override]
     public function getClass(): string
     {
-        return 'SilverStripe\View\ViewableData';
+        return $this->className;
     }
 
     #[Override]
