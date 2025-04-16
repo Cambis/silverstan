@@ -9,12 +9,16 @@ use PHPStan\ShouldNotHappenException;
 use SilverStripe\Core\DatabaselessKernel;
 use function class_exists;
 
+/**
+ * @phpstan-ignore classConstant.deprecatedClass
+ */
 if (!class_exists(DatabaselessKernel::class)) {
     throw new ShouldNotHappenException('Could not find `silverstripe/framework`, did you forget to install?');
 }
 
 /**
  * @deprecated since 1.0.0
+ * @phpstan-ignore-next-line classConstant.deprecatedClass
  */
 final class SilverstanKernel extends DatabaselessKernel
 {
