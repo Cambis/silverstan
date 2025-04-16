@@ -50,6 +50,15 @@ Silverstripe 5.2 introduces [generic typehints](https://docs.silverstripe.org/en
 
 To make the best use of this module, make sure that your classes are correctly annotated using a combination of generics, and property/method annotations.
 
+## Bleeding edge 🔪
+
+New and experimental features are available via the bleeding edge config. You can opt in by including the relevant config file.
+
+```neon
+includes:
+    - vendor/cambis/silverstan/bleedingEdge.neon
+```
+
 ## Rules 🚨
 Silverstan provides a set of customisable rules that can help make your application safer.
 
