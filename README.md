@@ -14,6 +14,7 @@ Here are some of the nice features this extension provides:
 - Correct return types for `SilverStripe\Core\Extension::$owner` and `SilverStripe\Core\Extension::getOwner()`.
 - Correct return types for `SilverStripe\Core\Injector\Injector::get()` and `SilverStripe\Core\Injector\Injector::create()`.
 - Correct return type for `SilverStripe\ORM\DataObject::dbObject()`.
+- Type specification for `SilverStripe\Model\ModelData::hasField()` method.
 - Type specification for `SilverStripe\View\ViewableData::hasField()` method.
 - Various correct return types for commonly used Silverstripe modules.
 - [Customisable rules to help make your application safer](docs/rules_overview.md).
@@ -49,6 +50,15 @@ Silverstripe 5.2 introduces [generic typehints](https://docs.silverstripe.org/en
 
 To make the best use of this module, make sure that your classes are correctly annotated using a combination of generics, and property/method annotations.
 
+## Bleeding edge 🔪
+
+New and experimental features are available via the bleeding edge config. You can opt in by including the relevant config file.
+
+```neon
+includes:
+    - vendor/cambis/silverstan/bleedingEdge.neon
+```
+
 ## Rules 🚨
 Silverstan provides a set of customisable rules that can help make your application safer.
 
@@ -81,7 +91,7 @@ You can use [Silverstripe Rector](https://github.com/Cambis/silverstripe-rector)
 
 Silverstan provides type specifying extensions for these cases. However, these extensions can only be applied on a per class basis.
 
-The default configuration applies these extensions to `SilverStripe\View\ViewableData` only. If you wish to add them to other `SilverStripe\Core\Extensible` classes that aren't subclasses of the former you can use the following configuration:
+The default configuration applies these extensions to `SilverStripe\View\ViewableData` and `SilverStripe\Model\ModelData` only. If you wish to add them to other `SilverStripe\Core\Extensible` classes that aren't subclasses of the former you can use the following configuration:
 
 ```yml
 services:

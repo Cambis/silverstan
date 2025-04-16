@@ -27,16 +27,24 @@ if (in_array(__DIR__ . '/silverstripe-autoloader.php', $bootstrapFiles)) {
     return;
 }
 
+foreach ($bootstrapFiles as $bootstrapFile) {
+    if (!str_contains($bootstrapFile, 'cambis/silverstan/silverstripe-autoloader.php')) {
+        continue;
+    }
+
+    return;
+}
+
 // Don't continue if there is no Silverstripe installation
 if (!class_exists('SilverStripe\Core\Config\Config')) {
-    throw new ShouldNotHappenException('Could not find `silverstripe/framework`, did you forget to install?');
+    throw new ShouldNotHappenException("\n\nCould not find `silverstripe/framework`, did you forget to install?\n");
 }
 
 /** @var array{includeTestOnly: bool} $silverstanParams */
 $silverstanParams = $container->getParameter('silverstan');
 
 // We don't need access to the database
-DB::set_conn(new NullDatabase());
+DB::set_conn(new NullDatabase(), 'default');
 
 // Ensure that the proper globals are set
 $globalVars = Environment::getVariables();

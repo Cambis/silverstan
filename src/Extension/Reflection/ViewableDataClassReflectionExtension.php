@@ -11,7 +11,7 @@ use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
 
 /**
- * This extension resolves `SilverStripe\View\ViewableData` magic properties.
+ * This extension resolves `SilverStripe\View\ViewableData` and `SilverStripe\Model\ModelData` magic properties.
  *
  * @see \Cambis\Silverstan\Tests\Extension\Reflection\ViewableDataClassReflectionExtensionTest
  */
@@ -30,11 +30,13 @@ final readonly class ViewableDataClassReflectionExtension implements PropertiesC
             return false;
         }
 
+        // silverstripe/framework <= 6.x
         if ($classReflection->is('SilverStripe\View\ViewableData')) {
             return true;
         }
 
-        return $classReflection->isSubclassOf('SilverStripe\View\ViewableData');
+        // silverstripe/framework >= 6.x
+        return $classReflection->is('SilverStripe\Model\ModelData');
     }
 
     #[Override]
