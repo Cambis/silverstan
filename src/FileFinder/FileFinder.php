@@ -36,7 +36,6 @@ final class FileFinder
     private ?array $vendorModuleRootDirectories = null;
 
     public function __construct(
-        private readonly ?string $appRootDir,
         private readonly bool $includeTestOnly
     ) {
     }
@@ -84,17 +83,8 @@ final class FileFinder
      */
     public function getAppRootDirectory(): string
     {
-        // Custom override if needed
-        if ($this->appRootDir !== null) {
-            $path = realpath($this->appRootDir);
-
-            if ($path !== false) {
-                return $path;
-            }
-        }
-
         foreach (InstalledVersions::getAllRawData() as $data) {
-            if (!isset($data['versions']['silverstripe/framework'])) {
+            if (!isset($data['versions']['silverstripe/framework']) && !isset($data['versions']['silverstripe/config'])) {
                 continue;
             }
 

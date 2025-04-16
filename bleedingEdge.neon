@@ -42,7 +42,6 @@ services:
     -
         class: Cambis\Silverstan\FileFinder\FileFinder
         arguments:
-            appRootDir: %silverstan.appRootDir%
             includeTestOnly: %silverstan.includeTestOnly%
     -
         class: Cambis\Silverstan\NodeVisitor\TestOnlyFinderVisitor

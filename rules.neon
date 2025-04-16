@@ -1,6 +1,5 @@
 parameters:
     silverstan:
-        appRootDir: null
         includeTestOnly: false
         requireParentCallInOverridenMethod:
             enabled: true
@@ -37,7 +36,6 @@ parameters:
 
 parametersSchema:
     silverstan: structure([
-        appRootDir: schema(string(), nullable())
         includeTestOnly: bool()
         requireParentCallInOverridenMethod: structure([
             enabled: bool()
