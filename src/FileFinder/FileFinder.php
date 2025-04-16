@@ -49,6 +49,11 @@ final class FileFinder
             ->notName(['index.php', 'cli-script.php'])
             ->notPath([...$this->getExcludedDirectories(), 'vendor']);
 
+        // Skip if there are no found vendor modules
+        if ($this->getVendorModuleDirectories() === []) {
+            return $app;
+        }
+
         $vendor = Finder::create()
             ->in($this->getVendorModuleDirectories())
             ->files()
@@ -79,7 +84,7 @@ final class FileFinder
     public function getAppRootDirectory(): string
     {
         foreach (InstalledVersions::getAllRawData() as $data) {
-            if (!isset($data['versions']['silverstripe/framework'])) {
+            if (!isset($data['versions']['silverstripe/framework']) && !isset($data['versions']['silverstripe/config'])) {
                 continue;
             }
 
@@ -132,11 +137,18 @@ final class FileFinder
             return $this->excludedDirectories;
         }
 
+        $inDirs = [
+            ...$this->getVendorModuleDirectories(),
+            ...$this->getAppDirectories(),
+        ];
+
+        // Skip if no directories
+        if ($inDirs === []) {
+            return [];
+        }
+
         $hits = Finder::create()
-            ->in([
-                ...$this->getVendorModuleDirectories(),
-                ...$this->getAppDirectories(),
-            ])
+            ->in($inDirs)
             ->directories()
             ->name($excludedNames);
 
@@ -201,6 +213,11 @@ final class FileFinder
     {
         if ($this->vendorModuleDirectories !== null) {
             return $this->vendorModuleDirectories;
+        }
+
+        // Skip if no root directories
+        if ($this->getVendorModuleRootDirectories() === []) {
+            return [];
         }
 
         $hits = Finder::create()
