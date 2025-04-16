@@ -19,41 +19,37 @@ use function is_array;
  *
  * @see \Cambis\Silverstan\Tests\Extension\Reflection\ExtensibleClassReflectionExtensionTest
  */
-final readonly class ResponsiveImageSetsMethodReflectionResolver implements MethodReflectionResolverInterface
+final class ResponsiveImageSetsMethodReflectionResolver implements MethodReflectionResolverInterface
 {
-    public function __construct(
-        private ConfigurationResolver $configurationResolver
-    ) {
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    public function __construct(ConfigurationResolver $configurationResolver)
+    {
+        $this->configurationResolver = $configurationResolver;
     }
 
-    #[Override]
     public function getConfigurationPropertyName(): string
     {
         return 'sets';
     }
 
-    #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
         $sets = $this->configurationResolver->get('Heyday\ResponsiveImages\ResponsiveImageExtension', $this->getConfigurationPropertyName());
-
         // No sets likely means this extension is not installed
         if (!is_array($sets) || $sets === []) {
             return [];
         }
-
         if (!$classReflection->is('SilverStripe\Assets\Image') && !$classReflection->is('SilverStripe\Assets\Storage\DBFile')) {
             return [];
         }
-
         $methodReflections = [];
-
         $returnType = new ObjectType('SilverStripe\ORM\FieldType\DBHTMLText');
-
         foreach (array_keys($sets) as $set) {
             $methodReflections[$set] = new ExtensibleMethodReflection($set, $classReflection, $returnType, [], false, false, null, TemplateTypeMap::createEmpty());
         }
-
         return $methodReflections;
     }
 }
