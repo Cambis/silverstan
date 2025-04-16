@@ -2,4 +2,4 @@
 "@cambis/silverstan": patch
 ---
 
-Add optional override for app root directory
+Add fallback directory for `FileFinder::getAppRootDirectory()`
