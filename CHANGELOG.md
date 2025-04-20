@@ -1,5 +1,15 @@
 # @cambis/silverstan
 
+## 1.1.0
+
+### Minor Changes
+
+- f401934: Add preliminary support for Silverstripe 6.0
+
+### Patch Changes
+
+- 8f07cf8: Add fallback directory for `FileFinder::getAppRootDirectory()`
+
 ## 1.0.7
 
 ### Patch Changes
