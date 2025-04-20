@@ -51,7 +51,6 @@ final class RequireConfigurationPropertyOverrideRule implements SilverstanRuleIn
         }
     }
 
-    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -84,7 +83,6 @@ CODE_SAMPLE
         );
     }
 
-    #[Override]
     public function getNodeType(): string
     {
         return InClassNode::class;
@@ -93,27 +91,20 @@ CODE_SAMPLE
     /**
      * @param InClassNode $node
      */
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$node->getOriginalNode() instanceof Class_) {
             return [];
         }
-
         $classReflection = $node->getClassReflection();
-
         if ($classReflection->isAnonymous()) {
             return [];
         }
-
         $classRequiredProperty = $this->getClassRequiredProperty($classReflection);
-
         if (!$classRequiredProperty instanceof ClassRequiredProperty) {
             return [];
         }
-
         $errors = [];
-
         foreach ($classRequiredProperty->properties as $property) {
             if (
                 array_key_exists($classReflection->getName(), self::PROPERTY_ALLOWLIST) &&
@@ -136,7 +127,6 @@ CODE_SAMPLE
                 ->identifier('silverstan.configurationProperty')
                 ->build();
         }
-
         return $errors;
     }
 
@@ -169,6 +159,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return !str_contains((string) $property->getDocComment(), '@internal');
+        return strpos((string) $property->getDocComment(), '@internal') === false;
     }
 }

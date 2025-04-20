@@ -18,32 +18,29 @@ use PHPStan\Type\Type;
  *
  * @see \Cambis\Silverstan\Tests\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRuleTest
  */
-final readonly class DataObjectTypeNodeResolverExtension implements TypeNodeResolverExtension
+final class DataObjectTypeNodeResolverExtension implements TypeNodeResolverExtension
 {
-    public function __construct(
-        private ReflectionProvider $reflectionProvider,
-    ) {
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
     }
-
-    #[Override]
     public function resolve(TypeNode $typeNode, NameScope $nameScope): ?Type
     {
         if (!$typeNode instanceof IdentifierTypeNode) {
             return null;
         }
-
         $className = $nameScope->resolveStringName($typeNode->name);
-
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
-
         $classReflection = $this->reflectionProvider->getClass($className);
-
         if (!$classReflection->isSubclassOf('SilverStripe\ORM\DataObject')) {
             return null;
         }
-
         return new UnsafeObjectType($className, null, $classReflection);
     }
 }
