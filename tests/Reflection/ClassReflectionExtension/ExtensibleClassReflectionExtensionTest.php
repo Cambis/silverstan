@@ -16,7 +16,6 @@ final class ExtensibleClassReflectionExtensionTest extends TypeInferenceTestCase
     {
         yield from self::gatherAssertTypes(__DIR__ . '/Fixture/DBPropertyReflections.php');
         yield from self::gatherAssertTypes(__DIR__ . '/Fixture/DependencyInjectionPropertyReflections.php');
-        yield from self::gatherAssertTypes(__DIR__ . '/Fixture/DisplayLogicMethodReflections.php');
         yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ExtensionMethodReflections.php');
         yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ExtensionPropertyReflections.php');
         yield from self::gatherAssertTypes(__DIR__ . '/Fixture/ResponsiveImagesMethodReflections.php');

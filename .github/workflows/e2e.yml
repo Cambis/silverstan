@@ -43,6 +43,9 @@ jobs:
             php-version: 8.3
             framework-version: 6.0
             cms-version: 6.0
+          - directory: e2e/uncle-cheese-display-logic
+            php-version: 8.3
+            framework-version: 5.4
     steps:
       # Build source code
       - uses: actions/checkout@v4
