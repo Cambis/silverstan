@@ -6,7 +6,7 @@ Call `exists()` first before accessing any magic `SilverStripe\ORM\DataObject` m
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRule`](src/Rule/MethodCall/DisallowMethodCallOnUnsafeDataObjectRule.php)
+- class: [`Cambis\Silverstan\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRule`](../src/Rule/MethodCall/DisallowMethodCallOnUnsafeDataObjectRule.php)
 
 ```yaml
 parameters:
@@ -64,7 +64,7 @@ Disallow instantiating a `SilverStripe\Core\Injectable` class using `new`. Use `
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule`](src/Rule/New_/DisallowNewInstanceOnInjectableRule.php)
+- class: [`Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule`](../src/Rule/New_/DisallowNewInstanceOnInjectableRule.php)
 
 ```yaml
 parameters:
@@ -107,7 +107,7 @@ Disallow overriding types of configuration properties.
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule`](src/Rule/ClassPropertyNode/DisallowOverridingOfConfigurationPropertyTypeRule.php)
+- class: [`Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule`](../src/Rule/ClassPropertyNode/DisallowOverridingOfConfigurationPropertyTypeRule.php)
 
 ```yaml
 parameters:
@@ -156,7 +156,7 @@ Disallow property fetch on `SilverStripe\Core\Config\Config_ForClass`. PHPStan c
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRule`](src/Rule/PropertyFetch/DisallowPropertyFetchOnConfigForClassRule.php)
+- class: [`Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRule`](../src/Rule/PropertyFetch/DisallowPropertyFetchOnConfigForClassRule.php)
 
 ```yaml
 parameters:
@@ -205,7 +205,7 @@ Call `exists()` first before accessing any magic `SilverStripe\ORM\DataObject` p
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRule`](src/Rule/PropertyFetch/DisallowPropertyFetchOnUnsafeDataObjectRule.php)
+- class: [`Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRule`](../src/Rule/PropertyFetch/DisallowPropertyFetchOnUnsafeDataObjectRule.php)
 
 ```yaml
 parameters:
@@ -260,7 +260,7 @@ Disallow static property fetch on configuration properties.
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule`](src/Rule/StaticPropertyFetch/DisallowStaticPropertyFetchOnConfigurationPropertyRule.php)
+- class: [`Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule`](../src/Rule/StaticPropertyFetch/DisallowStaticPropertyFetchOnConfigurationPropertyRule.php)
 
 ```yaml
 parameters:
@@ -309,7 +309,7 @@ Require a class to override a set of configuration properties.
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule`](src/Rule/InClassNode/RequireConfigurationPropertyOverrideRule.php)
+- class: [`Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule`](../src/Rule/InClassNode/RequireConfigurationPropertyOverrideRule.php)
 
 ```yaml
 parameters:
@@ -350,7 +350,7 @@ Require parent call in an overriden method.
 
 :wrench: **configure it!**
 
-- class: [`Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule`](src/Rule/ClassMethod/RequireParentCallInOverridenMethodRule.php)
+- class: [`Cambis\Silverstan\Rule\ClassMethod\RequireParentCallInOverridenMethodRule`](../src/Rule/ClassMethod/RequireParentCallInOverridenMethodRule.php)
 
 ```yaml
 parameters:

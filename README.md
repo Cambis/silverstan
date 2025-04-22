@@ -17,7 +17,7 @@ Here are some of the nice features this extension provides:
 - Type specification for `SilverStripe\Model\ModelData::hasField()` method.
 - Type specification for `SilverStripe\View\ViewableData::hasField()` method.
 - Various correct return types for commonly used Silverstripe modules.
-- [Customisable rules to help make your application safer](#rules-).
+- [Customisable rules to help make your application safer](docs/rules_overview.md).
 
 ## Installation 👷‍♀️
 
