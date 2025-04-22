@@ -154,4 +154,4 @@ parameters:
 ## SilverStripe\Core\Config\Config_ForClass 👩‍🔬
 
 > [!WARNING]
-> Silverstan cannot resolve the type of a property fetch on `SilverStripe\Core\Config\Config_ForClass`, use `SilverStripe\Core\Config\Config_ForClass::get()` instead. [See the rules overview](./docs/rules_overview.md#disallowpropertyfetchonconfigforclassrule).
+> Silverstan cannot resolve the type of a property fetch on `SilverStripe\Core\Config\Config_ForClass`, use `SilverStripe\Core\Config\Config_ForClass::get()` instead. [See the rules overview](docs/rules_overview.md#disallowpropertyfetchonconfigforclassrule).
