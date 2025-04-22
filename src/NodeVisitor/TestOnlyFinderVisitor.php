@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\NodeVisitor;
 
-use Override;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
@@ -20,25 +19,24 @@ final class TestOnlyFinderVisitor extends NodeVisitorAbstract
 {
     public const ATTRIBUTE_KEY = 'isTestOnly';
 
-    #[Override]
-    public function enterNode(Node $node): null
+    /**
+     * @return null
+     */
+    public function enterNode(Node $node)
     {
         if (!$node instanceof ClassLike) {
             return null;
         }
-
         if (($node instanceof Class_ || $node instanceof Enum_) && $this->doNamesContainTestOnly($node->implements)) {
             $node->setAttribute(self::ATTRIBUTE_KEY, true);
 
             return null;
         }
-
         if ($node instanceof Interface_ && $this->doNamesContainTestOnly($node->extends)) {
             $node->setAttribute(self::ATTRIBUTE_KEY, true);
 
             return null;
         }
-
         return null;
     }
 
