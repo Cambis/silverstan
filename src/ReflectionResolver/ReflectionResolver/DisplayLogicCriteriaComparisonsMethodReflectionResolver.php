@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
-use Cambis\Silverstan\Reflection\ExtensibleMethodReflection;
-use Cambis\Silverstan\Reflection\ExtensibleParameterReflection;
+use Cambis\Silverstan\Reflection\MethodReflection\ExtensibleMethodReflection;
+use Cambis\Silverstan\Reflection\ParameterReflection\ExtensibleParameterReflection;
 use Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterface;
 use Override;
 use PHPStan\Reflection\ClassReflection;
@@ -20,7 +20,7 @@ use function is_array;
 /**
  * Resolves magic comparison methods from `UncleCheese\DisplayLogic\Criteria`.
  *
- * @see \Cambis\Silverstan\Tests\Extension\Reflection\ExtensibleClassReflectionExtensionTest
+ * @see \Cambis\Silverstan\Tests\Reflection\ClassReflectionExtension\ExtensibleClassReflectionExtensionTest
  */
 final readonly class DisplayLogicCriteriaComparisonsMethodReflectionResolver implements MethodReflectionResolverInterface
 {

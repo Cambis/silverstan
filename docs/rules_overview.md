@@ -1,4 +1,4 @@
-# 8 Rules Overview
+# 8 rules overview
 
 ## DisallowMethodCallOnUnsafeDataObjectRule
 
@@ -14,7 +14,8 @@ parameters:
         disallowMethodCallOnUnsafeDataObject:
             enabled: true
             allowedMethodCalls:
-                - mySafeMethod
+                My\Object\Class:
+                    - doSomethingSafe
 ```
 
 ↓
@@ -118,8 +119,6 @@ parameters:
 ↓
 
 ```php
-namespace App\Model;
-
 class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $foo = 'foo';
@@ -136,8 +135,6 @@ final class Bar extends Foo
 <br>
 
 ```php
-namespace App\Model;
-
 class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $foo = 'foo';
@@ -320,10 +317,8 @@ parameters:
         requireConfigurationPropertyOverride:
             enabled: true
             classes:
-                -
-                    class: SilverStripe\ORM\DataObject
-                    properties:
-                        - table_name
+                SilverStripe\ORM\DataObject:
+                    - table_name
 ```
 
 ↓
@@ -366,71 +361,14 @@ parameters:
                 -
                     class: SilverStripe\ORM\DataObject
                     method: onBeforeWrite
-                -
-                    class: SilverStripe\ORM\DataObject
-                    method: onAfterWrite
-                -
-                    class: SilverStripe\ORM\DataObject
-                    method: requireDefaultRecords
-                -
-                    class: SilverStripe\Dev\SapphireTest
-                    method: setUp
-                    isFirst: true
-                -
-                    class: SilverStripe\Dev\SapphireTest
-                    method: setUpBeforeClass
-                    isFirst: true
-                -
-                    class: SilverStripe\Dev\SapphireTest
-                    method: tearDown
-                -
-                    class: SilverStripe\Dev\SapphireTest
-                    method: tearDownAfterClass
 ```
 
 ↓
 
 ```php
-namespace App\Model;
-
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     protected function onBeforeWrite(): void
-    {
-        // Custom code...
-    }
-
-    protected function onAfterWrite(): void
-    {
-        // Custom code...
-    }
-
-    public function requireDefaultRecords(): void
-    {
-        // Custom code...
-    }
-}
-
-namespace App\Tests\Model;
-
-final class FooTest extends \SilverStripe\Dev\SapphireTest
-{
-    protected function setUp(): void
-    {
-        // Custom code...
-    }
-
-    protected function setUpBeforeClass(): void
-    {
-        // Custom code...
-    }
-
-    protected function tearDown(): void
-    {
-        // Custom code...
-    }
-
-    protected function tearDownAfterClass(): void
     {
         // Custom code...
     }
@@ -442,8 +380,6 @@ final class FooTest extends \SilverStripe\Dev\SapphireTest
 <br>
 
 ```php
-namespace App\Model;
-
 final class Foo extends \SilverStripe\ORM\DataObject
 {
     protected function onBeforeWrite(): void
@@ -451,53 +387,6 @@ final class Foo extends \SilverStripe\ORM\DataObject
         // Custom code...
 
         parent::onBeforeWrite();
-    }
-
-    protected function onAfterWrite(): void
-    {
-        // Custom code...
-
-        parent::onAfterWrite();
-    }
-
-    public function requireDefaultRecords(): void
-    {
-        // Custom code...
-
-        parent::requireDefaultRecords();
-    }
-}
-
-namespace App\Tests\Model;
-
-final class FooTest extends \SilverStripe\Dev\SapphireTest
-{
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Custom code...
-    }
-
-    protected function setUpBeforeClass(): void
-    {
-        parent::setupBeforeClass();
-
-        // Custom code...
-    }
-
-    protected function tearDown(): void
-    {
-        // Custom code...
-
-        parent::tearDown();
-    }
-
-    protected function tearDownAfterClass(): void
-    {
-        // Custom code...
-
-        parent::tearDownAfterClass();
     }
 }
 ```

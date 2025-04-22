@@ -1,0 +1,27 @@
+{
+  "name": "cambis/silverstan-uncle-cheese-display-logic",
+  "type": "silverstripe-vendormodule",
+  "description": "",
+  "require": {
+    "php": "^8.3",
+    "silverstripe/framework": "^5.4",
+    "unclecheese/display-logic": "^3.0"
+  },
+  "require-dev": {
+    "cambis/silverstan": "dev-main"
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "silverstripe/vendor-plugin": true
+    }
+  }
+}

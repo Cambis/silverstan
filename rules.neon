@@ -1,6 +1,7 @@
 parameters:
     silverstan:
         includeTestOnly: false
+        ignoreConfigurationPropertyTypeIterableValue: true
         requireParentCallInOverridenMethod:
             enabled: true
             classes:
@@ -18,10 +19,8 @@ parameters:
         requireConfigurationPropertyOverride:
             enabled: true
             classes:
-                -
-                    class: SilverStripe\ORM\DataObject
-                    properties:
-                        - table_name
+                SilverStripe\ORM\DataObject:
+                    - table_name
         disallowMethodCallOnUnsafeDataObject:
             enabled: true
             allowedMethodCalls: []
@@ -37,6 +36,7 @@ parameters:
 parametersSchema:
     silverstan: structure([
         includeTestOnly: bool()
+        ignoreConfigurationPropertyTypeIterableValue: bool()
         requireParentCallInOverridenMethod: structure([
             enabled: bool()
             classes: arrayOf(
@@ -52,16 +52,19 @@ parametersSchema:
         ])
         requireConfigurationPropertyOverride: structure([
             enabled: bool()
-            classes: arrayOf(
-                structure([
-                    class: string(),
-                    properties: arrayOf(string())
-                ])
+            classes: anyOf(
+                arrayOf(listOf(string()), string()),
+                listOf(
+                    structure([
+                        class: string(),
+                        properties: listOf(string())
+                    ])
+                )
             )
         ])
         disallowMethodCallOnUnsafeDataObject: structure([
             enabled: bool()
-            allowedMethodCalls: arrayOf(string())
+            allowedMethodCalls: arrayOf(listOf(string()), string())
         ])
         disallowNewInstanceOnInjectable: structure([
             enabled: bool()

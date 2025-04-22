@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\InClassNode;
 
-use Cambis\Silverstan\Contract\SilverstanRuleInterface;
+use Cambis\Silverstan\Normaliser\Normaliser;
 use Cambis\Silverstan\ValueObject\ClassRequiredProperty;
 use Override;
 use PhpParser\Node;
@@ -12,9 +12,9 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use function array_is_list;
 use function array_key_exists;
 use function array_reverse;
 use function in_array;
@@ -22,11 +22,18 @@ use function sprintf;
 use function str_contains;
 
 /**
- * @implements SilverstanRuleInterface<InClassNode>
+ * @phpstan-type ClassConfig array{class: class-string, properties: list<string>}
+ * @implements Rule<InClassNode>
+ *
  * @see \Cambis\Silverstan\Tests\Rule\InClassNode\RequireConfigurationPropertyOverrideRuleTest
  */
-final class RequireConfigurationPropertyOverrideRule implements SilverstanRuleInterface
+final class RequireConfigurationPropertyOverrideRule implements Rule
 {
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.requiredConfigurationProperty';
+
     /**
      * @var string[][]
      */
@@ -41,47 +48,35 @@ final class RequireConfigurationPropertyOverrideRule implements SilverstanRuleIn
     private array $classRequiredProperties;
 
     /**
-     * @param array<array{class: class-string, properties: string[]}> $classes
+     * @param list<ClassConfig>|array<class-string, list<string>> $classes
      */
-    public function __construct(array $classes = [])
-    {
-        // Reverse so custom configuration takes precedence over default configuration
-        foreach (array_reverse($classes) as $klass) {
-            $this->classRequiredProperties[] = new ClassRequiredProperty($klass['class'], $klass['properties']);
-        }
-    }
+    public function __construct(
+        private readonly Normaliser $normaliser,
+        array $classes = []
+    ) {
+        $classes = array_reverse($classes);
+        $classRequiredProperties = [];
 
-    #[Override]
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition(
-            'Require a class to override a set of configuration properties.',
-            [
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-}
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    private static string $table_name = 'Foo';
-}
-CODE_SAMPLE
-                    ,
-                    [
-                        'enabled' => true,
-                        'classes' => [
-                            [
-                                'class' => 'SilverStripe\ORM\DataObject',
-                                'properties' => ['table_name'],
-                            ],
-                        ],
-                    ]
-                )],
-        );
+        if (!array_is_list($classes)) {
+            /** @var array<class-string, list<string>> $classes */
+            foreach ($classes as $className => $properties) {
+                $classRequiredProperties[] = new ClassRequiredProperty(
+                    $this->normaliser->normaliseNamespace($className),
+                    $properties
+                );
+            }
+
+            $this->classRequiredProperties = $classRequiredProperties;
+
+            return;
+        }
+
+        /** @var list<ClassConfig> $classes */
+        foreach ($classes as $classConfig) {
+            $classRequiredProperties[] = new ClassRequiredProperty($classConfig['class'], $classConfig['properties']);
+        }
+
+        $this->classRequiredProperties = $classRequiredProperties;
     }
 
     #[Override]
@@ -133,7 +128,7 @@ CODE_SAMPLE
                     $property
                 )
             )
-                ->identifier('silverstan.configurationProperty')
+                ->identifier(self::IDENTIFIER)
                 ->build();
         }
 
@@ -143,7 +138,7 @@ CODE_SAMPLE
     private function getClassRequiredProperty(ClassReflection $classReflection): ?ClassRequiredProperty
     {
         foreach ($this->classRequiredProperties as $requiredProperty) {
-            if (!$classReflection->isSubclassOf($requiredProperty->className)) {
+            if (!$classReflection->is($requiredProperty->className)) {
                 continue;
             }
 

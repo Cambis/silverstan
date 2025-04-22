@@ -188,6 +188,7 @@ final class FileFinder
             }
 
             if (realpath($installPath) !== false) {
+                /** @var non-empty-string $installPath */
                 $installPath = realpath($installPath);
             }
 

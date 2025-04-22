@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\New_;
 
-use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Override;
 use PhpParser\Node;
@@ -12,53 +11,25 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function sprintf;
 
 /**
- * @implements SilverstanRuleInterface<New_>
+ * @implements Rule<New_>
  * @see \Cambis\Silverstan\Tests\Rule\New_\DisallowNewInstanceOnInjectableRuleTest
  */
-final readonly class DisallowNewInstanceOnInjectableRule implements SilverstanRuleInterface
+final readonly class DisallowNewInstanceOnInjectableRule implements Rule
 {
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.newInjectable';
+
     public function __construct(
         private ClassReflectionAnalyser $classReflectionAnalyser,
         private ReflectionProvider $reflectionProvider
     ) {
-    }
-
-    #[Override]
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition(
-            'Disallow instantiating a `SilverStripe\Core\Injectable` class using `new`. Use create() instead.',
-            [
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
-final class Foo
-{
-    use \SilverStripe\Core\Injectable;
-}
-
-$foo = new Foo();
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
-final class Foo
-{
-    use \SilverStripe\Core\Injectable;
-}
-
-$foo = Foo::create();
-CODE_SAMPLE
-                    ,
-                    [
-                        'enabled' => true,
-                    ]
-                )],
-        );
     }
 
     #[Override]
@@ -95,7 +66,7 @@ CODE_SAMPLE
                     $node->class->toString(),
                 )
             )
-                ->identifier('silverstan.newInjectable')
+                ->identifier(self::IDENTIFIER)
                 ->build(),
         ];
     }

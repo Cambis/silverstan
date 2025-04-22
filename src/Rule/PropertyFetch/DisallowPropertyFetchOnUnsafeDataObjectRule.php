@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\PropertyFetch;
 
-use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor;
-use Cambis\Silverstan\Type\UnsafeObjectType;
+use Cambis\Silverstan\Type\ObjectType\UnsafeObjectType;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -14,63 +13,22 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function property_exists;
 use function sprintf;
 
 /**
- * @implements SilverstanRuleInterface<PropertyFetch>
+ * @implements Rule<PropertyFetch>
  *
  * @see \Cambis\Silverstan\Tests\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRuleTest
  */
-final readonly class DisallowPropertyFetchOnUnsafeDataObjectRule implements SilverstanRuleInterface
+final readonly class DisallowPropertyFetchOnUnsafeDataObjectRule implements Rule
 {
-    #[Override]
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition(
-            'Call `exists()` first before accessing any magic `SilverStripe\ORM\DataObject` properties as the object may not be present in the database. ' .
-            'Property assignment is allowed.',
-            [
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
-/**
- * @method \SilverStripe\ORM\DataObject Bar()
- */
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    public function doSomething(): string
-    {
-        return $this->Bar()->Title;
-    }
-}
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
-/**
- * @method \SilverStripe\ORM\DataObject Bar()
- */
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    public function doSomething(): string
-    {
-        if (!$this->Bar()->exists()) {
-            return '';
-        }
-
-        return $this->Bar()->Title;
-    }
-}
-CODE_SAMPLE
-                    ,
-                    [
-                        'enabled' => true,
-                    ]
-                )],
-        );
-    }
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.unsafeDataObjectAccess';
 
     #[Override]
     public function getNodeType(): string
@@ -132,7 +90,7 @@ CODE_SAMPLE
                 )
             )
                 ->tip('See https://api.silverstripe.org/5/SilverStripe/ORM/DataObject.html#method_exists')
-                ->identifier('silverstan.unsafeDataObjectAccess')
+                ->identifier(self::IDENTIFIER)
                 ->build(),
         ];
     }

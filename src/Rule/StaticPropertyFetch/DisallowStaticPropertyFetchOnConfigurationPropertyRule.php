@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\StaticPropertyFetch;
 
-use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
 use Override;
@@ -14,59 +13,25 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\VarLikeIdentifier;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function sprintf;
 
 /**
- * @implements SilverstanRuleInterface<StaticPropertyFetch>
+ * @implements Rule<StaticPropertyFetch>
  * @see \Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRuleTest
  */
-final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements SilverstanRuleInterface
+final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements Rule
 {
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.unsafeConfigurationPropertyAccess';
+
     public function __construct(
         private ClassReflectionAnalyser $classReflectionAnalyser,
         private PropertyReflectionAnalyser $propertyReflectionAnalyser,
     ) {
-    }
-
-    #[Override]
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition(
-            'Disallow static property fetch on configuration properties.',
-            [
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    private static string $singular_name = 'Foo';
-
-    public function getType(): string
-    {
-        return self::$singular_name;
-    }
-}
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    private static string $singular_name = 'Foo';
-
-    public function getType(): string
-    {
-        return self::config()->get('singular_name');
-    }
-}
-CODE_SAMPLE
-                    ,
-                    [
-                        'enabled' => true,
-                    ]
-                )],
-        );
     }
 
     #[Override]
@@ -128,7 +93,7 @@ CODE_SAMPLE
                     $node->name->name
                 )
             )
-                ->identifier('silverstan.configurationProperty')
+                ->identifier(self::IDENTIFIER)
                 ->tip('See: https://docs.silverstripe.org/en/5/developer_guides/configuration/configuration/#accessing-configuration-properties')
                 ->build(),
         ];

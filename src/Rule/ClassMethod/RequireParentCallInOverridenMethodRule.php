@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\ClassMethod;
 
-use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Cambis\Silverstan\ValueObject\ClassParentMethodCall;
 use Override;
 use PhpParser\Node;
@@ -16,18 +15,22 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function sprintf;
 
 /**
- * @implements SilverstanRuleInterface<ClassMethod>
+ * @implements Rule<ClassMethod>
  *
  * @see \Cambis\Silverstan\Tests\Rule\ClassMethod\RequireParentCallInOverridenMethodRuleTest
  */
-final class RequireParentCallInOverridenMethodRule implements SilverstanRuleInterface
+final class RequireParentCallInOverridenMethodRule implements Rule
 {
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.requiredParentCall';
+
     /**
      * @var ClassParentMethodCall[]
      */
@@ -47,160 +50,6 @@ final class RequireParentCallInOverridenMethodRule implements SilverstanRuleInte
                 $classParentCall['isFirst'] ?? false
             );
         }
-    }
-
-    #[Override]
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition(
-            'Require parent call in an overriden method.',
-            [
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
-namespace App\Model;
-
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    protected function onBeforeWrite(): void
-    {
-        // Custom code...
-    }
-
-    protected function onAfterWrite(): void
-    {
-        // Custom code...
-    }
-
-    public function requireDefaultRecords(): void
-    {
-        // Custom code...
-    }
-}
-
-namespace App\Tests\Model;
-
-final class FooTest extends \SilverStripe\Dev\SapphireTest
-{
-    protected function setUp(): void
-    {
-        // Custom code...
-    }
-
-    protected function setUpBeforeClass(): void
-    {
-        // Custom code...
-    }
-
-    protected function tearDown(): void
-    {
-        // Custom code...
-    }
-
-    protected function tearDownAfterClass(): void
-    {
-        // Custom code...
-    }
-}
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
-namespace App\Model;
-
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    protected function onBeforeWrite(): void
-    {
-        // Custom code...
-
-        parent::onBeforeWrite();
-    }
-
-    protected function onAfterWrite(): void
-    {
-        // Custom code...
-
-        parent::onAfterWrite();
-    }
-
-    public function requireDefaultRecords(): void
-    {
-        // Custom code...
-
-        parent::requireDefaultRecords();
-    }
-}
-
-namespace App\Tests\Model;
-
-final class FooTest extends \SilverStripe\Dev\SapphireTest
-{
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Custom code...
-    }
-
-    protected function setUpBeforeClass(): void
-    {
-        parent::setupBeforeClass();
-
-        // Custom code...
-    }
-
-    protected function tearDown(): void
-    {
-        // Custom code...
-
-        parent::tearDown();
-    }
-
-    protected function tearDownAfterClass(): void
-    {
-        // Custom code...
-
-        parent::tearDownAfterClass();
-    }
-}
-CODE_SAMPLE
-                    ,
-                    [
-                        'enabled' => true,
-                        'classes' => [
-                            [
-                                'class' => 'SilverStripe\ORM\DataObject',
-                                'method' => 'onBeforeWrite',
-                            ],
-                            [
-                                'class' => 'SilverStripe\ORM\DataObject',
-                                'method' => 'onAfterWrite',
-                            ],
-                            [
-                                'class' => 'SilverStripe\ORM\DataObject',
-                                'method' => 'requireDefaultRecords',
-                            ],
-                            [
-                                'class' => 'SilverStripe\Dev\SapphireTest',
-                                'method' => 'setUp',
-                                'isFirst' => true,
-                            ],
-                            [
-                                'class' => 'SilverStripe\Dev\SapphireTest',
-                                'method' => 'setUpBeforeClass',
-                                'isFirst' => true,
-                            ],
-                            [
-                                'class' => 'SilverStripe\Dev\SapphireTest',
-                                'method' => 'tearDown',
-                            ],
-                            [
-                                'class' => 'SilverStripe\Dev\SapphireTest',
-                                'method' => 'tearDownAfterClass',
-                            ],
-                        ],
-                    ]
-                )],
-        );
     }
 
     #[Override]
@@ -243,7 +92,7 @@ CODE_SAMPLE
                         $classParentMethodCall->methodName
                     )
                 )
-                    ->identifier('silverstan.requiredParentCall')
+                    ->identifier(self::IDENTIFIER)
                     ->build(),
             ];
         }
@@ -259,7 +108,7 @@ CODE_SAMPLE
                         $classParentMethodCall->methodName
                     )
                 )
-                    ->identifier('silverstan.requiredParentCall')
+                    ->identifier(self::IDENTIFIER)
                     ->build(),
             ];
         }
@@ -284,7 +133,7 @@ CODE_SAMPLE
                         $classParentMethodCall->methodName
                     )
                 )
-                    ->identifier('silverstan.requiredParentCall')
+                    ->identifier(self::IDENTIFIER)
                     ->build(),
             ];
         }
@@ -295,7 +144,7 @@ CODE_SAMPLE
     private function getClassParentMethodCall(ClassMethod $classMethod, ClassReflection $classReflection): ?ClassParentMethodCall
     {
         foreach ($this->classParentMethodCalls as $requiredParentCall) {
-            if (!$classReflection->isSubclassOf($requiredParentCall->className)) {
+            if (!$classReflection->is($requiredParentCall->className)) {
                 continue;
             }
 

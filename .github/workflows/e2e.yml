@@ -25,10 +25,6 @@ jobs:
             cms-version: 4.13
           - directory: e2e/basic-app
             php-version: 8.1
-            framework-version: 5.1
-            cms-version: 5.1
-          - directory: e2e/basic-app
-            php-version: 8.1
             framework-version: 5.4
             cms-version: 5.4
           - directory: e2e/basic-app
@@ -41,16 +37,15 @@ jobs:
             cms-version: 4.13
           - directory: e2e/basic-module
             php-version: 8.1
-            framework-version: 5.1
-            cms-version: 5.1
-          - directory: e2e/basic-module
-            php-version: 8.1
             framework-version: 5.4
             cms-version: 5.4
           - directory: e2e/basic-module
             php-version: 8.3
             framework-version: 6.0
             cms-version: 6.0
+          - directory: e2e/uncle-cheese-display-logic
+            php-version: 8.3
+            framework-version: 5.4
     steps:
       # Build source code
       - uses: actions/checkout@v4

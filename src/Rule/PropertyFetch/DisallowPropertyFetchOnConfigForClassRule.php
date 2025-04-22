@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\PropertyFetch;
 
-use Cambis\Silverstan\Contract\SilverstanRuleInterface;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,55 +12,20 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function sprintf;
 
 /**
- * @implements SilverstanRuleInterface<PropertyFetch>
+ * @implements Rule<PropertyFetch>
  * @see \Cambis\Silverstan\Tests\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRuleTest
  */
-final readonly class DisallowPropertyFetchOnConfigForClassRule implements SilverstanRuleInterface
+final readonly class DisallowPropertyFetchOnConfigForClassRule implements Rule
 {
-    #[Override]
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition(
-            'Disallow property fetch on `SilverStripe\Core\Config\Config_ForClass`. ' .
-            "PHPStan cannot resolve the type of the property, use `MyClass::config()->get('property_name')` instead.",
-            [
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    private static string $singular_name = 'Foo';
-
-    public function getType(): string
-    {
-        return self::config()->singular_name;
-    }
-}
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
-final class Foo extends \SilverStripe\ORM\DataObject
-{
-    private static string $singular_name = 'Foo';
-
-    public function getType(): string
-    {
-        return self::config()->get('singular_name');
-    }
-}
-CODE_SAMPLE
-                    ,
-                    [
-                        'enabled' => true,
-                    ]
-                )],
-        );
-    }
+    /**
+     * @var string
+     */
+    private const IDENTIFIER = 'silverstan.unresolvableConfigurationPropertyType';
 
     #[Override]
     public function getNodeType(): string
@@ -119,7 +83,7 @@ CODE_SAMPLE
                     $node->name->name,
                 )
             )
-                ->identifier('silverstan.propertyFetch')
+                ->identifier(self::IDENTIFIER)
                 ->build(),
         ];
     }

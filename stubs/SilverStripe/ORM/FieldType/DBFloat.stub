@@ -3,8 +3,7 @@
 namespace SilverStripe\ORM\FieldType;
 
 /**
- * @property-read float $value
- * @property-write float $value
+ * @property float $value
  */
 class DBFloat extends DBField
 {

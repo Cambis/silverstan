@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\TypeFactory;
 
 use Cambis\Silverstan\Type\Concern\ExtensibleTypeTrait;
-use Cambis\Silverstan\Type\UnsafeObjectType;
+use Cambis\Silverstan\Type\ObjectType\UnsafeObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;

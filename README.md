@@ -60,11 +60,13 @@ includes:
 ```
 
 ## Rules 🚨
+
 Silverstan provides a set of customisable rules that can help make your application safer.
 
 Each rule can be enabled/disabled individually using the configuration options, please refer to the [rules overview](docs/rules_overview.md) for the available options.
 
 ## SilverStripe\Dev\TestOnly 👨‍🔬
+
 Complex analysis of `SilverStripe\Dev\TestOnly` classes is disabled by default. This is because these classes often contain dependencies that aren't provided by Silverstripe.
 
 To enable complex analysis of these classes, please check the following option in your configuration file:
@@ -79,6 +81,7 @@ If PHPStan complains about missing classes, be sure to add the corresponding pac
 ## SilverStripe\Core\Extensible 🧑‍🔬
 
 ### Solving magic methods and properties
+
 Silverstan provides support for magic `SilverStripe\Core\Extensible` methods and properties.
 
 Silverstan will attempt to resolve magic methods/properties by searching for existing annotations in the class ancestry first. If no annotation is found it will access the configuration API in order to resolve the magic method/property.
@@ -97,13 +100,13 @@ The default configuration applies these extensions to `SilverStripe\View\Viewabl
 services:
     -
         # Solves `Foo::hasExtension()`
-        class: Cambis\Silverstan\Extension\Type\ExtensibleHasExtensionTypeSpecifyingExtension
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\ExtensibleHasExtensionTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
         arguments:
             className: 'Foo'
     -
         # Solves `Foo::hasMethod()`
-        class: Cambis\Silverstan\Extension\Type\ExtensibleHasMethodTypeSpecifyingExtension
+        class: Cambis\Silverstan\Type\TypeSpecifyingExtension\ExtensibleHasMethodTypeSpecifyingExtension
         tags: [phpstan.typeSpecifier.methodTypeSpecifyingExtension]
         arguments:
             className: 'Foo'
@@ -135,6 +138,17 @@ $foo = Foo::create();
 + if ($foo->hasExtension(FooExtension::class)) {
   // ...
 }
+```
+
+## SilverStripe\Core\Config\Configurable 🧑‍🏭
+
+The `missingType.iterableValue` error on configuration properties is ignored by default. This is because adding iterable information isn't useful unless the property is modified or accessed inside the current scope.
+
+You can disable this behaviour in your configuration file.
+```yml
+parameters:
+    silverstan:
+        ignoreConfigurationPropertyTypeIterableValue: false
 ```
 
 ## SilverStripe\Core\Config\Config_ForClass 👩‍🔬

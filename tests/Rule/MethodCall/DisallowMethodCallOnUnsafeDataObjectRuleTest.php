@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Tests\Rule\MethodCall;
 
+use Cambis\Silverstan\Normaliser\Normaliser;
 use Cambis\Silverstan\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRule;
 use Override;
 use PHPStan\Rules\Rule;
@@ -46,6 +47,11 @@ final class DisallowMethodCallOnUnsafeDataObjectRuleTest extends RuleTestCase
     #[Override]
     protected function getRule(): Rule
     {
-        return new DisallowMethodCallOnUnsafeDataObjectRule(['doSomethingSafe']);
+        return new DisallowMethodCallOnUnsafeDataObjectRule(
+            self::getContainer()->getByType(Normaliser::class),
+            [
+                'Cambis\Silverstan\Tests\Rule\MethodCall\Source\Model\Foo' => ['doSomethingSafe'],
+            ]
+        );
     }
 }

@@ -7,6 +7,7 @@ namespace Cambis\Silverstan\Type\Concern;
 use Override;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Accessory\HasMethodType;
+use PHPStan\Type\IsSuperTypeOfResult;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 
@@ -18,24 +19,28 @@ use PHPStan\Type\TypeWithClassName;
 trait ExtensibleTypeTrait
 {
     #[Override]
-    public function isSuperTypeOf(Type $type): TrinaryLogic
+    public function isSuperTypeOf(Type $type): IsSuperTypeOfResult
     {
         /** @phpstan-ignore-next-line phpstanApi.instanceofType */
         if ($type instanceof HasMethodType) {
-            return TrinaryLogic::createMaybe();
+            return new IsSuperTypeOfResult(TrinaryLogic::createMaybe(), []);
         }
 
         foreach ($type->getObjectClassReflections() as $classReflection) {
-            if ($this->getObjectClassNames() !== [] && $classReflection->isSubclassOf($this->getObjectClassNames()[0])) {
-                return TrinaryLogic::createYes();
+            foreach ($this->getObjectClassReflections() as $selfClassReflection) {
+                if (!$classReflection->isSubclassOfClass($selfClassReflection)) {
+                    continue;
+                }
+
+                return new IsSuperTypeOfResult(TrinaryLogic::createYes(), []);
             }
 
             if ($classReflection->hasTraitUse('SilverStripe\Core\Extensible')) {
-                return TrinaryLogic::createMaybe();
+                return new IsSuperTypeOfResult(TrinaryLogic::createMaybe(), []);
             }
 
-            if ($classReflection->isSubclassOf('SilverStripe\Core\Extension')) {
-                return TrinaryLogic::createMaybe();
+            if ($classReflection->is('SilverStripe\Core\Extension')) {
+                return new IsSuperTypeOfResult(TrinaryLogic::createMaybe(), []);
             }
         }
 
