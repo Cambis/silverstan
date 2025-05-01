@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\PhpDoc\StubFilesExtension;
 
-use Composer\InstalledVersions;
-use OutOfBoundsException;
 use Override;
 use PHPStan\PhpDoc\StubFilesExtension;
 use Symfony\Component\Finder\Finder;
 use function array_values;
-use function class_exists;
-use function str_starts_with;
 
 /**
  * Inspired by https://github.com/larastan/larastan/blob/2.x/src/LarastanStubFilesExtension.php
@@ -30,6 +26,8 @@ final class SilverstripeStubFilesExtension implements StubFilesExtension
         __DIR__ . '/../../../stubs/SilverStripe/includes',
         __DIR__ . '/../../../stubs/SilverStripe/ORM',
         __DIR__ . '/../../../stubs/SilverStripe/Security',
+        __DIR__ . '/../../../stubs/SilverStripe/Versioned',
+        __DIR__ . '/../../../stubs/SilverStripe/VersionedAdmin',
     ];
 
     #[Override]
@@ -38,14 +36,6 @@ final class SilverstripeStubFilesExtension implements StubFilesExtension
         $files = [];
         $stubDirs = [...self::COMMON_STUBS];
 
-        if ($this->isInstalledVersion('silverstripe/versioned', 2)) {
-            $stubDirs[] = __DIR__ . '/../../../stubs/SilverStripe/Versioned';
-        }
-
-        if ($this->isInstalledVersion('silverstripe/versioned-admin', 2)) {
-            $stubDirs[] = __DIR__ . '/../../../stubs/SilverStripe/VersionedAdmin';
-        }
-
         $stubFiles = Finder::create()->files()->name('*.stub')->in($stubDirs);
 
         foreach ($stubFiles as $stubFile) {
@@ -53,20 +43,5 @@ final class SilverstripeStubFilesExtension implements StubFilesExtension
         }
 
         return array_values($files);
-    }
-
-    private function isInstalledVersion(string $package, int $majorVersion): bool
-    {
-        if (!class_exists(InstalledVersions::class)) {
-            return false;
-        }
-
-        try {
-            $installedVersion = InstalledVersions::getVersion($package);
-        } catch (OutOfBoundsException) {
-            return false;
-        }
-
-        return $installedVersion !== null && str_starts_with($installedVersion, $majorVersion . '.');
     }
 }
