@@ -80,6 +80,9 @@ services:
         class: Cambis\Silverstan\Reflection\ClassReflectionExtension\ViewableDataClassReflectionExtension
         tags: [phpstan.broker.propertiesClassReflectionExtension]
     -
+        class: Cambis\Silverstan\Reflection\Deprecation\MethodDeprecationExtension\DataObjectGetCMSValidatorMethodDeprecationExtension
+        tags: [phpstan.methodDeprecationExtension]
+    -
         class: Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser
     -
         class: Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser
