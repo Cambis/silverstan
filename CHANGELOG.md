@@ -1,5 +1,19 @@
 # @cambis/silverstan
 
+## 2.0.0
+
+### Major Changes
+
+- c5f2cfa: PHPStan 2.0 upgrade
+
+### Minor Changes
+
+- e10e659: Report usage of deprecated DataObject::getCMSValidator() method
+
+### Patch Changes
+
+- 04bf121: Update stubs and test cases
+
 ## 1.1.0
 
 ### Minor Changes
