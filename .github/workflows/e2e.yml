@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - 1.x
   pull_request:
     branches:
       - main
+      - 1.x
 
 env:
   # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
