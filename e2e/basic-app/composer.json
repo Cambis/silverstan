@@ -7,7 +7,7 @@
     "silverstripe/framework": "^5"
   },
   "require-dev": {
-    "cambis/silverstan": "dev-main"
+    "cambis/silverstan": "@dev"
   },
   "repositories": [
     {
