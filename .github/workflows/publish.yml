@@ -6,6 +6,7 @@ on:
       - test
     branches: 
       - main
+      - 1.x
     types:
       - completed
 
