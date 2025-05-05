@@ -1,5 +1,12 @@
 # @cambis/silverstan
 
+## 1.1.1
+
+### Patch Changes
+
+- d3de891: Update workflows to run on 1.x
+- 2b82df9: update FileFinder::getAppRootDirectory() priority
+
 ## 1.1.0
 
 ### Minor Changes
