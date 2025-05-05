@@ -83,16 +83,21 @@ final class FileFinder
      */
     public function getAppRootDirectory(): string
     {
-        foreach (InstalledVersions::getAllRawData() as $data) {
-            if (!isset($data['versions']['silverstripe/framework']) && !isset($data['versions']['silverstripe/config'])) {
-                continue;
-            }
+        // Check for silverstripe/framework
+        $path = $this->getPackageInstallPath('silverstripe/framework');
 
-            $path = realpath($data['root']['install_path']);
-
-            return $path !== false ? $path : $data['root']['install_path'];
+        if ($path !== null) {
+            return $path;
         }
 
+        // Fallback to silverstripe/config
+        $path = $this->getPackageInstallPath('silverstripe/config');
+
+        if ($path !== null) {
+            return $path;
+        }
+
+        // Final fallback to root package
         $root = InstalledVersions::getRootPackage();
         $path = realpath($root['install_path']);
 
@@ -274,5 +279,20 @@ final class FileFinder
         $this->appDirectories = $appDirs;
 
         return $this->appDirectories;
+    }
+
+    private function getPackageInstallPath(string $packageName): ?string
+    {
+        foreach (InstalledVersions::getAllRawData() as $data) {
+            if (!isset($data['versions'][$packageName])) {
+                continue;
+            }
+
+            $path = realpath($data['root']['install_path']);
+
+            return $path !== false ? $path : $data['root']['install_path'];
+        }
+
+        return null;
     }
 }
