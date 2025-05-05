@@ -1,5 +1,12 @@
 # @cambis/silverstan
 
+## 2.0.1
+
+### Patch Changes
+
+- bab7e57: Update workflows to run on 1.x
+- 20c95d7: update FileFinder::getAppRootDirectory() priority
+
 ## 2.0.0
 
 ### Major Changes
