@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Type\Concern;
 
-use Override;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Accessory\HasMethodType;
 use PHPStan\Type\IsSuperTypeOfResult;
@@ -18,14 +17,12 @@ use PHPStan\Type\TypeWithClassName;
  */
 trait ExtensibleTypeTrait
 {
-    #[Override]
     public function isSuperTypeOf(Type $type): IsSuperTypeOfResult
     {
         /** @phpstan-ignore-next-line phpstanApi.instanceofType */
         if ($type instanceof HasMethodType) {
             return new IsSuperTypeOfResult(TrinaryLogic::createMaybe(), []);
         }
-
         foreach ($type->getObjectClassReflections() as $classReflection) {
             foreach ($this->getObjectClassReflections() as $selfClassReflection) {
                 if (!$classReflection->isSubclassOfClass($selfClassReflection)) {
@@ -43,7 +40,6 @@ trait ExtensibleTypeTrait
                 return new IsSuperTypeOfResult(TrinaryLogic::createMaybe(), []);
             }
         }
-
         return parent::isSuperTypeOf($type);
     }
 }
