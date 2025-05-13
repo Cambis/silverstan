@@ -1,0 +1,4 @@
+parameters:
+    silverstan:
+        disallowUsageOfDeprecatedConfigurationProperty:
+            enabled: %deprecationRulesInstalled%

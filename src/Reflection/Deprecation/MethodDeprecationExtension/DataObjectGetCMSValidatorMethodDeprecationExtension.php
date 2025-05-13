@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Reflection\Deprecation\MethodDeprecationExtension;
 
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\Reflection\Deprecation\Deprecation;
 use PHPStan\Reflection\Deprecation\MethodDeprecationExtension;
-use ReflectionMethod;
 use function sprintf;
 use function strtolower;
 
 /**
  * This extension reports usage of the deprecated `DataObject::getCMSValidator()` method.
  *
- * @see \Cambis\Silverstan\Tests\Reflection\Deprecation\MethodDeprecationExtension\DataObjectGetCMSValidatorMethodDeprecationExtensionTest;
+ * @see \Cambis\Silverstan\Tests\Reflection\Deprecation\MethodDeprecationExtension\DataObjectGetCMSValidatorMethodDeprecationExtensionTest
  */
 final class DataObjectGetCMSValidatorMethodDeprecationExtension implements MethodDeprecationExtension
 {

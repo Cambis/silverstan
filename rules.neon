@@ -16,6 +16,8 @@ parameters:
                     method: requireDefaultRecords
         disallowOverridingOfConfigurationPropertyType:
             enabled: true
+        disallowUsageOfDeprecatedConfigurationProperty:
+            enabled: false
         requireConfigurationPropertyOverride:
             enabled: true
             classes:
@@ -48,6 +50,9 @@ parametersSchema:
             )
         ])
         disallowOverridingOfConfigurationPropertyType: structure([
+            enabled: bool()
+        ])
+        disallowUsageOfDeprecatedConfigurationProperty: structure([
             enabled: bool()
         ])
         requireConfigurationPropertyOverride: structure([
@@ -85,6 +90,8 @@ conditionalTags:
         phpstan.rules.rule: %silverstan.requireParentCallInOverridenMethod.enabled%
     Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule:
         phpstan.rules.rule: %silverstan.disallowOverridingOfConfigurationPropertyType.enabled%
+    Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUsageOfDeprecatedConfigurationPropertyRule:
+        phpstan.rules.rule: %silverstan.disallowUsageOfDeprecatedConfigurationProperty.enabled%
     Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule:
         phpstan.rules.rule: %silverstan.requireConfigurationPropertyOverride.enabled%
     Cambis\Silverstan\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRule:
@@ -105,6 +112,8 @@ services:
             classes: %silverstan.requireParentCallInOverridenMethod.classes%
     -
         class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule
+    -
+        class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUsageOfDeprecatedConfigurationPropertyRule
     -
         class: Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule
         arguments:
