@@ -7,22 +7,26 @@ namespace Cambis\Silverstan\Tests\Rule\ClassPropertyNode;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
-use Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule;
+use Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUsageOfDeprecatedConfigurationPropertyRule;
 use Override;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
 /**
- * @extends RuleTestCase<DisallowOverridingOfConfigurationPropertyTypeRule>
+ * @extends RuleTestCase<DisallowUsageOfDeprecatedConfigurationPropertyRule>
  */
-final class DisallowOverridingOfConfigurationPropertyTypeRuleTest extends RuleTestCase
+final class DisallowUseOfDeprecatedConfigurationPropertyRuleTest extends RuleTestCase
 {
     public function testRule(): void
     {
         $this->analyse([__DIR__ . '/Fixture/Bar.php'], [
             [
-                'Type string|null of configuration property Cambis\Silverstan\Tests\Rule\ClassPropertyNode\Fixture\Bar::$table_name is not the same as type string of overridden configuration property SilverStripe\ORM\DataObject::$table_name.',
-                11,
+                'Access to deprecated configuration property $deprecated_property of class Cambis\Silverstan\Tests\Rule\ClassPropertyNode\Fixture\Foo.',
+                13,
+            ],
+            [
+                "Access to deprecated configuration property \$deprecated_property_with_message of class Cambis\\Silverstan\\Tests\\Rule\\ClassPropertyNode\\Fixture\\Foo:\nreason.",
+                15,
             ],
         ]);
     }
@@ -38,7 +42,7 @@ final class DisallowOverridingOfConfigurationPropertyTypeRuleTest extends RuleTe
     #[Override]
     protected function getRule(): Rule
     {
-        return new DisallowOverridingOfConfigurationPropertyTypeRule(
+        return new DisallowUsageOfDeprecatedConfigurationPropertyRule(
             self::getContainer()->getByType(ClassReflectionAnalyser::class),
             self::getContainer()->getByType(PropertyReflectionAnalyser::class),
             self::getContainer()->getByType(ReflectionResolver::class)

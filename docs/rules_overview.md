@@ -150,6 +150,27 @@ final class Bar extends Foo
 
 <br>
 
+## DisallowUsageOfDeprecatedConfigurationPropertyRule
+
+Disallow usage of depercated configuration properties.
+
+Currently available via [bleeding edge](../README.md#bleeding-edge-).
+
+Automatically enabled if [PHPStan deprecation rules](https://github.com/phpstan/phpstan-deprecation-rules) is installed.
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUsageOfDeprecatedConfigurationPropertyRule`](../src/Rule/ClassPropertyNode/DisallowUsageOfDeprecatedConfigurationPropertyRule.php)
+
+```yaml
+parameters:
+    silverstan:
+        disallowUsageOfDeprecatedConfigurationProperty:
+            enabled: true
+```
+
+<br>
+
 ## DisallowPropertyFetchOnConfigForClassRule
 
 Disallow property fetch on `SilverStripe\Core\Config\Config_ForClass`. PHPStan cannot resolve the type of the property, use `self::config()->get('property_name')` instead.
