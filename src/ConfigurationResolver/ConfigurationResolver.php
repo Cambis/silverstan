@@ -19,6 +19,14 @@ use function preg_match;
 final class ConfigurationResolver
 {
     /**
+     * @readonly
+     */
+    private ConfigCollectionFactoryInterface $configCollectionFactory;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    /**
      * Source options bitmask value - do not exclude any middleware.
      *
      * @var int
@@ -54,16 +62,17 @@ final class ConfigurationResolver
 
     private ?ConfigCollectionInterface $configCollection = null;
 
-    public function __construct(
-        private readonly ConfigCollectionFactoryInterface $configCollectionFactory,
-        private readonly ReflectionProvider $reflectionProvider,
-    ) {
+    public function __construct(ConfigCollectionFactoryInterface $configCollectionFactory, ReflectionProvider $reflectionProvider)
+    {
+        $this->configCollectionFactory = $configCollectionFactory;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
      * @param true|int-mask-of<self::EXCLUDE_*> $excludeMiddleware
+     * @return mixed
      */
-    public function get(string $className, ?string $name = null, true|int $excludeMiddleware = 0): mixed
+    public function get(string $className, ?string $name = null, $excludeMiddleware = 0)
     {
         if (!$this->configCollection instanceof ConfigCollectionInterface) {
             $this->configCollection = $this->configCollectionFactory->create();
