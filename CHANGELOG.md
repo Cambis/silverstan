@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 2.0.2
+
+### Patch Changes
+
+- 7bf485c: Add DisallowUsageOfDeprecatedConfigurationPropertyRule (Bleeding edge)
+
 ## 2.0.1
 
 ### Patch Changes
