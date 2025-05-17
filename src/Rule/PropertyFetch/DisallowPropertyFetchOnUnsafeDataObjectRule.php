@@ -6,7 +6,6 @@ namespace Cambis\Silverstan\Rule\PropertyFetch;
 
 use Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor;
 use Cambis\Silverstan\Type\ObjectType\UnsafeObjectType;
-use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
@@ -23,14 +22,13 @@ use function sprintf;
  *
  * @see \Cambis\Silverstan\Tests\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRuleTest
  */
-final readonly class DisallowPropertyFetchOnUnsafeDataObjectRule implements Rule
+final class DisallowPropertyFetchOnUnsafeDataObjectRule implements Rule
 {
     /**
      * @var string
      */
     private const IDENTIFIER = 'silverstan.unsafeDataObjectAccess';
 
-    #[Override]
     public function getNodeType(): string
     {
         return PropertyFetch::class;
@@ -39,43 +37,33 @@ final readonly class DisallowPropertyFetchOnUnsafeDataObjectRule implements Rule
     /**
      * @param PropertyFetch $node
      */
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$node->name instanceof Identifier) {
             return [];
         }
-
         // Allow access if the node is being assigned
         if ($node->hasAttribute(PropertyFetchAssignedToVisitor::ATTRIBUTE_KEY)) {
             return [];
         }
-
         if (!$node->var instanceof MethodCall) {
             return [];
         }
-
         if ($node->var->name instanceof Expr) {
             return [];
         }
-
         $ownerType = $scope->getType($node->var->var);
-
         // Skip any native methods, we're only interested in magic ones
         foreach ($ownerType->getObjectClassReflections() as $classReflection) {
             if ($classReflection->hasNativeMethod($node->var->name->toString())) {
                 return [];
             }
         }
-
         $type = $scope->getType($node->var);
-
         if (!$type instanceof UnsafeObjectType) {
             return [];
         }
-
         $varName = $this->resolveExprName($node->var->var);
-
         return [
             RuleErrorBuilder::message(
                 sprintf(

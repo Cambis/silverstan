@@ -8,7 +8,6 @@ use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\Reflection\MethodReflection\ExtensibleMethodReflection;
 use Cambis\Silverstan\Reflection\ParameterReflection\ExtensibleParameterReflection;
 use Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterface;
-use Override;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PassedByReference;
 use PHPStan\Type\Generic\TemplateTypeMap;
@@ -22,42 +21,38 @@ use function is_array;
  *
  * @see \Cambis\Silverstan\Tests\Reflection\ClassReflectionExtension\ExtensibleClassReflectionExtensionTest
  */
-final readonly class DisplayLogicCriteriaComparisonsMethodReflectionResolver implements MethodReflectionResolverInterface
+final class DisplayLogicCriteriaComparisonsMethodReflectionResolver implements MethodReflectionResolverInterface
 {
-    public function __construct(
-        private ConfigurationResolver $configurationResolver
-    ) {
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    public function __construct(ConfigurationResolver $configurationResolver)
+    {
+        $this->configurationResolver = $configurationResolver;
     }
 
-    #[Override]
     public function getConfigurationPropertyName(): string
     {
         return 'comparisons';
     }
 
-    #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
         if (!$classReflection->is('UncleCheese\DisplayLogic\Criteria')) {
             return [];
         }
-
         $methodReflections = [];
-
         $comparisons = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName());
-
         if (!is_array($comparisons) || $comparisons === []) {
             return [];
         }
-
         $parameters = [new ExtensibleParameterReflection('val', new MixedType(), PassedByReference::createNo(), true, true, new NullType())];
         $returnType = new ObjectType('UncleCheese\DisplayLogic\Criteria');
-
         /** @var string[] $comparisons */
         foreach ($comparisons as $comparison) {
             $methodReflections[$comparison] = new ExtensibleMethodReflection($comparison, $classReflection, $returnType, $parameters, false, true, null, TemplateTypeMap::createEmpty());
         }
-
         return $methodReflections;
     }
 }

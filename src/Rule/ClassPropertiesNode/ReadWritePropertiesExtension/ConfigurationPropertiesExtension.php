@@ -6,7 +6,6 @@ namespace Cambis\Silverstan\Rule\ClassPropertiesNode\ReadWritePropertiesExtensio
 
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
-use Override;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
 
@@ -16,29 +15,34 @@ use PHPStan\Rules\Properties\ReadWritePropertiesExtension;
  * @see \Cambis\Silverstan\Tests\Rule\ClassPropertiesNode\ReadWritePropertiesExtension\ConfigurationPropertiesExtensionTest
  * @see https://phpstan.org/developing-extensions/always-read-written-properties
  */
-final readonly class ConfigurationPropertiesExtension implements ReadWritePropertiesExtension
+final class ConfigurationPropertiesExtension implements ReadWritePropertiesExtension
 {
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private PropertyReflectionAnalyser $propertyReflectionAnalyser;
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, PropertyReflectionAnalyser $propertyReflectionAnalyser)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->propertyReflectionAnalyser = $propertyReflectionAnalyser;
     }
 
-    #[Override]
     public function isAlwaysRead(PropertyReflection $propertyReflection, string $propertyName): bool
     {
         return $this->classReflectionAnalyser->isConfigurable($propertyReflection->getDeclaringClass()) &&
             $this->propertyReflectionAnalyser->isConfigurationProperty($propertyReflection);
     }
 
-    #[Override]
     public function isAlwaysWritten(PropertyReflection $propertyReflection, string $propertyName): bool
     {
         return $this->classReflectionAnalyser->isConfigurable($propertyReflection->getDeclaringClass()) &&
             $this->propertyReflectionAnalyser->isConfigurationProperty($propertyReflection);
     }
 
-    #[Override]
     public function isInitialized(PropertyReflection $propertyReflection, string $propertyName): bool
     {
         return $this->classReflectionAnalyser->isConfigurable($propertyReflection->getDeclaringClass()) &&
