@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 2.0.3
+
+### Patch Changes
+
+- 822632a: Cache resolved configuration properties
+
 ## 2.0.2
 
 ### Patch Changes
