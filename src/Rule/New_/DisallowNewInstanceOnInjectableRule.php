@@ -21,15 +21,22 @@ use function sprintf;
  * @implements SilverstanRuleInterface<New_>
  * @see \Cambis\Silverstan\Tests\Rule\New_\DisallowNewInstanceOnInjectableRuleTest
  */
-final readonly class DisallowNewInstanceOnInjectableRule implements SilverstanRuleInterface
+final class DisallowNewInstanceOnInjectableRule implements SilverstanRuleInterface
 {
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private ReflectionProvider $reflectionProvider
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, ReflectionProvider $reflectionProvider)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
-    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -61,7 +68,6 @@ CODE_SAMPLE
         );
     }
 
-    #[Override]
     public function getNodeType(): string
     {
         return New_::class;
@@ -70,23 +76,18 @@ CODE_SAMPLE
     /**
      * @param New_ $node
      */
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$node->class instanceof Name) {
             return [];
         }
-
         if (!$this->reflectionProvider->hasClass($node->class->toString())) {
             return [];
         }
-
         $classReflection = $this->reflectionProvider->getClass($node->class->toString());
-
         if (!$this->classReflectionAnalyser->isInjectable($classReflection)) {
             return [];
         }
-
         return [
             RuleErrorBuilder::message(
                 sprintf(

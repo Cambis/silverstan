@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Cache\CacheStorage;
 
 use Cambis\Silverstan\Cache\ValueObject\CacheFilePaths;
-use Override;
 use PHPStan\Cache\CacheStorage;
 use PHPStan\ShouldNotHappenException;
 use function clearstatcache;
@@ -25,21 +24,23 @@ use function substr;
  *
  * @phpstan-ignore phpstanApi.interface
  */
-final readonly class SimpleStubFileCacheStorage implements CacheStorage
+final class SimpleStubFileCacheStorage implements CacheStorage
 {
-    public function __construct(
-        private string $directory
-    ) {
+    /**
+     * @readonly
+     */
+    private string $directory;
+    public function __construct(string $directory)
+    {
+        $this->directory = $directory;
     }
 
     /**
      * @return ?string
      */
-    #[Override]
     public function load(string $key, string $variableKey)
     {
         $filePath = $this->getFilePaths($key)->filePath;
-
         return (static function () use ($filePath): ?string {
             if (!is_file($filePath)) {
                 return null;
@@ -49,20 +50,15 @@ final readonly class SimpleStubFileCacheStorage implements CacheStorage
         })();
     }
 
-    #[Override]
     public function save(string $key, string $variableKey, $data): void
     {
         $cacheFilePaths = $this->getFilePaths($key);
-
         $this->makeDir($cacheFilePaths->firstDirectory);
         $this->makeDir($cacheFilePaths->secondDirectory);
-
         $result = @file_put_contents($cacheFilePaths->filePath, $data);
-
         if ($result !== false) {
             return;
         }
-
         throw new ShouldNotHappenException(
             sprintf('Could not write data to cache file %s.', $cacheFilePaths->filePath)
         );

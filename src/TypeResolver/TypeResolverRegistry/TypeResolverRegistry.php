@@ -9,21 +9,30 @@ use Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverAwareInterface;
 use Cambis\Silverstan\TypeResolver\Contract\TypeResolverRegistryInterface;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
-use Override;
 
-final readonly class TypeResolverRegistry implements TypeResolverRegistryInterface
+final class TypeResolverRegistry implements TypeResolverRegistryInterface
 {
+    /**
+     * @readonly
+     */
+    private array $propertyTypeResolvers;
+    /**
+     * @readonly
+     */
+    private array $methodTypeResolvers;
     public function __construct(
         TypeResolver $typeResolver,
+        array $propertyTypeResolvers,
+        array $methodTypeResolvers
+    ) {
         /**
          * @var PropertyTypeResolverInterface[]
          */
-        private array $propertyTypeResolvers,
+        $this->propertyTypeResolvers = $propertyTypeResolvers;
         /**
          * @var MethodTypeResolverInterface[]
          */
-        private array $methodTypeResolvers
-    ) {
+        $this->methodTypeResolvers = $methodTypeResolvers;
         foreach ($propertyTypeResolvers as $propertyTypeResolver) {
             if (!$propertyTypeResolver instanceof TypeResolverAwareInterface) {
                 continue;
@@ -41,13 +50,11 @@ final readonly class TypeResolverRegistry implements TypeResolverRegistryInterfa
         }
     }
 
-    #[Override]
     public function getPropertyTypeResolvers(): array
     {
         return $this->propertyTypeResolvers;
     }
 
-    #[Override]
     public function getMethodTypeResolvers(): array
     {
         return $this->methodTypeResolvers;
