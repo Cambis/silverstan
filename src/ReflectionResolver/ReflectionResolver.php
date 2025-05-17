@@ -17,12 +17,19 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use function array_key_exists;
 
-final readonly class ReflectionResolver
+final class ReflectionResolver
 {
+    /**
+     * Local cache.
+     *
+     * @var array<string, array<string, PropertyReflection>>
+     */
+    private array $configurationPropertyReflections = [];
+
     public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
-        private ReflectionResolverRegistryProviderInterface $reflectionResolverRegistryProvider
+        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
+        private readonly PropertyReflectionAnalyser $propertyReflectionAnalyser,
+        private readonly ReflectionResolverRegistryProviderInterface $reflectionResolverRegistryProvider
     ) {
     }
 
@@ -200,6 +207,16 @@ final readonly class ReflectionResolver
             return null;
         }
 
+        // Set up cache
+        if (!array_key_exists($classReflection->getCacheKey(), $this->configurationPropertyReflections)) {
+            $this->configurationPropertyReflections[$classReflection->getCacheKey()] = [];
+        }
+
+        // Check for cached result
+        if (isset($this->configurationPropertyReflections[$classReflection->getCacheKey()][$propertyName])) {
+            return $this->configurationPropertyReflections[$classReflection->getCacheKey()][$propertyName];
+        }
+
         // Safety check, only configurable classes can have configuration properties
         if (!$this->classReflectionAnalyser->isConfigurable($classReflection)) {
             return null;
@@ -218,12 +235,14 @@ final readonly class ReflectionResolver
             return $this->resolveConfigurationPropertyReflection($classReflection->getParentClass(), $propertyName);
         }
 
-        // Fail, property is not a configuration property. Check the parent class next.
+        // Fail, property is not a configuration property. Check the parent class next
         if (!$this->propertyReflectionAnalyser->isConfigurationProperty($property)) {
             return $this->resolveConfigurationPropertyReflection($classReflection->getParentClass(), $propertyName);
         }
 
-        // Success! We have found a configuration property!
+        // Success! We have found a configuration property! Cache the result
+        $this->configurationPropertyReflections[$classReflection->getCacheKey()][$propertyName] = $property;
+
         return $property;
     }
 
