@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 1.1.2
+
+### Patch Changes
+
+- d979111: Cache resolved configuration properties
+
 ## 1.1.1
 
 ### Patch Changes
