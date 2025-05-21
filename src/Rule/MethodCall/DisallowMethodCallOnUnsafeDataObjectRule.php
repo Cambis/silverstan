@@ -43,7 +43,7 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
     /**
      * @var string
      */
-    private const IDENTIFIER = 'silverstan.unsafeDataObjectAccess';
+    private const IDENTIFIER = 'silverstan.dataObject.unsafe';
 
     /**
      * @var list<ClassAllowedMethodCall>

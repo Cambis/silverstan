@@ -27,7 +27,7 @@ final readonly class DisallowUsageOfDeprecatedConfigurationPropertyRule implemen
     /**
      * @var string
      */
-    private const IDENTIFIER = 'silverstan.configurationProperty.isDeprecated';
+    private const IDENTIFIER = 'silverstan.configurationProperty.deprecated';
 
     public function __construct(
         private ClassReflectionAnalyser $classReflectionAnalyser,

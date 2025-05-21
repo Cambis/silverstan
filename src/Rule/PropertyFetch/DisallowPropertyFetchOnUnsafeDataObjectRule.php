@@ -28,7 +28,7 @@ final readonly class DisallowPropertyFetchOnUnsafeDataObjectRule implements Rule
     /**
      * @var string
      */
-    private const IDENTIFIER = 'silverstan.unsafeDataObjectAccess';
+    private const IDENTIFIER = 'silverstan.dataObject.unsafe';
 
     #[Override]
     public function getNodeType(): string

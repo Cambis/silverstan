@@ -26,7 +26,7 @@ final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implement
     /**
      * @var string
      */
-    private const IDENTIFIER = 'silverstan.invalidConfigurationPropertyType';
+    private const IDENTIFIER = 'silverstan.configurationProperty.invalid';
 
     public function __construct(
         private ClassReflectionAnalyser $classReflectionAnalyser,

@@ -1,5 +1,19 @@
 # Upgrading
 
+## From 2.0 to 2.1
+
+### Updates to error identifiers
+Some of the error identifiers have been updated, please refer to the table below. 
+
+|Original name|New name|
+|---|---|
+|silverstan.configurationProperty.isDeprecated|silverstan.configurationProperty.deprecated|
+|silverstan.invalidConfigurationProperty|silverstan.configurationProperty.invalid|
+|silverstan.newInjectable|silverstan.injectable.useCreate|
+|silverstan.requiredConfigurationProperty|silverstan.configurationProperty.required|
+|silverstan.unsafeConfigurationPropertyAccess|silverstan.configurationProperty.unsafe|
+|silverstan.unsafeDataObjectAccess|silverstan.dataObject.unsafe|
+
 ## From 1.x to 2.x
 Firstly, check the upgrade guide for PHPStan 2.0 [here](https://github.com/phpstan/phpstan/blob/2.0.x/UPGRADING.md).
 
