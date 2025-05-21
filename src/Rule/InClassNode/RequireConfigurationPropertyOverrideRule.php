@@ -32,7 +32,7 @@ final class RequireConfigurationPropertyOverrideRule implements Rule
     /**
      * @var string
      */
-    private const IDENTIFIER = 'silverstan.requiredConfigurationProperty';
+    private const IDENTIFIER = 'silverstan.configurationProperty.required';
 
     /**
      * @var string[][]

@@ -1,8 +1,10 @@
-# 8 rules overview
+# 9 rules overview
 
 ## DisallowMethodCallOnUnsafeDataObjectRule
 
 Call `exists()` first before accessing any magic `SilverStripe\ORM\DataObject` methods as the object may not be present in the database. Database manipulation methods such as `write()` and `delete()` are allowed by default. If you think a method is safe to call by default add it to the `allowedMethodCalls` configuration.
+
+:mag_right: **silverstan.dataObject.unsafe**
 
 :wrench: **configure it!**
 
@@ -62,6 +64,8 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 Disallow instantiating a `SilverStripe\Core\Injectable` class using `new`. Use `create()` instead.
 
+:mag_right: **silverstan.injectable.useCreate**
+
 :wrench: **configure it!**
 
 - class: [`Cambis\Silverstan\Rule\New_\DisallowNewInstanceOnInjectableRule`](../src/Rule/New_/DisallowNewInstanceOnInjectableRule.php)
@@ -104,6 +108,8 @@ $foo = Foo::create();
 ## DisallowOverridingOfConfigurationPropertyTypeRule
 
 Disallow overriding types of configuration properties.
+
+:mag_right: **silverstan.configurationProperty.invalid**
 
 :wrench: **configure it!**
 
@@ -154,9 +160,9 @@ final class Bar extends Foo
 
 Disallow usage of depercated configuration properties.
 
-Currently available via [bleeding edge](../README.md#bleeding-edge-).
-
 Automatically enabled if [PHPStan deprecation rules](https://github.com/phpstan/phpstan-deprecation-rules) is installed.
+
+:mag_right: **silverstan.configurationProperty.deprecated**
 
 :wrench: **configure it!**
 
@@ -169,11 +175,51 @@ parameters:
             enabled: true
 ```
 
+↓
+
+```php
+class Foo extends \SilverStripe\ORM\DataObject
+{
+    /**
+     * @deprecated use new_property instead.
+     */
+    private static string $deprecated_property = '';
+}
+
+final class Bar extends Foo
+{
+    private static string $deprecated_property = '';
+}
+```
+
+:x:
+
+<br>
+
+```php
+class Foo extends \SilverStripe\ORM\DataObject
+{
+    /**
+     * @deprecated use new_property instead.
+     */
+    private static string $deprecated_property = '';
+}
+
+final class Bar extends Foo
+{
+    private static string $new_property = '';
+}
+```
+
+:+1:
+
 <br>
 
 ## DisallowPropertyFetchOnConfigForClassRule
 
 Disallow property fetch on `SilverStripe\Core\Config\Config_ForClass`. PHPStan cannot resolve the type of the property, use `self::config()->get('property_name')` instead.
+
+:mag_right: **silverstan.configurationProperty.unresolveableType**
 
 :wrench: **configure it!**
 
@@ -223,6 +269,8 @@ final class Foo extends \SilverStripe\ORM\DataObject
 ## DisallowPropertyFetchOnUnsafeDataObjectRule
 
 Call `exists()` first before accessing any magic `SilverStripe\ORM\DataObject` properties as the object may not be present in the database. Property assignment is allowed.
+
+:mag_right: **silverstan.dataObject.unsafe**
 
 :wrench: **configure it!**
 
@@ -279,6 +327,8 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 Disallow static property fetch on configuration properties.
 
+:mag_right: **silverstan.configurationProperty.unsafe**
+
 :wrench: **configure it!**
 
 - class: [`Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule`](../src/Rule/StaticPropertyFetch/DisallowStaticPropertyFetchOnConfigurationPropertyRule.php)
@@ -328,6 +378,8 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 Require a class to override a set of configuration properties.
 
+:mag_right: **silverstan.configurationProperty.required**
+
 :wrench: **configure it!**
 
 - class: [`Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule`](../src/Rule/InClassNode/RequireConfigurationPropertyOverrideRule.php)
@@ -368,6 +420,8 @@ final class Foo extends \SilverStripe\ORM\DataObject
 ## RequireParentCallInOverridenMethodRule
 
 Require parent call in an overriden method.
+
+:mag_right: **silverstan.requiredParentCall**
 
 :wrench: **configure it!**
 

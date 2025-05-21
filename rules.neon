@@ -17,7 +17,7 @@ parameters:
         disallowOverridingOfConfigurationPropertyType:
             enabled: true
         disallowUsageOfDeprecatedConfigurationProperty:
-            enabled: false
+            enabled: %deprecationRulesInstalled%
         requireConfigurationPropertyOverride:
             enabled: true
             classes:

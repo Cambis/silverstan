@@ -25,7 +25,7 @@ final readonly class DisallowPropertyFetchOnConfigForClassRule implements Rule
     /**
      * @var string
      */
-    private const IDENTIFIER = 'silverstan.unresolvableConfigurationPropertyType';
+    private const IDENTIFIER = 'silverstan.configurationProperty.unresolvableType';
 
     #[Override]
     public function getNodeType(): string

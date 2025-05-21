@@ -24,7 +24,7 @@ final readonly class DisallowNewInstanceOnInjectableRule implements Rule
     /**
      * @var string
      */
-    private const IDENTIFIER = 'silverstan.newInjectable';
+    private const IDENTIFIER = 'silverstan.injectable.useCreate';
 
     public function __construct(
         private ClassReflectionAnalyser $classReflectionAnalyser,

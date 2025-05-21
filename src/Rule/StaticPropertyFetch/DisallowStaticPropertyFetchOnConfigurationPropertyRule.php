@@ -26,7 +26,7 @@ final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule impl
     /**
      * @var string
      */
-    private const IDENTIFIER = 'silverstan.unsafeConfigurationPropertyAccess';
+    private const IDENTIFIER = 'silverstan.configurationProperty.unsafe';
 
     public function __construct(
         private ClassReflectionAnalyser $classReflectionAnalyser,
