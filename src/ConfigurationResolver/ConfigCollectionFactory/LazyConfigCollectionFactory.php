@@ -8,7 +8,6 @@ use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigCollectionFactoryInte
 use Cambis\Silverstan\ConfigurationResolver\Contract\MiddlewareRegistryProviderInterface;
 use Cambis\Silverstan\FileFinder\FileFinder;
 use Composer\InstalledVersions;
-use Override;
 use SilverStripe\Config\Collections\ConfigCollectionInterface;
 use SilverStripe\Config\Collections\MemoryConfigCollection;
 use SilverStripe\Config\Transformer\YamlTransformer;
@@ -17,12 +16,20 @@ use function constant;
 use function defined;
 use function extension_loaded;
 
-final readonly class LazyConfigCollectionFactory implements ConfigCollectionFactoryInterface
+final class LazyConfigCollectionFactory implements ConfigCollectionFactoryInterface
 {
-    public function __construct(
-        private FileFinder $fileFinder,
-        private MiddlewareRegistryProviderInterface $middlewareRegistryProvider
-    ) {
+    /**
+     * @readonly
+     */
+    private FileFinder $fileFinder;
+    /**
+     * @readonly
+     */
+    private MiddlewareRegistryProviderInterface $middlewareRegistryProvider;
+    public function __construct(FileFinder $fileFinder, MiddlewareRegistryProviderInterface $middlewareRegistryProvider)
+    {
+        $this->fileFinder = $fileFinder;
+        $this->middlewareRegistryProvider = $middlewareRegistryProvider;
     }
 
     /**
@@ -30,7 +37,6 @@ final readonly class LazyConfigCollectionFactory implements ConfigCollectionFact
      *
      * Note that this collection is transformed via yaml only, private static properties are accessed lazily via middleware.
      */
-    #[Override]
     public function create(): ConfigCollectionInterface
     {
         return (new MemoryConfigCollection())
@@ -50,10 +56,10 @@ final readonly class LazyConfigCollectionFactory implements ConfigCollectionFact
                 return class_exists($class);
             })
             // Assume that the env var is set
-            ->addRule('envvarset', static function (string $name, mixed $value = null): bool {
+            ->addRule('envvarset', static function (string $name, $value = null): bool {
                 return true;
             })
-            ->addRule('constantdefined', static function (string $name, mixed $value = null): bool {
+            ->addRule('constantdefined', static function (string $name, $value = null): bool {
                 if (!defined($name)) {
                     return false;
                 }
@@ -61,7 +67,7 @@ final readonly class LazyConfigCollectionFactory implements ConfigCollectionFact
                 return constant($name) === $value;
             })
             // Assume that the env var is set
-            ->addRule('envorconstant', static function (string $name, mixed $value = null): bool {
+            ->addRule('envorconstant', static function (string $name, $value = null): bool {
                 return true;
             })
             // PHPStan should only be run in a dev environment

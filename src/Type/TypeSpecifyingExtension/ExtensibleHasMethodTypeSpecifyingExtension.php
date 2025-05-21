@@ -6,7 +6,6 @@ namespace Cambis\Silverstan\Type\TypeSpecifyingExtension;
 
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\TypeFactory\TypeFactory;
-use Override;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\SpecifiedTypes;
@@ -25,6 +24,18 @@ use function in_array;
 final class ExtensibleHasMethodTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
     /**
+     * @readonly
+     */
+    private string $className;
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
+    /**
      * @var string[]
      */
     private const SUPPORTED_METHODS = [
@@ -33,49 +44,40 @@ final class ExtensibleHasMethodTypeSpecifyingExtension implements MethodTypeSpec
 
     private TypeSpecifier $typeSpecifier;
 
-    public function __construct(
+    public function __construct(string $className, ClassReflectionAnalyser $classReflectionAnalyser, TypeFactory $typeFactory)
+    {
         /** @var class-string */
-        private readonly string $className,
-        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly TypeFactory $typeFactory,
-    ) {
+        $this->className = $className;
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->typeFactory = $typeFactory;
     }
 
-    #[Override]
     public function getClass(): string
     {
         return $this->className;
     }
 
-    #[Override]
     public function isMethodSupported(MethodReflection $methodReflection, MethodCall $node, TypeSpecifierContext $context): bool
     {
         if (!$this->classReflectionAnalyser->isExtensible($methodReflection->getDeclaringClass())) {
             return false;
         }
-
         if (!in_array($methodReflection->getName(), self::SUPPORTED_METHODS, true)) {
             return false;
         }
-
         return $context->truthy();
     }
 
-    #[Override]
     public function specifyTypes(MethodReflection $methodReflection, MethodCall $node, Scope $scope, TypeSpecifierContext $context): SpecifiedTypes
     {
         $methodNameType = $scope->getType($node->getArgs()[0]->value);
-
         if ($methodNameType->getConstantStrings() === []) {
             return new SpecifiedTypes();
         }
-
         $extensibleType = $scope->getType($node->var);
-
         if ($extensibleType->isObject()->no()) {
             return new SpecifiedTypes();
         }
-
         return $this->typeSpecifier->create(
             $node->var,
             TypeCombinator::intersect(
@@ -87,7 +89,6 @@ final class ExtensibleHasMethodTypeSpecifyingExtension implements MethodTypeSpec
         )->setAlwaysOverwriteTypes();
     }
 
-    #[Override]
     public function setTypeSpecifier(TypeSpecifier $typeSpecifier): void
     {
         $this->typeSpecifier = $typeSpecifier;

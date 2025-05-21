@@ -21,14 +21,14 @@ use PHPStan\Type\Type;
  */
 interface PropertyTypeResolverInterface
 {
-    final public const SERVICE_NAME = 'silverstan.typeResolver.propertyTypeResolver';
+    public const SERVICE_NAME = 'silverstan.typeResolver.propertyTypeResolver';
 
     public function getConfigurationPropertyName(): string;
 
     /**
      * @return true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
      */
-    public function getExcludeMiddleware(): true|int;
+    public function getExcludeMiddleware();
 
     /**
      * @return Type[]

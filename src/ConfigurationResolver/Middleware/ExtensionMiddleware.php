@@ -6,7 +6,6 @@ namespace Cambis\Silverstan\ConfigurationResolver\Middleware;
 
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\ConfigurationResolver\Contract\ConfigurationResolverAwareInterface;
-use Override;
 use PHPStan\Reflection\ReflectionProvider;
 use SilverStripe\Config\MergeStrategy\Priority;
 use Throwable;
@@ -17,11 +16,16 @@ use function is_array;
  */
 final class ExtensionMiddleware extends AbstractMiddleware implements ConfigurationResolverAwareInterface
 {
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
     private ConfigurationResolver $configurationResolver;
 
     public function __construct(
-        private readonly ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider
     ) {
+        $this->reflectionProvider = $reflectionProvider;
         parent::__construct(ConfigurationResolver::EXCLUDE_EXTRA_SOURCES);
     }
 
@@ -29,31 +33,27 @@ final class ExtensionMiddleware extends AbstractMiddleware implements Configurat
      * @param true|int-mask-of<ConfigurationResolver::EXCLUDE_*> $excludeMiddleware
      * @phpstan-ignore-next-line method.childParameterType
      */
-    #[Override]
     public function getClassConfig($class, $excludeMiddleware, $next)
     {
         // Get base config
         $config = $next($class, $excludeMiddleware);
-
         if (!$this->enabled($excludeMiddleware)) {
             return $config;
         }
-
         /** @var int-mask-of<ConfigurationResolver::EXCLUDE_*> $excludeMiddleware */
         $extraConfig = $this->getExtraConfig($class, $excludeMiddleware);
-
         foreach ($extraConfig as $extra) {
             $config = Priority::mergeArray($config, $extra);
         }
-
         return $config;
     }
 
-    #[Override]
-    public function setConfigurationResolver(ConfigurationResolver $configurationResolver): static
+    /**
+     * @return static
+     */
+    public function setConfigurationResolver(ConfigurationResolver $configurationResolver)
     {
         $this->configurationResolver = $configurationResolver;
-
         return $this;
     }
 
@@ -131,7 +131,7 @@ final class ExtensionMiddleware extends AbstractMiddleware implements Configurat
                 // Attempt to execute the method
                 try {
                     $extraConfig = $extensionClassParent->getName()::get_extra_config($class, $extensionClass->getName(), []);
-                } catch (Throwable) {
+                } catch (Throwable $exception) {
                     continue;
                 }
 
