@@ -1,5 +1,12 @@
 # @cambis/silverstan
 
+## 2.1.0
+
+### Minor Changes
+
+- 6ffe44b: Update error identifiers
+- 6ffe44b: Move DisallowUsageOfDeprecatedConfigurationPropertyRule out of bleeding edge
+
 ## 2.0.3
 
 ### Patch Changes
