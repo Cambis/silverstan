@@ -1,0 +1,11 @@
+<?php
+
+namespace SilverStripe\CMS\Controllers;
+
+/**
+ * @template T
+ * @property T $failover
+ */
+class ContentController
+{
+}
