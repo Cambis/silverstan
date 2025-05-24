@@ -1,0 +1,26 @@
+<?php
+
+namespace SilverStripe\Forms;
+
+class FieldList
+{
+    /**
+     * Inserts a field before a particular field in a FieldList.
+     * Will traverse CompositeFields depth-first to find the matching $name, and insert before the first match
+     *
+     * @return ($appendIfMissing is true ? FormField : FormField|bool)
+     */
+    public function insertBefore(string $name, FormField $item, bool $appendIfMissing = true)
+    {
+    }
+
+    /**
+     * Inserts a field after a particular field in a FieldList.
+     * Will traverse CompositeFields depth-first to find the matching $name, and insert after the first match
+     *
+     * @return ($appendIfMissing is true ? FormField : FormField|bool)
+     */
+    public function insertAfter(string $name, FormField $item, bool $appendIfMissing = true)
+    {
+    }
+}
