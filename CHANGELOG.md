@@ -1,5 +1,12 @@
 # @cambis/silverstan
 
+## 2.1.1
+
+### Patch Changes
+
+- e405d61: Add stub for SiteTree
+- 5496707: Update stub files
+
 ## 2.1.0
 
 ### Minor Changes
