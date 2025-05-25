@@ -15,40 +15,38 @@ use PHPStan\Reflection\PropertyReflection;
  *
  * @see \Cambis\Silverstan\Tests\Extension\Reflection\ViewableDataClassReflectionExtensionTest
  */
-final readonly class ViewableDataClassReflectionExtension implements PropertiesClassReflectionExtension
+final class ViewableDataClassReflectionExtension implements PropertiesClassReflectionExtension
 {
-    public function __construct(
-        private AnnotationClassReflectionExtension $annotationClassReflectionExtension
-    ) {
+    /**
+     * @readonly
+     */
+    private AnnotationClassReflectionExtension $annotationClassReflectionExtension;
+    public function __construct(AnnotationClassReflectionExtension $annotationClassReflectionExtension)
+    {
+        $this->annotationClassReflectionExtension = $annotationClassReflectionExtension;
     }
 
-    #[Override]
     public function hasProperty(ClassReflection $classReflection, string $propertyName): bool
     {
         // Let PHPStan handle this case
         if ($classReflection->hasNativeProperty($propertyName)) {
             return false;
         }
-
         // silverstripe/framework <= 6.x
         if ($classReflection->is('SilverStripe\View\ViewableData')) {
             return true;
         }
-
         // silverstripe/framework >= 6.x
         return $classReflection->is('SilverStripe\Model\ModelData');
     }
 
-    #[Override]
     public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
     {
         if ($this->annotationClassReflectionExtension->hasProperty($classReflection, $propertyName)) {
             return $this->annotationClassReflectionExtension->getProperty($classReflection, $propertyName);
         }
-
         $readableType = $classReflection->getNativeMethod('__get')->getVariants()[0]->getReturnType();
         $writableType = $classReflection->getNativeMethod('__set')->getVariants()[0]->getParameters()[1]->getType();
-
         return new ViewableDataPropertyReflection($classReflection, $readableType, $writableType);
     }
 }
