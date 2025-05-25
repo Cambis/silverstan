@@ -1,0 +1,11 @@
+<?php
+
+namespace SilverStripe\CMS\Model;
+
+/**
+ * @property ?string $Content HTML content of the page.
+ * @property ?string $MetaDescription
+ */
+class SiteTree
+{
+}
