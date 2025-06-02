@@ -67,6 +67,10 @@ final readonly class RequireInjectableCreateToMatchConstructorSignatureRule impl
             return [];
         }
 
+        if (!$classReflection->hasConstructor()) {
+            return [];
+        }
+
         $constructorReflection = $classReflection->getConstructor();
         $methodName = sprintf('%s::create()', $classReflection->getDisplayName());
 
