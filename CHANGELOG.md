@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 2.1.3
+
+### Patch Changes
+
+- be25e75: Check for constructor in RequireInjectableCreateToMatchConstructorSignatureRule
+
 ## 2.1.2
 
 ### Patch Changes
