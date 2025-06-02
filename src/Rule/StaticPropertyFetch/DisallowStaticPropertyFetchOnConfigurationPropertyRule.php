@@ -6,7 +6,6 @@ namespace Cambis\Silverstan\Rule\StaticPropertyFetch;
 
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
-use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -21,20 +20,27 @@ use function sprintf;
  * @implements Rule<StaticPropertyFetch>
  * @see \Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRuleTest
  */
-final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements Rule
+final class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements Rule
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private PropertyReflectionAnalyser $propertyReflectionAnalyser;
     /**
      * @var string
      */
     private const IDENTIFIER = 'silverstan.configurationProperty.unsafe';
 
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
-    ) {
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, PropertyReflectionAnalyser $propertyReflectionAnalyser)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->propertyReflectionAnalyser = $propertyReflectionAnalyser;
     }
 
-    #[Override]
     public function getNodeType(): string
     {
         return StaticPropertyFetch::class;
@@ -43,45 +49,33 @@ final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule impl
     /**
      * @param StaticPropertyFetch $node
      */
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$node->name instanceof VarLikeIdentifier) {
             return [];
         }
-
         $type = null;
-
         if ($node->class instanceof Expr) {
             $type = $scope->getType($node->class);
         }
-
         if ($node->class instanceof Name) {
             $type = $scope->resolveTypeByName($node->class);
         }
-
         if ($type->getObjectClassReflections() === []) {
             return [];
         }
-
         $classReflection = $type->getObjectClassReflections()[0];
-
         if (!$this->classReflectionAnalyser->isConfigurable($classReflection)) {
             return [];
         }
-
         if ($type->hasProperty($node->name->name)->no()) {
             return [];
         }
-
         $propertyReflection = $classReflection->getProperty($node->name->name, $scope);
-
         if (!$this->propertyReflectionAnalyser->isConfigurationProperty($propertyReflection)) {
             return [];
         }
-
         $varName = $node->class instanceof Name ? $node->class->toString() : $classReflection->getName();
-
         return [
             RuleErrorBuilder::message(
                 sprintf(
