@@ -1,0 +1,4 @@
+parameters:
+    silverstan:
+        requireInjectableCreateToMatchConstructorSignature:
+            enabled: true

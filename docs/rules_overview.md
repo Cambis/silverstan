@@ -62,7 +62,7 @@ final class Foo extends \SilverStripe\ORM\DataObject
 
 ## DisallowNewInstanceOnInjectableRule
 
-Disallow instantiating a `SilverStripe\Core\Injectable` class using `new`. Use `create()` instead.
+Disallow instantiating a `SilverStripe\Core\Injector\Injectable` class using `new`. Use `create()` instead.
 
 :mag_right: **silverstan.injectable.useCreate**
 
@@ -82,7 +82,7 @@ parameters:
 ```php
 final class Foo
 {
-    use \SilverStripe\Core\Injectable;
+    use \SilverStripe\Core\Injector\Injectable;
 }
 
 $foo = new Foo();
@@ -95,7 +95,7 @@ $foo = new Foo();
 ```php
 final class Foo
 {
-    use \SilverStripe\Core\Injectable;
+    use \SilverStripe\Core\Injector\Injectable;
 }
 
 $foo = Foo::create();
@@ -411,6 +411,62 @@ final class Foo extends \SilverStripe\ORM\DataObject
 {
     private static string $table_name = 'Foo';
 }
+```
+
+:+1:
+
+<br>
+
+## RequireInjectableCreateToMatchConstructorRule
+
+Require the `SilverStripe\Core\Injector\Injectable::create()` signature to match the object's constructor.
+
+Currently available via [bleeding edge](../README.md#bleeding-edge-).
+
+:mag_right: **argument.\***<br />
+:mag_right: **arguments.count**
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\StaticMethod\RequireInjectableCreateToMatchConstructorSignatureRule`](../src/Rule/StaticCall/RequireInjectableCreateToMatchConstructorSignatureRule.php)
+
+```yaml
+parameters:
+    silverstan:
+        requireInjectableCreateToMatchConstructorSignature:
+            enabled: true
+```
+
+↓
+
+```php
+final readonly class Foo
+{
+    use SilverStripe\Core\Injector\Injectable;
+
+    public function __construct(public string $bar)
+    {
+    }
+}
+
+Foo::create(1); // Parameter #1 $bar of Foo::create() expects string, int given.
+```
+
+:x:
+
+<br>
+
+```php
+final readonly class Foo
+{
+    use SilverStripe\Core\Injector\Injectable;
+
+    public function __construct(public string $bar)
+    {
+    }
+}
+
+Foo::create('');
 ```
 
 :+1:

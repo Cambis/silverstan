@@ -32,6 +32,8 @@ parameters:
             enabled: true
         disallowPropertyFetchOnUnsafeDataObject:
             enabled: true
+        requireInjectableCreateToMatchConstructorSignature:
+            enabled: false
         disallowStaticPropertyFetchOnConfigurationProperty:
             enabled: true
 
@@ -80,6 +82,9 @@ parametersSchema:
         disallowPropertyFetchOnUnsafeDataObject: structure([
             enabled: bool()
         ])
+        requireInjectableCreateToMatchConstructorSignature: structure([
+            enabled: bool()
+        ])
         disallowStaticPropertyFetchOnConfigurationProperty: structure([
             enabled: bool()
         ])
@@ -102,6 +107,8 @@ conditionalTags:
         phpstan.rules.rule: %silverstan.disallowPropertyFetchOnConfigForClass.enabled%
     Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRule:
         phpstan.rules.rule: %silverstan.disallowPropertyFetchOnUnsafeDataObject.enabled%
+    Cambis\Silverstan\Rule\StaticCall\RequireInjectableCreateToMatchConstructorSignatureRule:
+        phpstan.rules.rule: %silverstan.requireInjectableCreateToMatchConstructorSignature.enabled%
     Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule:
         phpstan.rules.rule: %silverstan.disallowStaticPropertyFetchOnConfigurationProperty.enabled%
 
@@ -128,5 +135,7 @@ services:
         class: Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRule
     -
         class: Cambis\Silverstan\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRule
+    -
+        class: Cambis\Silverstan\Rule\StaticCall\RequireInjectableCreateToMatchConstructorSignatureRule
     -
         class: Cambis\Silverstan\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRule
