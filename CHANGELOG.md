@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 2.1.2
+
+### Patch Changes
+
+- 53f3905: Add RequireInjectableCreateToMatchConstructorSignatureRule (bleeding edge)
+
 ## 2.1.1
 
 ### Patch Changes
