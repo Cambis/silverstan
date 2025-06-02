@@ -10,7 +10,6 @@ use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectDeleteTypeSpecifyin
 use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectExistsTypeSpecifyingExtension;
 use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectWriteTypeSpecifyingExtension;
 use Cambis\Silverstan\ValueObject\ClassAllowedMethodCall;
-use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
@@ -29,8 +28,12 @@ use function sprintf;
  *
  * @see \Cambis\Silverstan\Tests\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRuleTest
  */
-final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
+final class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
 {
+    /**
+     * @readonly
+     */
+    private Normaliser $normaliser;
     /**
      * @var string[]
      */
@@ -47,6 +50,7 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
 
     /**
      * @var list<ClassAllowedMethodCall>
+     * @readonly
      */
     private array $classAllowedMethodCalls;
 
@@ -54,9 +58,10 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
      * @param array<class-string, list<string>> $allowedMethodCalls
      */
     public function __construct(
-        private Normaliser $normaliser,
+        Normaliser $normaliser,
         array $allowedMethodCalls = []
     ) {
+        $this->normaliser = $normaliser;
         $classAllowedMethodCalls = [new ClassAllowedMethodCall('SilverStripe\ORM\DataObject', self::DEFAULT_ALLOWED_METHODS_CALLS)];
 
         foreach ($allowedMethodCalls as $className => $methodCalls) {
@@ -71,7 +76,6 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
         $this->classAllowedMethodCalls = $classAllowedMethodCalls;
     }
 
-    #[Override]
     public function getNodeType(): string
     {
         return MethodCall::class;
@@ -80,46 +84,36 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
     /**
      * @param MethodCall $node
      */
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$node->name instanceof Identifier) {
             return [];
         }
-
         // if (in_array($node->name->toString(), self::DEFAULT_ALLOWED_METHODS_CALLS, true)) {
         //     return [];
         // }
-
         // if (in_array($node->name->toString(), $this->allowedMethodCalls, true)) {
         //     return [];
         // }
-
         if (!$node->var instanceof MethodCall) {
             return [];
         }
-
         if ($node->var->name instanceof Expr) {
             return [];
         }
-
         // Type of the method owner
         $type = $scope->getType($node->var);
-
         // Only interested in DataObjects
         if (!$type instanceof UnsafeObjectType) {
             return [];
         }
-
         $ownerType = $scope->getType($node->var->var);
-
         foreach ($ownerType->getObjectClassReflections() as $classReflection) {
             // Skip any native methods, we're only interested in magic ones
             if ($classReflection->hasNativeMethod($node->var->name->toString())) {
                 return [];
             }
         }
-
         foreach ($type->getObjectClassReflections() as $classReflection) {
             $classAllowedMethodCall = $this->getClassAllowedMethodCall($classReflection, $node->name->toString());
 
@@ -128,9 +122,7 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
                 return [];
             }
         }
-
         $varName = $this->resolveExprName($node->var->var);
-
         return [
             RuleErrorBuilder::message(
                 sprintf(

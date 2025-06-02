@@ -6,7 +6,6 @@ namespace Cambis\Silverstan\Type\TypeSpecifyingExtension;
 
 use Cambis\Silverstan\Type\ObjectType\UnsafeObjectType;
 use Cambis\Silverstan\TypeFactory\TypeFactory;
-use Override;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\SpecifiedTypes;
@@ -24,6 +23,10 @@ use function in_array;
 final class DataObjectExistsTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
     /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
+    /**
      * @var string[]
      */
     public const SUPPORTED_METHODS = [
@@ -33,36 +36,30 @@ final class DataObjectExistsTypeSpecifyingExtension implements MethodTypeSpecify
 
     private TypeSpecifier $typeSpecifier;
 
-    public function __construct(
-        private readonly TypeFactory $typeFactory
-    ) {
+    public function __construct(TypeFactory $typeFactory)
+    {
+        $this->typeFactory = $typeFactory;
     }
 
-    #[Override]
     public function getClass(): string
     {
         return 'SilverStripe\ORM\DataObject';
     }
 
-    #[Override]
     public function isMethodSupported(MethodReflection $methodReflection, MethodCall $node, TypeSpecifierContext $context): bool
     {
         if (!in_array($methodReflection->getName(), self::SUPPORTED_METHODS, true)) {
             return false;
         }
-
         return $context->truthy();
     }
 
-    #[Override]
     public function specifyTypes(MethodReflection $methodReflection, MethodCall $node, Scope $scope, TypeSpecifierContext $context): SpecifiedTypes
     {
         $objectType = $scope->getType($node->var);
-
         if (!$objectType instanceof UnsafeObjectType) {
             return new SpecifiedTypes();
         }
-
         return $this->typeSpecifier->create(
             $node->var,
             $this->typeFactory->createObjectTypeFromUnsafeObjectType($objectType),
@@ -71,7 +68,6 @@ final class DataObjectExistsTypeSpecifyingExtension implements MethodTypeSpecify
         )->setAlwaysOverwriteTypes();
     }
 
-    #[Override]
     public function setTypeSpecifier(TypeSpecifier $typeSpecifier): void
     {
         $this->typeSpecifier = $typeSpecifier;
