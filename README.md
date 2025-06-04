@@ -2,6 +2,21 @@
 
 [PHPStan extensions and rules](https://github.com/phpstan/phpstan) for [Silverstripe CMS](https://github.com/silverstripe).
 
+<p>
+  <a href='https://packagist.org/packages/cambis/silverstan'>
+    <img src='https://poser.pugx.org/cambis/silverstan/v' alt='Latest stable version' />
+  </a>
+  <a href='https://packagist.org/packages/cambis/silverstan/stats'>
+    <img src='https://poser.pugx.org/cambis/silverstan/downloads' alt='Total downloads' />
+  </a>
+  <a href='https://packagist.org/packages/cambis/silverstan'>
+    <img src='https://poser.pugx.org/cambis/silverstan/license' alt='Licence' />
+  </a>
+  <a href='https://github.com/Cambis/silverstan/actions'>
+    <img src='https://github.com/Cambis/silverstan/actions/workflows/test.yml/badge.svg' alt='Build status'>
+  </a>
+</p>
+
 ## Features ✨
 
 Here are some of the nice features this extension provides:
