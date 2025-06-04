@@ -6,7 +6,6 @@ namespace Cambis\Silverstan\Type\DynamicReturnTypeExtension;
 
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\TypeResolver\TypeResolver;
-use Override;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
@@ -24,8 +23,20 @@ use function in_array;
  *
  * @see \Cambis\Silverstan\Tests\Type\DynamicReturnTypeExtension\ConfigCollectionInterfaceGetReturnTypeExtensionTest
  */
-final readonly class ConfigCollectionInterfaceGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
+final class ConfigCollectionInterfaceGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private TypeResolver $configurationPropertyTypeResolver;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var string[]
      */
@@ -33,39 +44,33 @@ final readonly class ConfigCollectionInterfaceGetReturnTypeExtension implements 
         'get',
     ];
 
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private TypeResolver $configurationPropertyTypeResolver,
-        private ReflectionProvider $reflectionProvider
-    ) {
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, TypeResolver $configurationPropertyTypeResolver, ReflectionProvider $reflectionProvider)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->configurationPropertyTypeResolver = $configurationPropertyTypeResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
-    #[Override]
     public function getClass(): string
     {
         return 'SilverStripe\Config\Collections\ConfigCollectionInterface';
     }
 
-    #[Override]
     public function isMethodSupported(MethodReflection $methodReflection): bool
     {
         return in_array($methodReflection->getName(), self::SUPPORTED_METHODS, true);
     }
 
-    #[Override]
     public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): ?Type
     {
         if (count($methodCall->getArgs()) < 2) {
             return null;
         }
-
         // Let's get the first argument which should be class name
         $firstArgValue = $methodCall->getArgs()[0]->value;
-
         if (!$firstArgValue instanceof String_ && !$firstArgValue instanceof ClassConstFetch) {
             return null;
         }
-
         if ($firstArgValue instanceof String_) {
             $className = $firstArgValue->value;
         } elseif ($firstArgValue->class instanceof Name) {
@@ -73,28 +78,21 @@ final readonly class ConfigCollectionInterfaceGetReturnTypeExtension implements 
         } else {
             return null;
         }
-
         // Cool, we now have a class name to work with
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
-
         $classReflection = $this->reflectionProvider->getClass($className);
-
         if (!$this->classReflectionAnalyser->isConfigurable($classReflection)) {
             return null;
         }
-
         // Lets get the second argument which should be the property name
         $secondArgValue = $methodCall->getArgs()[1]->value;
-
         if (!$secondArgValue instanceof String_) {
             return null;
         }
-
         // Cool, now we have a property name to work with
         $propertyName = $secondArgValue->value;
-
         return $this->configurationPropertyTypeResolver->resolveConfigurationPropertyType($classReflection, $propertyName);
     }
 }
