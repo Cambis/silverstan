@@ -1,5 +1,12 @@
 # @cambis/silverstan
 
+## 1.1.4
+
+### Patch Changes
+
+- c664375: Allow property assign in DisallowPropertyFetchOnConfigForClassRule
+- c197bd8: Add status badges
+
 ## 1.1.3
 
 ### Patch Changes
