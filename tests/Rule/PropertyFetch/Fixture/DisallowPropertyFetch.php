@@ -21,5 +21,7 @@ final class DisallowPropertyFetch implements TestOnly
 
         self::config()->foo;
         self::config()->get('foo');
+
+        self::config()->foo = 'bar';
     }
 }
