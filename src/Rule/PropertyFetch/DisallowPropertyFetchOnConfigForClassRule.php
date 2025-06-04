@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\PropertyFetch;
 
 use Cambis\Silverstan\Contract\SilverstanRuleInterface;
+use Cambis\Silverstan\NodeVisitor\PropertyFetchAssignedToVisitor;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -75,6 +76,11 @@ CODE_SAMPLE
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        // Allow assignment
+        if ($node->hasAttribute(PropertyFetchAssignedToVisitor::ATTRIBUTE_KEY)) {
+            return [];
+        }
+
         $type = $scope->getType($node->var);
 
         // Ensure the resolved type has class reflections
