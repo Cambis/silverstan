@@ -23,16 +23,27 @@ use function sprintf;
  * @implements SilverstanRuleInterface<ClassPropertyNode>
  * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRuleTest
  */
-final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implements SilverstanRuleInterface
+final class DisallowOverridingOfConfigurationPropertyTypeRule implements SilverstanRuleInterface
 {
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
-        private ReflectionResolver $reflectionResolver
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private PropertyReflectionAnalyser $propertyReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, PropertyReflectionAnalyser $propertyReflectionAnalyser, ReflectionResolver $reflectionResolver)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->propertyReflectionAnalyser = $propertyReflectionAnalyser;
+        $this->reflectionResolver = $reflectionResolver;
     }
 
-    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -74,7 +85,6 @@ CODE_SAMPLE
         );
     }
 
-    #[Override]
     public function getNodeType(): string
     {
         return ClassPropertyNode::class;
@@ -83,38 +93,28 @@ CODE_SAMPLE
     /**
      * @param ClassPropertyNode $node
      */
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$this->propertyReflectionAnalyser->isConfigurationProperty($node)) {
             return [];
         }
-
         $classReflection = $node->getClassReflection();
-
         if (!$classReflection->hasNativeProperty($node->getName())) {
             return [];
         }
-
         if (!$this->classReflectionAnalyser->isConfigurable($classReflection)) {
             return [];
         }
-
         $prototype = $this->reflectionResolver->resolveConfigurationPropertyReflection($classReflection->getParentClass(), $node->getName());
-
         if (!$prototype instanceof PropertyReflection) {
             return [];
         }
-
         $nativeType = $classReflection->getNativeProperty($node->getName())->getReadableType();
         $type = $node->getPhpDocType() ?? $nativeType;
-
         $prototypeType = $prototype->getReadableType();
-
         if ($prototypeType->accepts($type, true)->yes()) {
             return [];
         }
-
         return [
             RuleErrorBuilder::message(
                 sprintf(
