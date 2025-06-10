@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Autoloader;
 
+use Closure;
 use Cambis\Silverstan\ClassManifest\ClassManifest;
 use function file_exists;
 use function spl_autoload_register;
 
-final readonly class Autoloader
+final class Autoloader
 {
-    public function __construct(
-        private ClassManifest $classManifest
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassManifest $classManifest;
+    public function __construct(ClassManifest $classManifest)
+    {
+        $this->classManifest = $classManifest;
     }
 
     /**
@@ -20,7 +25,7 @@ final readonly class Autoloader
      */
     public function register(): void
     {
-        spl_autoload_register($this->autoload(...));
+        spl_autoload_register(Closure::fromCallable([$this, 'autoload']));
     }
 
     private function autoload(string $className): void

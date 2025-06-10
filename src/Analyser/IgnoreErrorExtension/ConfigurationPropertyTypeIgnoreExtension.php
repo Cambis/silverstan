@@ -15,13 +15,25 @@ use PHPStan\Node\ClassPropertyNode;
 /**
  * Ignore `missingType.iterableValue` value errors on configuration properties.
  */
-final readonly class ConfigurationPropertyTypeIgnoreExtension implements IgnoreErrorExtension
+final class ConfigurationPropertyTypeIgnoreExtension implements IgnoreErrorExtension
 {
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
-        private bool $enabled
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private PropertyReflectionAnalyser $propertyReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private bool $enabled;
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, PropertyReflectionAnalyser $propertyReflectionAnalyser, bool $enabled)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->propertyReflectionAnalyser = $propertyReflectionAnalyser;
+        $this->enabled = $enabled;
     }
 
     public function shouldIgnore(Error $error, Node $node, Scope $scope): bool

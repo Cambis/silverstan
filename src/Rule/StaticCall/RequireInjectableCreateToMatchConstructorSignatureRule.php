@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cambis\Silverstan\Rule\StaticCall;
 
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
-use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticCall;
@@ -22,58 +21,54 @@ use function sprintf;
  *
  * @see \Cambis\Silverstan\Tests\Rule\StaticCall\RequireInjectableCreateToMatchConstructorSignatureRuleTest
  */
-final readonly class RequireInjectableCreateToMatchConstructorSignatureRule implements Rule
+final class RequireInjectableCreateToMatchConstructorSignatureRule implements Rule
 {
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private FunctionCallParametersCheck $functionCallParametersCheck
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private FunctionCallParametersCheck $functionCallParametersCheck;
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, FunctionCallParametersCheck $functionCallParametersCheck)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->functionCallParametersCheck = $functionCallParametersCheck;
     }
 
-    #[Override]
     public function getNodeType(): string
     {
         return StaticCall::class;
     }
 
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$node->name instanceof Identifier) {
             return [];
         }
-
         if ($node->name->toLowerString() !== 'create') {
             return [];
         }
-
         $type = null;
-
         if ($node->class instanceof Expr) {
             $type = $scope->getType($node->class);
         }
-
         if ($node->class instanceof Name) {
             $type = $scope->resolveTypeByName($node->class);
         }
-
         if ($type->getObjectClassReflections() === []) {
             return [];
         }
-
         $classReflection = $type->getObjectClassReflections()[0];
-
         if (!$this->classReflectionAnalyser->isInjectable($classReflection)) {
             return [];
         }
-
         if (!$classReflection->hasConstructor()) {
             return [];
         }
-
         $constructorReflection = $classReflection->getConstructor();
         $methodName = sprintf('%s::create()', $classReflection->getDisplayName());
-
         // @phpstan-ignore phpstanApi.method
         return $this->functionCallParametersCheck->check(
             ParametersAcceptorSelector::selectFromArgs(
