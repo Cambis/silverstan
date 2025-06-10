@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 1.1.5
+
+### Patch Changes
+
+- f273f7a: update Injector::get to use correct definition for constructorArgs
+
 ## 1.1.4
 
 ### Patch Changes
