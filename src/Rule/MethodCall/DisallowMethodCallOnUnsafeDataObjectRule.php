@@ -27,8 +27,12 @@ use function sprintf;
  *
  * @see \Cambis\Silverstan\Tests\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRuleTest
  */
-final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements SilverstanRuleInterface
+final class DisallowMethodCallOnUnsafeDataObjectRule implements SilverstanRuleInterface
 {
+    /**
+     * @readonly
+     */
+    private array $allowedMethodCalls = [];
     /**
      * @var string[]
      */
@@ -38,13 +42,12 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Silvers
         ...DataObjectWriteTypeSpecifyingExtension::SUPPORTED_METHODS,
     ];
 
-    public function __construct(
+    public function __construct(array $allowedMethodCalls = [])
+    {
         /** @var string[] */
-        private array $allowedMethodCalls = []
-    ) {
+        $this->allowedMethodCalls = $allowedMethodCalls;
     }
 
-    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -93,7 +96,6 @@ CODE_SAMPLE
         );
     }
 
-    #[Override]
     public function getNodeType(): string
     {
         return MethodCall::class;
@@ -102,46 +104,35 @@ CODE_SAMPLE
     /**
      * @param MethodCall $node
      */
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$node->name instanceof Identifier) {
             return [];
         }
-
         if (in_array($node->name->toString(), self::DEFAULT_ALLOWED_METHODS_CALLS, true)) {
             return [];
         }
-
         if (in_array($node->name->toString(), $this->allowedMethodCalls, true)) {
             return [];
         }
-
         if (!$node->var instanceof MethodCall) {
             return [];
         }
-
         if ($node->var->name instanceof Expr) {
             return [];
         }
-
         $ownerType = $scope->getType($node->var->var);
-
         // Skip any native methods, we're only interested in magic ones
         foreach ($ownerType->getObjectClassReflections() as $classReflection) {
             if ($classReflection->hasNativeMethod($node->var->name->toString())) {
                 return [];
             }
         }
-
         $type = $scope->getType($node->var);
-
         if (!$type instanceof UnsafeObjectType) {
             return [];
         }
-
         $varName = $this->resolveExprName($node->var->var);
-
         return [
             RuleErrorBuilder::message(
                 sprintf(

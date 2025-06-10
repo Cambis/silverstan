@@ -23,6 +23,10 @@ use function in_array;
 final class ViewableDataHasFieldTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
     /**
+     * @readonly
+     */
+    private string $className;
+    /**
      * @var string[]
      */
     private const SUPPORTED_METHODS = [
@@ -31,45 +35,37 @@ final class ViewableDataHasFieldTypeSpecifyingExtension implements MethodTypeSpe
 
     private TypeSpecifier $typeSpecifier;
 
-    public function __construct(
+    public function __construct(string $className)
+    {
         /**
          * @var class-string
          */
-        private readonly string $className
-    ) {
+        $this->className = $className;
     }
 
-    #[Override]
     public function getClass(): string
     {
         return $this->className;
     }
 
-    #[Override]
     public function isMethodSupported(MethodReflection $methodReflection, MethodCall $node, TypeSpecifierContext $context): bool
     {
         if (!in_array($methodReflection->getName(), self::SUPPORTED_METHODS, true)) {
             return false;
         }
-
         return $context->falsey();
     }
 
-    #[Override]
     public function specifyTypes(MethodReflection $methodReflection, MethodCall $node, Scope $scope, TypeSpecifierContext $context): SpecifiedTypes
     {
         $propertyNameType = $scope->getType($node->getArgs()[0]->value);
-
         if ($propertyNameType->isString()->no()) {
             return new SpecifiedTypes();
         }
-
         if ($propertyNameType->getConstantStrings() === []) {
             return new SpecifiedTypes();
         }
-
         $propertyFetch = new PropertyFetch($node->var, $propertyNameType->getConstantStrings()[0]->getValue());
-
         return $this->typeSpecifier->create(
             $propertyFetch,
             new NullType(),
@@ -79,7 +75,6 @@ final class ViewableDataHasFieldTypeSpecifyingExtension implements MethodTypeSpe
         );
     }
 
-    #[Override]
     public function setTypeSpecifier(TypeSpecifier $typeSpecifier): void
     {
         $this->typeSpecifier = $typeSpecifier;

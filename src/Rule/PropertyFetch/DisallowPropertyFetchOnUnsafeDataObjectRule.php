@@ -25,9 +25,8 @@ use function sprintf;
  *
  * @see \Cambis\Silverstan\Tests\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRuleTest
  */
-final readonly class DisallowPropertyFetchOnUnsafeDataObjectRule implements SilverstanRuleInterface
+final class DisallowPropertyFetchOnUnsafeDataObjectRule implements SilverstanRuleInterface
 {
-    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -72,7 +71,6 @@ CODE_SAMPLE
         );
     }
 
-    #[Override]
     public function getNodeType(): string
     {
         return PropertyFetch::class;
@@ -81,43 +79,33 @@ CODE_SAMPLE
     /**
      * @param PropertyFetch $node
      */
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$node->name instanceof Identifier) {
             return [];
         }
-
         // Allow access if the node is being assigned
         if ($node->hasAttribute(PropertyFetchAssignedToVisitor::ATTRIBUTE_KEY)) {
             return [];
         }
-
         if (!$node->var instanceof MethodCall) {
             return [];
         }
-
         if ($node->var->name instanceof Expr) {
             return [];
         }
-
         $ownerType = $scope->getType($node->var->var);
-
         // Skip any native methods, we're only interested in magic ones
         foreach ($ownerType->getObjectClassReflections() as $classReflection) {
             if ($classReflection->hasNativeMethod($node->var->name->toString())) {
                 return [];
             }
         }
-
         $type = $scope->getType($node->var);
-
         if (!$type instanceof UnsafeObjectType) {
             return [];
         }
-
         $varName = $this->resolveExprName($node->var->var);
-
         return [
             RuleErrorBuilder::message(
                 sprintf(
