@@ -46,7 +46,7 @@ final readonly class TypeResolver
      * Does not resolve implementors of `Cambis\Silverstan\TypeResolver\Contract\LazyTypeResolverInterface`.
      *
      * @see \Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface
-     * @return Type[]
+     * @return array<non-empty-string, Type>
      */
     public function resolveInjectedPropertyTypes(ClassReflection $classReflection): array
     {
@@ -67,7 +67,7 @@ final readonly class TypeResolver
      * Resolve injected property types using the registered resolvers.
      *
      * @see \Cambis\Silverstan\TypeResolver\Contract\PropertyTypeResolverInterface
-     * @return Type[]
+     * @return array<non-empty-string, Type>
      */
     public function resolveInjectedPropertyTypesFromConfigurationProperty(ClassReflection $classReflection, string $propertyName): array
     {
@@ -86,7 +86,7 @@ final readonly class TypeResolver
      * Resolve injected method types using the registered resolvers.
      *
      * @see \Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface
-     * @return Type[]
+     * @return array<non-empty-string, Type>
      */
     public function resolveInjectedMethodTypesFromConfigurationProperty(ClassReflection $classReflection, string $propertyName): array
     {
@@ -106,7 +106,7 @@ final readonly class TypeResolver
      * Does not resolve implementors of `Cambis\Silverstan\TypeResolver\Contract\LazyTypeResolverInterface`.
      *
      * @see \Cambis\Silverstan\TypeResolver\Contract\MethodTypeResolverInterface
-     * @return Type[]
+     * @return array<non-empty-string, Type>
      */
     public function resolveInjectedMethodTypes(ClassReflection $classReflection): array
     {

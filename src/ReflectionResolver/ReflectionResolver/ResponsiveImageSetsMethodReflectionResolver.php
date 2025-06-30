@@ -13,6 +13,7 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\ObjectType;
 use function array_keys;
 use function is_array;
+use function strtolower;
 
 /**
  * Resolves magic sets methods from `Heyday\ResponsiveImages\ResponsiveImageExtension`.
@@ -50,8 +51,9 @@ final readonly class ResponsiveImageSetsMethodReflectionResolver implements Meth
 
         $returnType = new ObjectType('SilverStripe\ORM\FieldType\DBHTMLText');
 
+        /** @var non-empty-string $set */
         foreach (array_keys($sets) as $set) {
-            $methodReflections[$set] = new ExtensibleMethodReflection($set, $classReflection, $returnType, [], false, false, null, TemplateTypeMap::createEmpty());
+            $methodReflections[strtolower($set)] = new ExtensibleMethodReflection($set, $classReflection, $returnType, [], false, false, null, TemplateTypeMap::createEmpty());
         }
 
         return $methodReflections;

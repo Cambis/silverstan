@@ -9,6 +9,7 @@ $foo = Foo::create();
 
 // belongs_to
 assertType(Foo::class, $foo->Parent());
+assertType(Foo::class, $foo->parent()); // Wrong case but still valid PHP
 
 // has_one
 assertType(Foo::class, $foo->Child());

@@ -31,7 +31,7 @@ interface PropertyTypeResolverInterface
     public function getExcludeMiddleware(): true|int;
 
     /**
-     * @return Type[]
+     * @return array<non-empty-string, Type>
      */
     public function resolve(ClassReflection $classReflection): array;
 }

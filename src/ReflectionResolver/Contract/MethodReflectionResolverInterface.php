@@ -25,7 +25,7 @@ interface MethodReflectionResolverInterface
     public function getConfigurationPropertyName(): string;
 
     /**
-     * @return MethodReflection[]
+     * @return array<non-empty-lowercase-string, MethodReflection>
      */
     public function resolve(ClassReflection $classReflection): array;
 }
