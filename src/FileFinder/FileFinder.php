@@ -7,6 +7,7 @@ namespace Cambis\Silverstan\FileFinder;
 use Composer\InstalledVersions;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
+use function array_unique;
 use function dirname;
 use function file_exists;
 use function realpath;
@@ -157,13 +158,7 @@ final class FileFinder
             ->directories()
             ->name($excludedNames);
 
-        $excludedDirs = [];
-
-        foreach ($hits as $hit) {
-            $excludedDirs[] = $hit->getRealPath() !== false ? dirname($hit->getRealPath()) : dirname($hit->getPath());
-        }
-
-        $this->excludedDirectories = $excludedDirs;
+        $this->excludedDirectories = $this->getFinderDirectories($hits);
 
         return $this->excludedDirectories;
     }
@@ -246,6 +241,8 @@ final class FileFinder
     /**
      * Get a list of directories from the application root that contain the `_config` directory or the `config.php` file.
      *
+     * If the application root is inside a `silverstripe-vendormodule` return the directories inside it.
+     *
      * @return list<string>
      */
     private function getAppDirectories(): array
@@ -254,29 +251,33 @@ final class FileFinder
             return $this->appDirectories;
         }
 
-        $configFiles = Finder::create()
-            ->in($this->getAppRootDirectory())
-            ->files()
-            ->exclude('vendor')
-            ->name('_config.php');
-
-        $configDirs = Finder::create()
-            ->in($this->getAppRootDirectory())
-            ->directories()
-            ->exclude('vendor')
-            ->name('_config');
-
         $appDirs = [];
 
-        foreach ($configFiles as $configFile) {
-            $appDirs[] = $configFile->getRealPath() !== false ? dirname($configFile->getRealPath()) : dirname($configFile->getPath());
+        // Modules don't need `_config` directory or `_config.php` file
+        if ($this->isInModule()) {
+            $moduleDirectories = Finder::create()
+                ->in($this->getAppRootDirectory())
+                ->directories()
+                ->exclude(['node_modules', 'vendor']);
+
+            $appDirs = $this->getFinderDirectories($moduleDirectories);
+        } else {
+            $configFiles = Finder::create()
+                ->in($this->getAppRootDirectory())
+                ->files()
+                ->exclude(['node_modules', 'vendor'])
+                ->name('_config.php');
+
+            $configDirs = Finder::create()
+                ->in($this->getAppRootDirectory())
+                ->directories()
+                ->exclude(['node_modules', 'vendor'])
+                ->name('_config');
+
+            $appDirs = [...$this->getFinderDirectories($configFiles), ...$this->getFinderDirectories($configDirs)];
         }
 
-        foreach ($configDirs as $configDir) {
-            $appDirs[] = $configDir->getRealPath() !== false ? dirname($configDir->getRealPath()) : dirname($configDir->getPath());
-        }
-
-        $this->appDirectories = $appDirs;
+        $this->appDirectories = [...array_unique($appDirs)];
 
         return $this->appDirectories;
     }
@@ -294,5 +295,45 @@ final class FileFinder
         }
 
         return null;
+    }
+
+    /**
+     * True if the app root is inside a `silverstripe-vendormodule`.
+     */
+    private function isInModule(): bool
+    {
+        $installedVersions = InstalledVersions::getInstalledPackagesByType('silverstripe-vendormodule');
+
+        foreach ($installedVersions as $packageName) {
+            $path = InstalledVersions::getInstallPath($packageName);
+
+            if ($path === null) {
+                continue;
+            }
+
+            $path = realpath($path);
+
+            if ($path !== $this->getAppRootDirectory()) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function getFinderDirectories(Finder $finder): array
+    {
+        $dirs = [];
+
+        foreach ($finder as $directory) {
+            $dirs[] = $directory->getRealPath() !== false ? dirname($directory->getRealPath()) : dirname($directory->getPath());
+        }
+
+        return $dirs;
     }
 }
