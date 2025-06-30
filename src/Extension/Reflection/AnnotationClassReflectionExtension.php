@@ -12,6 +12,7 @@ use PHPStan\Reflection\MethodsClassReflectionExtension;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
 use function array_key_exists;
+use function strtolower;
 
 /**
  * This extension is used resolve methods and properties declared by annotations.
@@ -53,7 +54,7 @@ final class AnnotationClassReflectionExtension implements MethodsClassReflection
                 return false;
             }
 
-            $this->methodReflections[$classReflection->getCacheKey()][$methodName] = $methodReflection;
+            $this->methodReflections[$classReflection->getCacheKey()][strtolower($methodName)] = $methodReflection;
         }
 
         return true;
@@ -88,6 +89,6 @@ final class AnnotationClassReflectionExtension implements MethodsClassReflection
     #[Override]
     public function getMethod(ClassReflection $classReflection, string $methodName): MethodReflection
     {
-        return $this->methodReflections[$classReflection->getCacheKey()][$methodName];
+        return $this->methodReflections[$classReflection->getCacheKey()][strtolower($methodName)];
     }
 }
