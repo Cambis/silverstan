@@ -13,6 +13,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use ReflectionMethod;
 use function array_unique;
 use function is_array;
+use function strtolower;
 
 final readonly class ExtensionMethodReflectionResolver implements MethodReflectionResolverInterface
 {
@@ -83,7 +84,10 @@ final readonly class ExtensionMethodReflectionResolver implements MethodReflecti
                     continue;
                 }
 
-                $methodReflections[$reflectionMethod->getName()] = $extendedMethodReflection;
+                /** @var non-empty-lowercase-string $methodName */
+                $methodName = strtolower($reflectionMethod->getName());
+
+                $methodReflections[$methodName] = $extendedMethodReflection;
             }
         }
 

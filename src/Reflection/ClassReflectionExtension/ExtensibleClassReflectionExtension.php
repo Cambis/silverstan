@@ -13,6 +13,7 @@ use PHPStan\Reflection\MethodsClassReflectionExtension;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
 use function array_key_exists;
+use function strtolower;
 
 /**
  * This extension resolves `SilverStripe\Core\Extensible` magic methods and properties.
@@ -22,7 +23,7 @@ use function array_key_exists;
 final class ExtensibleClassReflectionExtension implements MethodsClassReflectionExtension, PropertiesClassReflectionExtension
 {
     /**
-     * @var MethodReflection[][]
+     * @var array<string, array<non-empty-lowercase-string, MethodReflection>>
      */
     private array $methodReflections = [];
 
@@ -57,7 +58,7 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
 
         $methodReflections = $this->resolveInjectedMethodReflections($classReflection);
 
-        $methodReflection = $methodReflections[$methodName] ?? null;
+        $methodReflection = $methodReflections[strtolower($methodName)] ?? null;
 
         return $methodReflection instanceof MethodReflection;
     }
@@ -92,7 +93,7 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
             return $this->annotationClassReflectionExtension->getMethod($classReflection, $methodName);
         }
 
-        return $this->methodReflections[$classReflection->getCacheKey()][$methodName];
+        return $this->methodReflections[$classReflection->getCacheKey()][strtolower($methodName)];
     }
 
     #[Override]

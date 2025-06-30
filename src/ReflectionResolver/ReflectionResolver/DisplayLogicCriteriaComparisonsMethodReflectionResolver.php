@@ -16,6 +16,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use function is_array;
+use function strtolower;
 
 /**
  * Resolves magic comparison methods from `UncleCheese\DisplayLogic\Criteria`.
@@ -53,9 +54,9 @@ final readonly class DisplayLogicCriteriaComparisonsMethodReflectionResolver imp
         $parameters = [new ExtensibleParameterReflection('val', new MixedType(), PassedByReference::createNo(), true, true, new NullType())];
         $returnType = new ObjectType('UncleCheese\DisplayLogic\Criteria');
 
-        /** @var string[] $comparisons */
+        /** @var non-empty-string[] $comparisons */
         foreach ($comparisons as $comparison) {
-            $methodReflections[$comparison] = new ExtensibleMethodReflection($comparison, $classReflection, $returnType, $parameters, false, true, null, TemplateTypeMap::createEmpty());
+            $methodReflections[strtolower($comparison)] = new ExtensibleMethodReflection($comparison, $classReflection, $returnType, $parameters, false, true, null, TemplateTypeMap::createEmpty());
         }
 
         return $methodReflections;

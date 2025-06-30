@@ -11,6 +11,7 @@ use Cambis\Silverstan\TypeResolver\TypeResolver;
 use Override;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Generic\TemplateTypeMap;
+use function strtolower;
 
 final readonly class SimpleRelationMethodReflectionResolver implements MethodReflectionResolverInterface
 {
@@ -39,7 +40,7 @@ final readonly class SimpleRelationMethodReflectionResolver implements MethodRef
         $methodReflections = [];
 
         foreach ($types as $name => $type) {
-            $methodReflections[$name] = new ExtensibleMethodReflection($name, $classReflection, $type, [], false, false, null, TemplateTypeMap::createEmpty());
+            $methodReflections[strtolower($name)] = new ExtensibleMethodReflection($name, $classReflection, $type, [], false, false, null, TemplateTypeMap::createEmpty());
         }
 
         return $methodReflections;

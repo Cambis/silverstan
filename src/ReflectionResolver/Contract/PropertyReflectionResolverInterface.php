@@ -25,7 +25,7 @@ interface PropertyReflectionResolverInterface
     public function getConfigurationPropertyName(): string;
 
     /**
-     * @return PropertyReflection[]
+     * @return array<non-empty-string, PropertyReflection>
      */
     public function resolve(ClassReflection $classReflection): array;
 }

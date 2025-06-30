@@ -37,7 +37,7 @@ final class ReflectionResolver
      * Resolve all injected property reflections using the registered resolvers.
      *
      * @see \Cambis\Silverstan\ReflectionResolver\Contract\PropertyReflectionResolverInterface
-     * @return PropertyReflection[]
+     * @return array<non-empty-string, PropertyReflection>
      */
     public function resolveInjectedPropertyReflections(ClassReflection $classReflection): array
     {
@@ -54,7 +54,7 @@ final class ReflectionResolver
      * Resolve all injected method reflections using the registered resolvers.
      *
      * @see \Cambis\Silverstan\ReflectionResolver\Contract\MethodReflectionResolverInterface
-     * @return MethodReflection[]
+     * @return array<non-empty-lowercase-string, MethodReflection>
      */
     public function resolveInjectedMethodReflections(ClassReflection $classReflection): array
     {
