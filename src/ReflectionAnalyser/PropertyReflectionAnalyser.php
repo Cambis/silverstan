@@ -6,11 +6,13 @@ namespace Cambis\Silverstan\ReflectionAnalyser;
 
 use PHPStan\Node\ClassPropertyNode;
 use PHPStan\Reflection\PropertyReflection;
-use function str_contains;
 
 final class PropertyReflectionAnalyser
 {
-    public function isConfigurationProperty(ClassPropertyNode|PropertyReflection $property): bool
+    /**
+     * @param ClassPropertyNode|PropertyReflection $property
+     */
+    public function isConfigurationProperty($property): bool
     {
         if (!$property->isPrivate()) {
             return false;
@@ -21,9 +23,9 @@ final class PropertyReflectionAnalyser
         }
 
         if ($property instanceof ClassPropertyNode) {
-            return !str_contains((string) $property->getPhpDoc(), '@internal');
+            return strpos((string) $property->getPhpDoc(), '@internal') === false;
         }
 
-        return !str_contains((string) $property->getDocComment(), '@internal');
+        return strpos((string) $property->getDocComment(), '@internal') === false;
     }
 }

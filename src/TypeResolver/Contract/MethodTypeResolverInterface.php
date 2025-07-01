@@ -21,14 +21,14 @@ use PHPStan\Type\Type;
  */
 interface MethodTypeResolverInterface
 {
-    final public const SERVICE_NAME = 'silverstan.typeResolver.methodTypeResolver';
+    public const SERVICE_NAME = 'silverstan.typeResolver.methodTypeResolver';
 
     public function getConfigurationPropertyName(): string;
 
     /**
      * @return true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
      */
-    public function getExcludeMiddleware(): true|int;
+    public function getExcludeMiddleware();
 
     /**
      * @return array<non-empty-string, Type>

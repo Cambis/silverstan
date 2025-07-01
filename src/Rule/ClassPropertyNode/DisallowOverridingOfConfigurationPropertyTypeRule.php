@@ -7,7 +7,6 @@ namespace Cambis\Silverstan\Rule\ClassPropertyNode;
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionAnalyser\PropertyReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
-use Override;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\ClassPropertyNode;
@@ -21,21 +20,32 @@ use function sprintf;
  * @implements Rule<ClassPropertyNode>
  * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRuleTest
  */
-final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implements Rule
+final class DisallowOverridingOfConfigurationPropertyTypeRule implements Rule
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private PropertyReflectionAnalyser $propertyReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
     /**
      * @var string
      */
     private const IDENTIFIER = 'silverstan.configurationProperty.invalid';
 
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
-        private ReflectionResolver $reflectionResolver
-    ) {
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, PropertyReflectionAnalyser $propertyReflectionAnalyser, ReflectionResolver $reflectionResolver)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->propertyReflectionAnalyser = $propertyReflectionAnalyser;
+        $this->reflectionResolver = $reflectionResolver;
     }
 
-    #[Override]
     public function getNodeType(): string
     {
         return ClassPropertyNode::class;
@@ -44,38 +54,28 @@ final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implement
     /**
      * @param ClassPropertyNode $node
      */
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$this->propertyReflectionAnalyser->isConfigurationProperty($node)) {
             return [];
         }
-
         $classReflection = $node->getClassReflection();
-
         if (!$classReflection->hasNativeProperty($node->getName())) {
             return [];
         }
-
         if (!$this->classReflectionAnalyser->isConfigurable($classReflection)) {
             return [];
         }
-
         $prototype = $this->reflectionResolver->resolveConfigurationPropertyReflection($classReflection->getParentClass(), $node->getName());
-
         if (!$prototype instanceof PropertyReflection) {
             return [];
         }
-
         $nativeType = $classReflection->getNativeProperty($node->getName())->getReadableType();
         $type = $node->getPhpDocType() ?? $nativeType;
-
         $prototypeType = $prototype->getReadableType();
-
         if ($prototypeType->accepts($type, true)->yes()) {
             return [];
         }
-
         return [
             RuleErrorBuilder::message(
                 sprintf(

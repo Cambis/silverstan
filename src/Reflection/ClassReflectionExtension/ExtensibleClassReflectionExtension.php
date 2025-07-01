@@ -6,7 +6,6 @@ namespace Cambis\Silverstan\Reflection\ClassReflectionExtension;
 
 use Cambis\Silverstan\ReflectionAnalyser\ClassReflectionAnalyser;
 use Cambis\Silverstan\ReflectionResolver\ReflectionResolver;
-use Override;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\MethodsClassReflectionExtension;
@@ -23,6 +22,18 @@ use function strtolower;
 final class ExtensibleClassReflectionExtension implements MethodsClassReflectionExtension, PropertiesClassReflectionExtension
 {
     /**
+     * @readonly
+     */
+    private AnnotationClassReflectionExtension $annotationClassReflectionExtension;
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    /**
      * @var array<string, array<non-empty-lowercase-string, MethodReflection>>
      */
     private array $methodReflections = [];
@@ -32,77 +43,62 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
      */
     private array $propertyReflections = [];
 
-    public function __construct(
-        private readonly AnnotationClassReflectionExtension $annotationClassReflectionExtension,
-        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly ReflectionResolver $reflectionResolver
-    ) {
+    public function __construct(AnnotationClassReflectionExtension $annotationClassReflectionExtension, ClassReflectionAnalyser $classReflectionAnalyser, ReflectionResolver $reflectionResolver)
+    {
+        $this->annotationClassReflectionExtension = $annotationClassReflectionExtension;
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->reflectionResolver = $reflectionResolver;
     }
 
-    #[Override]
     public function hasMethod(ClassReflection $classReflection, string $methodName): bool
     {
         // Skip non-extensible classes
         if (!$this->classReflectionAnalyser->isExtensible($classReflection)) {
             return false;
         }
-
         // Let PHPStan handle this case
         if ($classReflection->hasNativeMethod($methodName)) {
             return false;
         }
-
         if ($this->annotationClassReflectionExtension->hasMethod($classReflection, $methodName)) {
             return true;
         }
-
         $methodReflections = $this->resolveInjectedMethodReflections($classReflection);
-
         $methodReflection = $methodReflections[strtolower($methodName)] ?? null;
-
         return $methodReflection instanceof MethodReflection;
     }
 
-    #[Override]
     public function hasProperty(ClassReflection $classReflection, string $propertyName): bool
     {
         // Skip non-extensible classes
         if (!$this->classReflectionAnalyser->isExtensible($classReflection)) {
             return false;
         }
-
         // Let PHPStan handle this case
         if ($classReflection->hasNativeProperty($propertyName)) {
             return false;
         }
-
         if ($this->annotationClassReflectionExtension->hasProperty($classReflection, $propertyName)) {
             return true;
         }
-
         $propertyReflections = $this->resolveInjectedPropertyReflections($classReflection);
         $propertyReflection = $propertyReflections[$propertyName] ?? null;
-
         return $propertyReflection instanceof PropertyReflection;
     }
 
-    #[Override]
     public function getMethod(ClassReflection $classReflection, string $methodName): MethodReflection
     {
         if ($this->annotationClassReflectionExtension->hasMethod($classReflection, $methodName)) {
             return $this->annotationClassReflectionExtension->getMethod($classReflection, $methodName);
         }
-
         return $this->methodReflections[$classReflection->getCacheKey()][strtolower($methodName)];
     }
 
-    #[Override]
     public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
     {
         if ($this->annotationClassReflectionExtension->hasProperty($classReflection, $propertyName)) {
             return $this->annotationClassReflectionExtension->getProperty($classReflection, $propertyName);
         }
-
         return $this->propertyReflections[$classReflection->getCacheKey()][$propertyName];
     }
 
