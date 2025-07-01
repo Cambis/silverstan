@@ -1,5 +1,12 @@
 # @cambis/silverstan
 
+## 2.1.6
+
+### Patch Changes
+
+- 6c9a3f8: Allow autoloading of modules with no config files
+- bd8eee9: Allow case insensitive method calls in ExtensibleClassReflectionExtension
+
 ## 2.1.5
 
 ### Patch Changes
