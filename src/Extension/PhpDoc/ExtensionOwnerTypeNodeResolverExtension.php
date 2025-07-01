@@ -24,26 +24,31 @@ use PHPStan\Type\TypeCombinator;
  */
 final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverExtension, TypeNodeResolverAwareExtension
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
     private TypeNodeResolver $typeNodeResolver;
 
-    public function __construct(
-        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly TypeFactory $typeFactory,
-    ) {
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, TypeFactory $typeFactory)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
      * @throws ShouldNotHappenException
      */
-    #[Override]
     public function resolve(TypeNode $typeNode, NameScope $nameScope): ?Type
     {
         if (!$typeNode instanceof IntersectionTypeNode) {
             return null;
         }
-
         $types = [];
-
         foreach ($typeNode->types as $node) {
             $type = $this->typeNodeResolver->resolve($node, $nameScope);
 
@@ -53,11 +58,9 @@ final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverE
 
             $types[] = $this->typeFactory->createExtensibleTypeFromType($type);
         }
-
         return TypeCombinator::intersect(...$types);
     }
 
-    #[Override]
     public function setTypeNodeResolver(TypeNodeResolver $typeNodeResolver): void
     {
         $this->typeNodeResolver = $typeNodeResolver;

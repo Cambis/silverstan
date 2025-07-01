@@ -23,42 +23,38 @@ use function strtolower;
  *
  * @see \Cambis\Silverstan\Tests\Extension\Reflection\ExtensibleClassReflectionExtensionTest
  */
-final readonly class DisplayLogicCriteriaComparisonsMethodReflectionResolver implements MethodReflectionResolverInterface
+final class DisplayLogicCriteriaComparisonsMethodReflectionResolver implements MethodReflectionResolverInterface
 {
-    public function __construct(
-        private ConfigurationResolver $configurationResolver
-    ) {
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    public function __construct(ConfigurationResolver $configurationResolver)
+    {
+        $this->configurationResolver = $configurationResolver;
     }
 
-    #[Override]
     public function getConfigurationPropertyName(): string
     {
         return 'comparisons';
     }
 
-    #[Override]
     public function resolve(ClassReflection $classReflection): array
     {
         if (!$classReflection->is('UncleCheese\DisplayLogic\Criteria')) {
             return [];
         }
-
         $methodReflections = [];
-
         $comparisons = $this->configurationResolver->get($classReflection->getName(), $this->getConfigurationPropertyName());
-
         if (!is_array($comparisons) || $comparisons === []) {
             return [];
         }
-
         $parameters = [new ExtensibleParameterReflection('val', new MixedType(), PassedByReference::createNo(), true, true, new NullType())];
         $returnType = new ObjectType('UncleCheese\DisplayLogic\Criteria');
-
         /** @var non-empty-string[] $comparisons */
         foreach ($comparisons as $comparison) {
             $methodReflections[strtolower($comparison)] = new ExtensibleMethodReflection($comparison, $classReflection, $returnType, $parameters, false, true, null, TemplateTypeMap::createEmpty());
         }
-
         return $methodReflections;
     }
 }
