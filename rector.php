@@ -6,6 +6,7 @@ use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRecto
 use Rector\Config\RectorConfig;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
+use Rector\Php81\Rector\MethodCall\RemoveReflectionSetAccessibleCallsRector;
 use Rector\Php83\Rector\ClassConst\AddTypeToConstRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
@@ -20,11 +21,11 @@ return RectorConfig::configure()
         php83: true
     )
     ->withPreparedSets(
+        deadCode: true,
         codeQuality: true,
         codingStyle: true,
-        deadCode: true,
-        earlyReturn: true,
-        privatization: true
+        privatization: true,
+        earlyReturn: true
     )
     ->withRules([
         DeclareStrictTypesRector::class,
@@ -43,5 +44,8 @@ return RectorConfig::configure()
         StringClassNameToClassConstantRector::class,
         UseClassKeywordForClassNameResolutionRector::class => [
             __DIR__ . '/tests',
+        ],
+        RemoveReflectionSetAccessibleCallsRector::class => [
+            __DIR__ . '/src/ConfigurationResolver/Middleware/PrivateStaticMiddleware.php',
         ],
     ]);
