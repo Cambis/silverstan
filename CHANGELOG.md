@@ -1,5 +1,11 @@
 # @cambis/silverstan
 
+## 2.1.7
+
+### Patch Changes
+
+- 1c20bbc: Add support for PHPStan 2.1.28
+
 ## 2.1.6
 
 ### Patch Changes
