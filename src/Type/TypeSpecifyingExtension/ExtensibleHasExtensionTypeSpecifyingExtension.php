@@ -33,7 +33,9 @@ final class ExtensibleHasExtensionTypeSpecifyingExtension implements MethodTypeS
     private TypeSpecifier $typeSpecifier;
 
     public function __construct(
-        /** @var class-string */
+        /**
+         * @var class-string
+         */
         private readonly string $className,
         private readonly ClassReflectionAnalyser $classReflectionAnalyser,
         private readonly TypeFactory $typeFactory,

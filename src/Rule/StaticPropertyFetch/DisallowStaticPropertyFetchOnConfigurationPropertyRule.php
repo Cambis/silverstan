@@ -70,11 +70,11 @@ final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule impl
             return [];
         }
 
-        if ($type->hasProperty($node->name->name)->no()) {
+        if ($type->hasStaticProperty($node->name->name)->no()) {
             return [];
         }
 
-        $propertyReflection = $classReflection->getProperty($node->name->name, $scope);
+        $propertyReflection = $classReflection->getStaticProperty($node->name->name);
 
         if (!$this->propertyReflectionAnalyser->isConfigurationProperty($propertyReflection)) {
             return [];

@@ -20,7 +20,7 @@ final readonly class SimpleRelationPropertyTypeResolver implements PropertyTypeR
         /**
          * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
          */
-        private readonly true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
+        private true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
     ) {
     }
 

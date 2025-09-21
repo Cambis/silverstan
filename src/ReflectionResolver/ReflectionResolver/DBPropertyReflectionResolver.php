@@ -77,8 +77,8 @@ final readonly class DBPropertyReflectionResolver implements PropertyReflectionR
         }
 
         // Attempt to return the type from the property
-        if ($fieldClassReflection->hasProperty('value')) {
-            return $fieldClassReflection->getProperty('value', new OutOfClassScope())->getReadableType();
+        if ($fieldClassReflection->hasInstanceProperty('value')) {
+            return $fieldClassReflection->getInstanceProperty('value', new OutOfClassScope())->getReadableType();
         }
 
         // Fallback, return the original type
@@ -112,8 +112,8 @@ final readonly class DBPropertyReflectionResolver implements PropertyReflectionR
         }
 
         // Attempt to return the type from the property
-        if ($fieldClassReflection->hasProperty('value')) {
-            return $fieldClassReflection->getProperty('value', new OutOfClassScope())->getWritableType();
+        if ($fieldClassReflection->hasInstanceProperty('value')) {
+            return $fieldClassReflection->getInstanceProperty('value', new OutOfClassScope())->getWritableType();
         }
 
         // Fallback, return the original type
