@@ -20,11 +20,15 @@ use function strtolower;
  *
  * @see \Cambis\Silverstan\Tests\Reflection\ClassReflectionExtension\ExtensibleClassReflectionExtensionTest
  */
-final readonly class ResponsiveImageSetsMethodReflectionResolver implements MethodReflectionResolverInterface
+final class ResponsiveImageSetsMethodReflectionResolver implements MethodReflectionResolverInterface
 {
-    public function __construct(
-        private ConfigurationResolver $configurationResolver
-    ) {
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    public function __construct(ConfigurationResolver $configurationResolver)
+    {
+        $this->configurationResolver = $configurationResolver;
     }
 
     #[Override]

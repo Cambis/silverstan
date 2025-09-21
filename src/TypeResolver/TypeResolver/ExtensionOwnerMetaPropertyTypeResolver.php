@@ -25,14 +25,30 @@ use function is_array;
 /**
  * This resolver tracks extension owners and saves them in a meta property `__getOwners`.
  */
-final readonly class ExtensionOwnerMetaPropertyTypeResolver implements PropertyTypeResolverInterface, LazyTypeResolverInterface
+final class ExtensionOwnerMetaPropertyTypeResolver implements PropertyTypeResolverInterface, LazyTypeResolverInterface
 {
-    public function __construct(
-        private ConfigurationResolver $configurationResolver,
-        private ClassManifest $classManifest,
-        private ReflectionProvider $reflectionProvider,
-        private TypeFactory $typeFactory
-    ) {
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    /**
+     * @readonly
+     */
+    private ClassManifest $classManifest;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
+    public function __construct(ConfigurationResolver $configurationResolver, ClassManifest $classManifest, ReflectionProvider $reflectionProvider, TypeFactory $typeFactory)
+    {
+        $this->configurationResolver = $configurationResolver;
+        $this->classManifest = $classManifest;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->typeFactory = $typeFactory;
     }
 
     #[Override]
@@ -43,9 +59,10 @@ final readonly class ExtensionOwnerMetaPropertyTypeResolver implements PropertyT
 
     /**
      * @phpstan-ignore-next-line return.unusedType
+     * @return int|true
      */
     #[Override]
-    public function getExcludeMiddleware(): true|int
+    public function getExcludeMiddleware()
     {
         return ConfigurationResolver::EXCLUDE_INHERITED | ConfigurationResolver::EXCLUDE_EXTRA_SOURCES;
     }

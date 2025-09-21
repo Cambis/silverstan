@@ -17,6 +17,10 @@ use function sprintf;
 final class FileFinder
 {
     /**
+     * @readonly
+     */
+    private bool $includeTestOnly;
+    /**
      * @var ?list<string>
      */
     private ?array $excludedDirectories = null;
@@ -36,9 +40,9 @@ final class FileFinder
      */
     private ?array $vendorModuleRootDirectories = null;
 
-    public function __construct(
-        private readonly bool $includeTestOnly
-    ) {
+    public function __construct(bool $includeTestOnly)
+    {
+        $this->includeTestOnly = $includeTestOnly;
     }
 
     public function getPhpFiles(): Finder
@@ -48,7 +52,7 @@ final class FileFinder
             ->files()
             ->name('*.php')
             ->notName(['index.php', 'cli-script.php'])
-            ->notPath([...$this->getExcludedDirectories(), 'vendor']);
+            ->notPath(array_merge($this->getExcludedDirectories(), ['vendor']));
 
         // Skip if there are no found vendor modules
         if ($this->getVendorModuleDirectories() === []) {
@@ -68,10 +72,7 @@ final class FileFinder
     public function getYamlConfigFiles(): Finder
     {
         return Finder::create()
-            ->in([
-                ...$this->getAppDirectories(),
-                ...$this->getVendorModuleRootDirectories(),
-            ])
+            ->in(array_merge($this->getAppDirectories(), $this->getVendorModuleRootDirectories()))
             ->files()
             ->path('/\_config\//')
             ->notPath($this->getExcludedDirectories())
@@ -143,10 +144,7 @@ final class FileFinder
             return $this->excludedDirectories;
         }
 
-        $inDirs = [
-            ...$this->getVendorModuleDirectories(),
-            ...$this->getAppDirectories(),
-        ];
+        $inDirs = array_merge($this->getVendorModuleDirectories(), $this->getAppDirectories());
 
         // Skip if no directories
         if ($inDirs === []) {
@@ -274,7 +272,7 @@ final class FileFinder
                 ->exclude(['node_modules', 'vendor'])
                 ->name('_config');
 
-            $appDirs = [...$this->getFinderDirectories($configFiles), ...$this->getFinderDirectories($configDirs)];
+            $appDirs = array_merge($this->getFinderDirectories($configFiles), $this->getFinderDirectories($configDirs));
         }
 
         $this->appDirectories = [...array_unique($appDirs)];

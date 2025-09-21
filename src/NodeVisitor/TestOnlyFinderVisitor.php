@@ -20,8 +20,11 @@ final class TestOnlyFinderVisitor extends NodeVisitorAbstract
 {
     public const ATTRIBUTE_KEY = 'isTestOnly';
 
+    /**
+     * @return null
+     */
     #[Override]
-    public function enterNode(Node $node): null
+    public function enterNode(Node $node)
     {
         if (!$node instanceof ClassLike) {
             return null;

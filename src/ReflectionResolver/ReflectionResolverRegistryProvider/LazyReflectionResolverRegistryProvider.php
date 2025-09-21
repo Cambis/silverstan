@@ -15,11 +15,15 @@ use function array_reverse;
 
 final class LazyReflectionResolverRegistryProvider implements ReflectionResolverRegistryProviderInterface
 {
+    /**
+     * @readonly
+     */
+    private Container $container;
     private ?ReflectionResolverRegistryInterface $registry = null;
 
-    public function __construct(
-        private readonly Container $container
-    ) {
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
     }
 
     #[Override]
