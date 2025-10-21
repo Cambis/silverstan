@@ -6,3 +6,5 @@ SilverStripe\Core\Injector\Injector:
     class: Cambis\Silverstan\Tests\Type\Source\Model\Foo
   FooField:
     class: Cambis\Silverstan\Tests\Extension\Reflection\Source\ORM\FieldType\DBField\FooField
+  NullifiedClass:
+    class: null
