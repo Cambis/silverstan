@@ -9,6 +9,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use SilverStripe\Config\Collections\ConfigCollectionInterface;
 use function array_key_exists;
 use function is_array;
+use function is_string;
 use function preg_match;
 
 /**
@@ -85,6 +86,11 @@ final class ConfigurationResolver
         }
 
         $injectedClassName = $classConfig['class'];
+
+        // Safety check incase there is bad configuration
+        if (!is_string($injectedClassName) || $injectedClassName === '') {
+            return $className;
+        }
 
         if (!$this->reflectionProvider->hasClass($injectedClassName)) {
             return $className;

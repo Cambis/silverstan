@@ -6,3 +6,5 @@ SilverStripe\Core\Injector\Injector:
     class: Cambis\Silverstan\Tests\Type\DynamicReturnTypeExtension\Source\Model\Foo
   FooField:
     class: Cambis\Silverstan\Tests\Reflection\ClassReflectionExtension\Source\ORM\FieldType\DBField\FooField
+  NullifiedClass:
+    class: null

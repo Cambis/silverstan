@@ -7,6 +7,7 @@ namespace Cambis\Silverstan\Tests\ConfigurationResolver;
 use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use Cambis\Silverstan\Tests\ConfigurationResolver\Source\Model\Bar;
 use Cambis\Silverstan\Tests\ConfigurationResolver\Source\Model\Foo;
+use Iterator;
 use Override;
 use PHPStan\Testing\PHPStanTestCase;
 
@@ -85,6 +86,21 @@ final class ConfigurationResolverTest extends PHPStanTestCase
             ['test_4'],
             $this->configurationResolver->get(Bar::class, 'fourth')
         );
+    }
+
+    /**
+     * @dataProvider resolveClassNameProvider
+     */
+    public function testResolveClassName(string $className, string $expected): void
+    {
+        $this->assertSame($expected, $this->configurationResolver->resolveClassName($className));
+    }
+
+    public static function resolveClassNameProvider(): Iterator
+    {
+        yield ['Foo', 'Cambis\Silverstan\Tests\Type\DynamicReturnTypeExtension\Source\Model\Foo'];
+        yield ['FooField', 'Cambis\Silverstan\Tests\Reflection\ClassReflectionExtension\Source\ORM\FieldType\DBField\FooField'];
+        yield ['NullifiedClass', 'NullifiedClass'];
     }
 
     /**
