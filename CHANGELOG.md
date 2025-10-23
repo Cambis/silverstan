@@ -1,5 +1,15 @@
 # @cambis/silverstan
 
+## 1.1.7
+
+### Patch Changes
+
+- e276575: Skip bad injector class overrides
+- c4e6d03: Add scheduled workflow
+- c5f5bd3: 
+  - Update Injector stub
+  - Update error message for DisallowStaticPropertyFetchOnConfigurationPropertyRule
+
 ## 1.1.6
 
 ### Patch Changes
