@@ -46,9 +46,7 @@ final readonly class LazyConfigCollectionFactory implements ConfigCollectionFact
             $this->fileFinder->getAppRootDirectory(),
             $this->fileFinder->getYamlConfigFiles()
         )
-            ->addRule('classexists', static function (string $class): bool {
-                return class_exists($class);
-            })
+            ->addRule('classexists', class_exists(...))
             // Assume that the env var is set
             ->addRule('envvarset', static function (string $name, mixed $value = null): bool {
                 return true;
@@ -69,11 +67,7 @@ final readonly class LazyConfigCollectionFactory implements ConfigCollectionFact
                 return $env === 'dev';
             })
             // Search installed composer packages for module
-            ->addRule('moduleexists', static function (string $module): bool {
-                return InstalledVersions::isInstalled($module);
-            })
-            ->addRule('extensionloaded', static function (string $extension): bool {
-                return extension_loaded($extension);
-            });
+            ->addRule('moduleexists', InstalledVersions::isInstalled(...))
+            ->addRule('extensionloaded', extension_loaded(...));
     }
 }

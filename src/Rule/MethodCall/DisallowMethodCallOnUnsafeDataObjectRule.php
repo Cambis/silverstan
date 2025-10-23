@@ -61,9 +61,7 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
 
         foreach ($allowedMethodCalls as $className => $methodCalls) {
             // Normalise calls, remove brackets etc
-            $normalisedMethodCalls = array_map(function (string $methodCall): string {
-                return $this->normaliser->normaliseBracketNotation($methodCall);
-            }, $methodCalls);
+            $normalisedMethodCalls = array_map($this->normaliser->normaliseBracketNotation(...), $methodCalls);
 
             $classAllowedMethodCalls[] = new ClassAllowedMethodCall($this->normaliser->normaliseNamespace($className), $normalisedMethodCalls);
         }

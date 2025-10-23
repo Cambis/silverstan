@@ -80,9 +80,7 @@ final readonly class ExtensionOwnerMetaPropertyTypeResolver implements PropertyT
             // Use the Injector to resolve the extension class name as it may have been replaced
             return in_array(
                 $classReflection->getName(),
-                array_map(function (string $extensionName): string {
-                    return $this->configurationResolver->resolveClassName($extensionName);
-                }, $extensionsFiltered),
+                array_map($this->configurationResolver->resolveClassName(...), $extensionsFiltered),
                 true
             );
         });
