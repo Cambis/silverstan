@@ -23,9 +23,8 @@ use function sprintf;
  * @implements SilverstanRuleInterface<PropertyFetch>
  * @see \Cambis\Silverstan\Tests\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRuleTest
  */
-final readonly class DisallowPropertyFetchOnConfigForClassRule implements SilverstanRuleInterface
+final class DisallowPropertyFetchOnConfigForClassRule implements SilverstanRuleInterface
 {
-    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -64,7 +63,6 @@ CODE_SAMPLE
         );
     }
 
-    #[Override]
     public function getNodeType(): string
     {
         return PropertyFetch::class;
@@ -73,48 +71,38 @@ CODE_SAMPLE
     /**
      * @param PropertyFetch $node
      */
-    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         // Allow assignment
         if ($node->hasAttribute(PropertyFetchAssignedToVisitor::ATTRIBUTE_KEY)) {
             return [];
         }
-
         $type = $scope->getType($node->var);
-
         // Ensure the resolved type has class reflections
         if ($type->getObjectClassReflections() === []) {
             return [];
         }
-
         // Resolved type must be `SilverStripe\Core\Config\Config_ForClass`
         foreach ($type->getObjectClassReflections() as $classReflection) {
             if (!$classReflection->is('SilverStripe\Core\Config\Config_ForClass')) {
                 return [];
             }
         }
-
         if (!$node->name instanceof Identifier) {
             return [];
         }
-
         if (!$node->var instanceof StaticCall && !$node->var instanceof MethodCall) {
             return [];
         }
-
         if ($node->var instanceof StaticCall) {
             $type = $node->var->class instanceof Name ? $scope->resolveTypeByName($node->var->class) : $scope->getType($node->var->class);
         }
-
         if ($node->var instanceof MethodCall) {
             $type = $scope->getType($node->var->var);
         }
-
         if ($type->getObjectClassNames() === []) {
             return [];
         }
-
         return [
             RuleErrorBuilder::message(
                 sprintf(
