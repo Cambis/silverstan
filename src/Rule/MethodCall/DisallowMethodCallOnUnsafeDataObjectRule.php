@@ -39,7 +39,9 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Silvers
     ];
 
     public function __construct(
-        /** @var string[] */
+        /**
+         * @var string[]
+         */
         private array $allowedMethodCalls = []
     ) {
     }

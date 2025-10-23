@@ -1,6 +1,6 @@
 {
     "name": "cambis/silverstan",
-    "description": "PHPStan extensions and rules for Silverstripe.",
+    "description": "PHPStan extensions and rules for Silverstripe CMS.",
     "license": "MIT",
     "type": "phpstan-extension",
     "keywords": [
@@ -13,6 +13,7 @@
             "name": "Cameron Bryers"
         }
     ],
+    "homepage": "https://github.com/Cambis/silverstan",
     "require": {
         "php": "^8.3",
         "ext-tokenizer": "*",
@@ -41,6 +42,9 @@
         "symplify/rule-doc-generator": "^11.0",
         "tomasvotruba/unused-public": "^0.4",
         "unclecheese/display-logic": "^3.0"
+    },
+    "conflict": {
+        "squizlabs/php_codesniffer": ">=4.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
