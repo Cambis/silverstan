@@ -26,6 +26,10 @@ use function strtolower;
 final class AnnotationClassReflectionExtension implements MethodsClassReflectionExtension, PropertiesClassReflectionExtension
 {
     /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    /**
      * @var MethodReflection[][]
      */
     private array $methodReflections = [];
@@ -35,9 +39,9 @@ final class AnnotationClassReflectionExtension implements MethodsClassReflection
      */
     private array $propertyReflections = [];
 
-    public function __construct(
-        private readonly ReflectionResolver $reflectionResolver
-    ) {
+    public function __construct(ReflectionResolver $reflectionResolver)
+    {
+        $this->reflectionResolver = $reflectionResolver;
     }
 
     #[Override]

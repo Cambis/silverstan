@@ -21,7 +21,7 @@ use function sprintf;
  * @implements Rule<PropertyFetch>
  * @see \Cambis\Silverstan\Tests\Rule\PropertyFetch\DisallowPropertyFetchOnConfigForClassRuleTest
  */
-final readonly class DisallowPropertyFetchOnConfigForClassRule implements Rule
+final class DisallowPropertyFetchOnConfigForClassRule implements Rule
 {
     /**
      * @var string

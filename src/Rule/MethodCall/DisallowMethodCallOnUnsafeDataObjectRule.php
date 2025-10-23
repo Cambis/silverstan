@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\Rule\MethodCall;
 
+use Closure;
 use Cambis\Silverstan\Normaliser\Normaliser;
 use Cambis\Silverstan\Type\ObjectType\UnsafeObjectType;
 use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectDeleteTypeSpecifyingExtension;
@@ -29,8 +30,12 @@ use function sprintf;
  *
  * @see \Cambis\Silverstan\Tests\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRuleTest
  */
-final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
+final class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
 {
+    /**
+     * @readonly
+     */
+    private Normaliser $normaliser;
     /**
      * @var string[]
      */
@@ -47,6 +52,7 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
 
     /**
      * @var list<ClassAllowedMethodCall>
+     * @readonly
      */
     private array $classAllowedMethodCalls;
 
@@ -54,14 +60,15 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
      * @param array<class-string, list<string>> $allowedMethodCalls
      */
     public function __construct(
-        private Normaliser $normaliser,
+        Normaliser $normaliser,
         array $allowedMethodCalls = []
     ) {
+        $this->normaliser = $normaliser;
         $classAllowedMethodCalls = [new ClassAllowedMethodCall('SilverStripe\ORM\DataObject', self::DEFAULT_ALLOWED_METHODS_CALLS)];
 
         foreach ($allowedMethodCalls as $className => $methodCalls) {
             // Normalise calls, remove brackets etc
-            $normalisedMethodCalls = array_map($this->normaliser->normaliseBracketNotation(...), $methodCalls);
+            $normalisedMethodCalls = array_map(Closure::fromCallable([$this->normaliser, 'normaliseBracketNotation']), $methodCalls);
 
             $classAllowedMethodCalls[] = new ClassAllowedMethodCall($this->normaliser->normaliseNamespace($className), $normalisedMethodCalls);
         }

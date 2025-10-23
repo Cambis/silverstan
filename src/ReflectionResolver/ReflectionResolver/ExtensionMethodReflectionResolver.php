@@ -15,13 +15,25 @@ use function array_unique;
 use function is_array;
 use function strtolower;
 
-final readonly class ExtensionMethodReflectionResolver implements MethodReflectionResolverInterface
+final class ExtensionMethodReflectionResolver implements MethodReflectionResolverInterface
 {
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private ConfigurationResolver $configurationResolver,
-        private ReflectionProvider $reflectionProvider
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, ConfigurationResolver $configurationResolver, ReflectionProvider $reflectionProvider)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->configurationResolver = $configurationResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     #[Override]

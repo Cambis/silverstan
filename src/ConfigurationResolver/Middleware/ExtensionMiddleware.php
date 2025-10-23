@@ -17,11 +17,16 @@ use function is_array;
  */
 final class ExtensionMiddleware extends AbstractMiddleware implements ConfigurationResolverAwareInterface
 {
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
     private ConfigurationResolver $configurationResolver;
 
     public function __construct(
-        private readonly ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider
     ) {
+        $this->reflectionProvider = $reflectionProvider;
         parent::__construct(ConfigurationResolver::EXCLUDE_EXTRA_SOURCES);
     }
 
@@ -49,8 +54,11 @@ final class ExtensionMiddleware extends AbstractMiddleware implements Configurat
         return $config;
     }
 
+    /**
+     * @return static
+     */
     #[Override]
-    public function setConfigurationResolver(ConfigurationResolver $configurationResolver): static
+    public function setConfigurationResolver(ConfigurationResolver $configurationResolver)
     {
         $this->configurationResolver = $configurationResolver;
 
@@ -131,7 +139,7 @@ final class ExtensionMiddleware extends AbstractMiddleware implements Configurat
                 // Attempt to execute the method
                 try {
                     $extraConfig = $extensionClassParent->getName()::get_extra_config($class, $extensionClass->getName(), []);
-                } catch (Throwable) {
+                } catch (Throwable $exception) {
                     continue;
                 }
 

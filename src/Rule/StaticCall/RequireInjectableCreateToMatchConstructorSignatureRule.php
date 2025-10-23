@@ -22,12 +22,20 @@ use function sprintf;
  *
  * @see \Cambis\Silverstan\Tests\Rule\StaticCall\RequireInjectableCreateToMatchConstructorSignatureRuleTest
  */
-final readonly class RequireInjectableCreateToMatchConstructorSignatureRule implements Rule
+final class RequireInjectableCreateToMatchConstructorSignatureRule implements Rule
 {
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private FunctionCallParametersCheck $functionCallParametersCheck
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private FunctionCallParametersCheck $functionCallParametersCheck;
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, FunctionCallParametersCheck $functionCallParametersCheck)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->functionCallParametersCheck = $functionCallParametersCheck;
     }
 
     #[Override]

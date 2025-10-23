@@ -12,16 +12,32 @@ use PHPStan\Type\IntegerType;
 use function array_keys;
 use function is_array;
 
-final readonly class SimpleRelationPropertyTypeResolver implements PropertyTypeResolverInterface
+final class SimpleRelationPropertyTypeResolver implements PropertyTypeResolverInterface
 {
-    public function __construct(
-        private ConfigurationResolver $configurationResolver,
-        private string $configurationPropertyName,
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    /**
+     * @readonly
+     */
+    private string $configurationPropertyName;
+    /**
+     * @readonly
+     * @var int|true
+     */
+    private $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE;
+    /**
+     * @param true|int $excludeMiddleware
+     */
+    public function __construct(ConfigurationResolver $configurationResolver, string $configurationPropertyName, $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE)
+    {
+        $this->configurationResolver = $configurationResolver;
+        $this->configurationPropertyName = $configurationPropertyName;
         /**
          * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
          */
-        private true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
-    ) {
+        $this->excludeMiddleware = $excludeMiddleware;
     }
 
     #[Override]
@@ -30,8 +46,11 @@ final readonly class SimpleRelationPropertyTypeResolver implements PropertyTypeR
         return $this->configurationPropertyName;
     }
 
+    /**
+     * @return int|true
+     */
     #[Override]
-    public function getExcludeMiddleware(): true|int
+    public function getExcludeMiddleware()
     {
         return $this->excludeMiddleware;
     }

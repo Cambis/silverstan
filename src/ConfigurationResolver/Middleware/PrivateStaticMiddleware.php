@@ -12,16 +12,20 @@ use ReflectionProperty;
 use SilverStripe\Config\MergeStrategy\Priority;
 use Throwable;
 use function class_exists;
-use function str_contains;
 
 /**
  * Basic middleware used to resolve private static configuration properties.
  */
 final class PrivateStaticMiddleware extends AbstractMiddleware
 {
+    /**
+     * @readonly
+     */
+    private ClassManifest $classManifest;
     public function __construct(
-        private readonly ClassManifest $classManifest
+        ClassManifest $classManifest
     ) {
+        $this->classManifest = $classManifest;
         parent::__construct(ConfigurationResolver::EXCLUDE_PRIVATE_STATIC);
     }
 
@@ -62,7 +66,7 @@ final class PrivateStaticMiddleware extends AbstractMiddleware
             $docComment = $nativePropertyReflection->getDocComment() === false ? '' : $nativePropertyReflection->getDocComment();
 
             // Properties with the `@internal` annotation are not considered configuration properties
-            if (str_contains($docComment, '@internal')) {
+            if (strpos($docComment, '@internal') !== false) {
                 continue;
             }
 
@@ -70,7 +74,7 @@ final class PrivateStaticMiddleware extends AbstractMiddleware
             try {
                 $nativePropertyReflection->setAccessible(true);
                 $classConfig[$nativePropertyReflection->getName()] = $nativePropertyReflection->getValue();
-            } catch (Throwable) {
+            } catch (Throwable $exception) {
                 continue;
             }
         }
