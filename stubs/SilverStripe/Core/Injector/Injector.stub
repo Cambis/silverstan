@@ -50,7 +50,7 @@ class Injector
      *
      * @template T
      * @param class-string<T>|string $name Name of the class to create an object of
-     * @param array<string> $constructorArgs Arguments to pass to the constructor
+     * @param array<mixed> $constructorArgs Arguments to pass to the constructor
      * @return T|mixed
      * @phpstan-return ($name is class-string<T> ? T : mixed)
      */
