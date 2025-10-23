@@ -20,7 +20,7 @@ final class DisallowStaticPropertyFetchOnConfigurationPropertyRuleTest extends R
     {
         $this->analyse([__DIR__ . '/Fixture/DisallowStaticPropertyFetch.php'], [
             [
-                'Unsafe access to configuration property Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\Fixture\DisallowStaticPropertyFetch::$foo through self::. Use self::config->get(\'foo\') instead.',
+                'Unsafe access to configuration property Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\Fixture\DisallowStaticPropertyFetch::$foo through self::. Use self::config()->get(\'foo\') instead.',
                 23,
                 'See: https://docs.silverstripe.org/en/5/developer_guides/configuration/configuration/#accessing-configuration-properties',
             ],
