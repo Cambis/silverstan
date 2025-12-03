@@ -18,7 +18,7 @@ final class DataObjectGetCMSValidatorMethodDeprecationExtensionTest extends PHPS
 
         $this->assertTrue($fixtureClass->getMethod('getCMSValidator', new OutOfClassScope())->isDeprecated()->yes());
         $this->assertSame(
-            'use Cambis\Silverstan\Tests\Reflection\Deprecation\MethodDeprecationExtension\Source\Model\Foo::getCMSCompositeValidator() instead. See https://docs.silverstripe.org/en/5/developer_guides/forms/validation/#validation-in-the-cms.',
+            'use Cambis\Silverstan\Tests\Reflection\Deprecation\MethodDeprecationExtension\Source\Model\Foo::getCMSCompositeValidator() instead. See https://docs.silverstripe.org/en/developer_guides/forms/validation/#validation-in-the-cms.',
             $fixtureClass->getMethod('getCMSValidator', new OutOfClassScope())->getDeprecatedDescription()
         );
     }

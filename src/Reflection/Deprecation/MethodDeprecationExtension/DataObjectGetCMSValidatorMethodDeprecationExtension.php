@@ -33,7 +33,7 @@ final class DataObjectGetCMSValidatorMethodDeprecationExtension implements Metho
         }
 
         return Deprecation::createWithDescription(sprintf(
-            'use %s::getCMSCompositeValidator() instead. See https://docs.silverstripe.org/en/5/developer_guides/forms/validation/#validation-in-the-cms.',
+            'use %s::getCMSCompositeValidator() instead. See https://docs.silverstripe.org/en/developer_guides/forms/validation/#validation-in-the-cms.',
             $reflectionMethod->getDeclaringClass()->getName()
         ));
     }
