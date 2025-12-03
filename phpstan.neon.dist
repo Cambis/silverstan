@@ -19,6 +19,12 @@ parameters:
                 - '#Dynamic call to static method PHPUnit\\Framework\\#'
             identifier: staticMethod.dynamicCall
             reportUnmatched: false
+        -
+            messages:
+                - '#^Parameter \#1 \$assertType of method Cambis\\Silverstan\\Tests\\(.*?)\:\:testFileAsserts\(\) expects string, mixed given.$#'
+                - '#^Parameter \#2 \$file of method Cambis\\Silverstan\\Tests\\(.*?)\:\:testFileAsserts\(\) expects string, mixed given.$#'
+            identifier: argument.type
+            path: tests
 services:
     -
         class: Symplify\PHPStanRules\Naming\ClassToSuffixResolver

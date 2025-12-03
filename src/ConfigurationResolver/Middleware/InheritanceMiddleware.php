@@ -46,7 +46,7 @@ final class InheritanceMiddleware extends AbstractMiddleware implements Configur
         }
 
         // Merge with parent class
-        $parentConfig = $this->configurationResolver->get($parent, null);
+        $parentConfig = $this->configurationResolver->get($parent);
 
         if (!is_array($parentConfig) || $parentConfig === []) {
             return $config;

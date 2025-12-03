@@ -31,7 +31,7 @@ final class ConfigurationResolverTest extends PHPStanTestCase
                 'second' => ['test_1'],
                 'third' => ['test_1'],
             ],
-            $this->configurationResolver->get(Foo::class, null)
+            $this->configurationResolver->get(Foo::class)
         );
     }
 
