@@ -82,5 +82,5 @@ jobs:
         working-directory: ${{ matrix.directory }}
 
       # Run phpstan on the e2e directory
-      - run: vendor/bin/phpstan analyse --configuration=phpstan.neon.dist
+      - run: vendor/bin/phpstan analyse --configuration=phpstan.neon.dist -vvv
         working-directory: ${{ matrix.directory }}
