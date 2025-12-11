@@ -39,6 +39,9 @@
         "symplify/phpstan-rules": "^14.0",
         "tomasvotruba/unused-public": "^2.0"
     },
+    "conflict": {
+        "rector/rector": ">=2.2.5"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
