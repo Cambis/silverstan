@@ -29,7 +29,7 @@
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpunit/phpunit": "^9.6",
-        "rector/rector": "^2.0",
+        "rector/rector": "2.2.4",
         "shipmonk/composer-dependency-analyser": "^1.7",
         "silverstripe/assets": "^2.3",
         "silverstripe/cms": "^5.2",
@@ -38,9 +38,6 @@
         "symplify/easy-coding-standard": "^13.0",
         "symplify/phpstan-rules": "^14.0",
         "tomasvotruba/unused-public": "^2.0"
-    },
-    "conflict": {
-        "rector/rector": ">=2.2.5"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
