@@ -24,6 +24,10 @@ use function in_array;
 final class DataObjectDeleteTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
     /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
+    /**
      * @var string[]
      */
     public const SUPPORTED_METHODS = [
@@ -32,9 +36,9 @@ final class DataObjectDeleteTypeSpecifyingExtension implements MethodTypeSpecify
 
     private TypeSpecifier $typeSpecifier;
 
-    public function __construct(
-        private readonly TypeFactory $typeFactory
-    ) {
+    public function __construct(TypeFactory $typeFactory)
+    {
+        $this->typeFactory = $typeFactory;
     }
 
     #[Override]

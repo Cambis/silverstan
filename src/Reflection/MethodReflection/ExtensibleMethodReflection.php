@@ -16,21 +16,54 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 
-final readonly class ExtensibleMethodReflection implements MethodReflection
+final class ExtensibleMethodReflection implements MethodReflection
 {
+    /**
+     * @readonly
+     */
+    private string $name;
+    /**
+     * @readonly
+     */
+    private ClassReflection $declaringClass;
+    /**
+     * @readonly
+     */
+    private Type $returnType;
+    /**
+     * @var list<ParameterReflection>
+     * @readonly
+     */
+    private array $parameters;
+    /**
+     * @readonly
+     */
+    private bool $isStatic;
+    /**
+     * @readonly
+     */
+    private bool $isVariadic;
+    /**
+     * @readonly
+     */
+    private ?Type $throwType;
+    /**
+     * @readonly
+     */
+    private TemplateTypeMap $templateTypeMap;
     /**
      * @param list<ParameterReflection> $parameters
      */
-    public function __construct(
-        private string $name,
-        private ClassReflection $declaringClass,
-        private Type $returnType,
-        private array $parameters,
-        private bool $isStatic,
-        private bool $isVariadic,
-        private ?Type $throwType,
-        private TemplateTypeMap $templateTypeMap,
-    ) {
+    public function __construct(string $name, ClassReflection $declaringClass, Type $returnType, array $parameters, bool $isStatic, bool $isVariadic, ?Type $throwType, TemplateTypeMap $templateTypeMap)
+    {
+        $this->name = $name;
+        $this->declaringClass = $declaringClass;
+        $this->returnType = $returnType;
+        $this->parameters = $parameters;
+        $this->isStatic = $isStatic;
+        $this->isVariadic = $isVariadic;
+        $this->throwType = $throwType;
+        $this->templateTypeMap = $templateTypeMap;
     }
 
     #[Override]

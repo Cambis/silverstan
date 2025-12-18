@@ -23,6 +23,10 @@ use function in_array;
 final class ViewableDataHasFieldTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
     /**
+     * @readonly
+     */
+    private string $className;
+    /**
      * @var string[]
      */
     private const SUPPORTED_METHODS = [
@@ -31,12 +35,12 @@ final class ViewableDataHasFieldTypeSpecifyingExtension implements MethodTypeSpe
 
     private TypeSpecifier $typeSpecifier;
 
-    public function __construct(
+    public function __construct(string $className)
+    {
         /**
          * @var class-string
          */
-        private readonly string $className
-    ) {
+        $this->className = $className;
     }
 
     #[Override]

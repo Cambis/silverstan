@@ -21,18 +21,30 @@ use function sprintf;
  * @implements Rule<ClassPropertyNode>
  * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRuleTest
  */
-final readonly class DisallowOverridingOfConfigurationPropertyTypeRule implements Rule
+final class DisallowOverridingOfConfigurationPropertyTypeRule implements Rule
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private PropertyReflectionAnalyser $propertyReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
     /**
      * @var string
      */
     private const IDENTIFIER = 'silverstan.configurationProperty.invalid';
 
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
-        private ReflectionResolver $reflectionResolver
-    ) {
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, PropertyReflectionAnalyser $propertyReflectionAnalyser, ReflectionResolver $reflectionResolver)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->propertyReflectionAnalyser = $propertyReflectionAnalyser;
+        $this->reflectionResolver = $reflectionResolver;
     }
 
     #[Override]

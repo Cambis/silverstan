@@ -10,13 +10,25 @@ use PHPStan\Reflection\PropertyReflection;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Type;
 
-final readonly class ViewableDataPropertyReflection implements PropertyReflection
+final class ViewableDataPropertyReflection implements PropertyReflection
 {
-    public function __construct(
-        private ClassReflection $classReflection,
-        private Type $readableType,
-        private Type $writableType,
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassReflection $classReflection;
+    /**
+     * @readonly
+     */
+    private Type $readableType;
+    /**
+     * @readonly
+     */
+    private Type $writableType;
+    public function __construct(ClassReflection $classReflection, Type $readableType, Type $writableType)
+    {
+        $this->classReflection = $classReflection;
+        $this->readableType = $readableType;
+        $this->writableType = $writableType;
     }
 
     #[Override]

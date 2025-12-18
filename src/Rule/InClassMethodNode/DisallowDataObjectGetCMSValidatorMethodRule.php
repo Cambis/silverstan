@@ -18,16 +18,20 @@ use function strtolower;
  *
  * @see \Cambis\Silverstan\Tests\Rule\InClassMethodNode\DisallowDataObjectGetCMSValidatorMethodRuleTest
  */
-final readonly class DisallowDataObjectGetCMSValidatorMethodRule implements Rule
+final class DisallowDataObjectGetCMSValidatorMethodRule implements Rule
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
     /**
      * @var string
      */
     private const IDENTIFIER = 'silverstan.method.deprecated';
 
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-    ) {
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
     }
 
     public function getNodeType(): string

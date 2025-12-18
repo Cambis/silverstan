@@ -8,11 +8,15 @@ use Cambis\Silverstan\FileFinder\FileFinder;
 use Override;
 use PHPStan\Analyser\ResultCache\ResultCacheMetaExtension;
 
-final readonly class ConfigCacheMetaExtension implements ResultCacheMetaExtension
+final class ConfigCacheMetaExtension implements ResultCacheMetaExtension
 {
-    public function __construct(
-        private FileFinder $fileFinder
-    ) {
+    /**
+     * @readonly
+     */
+    private FileFinder $fileFinder;
+    public function __construct(FileFinder $fileFinder)
+    {
+        $this->fileFinder = $fileFinder;
     }
 
     #[Override]
