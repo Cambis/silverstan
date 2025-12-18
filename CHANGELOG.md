@@ -1,5 +1,14 @@
 # @cambis/silverstan
 
+## 2.1.9
+
+### Patch Changes
+
+- 8a3928b: Add DisallowDataObjectGetCMSValidatorRule
+- c0ad03e: Schedule lint job
+- 0373f7c: Specify exact rector version for dev (2.2.4)
+- 082d35f: Temp lock rector version
+
 ## 2.1.8
 
 ### Patch Changes
