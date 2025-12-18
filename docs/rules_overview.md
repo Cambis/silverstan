@@ -1,4 +1,4 @@
-# 9 rules overview
+# 11 rules overview
 
 ## DisallowMethodCallOnUnsafeDataObjectRule
 
@@ -208,6 +208,55 @@ class Foo extends \SilverStripe\ORM\DataObject
 final class Bar extends Foo
 {
     private static string $new_property = '';
+}
+```
+
+:+1:
+
+<br>
+
+## DisallowDataObjectGetCMSValidatorMethodRule
+
+Disallow declaring `DataObject::getCMSValidator()`.
+
+Automatically enabled if [PHPStan deprecation rules](https://github.com/phpstan/phpstan-deprecation-rules) is installed.
+
+:mag_right: **silverstan.method.deprecated**
+
+:wrench: **configure it!**
+
+- class: [`Cambis\Silverstan\Rule\InClassMethodNode\DisallowDataObjectGetCMSValidatorMethodRule`](../src/Rule/InClassMethodNode/DisallowDataObjectGetCMSValidatorMethodRule.php)
+
+```yaml
+parameters:
+    silverstan:
+        disallowDataObjectGetCmsValidatorMethod:
+            enabled: true
+```
+
+↓
+
+```php
+class Foo extends \SilverStripe\ORM\DataObject
+{
+    public function getCMSValidator()
+    {
+        // ...
+    }
+}
+```
+
+:x:
+
+<br>
+
+```php
+class Foo extends \SilverStripe\ORM\DataObject
+{
+    public function getCMSCompositeValidator(): \SilverStripe\Forms\CompositeValidator
+    {
+        // ...
+    }
 }
 ```
 

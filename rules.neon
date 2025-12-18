@@ -18,6 +18,8 @@ parameters:
             enabled: true
         disallowUsageOfDeprecatedConfigurationProperty:
             enabled: %deprecationRulesInstalled%
+        disallowDataObjectGetCmsValidatorMethod:
+            enabled: %deprecationRulesInstalled%
         requireConfigurationPropertyOverride:
             enabled: true
             classes:
@@ -55,6 +57,9 @@ parametersSchema:
             enabled: bool()
         ])
         disallowUsageOfDeprecatedConfigurationProperty: structure([
+            enabled: bool()
+        ])
+        disallowDataObjectGetCmsValidatorMethod: structure([
             enabled: bool()
         ])
         requireConfigurationPropertyOverride: structure([
@@ -97,6 +102,8 @@ conditionalTags:
         phpstan.rules.rule: %silverstan.disallowOverridingOfConfigurationPropertyType.enabled%
     Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUsageOfDeprecatedConfigurationPropertyRule:
         phpstan.rules.rule: %silverstan.disallowUsageOfDeprecatedConfigurationProperty.enabled%
+    Cambis\Silverstan\Rule\InClassMethodNode\DisallowDataObjectGetCMSValidatorMethodRule:
+        phpstan.rules.rule: %silverstan.disallowDataObjectGetCmsValidatorMethod.enabled%
     Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule:
         phpstan.rules.rule: %silverstan.requireConfigurationPropertyOverride.enabled%
     Cambis\Silverstan\Rule\MethodCall\DisallowMethodCallOnUnsafeDataObjectRule:
@@ -121,6 +128,8 @@ services:
         class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowOverridingOfConfigurationPropertyTypeRule
     -
         class: Cambis\Silverstan\Rule\ClassPropertyNode\DisallowUsageOfDeprecatedConfigurationPropertyRule
+    -
+        class: Cambis\Silverstan\Rule\InClassMethodNode\DisallowDataObjectGetCMSValidatorMethodRule
     -
         class: Cambis\Silverstan\Rule\InClassNode\RequireConfigurationPropertyOverrideRule
         arguments:
