@@ -2,4 +2,4 @@
 "@cambis/silverstan": patch
 ---
 
-Update dev dependencies
+Remove spread operators from DisallowMethodCallOnUnsafeDataObjectRule.

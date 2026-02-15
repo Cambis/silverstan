@@ -25,6 +25,7 @@ final class DataObjectExistsTypeSpecifyingExtension implements MethodTypeSpecify
 {
     /**
      * @var string[]
+     * @api
      */
     public const SUPPORTED_METHODS = [
         'exists',
