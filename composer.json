@@ -29,7 +29,7 @@
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpunit/phpunit": "^9.6",
-        "rector/rector": "2.2.4",
+        "rector/rector": "^2.3",
         "shipmonk/composer-dependency-analyser": "^1.7",
         "silverstripe/assets": "^2.3",
         "silverstripe/cms": "^5.2",

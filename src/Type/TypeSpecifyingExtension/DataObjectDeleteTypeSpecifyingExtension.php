@@ -25,6 +25,7 @@ final class DataObjectDeleteTypeSpecifyingExtension implements MethodTypeSpecify
 {
     /**
      * @var string[]
+     * @api
      */
     public const SUPPORTED_METHODS = [
         'delete',

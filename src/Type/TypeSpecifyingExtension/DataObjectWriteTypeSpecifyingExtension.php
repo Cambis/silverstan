@@ -25,6 +25,7 @@ final class DataObjectWriteTypeSpecifyingExtension implements MethodTypeSpecifyi
 {
     /**
      * @var string[]
+     * @api
      */
     public const SUPPORTED_METHODS = [
         'publishRecursive',

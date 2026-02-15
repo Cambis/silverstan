@@ -6,9 +6,6 @@ namespace Cambis\Silverstan\Rule\MethodCall;
 
 use Cambis\Silverstan\Normaliser\Normaliser;
 use Cambis\Silverstan\Type\ObjectType\UnsafeObjectType;
-use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectDeleteTypeSpecifyingExtension;
-use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectExistsTypeSpecifyingExtension;
-use Cambis\Silverstan\Type\TypeSpecifyingExtension\DataObjectWriteTypeSpecifyingExtension;
 use Cambis\Silverstan\ValueObject\ClassAllowedMethodCall;
 use Override;
 use PhpParser\Node;
@@ -35,9 +32,12 @@ final readonly class DisallowMethodCallOnUnsafeDataObjectRule implements Rule
      * @var string[]
      */
     private const DEFAULT_ALLOWED_METHODS_CALLS = [
-        ...DataObjectDeleteTypeSpecifyingExtension::SUPPORTED_METHODS,
-        ...DataObjectExistsTypeSpecifyingExtension::SUPPORTED_METHODS,
-        ...DataObjectWriteTypeSpecifyingExtension::SUPPORTED_METHODS,
+        'delete',
+        'exists',
+        'isInDB',
+        'publishRecursive',
+        'publishSingle',
+        'write',
     ];
 
     /**
