@@ -18,11 +18,15 @@ use PHPStan\Type\Type;
  *
  * @see \Cambis\Silverstan\Tests\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRuleTest
  */
-final readonly class DataObjectTypeNodeResolverExtension implements TypeNodeResolverExtension
+final class DataObjectTypeNodeResolverExtension implements TypeNodeResolverExtension
 {
-    public function __construct(
-        private ReflectionProvider $reflectionProvider,
-    ) {
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     #[Override]

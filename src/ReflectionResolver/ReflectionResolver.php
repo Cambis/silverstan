@@ -20,17 +20,29 @@ use function array_key_exists;
 final class ReflectionResolver
 {
     /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private PropertyReflectionAnalyser $propertyReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ReflectionResolverRegistryProviderInterface $reflectionResolverRegistryProvider;
+    /**
      * Local cache.
      *
      * @var array<string, array<string, PropertyReflection>>
      */
     private array $configurationPropertyReflections = [];
 
-    public function __construct(
-        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly PropertyReflectionAnalyser $propertyReflectionAnalyser,
-        private readonly ReflectionResolverRegistryProviderInterface $reflectionResolverRegistryProvider
-    ) {
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, PropertyReflectionAnalyser $propertyReflectionAnalyser, ReflectionResolverRegistryProviderInterface $reflectionResolverRegistryProvider)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->propertyReflectionAnalyser = $propertyReflectionAnalyser;
+        $this->reflectionResolverRegistryProvider = $reflectionResolverRegistryProvider;
     }
 
     /**
@@ -44,7 +56,7 @@ final class ReflectionResolver
         $propertyReflections = [];
 
         foreach ($this->reflectionResolverRegistryProvider->getRegistry()->getPropertyReflectionResolvers() as $reflectionResolver) {
-            $propertyReflections = [...$propertyReflections, ...$reflectionResolver->resolve($classReflection)];
+            $propertyReflections = array_merge($propertyReflections, $reflectionResolver->resolve($classReflection));
         }
 
         return $propertyReflections;
@@ -61,7 +73,7 @@ final class ReflectionResolver
         $methodReflections = [];
 
         foreach ($this->reflectionResolverRegistryProvider->getRegistry()->getMethodReflectionResolvers() as $reflectionResolver) {
-            $methodReflections = [...$methodReflections, ...$reflectionResolver->resolve($classReflection)];
+            $methodReflections = array_merge($methodReflections, $reflectionResolver->resolve($classReflection));
         }
 
         if (!$classReflection->getParentClass() instanceof ClassReflection) {

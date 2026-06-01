@@ -27,6 +27,10 @@ use function sprintf;
 final class RequireParentCallInOverridenMethodRule implements Rule
 {
     /**
+     * @readonly
+     */
+    private NodeFinder $nodeFinder;
+    /**
      * @var string
      */
     private const IDENTIFIER = 'silverstan.requiredParentCall';
@@ -40,9 +44,10 @@ final class RequireParentCallInOverridenMethodRule implements Rule
      * @param array<array{class: class-string, method: string, isFirst?: bool}> $classes
      */
     public function __construct(
-        private readonly NodeFinder $nodeFinder,
+        NodeFinder $nodeFinder,
         array $classes
     ) {
+        $this->nodeFinder = $nodeFinder;
         foreach ($classes as $classParentCall) {
             $this->classParentMethodCalls[] = new ClassParentMethodCall(
                 $classParentCall['class'],

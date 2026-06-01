@@ -15,17 +15,37 @@ use function is_array;
 
 final class SimpleRelationMethodTypeResolver implements MethodTypeResolverInterface, TypeResolverAwareInterface
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private string $configurationPropertyName;
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    /**
+     * @readonly
+     * @var int|true
+     */
+    private $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE;
     private TypeResolver $typeResolver;
 
-    public function __construct(
-        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly string $configurationPropertyName,
-        private readonly ConfigurationResolver $configurationResolver,
+    /**
+     * @param true|int $excludeMiddleware
+     */
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, string $configurationPropertyName, ConfigurationResolver $configurationResolver, $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->configurationPropertyName = $configurationPropertyName;
+        $this->configurationResolver = $configurationResolver;
         /**
          * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
          */
-        private readonly true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
-    ) {
+        $this->excludeMiddleware = $excludeMiddleware;
     }
 
     #[Override]
@@ -34,8 +54,11 @@ final class SimpleRelationMethodTypeResolver implements MethodTypeResolverInterf
         return $this->configurationPropertyName;
     }
 
+    /**
+     * @return int|true
+     */
     #[Override]
-    public function getExcludeMiddleware(): true|int
+    public function getExcludeMiddleware()
     {
         return $this->excludeMiddleware;
     }
@@ -62,8 +85,11 @@ final class SimpleRelationMethodTypeResolver implements MethodTypeResolverInterf
         return $properties;
     }
 
+    /**
+     * @return static
+     */
     #[Override]
-    public function setTypeResolver(TypeResolver $typeResolver): static
+    public function setTypeResolver(TypeResolver $typeResolver)
     {
         $this->typeResolver = $typeResolver;
 

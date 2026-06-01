@@ -24,6 +24,10 @@ use function in_array;
 final class DataObjectExistsTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
     /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
+    /**
      * @var string[]
      * @api
      */
@@ -34,9 +38,9 @@ final class DataObjectExistsTypeSpecifyingExtension implements MethodTypeSpecify
 
     private TypeSpecifier $typeSpecifier;
 
-    public function __construct(
-        private readonly TypeFactory $typeFactory
-    ) {
+    public function __construct(TypeFactory $typeFactory)
+    {
+        $this->typeFactory = $typeFactory;
     }
 
     #[Override]

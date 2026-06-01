@@ -18,19 +18,47 @@ use function is_array;
 
 final class ManyRelationMethodTypeResolver implements MethodTypeResolverInterface, TypeResolverAwareInterface
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private string $configurationPropertyName;
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    /**
+     * @readonly
+     */
+    private string $listName;
+    /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
+    /**
+     * @readonly
+     * @var int|true
+     */
+    private $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE;
     private TypeResolver $typeResolver;
 
-    public function __construct(
-        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly string $configurationPropertyName,
-        private readonly ConfigurationResolver $configurationResolver,
-        private readonly string $listName,
-        private readonly TypeFactory $typeFactory,
+    /**
+     * @param true|int $excludeMiddleware
+     */
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, string $configurationPropertyName, ConfigurationResolver $configurationResolver, string $listName, TypeFactory $typeFactory, $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->configurationPropertyName = $configurationPropertyName;
+        $this->configurationResolver = $configurationResolver;
+        $this->listName = $listName;
+        $this->typeFactory = $typeFactory;
         /**
          * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
          */
-        private readonly true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
-    ) {
+        $this->excludeMiddleware = $excludeMiddleware;
     }
 
     #[Override]
@@ -39,8 +67,11 @@ final class ManyRelationMethodTypeResolver implements MethodTypeResolverInterfac
         return $this->configurationPropertyName;
     }
 
+    /**
+     * @return int|true
+     */
     #[Override]
-    public function getExcludeMiddleware(): true|int
+    public function getExcludeMiddleware()
     {
         return $this->excludeMiddleware;
     }
@@ -86,8 +117,11 @@ final class ManyRelationMethodTypeResolver implements MethodTypeResolverInterfac
         return $types;
     }
 
+    /**
+     * @return static
+     */
     #[Override]
-    public function setTypeResolver(TypeResolver $typeResolver): static
+    public function setTypeResolver(TypeResolver $typeResolver)
     {
         $this->typeResolver = $typeResolver;
 

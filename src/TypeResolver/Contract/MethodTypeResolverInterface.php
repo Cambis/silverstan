@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\TypeResolver\Contract;
 
-use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
 
@@ -21,14 +20,14 @@ use PHPStan\Type\Type;
  */
 interface MethodTypeResolverInterface
 {
-    final public const SERVICE_NAME = 'silverstan.typeResolver.methodTypeResolver';
+    public const SERVICE_NAME = 'silverstan.typeResolver.methodTypeResolver';
 
     public function getConfigurationPropertyName(): string;
 
     /**
-     * @return true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
+     * @return int|true
      */
-    public function getExcludeMiddleware(): true|int;
+    public function getExcludeMiddleware();
 
     /**
      * @return array<non-empty-string, Type>

@@ -24,6 +24,18 @@ use function in_array;
 final class ExtensibleHasExtensionTypeSpecifyingExtension implements MethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
     /**
+     * @readonly
+     */
+    private string $className;
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
+    /**
      * @var string[]
      */
     private const SUPPORTED_METHODS = [
@@ -32,14 +44,14 @@ final class ExtensibleHasExtensionTypeSpecifyingExtension implements MethodTypeS
 
     private TypeSpecifier $typeSpecifier;
 
-    public function __construct(
+    public function __construct(string $className, ClassReflectionAnalyser $classReflectionAnalyser, TypeFactory $typeFactory)
+    {
         /**
          * @var class-string
          */
-        private readonly string $className,
-        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly TypeFactory $typeFactory,
-    ) {
+        $this->className = $className;
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->typeFactory = $typeFactory;
     }
 
     #[Override]

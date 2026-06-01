@@ -14,11 +14,15 @@ use function array_reverse;
 
 final class LazyMiddlewareRegistryProvider implements MiddlewareRegistryProviderInterface
 {
+    /**
+     * @readonly
+     */
+    private Container $container;
     private ?MiddlewareRegistryInterface $registry = null;
 
-    public function __construct(
-        private readonly Container $container
-    ) {
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
     }
 
     #[Override]

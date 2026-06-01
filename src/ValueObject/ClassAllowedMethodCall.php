@@ -4,17 +4,25 @@ declare(strict_types=1);
 
 namespace Cambis\Silverstan\ValueObject;
 
-final readonly class ClassAllowedMethodCall
+final class ClassAllowedMethodCall
 {
-    public function __construct(
+    /**
+     * @readonly
+     */
+    public string $className;
+    /**
+     * @readonly
+     */
+    public array $methodNames;
+    public function __construct(string $className, array $methodNames)
+    {
         /**
          * @var class-string
          */
-        public string $className,
+        $this->className = $className;
         /**
          * @var list<string>
          */
-        public array $methodNames,
-    ) {
+        $this->methodNames = $methodNames;
     }
 }

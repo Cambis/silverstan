@@ -20,8 +20,12 @@ use function in_array;
  *
  * @see \Cambis\Silverstan\Tests\Type\DynamicReturnTypeExtension\ExtensionGetOwnerReturnTypeExtensionTest
  */
-final readonly class ExtensionGetOwnerReturnTypeExtension implements DynamicMethodReturnTypeExtension
+final class ExtensionGetOwnerReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
+    /**
+     * @readonly
+     */
+    private TypeResolver $typeResolver;
     /**
      * @var string[]
      */
@@ -29,9 +33,9 @@ final readonly class ExtensionGetOwnerReturnTypeExtension implements DynamicMeth
         'getOwner',
     ];
 
-    public function __construct(
-        private TypeResolver $typeResolver
-    ) {
+    public function __construct(TypeResolver $typeResolver)
+    {
+        $this->typeResolver = $typeResolver;
     }
 
     #[Override]

@@ -15,16 +15,32 @@ use function is_array;
 
 final class DependencyInjectionPropertyTypeResolver implements PropertyTypeResolverInterface, TypeResolverAwareInterface
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    /**
+     * @readonly
+     * @var int|true
+     */
+    private $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE;
     private TypeResolver $typeResolver;
 
-    public function __construct(
-        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly ConfigurationResolver $configurationResolver,
+    /**
+     * @param true|int $excludeMiddleware
+     */
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, ConfigurationResolver $configurationResolver, $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->configurationResolver = $configurationResolver;
         /**
          * @var true|int-mask-of<ConfigurationResolver::EXCLUDE_*>
          */
-        private readonly true|int $excludeMiddleware = ConfigurationResolver::EXCLUDE_NONE
-    ) {
+        $this->excludeMiddleware = $excludeMiddleware;
     }
 
     #[Override]
@@ -33,8 +49,11 @@ final class DependencyInjectionPropertyTypeResolver implements PropertyTypeResol
         return 'dependencies';
     }
 
+    /**
+     * @return int|true
+     */
     #[Override]
-    public function getExcludeMiddleware(): true|int
+    public function getExcludeMiddleware()
     {
         return $this->excludeMiddleware;
     }
@@ -61,8 +80,11 @@ final class DependencyInjectionPropertyTypeResolver implements PropertyTypeResol
         return $types;
     }
 
+    /**
+     * @return static
+     */
     #[Override]
-    public function setTypeResolver(TypeResolver $typeResolver): static
+    public function setTypeResolver(TypeResolver $typeResolver)
     {
         $this->typeResolver = $typeResolver;
 

@@ -8,5 +8,8 @@ use Cambis\Silverstan\ConfigurationResolver\ConfigurationResolver;
 
 interface ConfigurationResolverAwareInterface
 {
-    public function setConfigurationResolver(ConfigurationResolver $configurationResolver): static;
+    /**
+     * @return static
+     */
+    public function setConfigurationResolver(ConfigurationResolver $configurationResolver);
 }

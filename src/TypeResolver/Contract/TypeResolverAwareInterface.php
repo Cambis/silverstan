@@ -8,5 +8,8 @@ use Cambis\Silverstan\TypeResolver\TypeResolver;
 
 interface TypeResolverAwareInterface
 {
-    public function setTypeResolver(TypeResolver $typeResolver): static;
+    /**
+     * @return static
+     */
+    public function setTypeResolver(TypeResolver $typeResolver);
 }

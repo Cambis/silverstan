@@ -22,8 +22,16 @@ use function is_array;
  *
  * @see \Cambis\Silverstan\Tests\Type\DynamicReturnTypeExtension\DataObjectDbObjectReturnTypeExtensionTest
  */
-final readonly class DataObjectDbObjectReturnTypeExtension implements DynamicMethodReturnTypeExtension
+final class DataObjectDbObjectReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    /**
+     * @readonly
+     */
+    private TypeResolver $typeResolver;
     /**
      * @var string[]
      */
@@ -31,10 +39,10 @@ final readonly class DataObjectDbObjectReturnTypeExtension implements DynamicMet
         'dbObject',
     ];
 
-    public function __construct(
-        private ConfigurationResolver $configurationResolver,
-        private TypeResolver $typeResolver,
-    ) {
+    public function __construct(ConfigurationResolver $configurationResolver, TypeResolver $typeResolver)
+    {
+        $this->configurationResolver = $configurationResolver;
+        $this->typeResolver = $typeResolver;
     }
 
     #[Override]

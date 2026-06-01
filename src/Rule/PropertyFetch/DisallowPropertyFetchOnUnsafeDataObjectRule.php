@@ -23,7 +23,7 @@ use function sprintf;
  *
  * @see \Cambis\Silverstan\Tests\Rule\PropertyFetch\DisallowPropertyFetchOnUnsafeDataObjectRuleTest
  */
-final readonly class DisallowPropertyFetchOnUnsafeDataObjectRule implements Rule
+final class DisallowPropertyFetchOnUnsafeDataObjectRule implements Rule
 {
     /**
      * @var string

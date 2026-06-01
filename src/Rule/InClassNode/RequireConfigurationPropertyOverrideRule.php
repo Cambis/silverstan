@@ -19,7 +19,6 @@ use function array_key_exists;
 use function array_reverse;
 use function in_array;
 use function sprintf;
-use function str_contains;
 
 /**
  * @phpstan-type ClassConfig array{class: class-string, properties: list<string>}
@@ -29,6 +28,10 @@ use function str_contains;
  */
 final class RequireConfigurationPropertyOverrideRule implements Rule
 {
+    /**
+     * @readonly
+     */
+    private Normaliser $normaliser;
     /**
      * @var string
      */
@@ -51,13 +54,30 @@ final class RequireConfigurationPropertyOverrideRule implements Rule
      * @param list<ClassConfig>|array<class-string, list<string>> $classes
      */
     public function __construct(
-        private readonly Normaliser $normaliser,
+        Normaliser $normaliser,
         array $classes = []
     ) {
+        $this->normaliser = $normaliser;
         $classes = array_reverse($classes);
         $classRequiredProperties = [];
+        $arrayIsListFunction = function (array $array): bool {
+            if (function_exists('array_is_list')) {
+                return array_is_list($array);
+            }
+            if ($array === []) {
+                return true;
+            }
+            $current_key = 0;
+            foreach ($array as $key => $noop) {
+                if ($key !== $current_key) {
+                    return false;
+                }
+                ++$current_key;
+            }
+            return true;
+        };
 
-        if (!array_is_list($classes)) {
+        if (!$arrayIsListFunction($classes)) {
             /** @var array<class-string, list<string>> $classes */
             foreach ($classes as $className => $properties) {
                 $classRequiredProperties[] = new ClassRequiredProperty(
@@ -164,6 +184,6 @@ final class RequireConfigurationPropertyOverrideRule implements Rule
             return false;
         }
 
-        return !str_contains((string) $property->getDocComment(), '@internal');
+        return strpos((string) $property->getDocComment(), '@internal') === false;
     }
 }

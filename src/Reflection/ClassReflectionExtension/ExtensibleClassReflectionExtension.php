@@ -23,6 +23,18 @@ use function strtolower;
 final class ExtensibleClassReflectionExtension implements MethodsClassReflectionExtension, PropertiesClassReflectionExtension
 {
     /**
+     * @readonly
+     */
+    private AnnotationClassReflectionExtension $annotationClassReflectionExtension;
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    /**
      * @var array<string, array<non-empty-lowercase-string, MethodReflection>>
      */
     private array $methodReflections = [];
@@ -32,11 +44,11 @@ final class ExtensibleClassReflectionExtension implements MethodsClassReflection
      */
     private array $propertyReflections = [];
 
-    public function __construct(
-        private readonly AnnotationClassReflectionExtension $annotationClassReflectionExtension,
-        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly ReflectionResolver $reflectionResolver
-    ) {
+    public function __construct(AnnotationClassReflectionExtension $annotationClassReflectionExtension, ClassReflectionAnalyser $classReflectionAnalyser, ReflectionResolver $reflectionResolver)
+    {
+        $this->annotationClassReflectionExtension = $annotationClassReflectionExtension;
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->reflectionResolver = $reflectionResolver;
     }
 
     #[Override]

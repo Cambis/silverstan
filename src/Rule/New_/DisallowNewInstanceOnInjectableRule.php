@@ -19,17 +19,25 @@ use function sprintf;
  * @implements Rule<New_>
  * @see \Cambis\Silverstan\Tests\Rule\New_\DisallowNewInstanceOnInjectableRuleTest
  */
-final readonly class DisallowNewInstanceOnInjectableRule implements Rule
+final class DisallowNewInstanceOnInjectableRule implements Rule
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var string
      */
     private const IDENTIFIER = 'silverstan.injectable.useCreate';
 
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private ReflectionProvider $reflectionProvider
-    ) {
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, ReflectionProvider $reflectionProvider)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     #[Override]

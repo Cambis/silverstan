@@ -55,8 +55,11 @@ final class InheritanceMiddleware extends AbstractMiddleware implements Configur
         return Priority::mergeArray($config, $parentConfig);
     }
 
+    /**
+     * @return static
+     */
     #[Override]
-    public function setConfigurationResolver(ConfigurationResolver $configurationResolver): static
+    public function setConfigurationResolver(ConfigurationResolver $configurationResolver)
     {
         $this->configurationResolver = $configurationResolver;
 

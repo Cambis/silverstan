@@ -22,18 +22,30 @@ use function sprintf;
  *
  * @see \Cambis\Silverstan\Tests\Rule\ClassPropertyNode\DisallowUseOfDeprecatedConfigurationPropertyRuleTest
  */
-final readonly class DisallowUsageOfDeprecatedConfigurationPropertyRule implements Rule
+final class DisallowUsageOfDeprecatedConfigurationPropertyRule implements Rule
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private PropertyReflectionAnalyser $propertyReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
     /**
      * @var string
      */
     private const IDENTIFIER = 'silverstan.configurationProperty.deprecated';
 
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
-        private ReflectionResolver $reflectionResolver
-    ) {
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, PropertyReflectionAnalyser $propertyReflectionAnalyser, ReflectionResolver $reflectionResolver)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->propertyReflectionAnalyser = $propertyReflectionAnalyser;
+        $this->reflectionResolver = $reflectionResolver;
     }
 
     #[Override]

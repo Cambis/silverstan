@@ -13,13 +13,25 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use function strtolower;
 
-final readonly class SimpleRelationMethodReflectionResolver implements MethodReflectionResolverInterface
+final class SimpleRelationMethodReflectionResolver implements MethodReflectionResolverInterface
 {
-    public function __construct(
-        private string $configurationPropertyName,
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private TypeResolver $typeResolver
-    ) {
+    /**
+     * @readonly
+     */
+    private string $configurationPropertyName;
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private TypeResolver $typeResolver;
+    public function __construct(string $configurationPropertyName, ClassReflectionAnalyser $classReflectionAnalyser, TypeResolver $typeResolver)
+    {
+        $this->configurationPropertyName = $configurationPropertyName;
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->typeResolver = $typeResolver;
     }
 
     #[Override]

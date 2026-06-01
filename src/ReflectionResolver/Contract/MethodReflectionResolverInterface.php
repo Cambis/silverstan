@@ -20,7 +20,7 @@ use PHPStan\Reflection\MethodReflection;
  */
 interface MethodReflectionResolverInterface
 {
-    final public const SERVICE_NAME = 'silverstan.reflectionResolver.methodReflectionResolver';
+    public const SERVICE_NAME = 'silverstan.reflectionResolver.methodReflectionResolver';
 
     public function getConfigurationPropertyName(): string;
 

@@ -21,8 +21,20 @@ use function in_array;
  *
  * @see \Cambis\Silverstan\Tests\Type\DynamicReturnTypeExtension\InjectorGetReturnTypeExtensionTest
  */
-final readonly class InjectorGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
+final class InjectorGetReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
+    /**
+     * @readonly
+     */
+    private ConfigurationResolver $configurationResolver;
+    /**
+     * @readonly
+     */
+    private Normaliser $normaliser;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var string[]
      */
@@ -32,11 +44,11 @@ final readonly class InjectorGetReturnTypeExtension implements DynamicMethodRetu
         'get',
     ];
 
-    public function __construct(
-        private ConfigurationResolver $configurationResolver,
-        private Normaliser $normaliser,
-        private ReflectionProvider $reflectionProvider
-    ) {
+    public function __construct(ConfigurationResolver $configurationResolver, Normaliser $normaliser, ReflectionProvider $reflectionProvider)
+    {
+        $this->configurationResolver = $configurationResolver;
+        $this->normaliser = $normaliser;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     #[Override]

@@ -21,17 +21,25 @@ use function sprintf;
  * @implements Rule<StaticPropertyFetch>
  * @see \Cambis\Silverstan\Tests\Rule\StaticPropertyFetch\DisallowStaticPropertyFetchOnConfigurationPropertyRuleTest
  */
-final readonly class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements Rule
+final class DisallowStaticPropertyFetchOnConfigurationPropertyRule implements Rule
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private PropertyReflectionAnalyser $propertyReflectionAnalyser;
     /**
      * @var string
      */
     private const IDENTIFIER = 'silverstan.configurationProperty.unsafe';
 
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private PropertyReflectionAnalyser $propertyReflectionAnalyser,
-    ) {
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, PropertyReflectionAnalyser $propertyReflectionAnalyser)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->propertyReflectionAnalyser = $propertyReflectionAnalyser;
     }
 
     #[Override]

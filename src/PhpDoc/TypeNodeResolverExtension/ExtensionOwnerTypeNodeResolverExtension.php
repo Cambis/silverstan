@@ -24,12 +24,20 @@ use PHPStan\Type\TypeCombinator;
  */
 final class ExtensionOwnerTypeNodeResolverExtension implements TypeNodeResolverExtension, TypeNodeResolverAwareExtension
 {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private TypeFactory $typeFactory;
     private TypeNodeResolver $typeNodeResolver;
 
-    public function __construct(
-        private readonly ClassReflectionAnalyser $classReflectionAnalyser,
-        private readonly TypeFactory $typeFactory,
-    ) {
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, TypeFactory $typeFactory)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->typeFactory = $typeFactory;
     }
 
     /**

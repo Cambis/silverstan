@@ -14,13 +14,25 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 
-final readonly class DBPropertyReflectionResolver implements PropertyReflectionResolverInterface
+final class DBPropertyReflectionResolver implements PropertyReflectionResolverInterface
 {
-    public function __construct(
-        private ClassReflectionAnalyser $classReflectionAnalyser,
-        private ReflectionProvider $reflectionProvider,
-        private TypeResolver $typeResolver
-    ) {
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyser $classReflectionAnalyser;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    /**
+     * @readonly
+     */
+    private TypeResolver $typeResolver;
+    public function __construct(ClassReflectionAnalyser $classReflectionAnalyser, ReflectionProvider $reflectionProvider, TypeResolver $typeResolver)
+    {
+        $this->classReflectionAnalyser = $classReflectionAnalyser;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->typeResolver = $typeResolver;
     }
 
     #[Override]
