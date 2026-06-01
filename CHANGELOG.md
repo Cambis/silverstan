@@ -1,5 +1,15 @@
 # @cambis/silverstan
 
+## 2.2.0
+
+### Minor Changes
+
+- d9b360a: PHPStan 2.2 upgrade
+
+### Patch Changes
+
+- 4f2e4b4: Remove spread operators from DisallowMethodCallOnUnsafeDataObjectRule.
+
 ## 2.1.9
 
 ### Patch Changes
