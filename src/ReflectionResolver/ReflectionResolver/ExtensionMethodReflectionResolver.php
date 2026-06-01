@@ -50,7 +50,7 @@ final readonly class ExtensionMethodReflectionResolver implements MethodReflecti
         }
 
         /** @var array<class-string|null> $extensions */
-        $extensions = array_unique($extensions);
+        $extensions = array_unique($extensions); // @phpstan-ignore argument.type
 
         foreach ($extensions as $extension) {
             if ($extension === null) {

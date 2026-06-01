@@ -107,7 +107,11 @@ final class ConfigurationResolver
             return null;
         }
 
-        $resolved = $matches[1];
+        $resolved = $matches[1] ?? null;
+
+        if ($resolved === null || $resolved === '') {
+            return null;
+        }
 
         if (!$this->reflectionProvider->hasClass($resolved)) {
             return null;

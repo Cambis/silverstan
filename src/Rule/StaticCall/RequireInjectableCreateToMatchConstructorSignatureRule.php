@@ -102,6 +102,10 @@ final readonly class RequireInjectableCreateToMatchConstructorSignatureRule impl
             'Return type of call to method ' . $methodName . ' contains unresolvable type.',
             '%s of method ' . $methodName . ' contains unresolvable type.',
             'Method ' . $methodName . " invoked with %s, but it's not allowed because of @no-named-arguments.",
+            'Constant %s is not allowed for %s of method ' . $methodName . ' constructor.',
+            'Constants %s cannot be combined for %s of method ' . $methodName . ' constructor.',
+            'Combining constants with | is not allowed for %s of method ' . $methodName . ' constructor.',
+            null,
         );
     }
 }
