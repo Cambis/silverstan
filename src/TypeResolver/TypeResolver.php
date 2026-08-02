@@ -194,7 +194,7 @@ final readonly class TypeResolver
             return new StringType();
         }
 
-        if ($this->reflectionProvider->hasClass($name)) {
+        if ($this->reflectionProvider->hasClass($name)) { // @phpstan-ignore if.alwaysTrue
             $name = $this->configurationResolver->resolveClassName($name);
         }
 

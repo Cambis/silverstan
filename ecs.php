@@ -6,6 +6,7 @@ use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
 use PhpCsFixer\Fixer\Operator\NewWithParenthesesFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff;
+use Symplify\CodingStandard\Fixer\Spacing\MethodChainingNewlineFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 return ECSConfig::configure()
@@ -48,4 +49,5 @@ return ECSConfig::configure()
             __DIR__ . '/stubs/Page.php',
             __DIR__ . '/stubs/PageController.php',
         ],
+        MethodChainingNewlineFixer::class,
     ]);

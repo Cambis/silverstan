@@ -13,7 +13,6 @@ use SilverStripe\ORM\HasManyList;
  * @method Foo TypehintedHasOne()
  * @method HasManyList<Foo> TypehintedHasMany()
  */
-
 class Foo extends DataObject implements TestOnly
 {
     /**
