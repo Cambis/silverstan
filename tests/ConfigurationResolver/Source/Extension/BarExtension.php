@@ -7,7 +7,7 @@ use SilverStripe\Core\Extension;
 use SilverStripe\Dev\TestOnly;
 
 /**
- * @extends Extension<(Bar & static)>
+ * @extends Extension<(Bar&static)>
  */
 final class BarExtension extends Extension implements TestOnly
 {
